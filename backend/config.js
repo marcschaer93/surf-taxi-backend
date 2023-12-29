@@ -10,8 +10,8 @@ const PORT = +process.env.PORT || 3001;
 const getDatabaseUri = () => {
   const databaseUri =
     process.env.NODE_ENV === "test"
-      ? "postgresql:///surf-taxi-test"
-      : process.env.DATABASE_URL || "postgresql:///surf-taxi";
+      ? "postgresql:///surf_taxi-test"
+      : process.env.DATABASE_URL || "postgresql:///surf_taxi";
 
   return databaseUri;
 };

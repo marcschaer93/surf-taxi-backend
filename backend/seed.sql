@@ -11,3 +11,6 @@ VALUES ('testuser',
         'Admin!',
         'joel@joelburton.com',
         TRUE);
+
+INSERT INTO trips (start_point, end_point, trip_info, seats)
+VALUES  ('Bern', 'Hossegor', 'surf-trip', 2)

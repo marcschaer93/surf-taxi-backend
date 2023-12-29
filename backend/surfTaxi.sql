@@ -1,18 +1,22 @@
-\echo 'Delete and recreate surf-taxi db?'
-\prompt 'Return for yes or control-C to cancel > ' foo
+-- Delete and recreate surf_taxi db
+DROP DATABASE IF EXISTS surf_taxi;
+CREATE DATABASE surf_taxi;
 
-DROP DATABASE surf-taxi;
-CREATE DATABASE surf-taxi;
-\connect surf-taxi
+-- Connect to surf_taxi
+\connect surf_taxi
 
+-- Create schema
 \i schema.sql
+
+-- Seed the database
 \i seed.sql
 
-\echo 'Delete and recreate surf-taxi-test db?'
-\prompt 'Return for yes or control-C to cancel > ' foo
+-- Delete and recreate surf-taxi-test db
+DROP DATABASE IF EXISTS surf_taxi_test;
+CREATE DATABASE surf_taxi_test;
 
-DROP DATABASE surf-taxi-test;
-CREATE DATABASE surf-taxi-test;
-\connect surf-taxi-test
+-- Connect to surf_taxi_test
+\connect surf_taxi_test
 
+-- Create schema for test database
 \i schema.sql
