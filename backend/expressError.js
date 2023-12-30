@@ -4,6 +4,8 @@
  *  The error-handling middleware will return this.
  */
 
+require("colors");
+
 class ExpressError extends Error {
   constructor(message, status) {
     super();

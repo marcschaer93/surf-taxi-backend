@@ -1,31 +1,39 @@
 const db = require("../../db/db");
-//
+const { NotFoundError } = require("../../expressError");
+
+/** Related functions for trips. */
+
 class TripApi {
+  /** Given a id, return data about trip.
+   *
+   * Returns { username, first_name, last_name, is_admin, jobs }
+   *   where jobs is { id, title, company_handle, company_name, state }
+   *
+   * Throws NotFoundError if trip not found.
+   **/
+
   static async getAllTrips() {
     let result = await db.query(`SELECT * FROM trips`);
-    return result.rows;
+    const trips = result.rows;
+    return trips;
   }
+
+  /** Given a id, return data about trip.
+   *
+   * Returns { username, first_name, last_name, is_admin, jobs }
+   *   where jobs is { id, title, company_handle, company_name, state }
+   *
+   * Throws NotFoundError if trip not found.
+   **/
 
   static async getTrip(id) {
     let result = await db.query(`SELECT * FROM trips WHERE id=$1`, [id]);
-    console.log("rsult", result.rows[0]);
-    return result.rows[0];
+    const trip = result.rows[0];
+    if (!trip) throw new NotFoundError(`No trip found with ID: ${id}`);
+    return trip;
   }
 
-  // static async createTrip(data) {
-  //   const { start_point, end_point, trip_info, seats } = data;
-  //   let result = await db.query(
-  //     `
-  //     INSERT INTO trips (start_point, end_point, trip_info, seats)
-  //     VALUES ($1, $2, $3, $4)
-  //     `,
-  //     [start_point, end_point, trip_info, seats]
-  //   );
-  //   return;
-  // }
-
-  static async createTrip(data) {
-    const { start_point, end_point, trip_info, seats } = data;
+  static async createTrip({ start_point, end_point, trip_info, seats }) {
     try {
       // Perform the database operation that might throw an error
       await db.query(
