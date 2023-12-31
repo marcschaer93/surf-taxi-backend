@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "title": "Root Schema",
+  "type": "object",
+  "required": [
+    "username",
+    "first_name",
+    "last_name",
+    "email",
+    "gender",
+    "birth_year",
+    "phone",
+    "country",
+    "languages",
+    "profile_img_url",
+    "bio"
+  ],
+  "properties": {
+    "username": {
+      "title": "The username Schema",
+      "type": "string",
+      "examples": ["marcschaer"]
+    },
+    "first_name": {
+      "title": "The first_name Schema",
+      "type": "string",
+      "examples": ["marc"]
+    },
+    "last_name": {
+      "title": "The last_name Schema",
+      "type": "string",
+      "examples": ["schaer"]
+    },
+    "email": {
+      "title": "The email Schema",
+      "type": "string",
+      "examples": ["marc.schaer93@gmail.com"]
+    },
+    "gender": {
+      "title": "The gender Schema",
+      "type": "string",
+      "examples": ["male"]
+    },
+    "birth_year": {
+      "title": "The birth_year Schema",
+      "type": "integer",
+      "examples": [1993]
+    },
+    "phone": {
+      "title": "The phone Schema",
+      "type": "string",
+      "examples": ["+41798490968"]
+    },
+    "country": {
+      "title": "The country Schema",
+      "type": "string",
+      "examples": ["switzerland"]
+    },
+    "languages": {
+      "title": "The languages Schema",
+      "type": "array",
+      "items": {
+        "title": "A Schema",
+        "type": "string",
+        "examples": ["german", "english", "french"]
+      },
+      "examples": [["german", "english", "french"]]
+    },
+    "profile_img_url": {
+      "title": "The profile_img_url Schema",
+      "type": "string",
+      "examples": ["google.com"]
+    },
+    "bio": {
+      "title": "The bio Schema",
+      "type": "string",
+      "examples": ["surfer"]
+    }
+  },
+  "examples": [
+    {
+      "username": "marcschaer",
+      "first_name": "marc",
+      "last_name": "schaer",
+      "email": "marc.schaer93@gmail.com",
+      "gender": "male",
+      "birth_year": 1993,
+      "phone": "+41798490968",
+      "country": "switzerland",
+      "languages": ["german", "english", "french"],
+      "profile_img_url": "google.com",
+      "bio": "surfer"
+    }
+  ]
+}

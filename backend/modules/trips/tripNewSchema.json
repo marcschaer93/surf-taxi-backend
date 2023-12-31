@@ -3,35 +3,66 @@
   "$id": "http://example.com/example.json",
   "title": "Root Schema",
   "type": "object",
-  "required": ["start_point", "end_point", "trip_info", "seats"],
+  "required": [
+    "start_location",
+    "destination",
+    "trip_info",
+    "costs",
+    "seats",
+    "user_id"
+  ],
   "properties": {
-    "start_point": {
-      "title": "The start_point Schema",
+    "date": {
+      "title": "The date Schema",
       "type": "string",
-      "examples": ["Interlaken"]
+      "examples": ["2023-12-31"]
     },
-    "end_point": {
-      "title": "The end_point Schema",
+    "start_location": {
+      "title": "The start_location Schema",
       "type": "string",
-      "examples": ["Sidi Ifni"]
+      "examples": ["Bern"]
+    },
+    "destination": {
+      "title": "The destination Schema",
+      "type": "string",
+      "examples": ["Santander"]
+    },
+    "stops": {
+      "title": "The stops Schema",
+      "type": "string",
+      "examples": ["Hossegor"]
     },
     "trip_info": {
       "title": "The trip_info Schema",
       "type": "string",
-      "examples": ["holiday"]
+      "examples": ["surftrip"]
+    },
+    "costs": {
+      "title": "The costs Schema",
+      "type": "string",
+      "examples": ["split gas \u0026 tolls"]
     },
     "seats": {
       "title": "The seats Schema",
       "type": "integer",
-      "examples": [3]
+      "examples": [2]
+    },
+    "user_id": {
+      "title": "The user_id Schema",
+      "type": "integer",
+      "examples": [1]
     }
   },
   "examples": [
     {
-      "start_point": "Interlaken",
-      "end_point": "Sidi Ifni",
-      "trip_info": "holiday",
-      "seats": 3
+      "date": "2023-12-31",
+      "start_location": "Bern",
+      "destination": "Santander",
+      "stops": "Hossegor",
+      "trip_info": "surftrip",
+      "costs": "split gas \u0026 tolls",
+      "seats": 2,
+      "user_id": 1
     }
   ]
 }
