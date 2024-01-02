@@ -1,17 +1,15 @@
 const jsonschema = require("jsonschema");
-const { BadRequestError } = require("./errors"); // Your error handling logic
+const { BadRequestError } = require("../expressError"); // Your error handling logic
 
-function validateInputs(data, schema) {
+function validateInputs(schema) {
   return (req, res, next) => {
-    // const data = req.body; // Assuming data is in the request body
+    // const data = dataKey ? req[dataKey] : req.body; // Allows specifying different data sources
 
-    const validator = jsonschema.validate(data, schema);
-
+    const validator = jsonschema.validate(req.body, schema);
     if (!validator.valid) {
-      const errors = validator.errors.map((error) => error.stack);
+      const errors = validator.errors.map((e) => e.stack);
       return next(new BadRequestError(errors));
     }
-
     next();
   };
 }

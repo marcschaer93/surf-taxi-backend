@@ -33,22 +33,19 @@ class TripApi {
     return trip;
   }
 
-  static async createTrip(data) {
-    const {
-      date,
-      start_location,
-      destination,
-      stops,
-      trip_info,
-      seats,
-      costs,
-      user_id,
-    } = data;
-
-    try {
-      // Perform the database operation that might throw an error
-      await db.query(
-        `
+  static async createTrip({
+    date,
+    start_location,
+    destination,
+    stops,
+    trip_info,
+    seats,
+    costs,
+    user_id,
+  }) {
+    // Perform the database operation that might throw an error
+    await db.query(
+      `
         INSERT INTO trips (date,
           start_location,
           destination,
@@ -59,32 +56,23 @@ class TripApi {
           user_id)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         `,
-        [
-          date,
-          start_location,
-          destination,
-          stops,
-          trip_info,
-          seats,
-          costs,
-          user_id,
-        ]
-      );
+      [
+        date,
+        start_location,
+        destination,
+        stops,
+        trip_info,
+        seats,
+        costs,
+        user_id,
+      ]
+    );
 
-      // Return success or appropriate data
-      return {
-        success: true,
-        message: "Trip created successfully",
-      };
-    } catch (error) {
-      // Handle the error
-      console.error("Error creating trip:", error);
-      // Return failure status or appropriate error message
-      return {
-        success: false,
-        message: "Failed to create trip",
-      };
-    }
+    // Return success or appropriate data
+    return {
+      success: true,
+      message: "Trip created successfully",
+    };
   }
 }
 

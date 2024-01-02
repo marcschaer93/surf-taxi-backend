@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 const jsonschema = require("jsonschema");
 
 const UserApi = require("./userModel");
+const { BadRequestError } = require("../../expressError");
 const userNewSchema = require("./userNewSchema.json");
 
 // Displays list of all Users.
@@ -22,25 +23,6 @@ exports.userDetail = asyncHandler(async (req, res, next) => {
 // Handle Trip create on POST.
 exports.userCreatePost = asyncHandler(async (req, res, next) => {
   const newUserData = req.body;
-  const validator = jsonschema.validate(newUserData, userNewSchema);
-  if (!validator.valid) {
-    const errors = validator.errors.map((e) => e.stack);
-    throw new BadRequestError(errors);
-  }
-
   const result = await UserApi.createUser(newUserData);
   res.json({ result });
 });
-
-// Handle Trip create on POST.
-// exports.trip_create_post = asyncHandler(async (req, res, next) => {
-//     const newTripData = req.body;
-//     const validator = jsonschema.validate(newTripData, tripNewSchema);
-//     if (!validator.valid) {
-//       const errors = validator.errors.map((e) => e.stack);
-//       throw new BadRequestError(errors);
-//     }
-
-//     const result = await TripApi.createTrip(newTripData);
-//     res.json({ result });
-//   });

@@ -25,7 +25,7 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
   if (process.env.NODE_ENV !== "test") console.error("ERROR".red, err);
   const status = err.status || 500;
-  const message = err.message;
+  const message = err.message || "Something went wrong";
 
   return res.status(status).json({
     error: { message, status },

@@ -45,7 +45,10 @@
     "birth_year": {
       "title": "The birth_year Schema",
       "type": "integer",
-      "examples": [1993]
+      "examples": [1993],
+      "errorMessages": {
+        "type": "Please provide a valid birth year."
+      }
     },
     "phone": {
       "title": "The phone Schema",

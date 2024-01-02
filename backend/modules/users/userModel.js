@@ -1,5 +1,5 @@
 const db = require("../../db/db");
-const { NotFoundError } = require("../../expressError");
+const { NotFoundError, BadRequestError } = require("../../expressError");
 
 /** Related functions for users. */
 
@@ -20,58 +20,53 @@ class UserApi {
     return user;
   }
 
-  static async createUser(data) {
-    const {
-      username,
-      password,
-      first_name,
-      last_name,
-      email,
-      gender,
-      birth_year,
-      phone,
-      country,
-      languages,
-      profile_img_url,
-      bio,
-    } = data;
-    try {
-      await db.query(
-        `
+  static async createUser({
+    username,
+    password,
+    first_name,
+    last_name,
+    email,
+    gender,
+    birth_year,
+    phone,
+    country,
+    languages,
+    profile_img_url,
+    bio,
+  }) {
+    const duplicateCheck = await db.query(
+      `SELECT FROM users WHERE username = $1`,
+      [username]
+    );
+    if (duplicateCheck.rows[0])
+      throw new BadRequestError(`Duplicate username: ${username}`);
+
+    await db.query(
+      `
         INSERT INTO users 
         (username, password, first_name, last_name, email, gender, birth_year, phone, country, languages, profile_img_url, bio)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
         `,
-        [
-          username,
-          password,
-          first_name,
-          last_name,
-          email,
-          gender,
-          birth_year,
-          phone,
-          country,
-          languages,
-          profile_img_url,
-          bio,
-        ]
-      );
+      [
+        username,
+        password,
+        first_name,
+        last_name,
+        email,
+        gender,
+        birth_year,
+        phone,
+        country,
+        languages,
+        profile_img_url,
+        bio,
+      ]
+    );
 
-      // Return success or appropriate data
-      return {
-        success: true,
-        message: "User created successfully",
-      };
-    } catch (error) {
-      //   Handle the error
-      console.error("Error creating user:", error);
-      // Return failure status or appropriate error message
-      return {
-        success: false,
-        message: "Failed to create user",
-      };
-    }
+    return {
+      success: true,
+      message: "User created successfully",
+    };
   }
 }
 

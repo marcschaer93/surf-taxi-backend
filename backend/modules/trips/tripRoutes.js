@@ -2,6 +2,8 @@ const tripController = require("./tripController");
 
 const express = require("express");
 const router = express.Router();
+const validateInputs = require("../../middleware/validateInputs");
+const tripNewSchema = require("./tripNewSchema.json");
 
 module.exports = router;
 
@@ -14,7 +16,11 @@ module.exports = router;
 router.get("/create", tripController.tripCreateGet);
 
 // POST request for creating Trip.
-router.post("/create", tripController.tripCreatePost);
+router.post(
+  "/create",
+  validateInputs(tripNewSchema),
+  tripController.tripCreatePost
+);
 
 // GET request to delete Trip.
 router.get("/:id/delete", tripController.tripDeleteGet);

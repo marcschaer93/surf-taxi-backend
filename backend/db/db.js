@@ -16,4 +16,6 @@ const pool = new Pool({
 
 module.exports = {
   query: (text, params) => pool.query(text, params),
+  connect: () => pool.connect(), // Function to acquire a client from the pool
+  end: () => pool.end(), // Function to close the pool
 };

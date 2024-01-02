@@ -27,12 +27,6 @@ exports.tripCreateGet = asyncHandler(async (req, res, next) => {
 // Handle Trip create on POST.
 exports.tripCreatePost = asyncHandler(async (req, res, next) => {
   const newTripData = req.body;
-  const validator = jsonschema.validate(newTripData, tripNewSchema);
-  if (!validator.valid) {
-    const errors = validator.errors.map((e) => e.stack);
-    throw new BadRequestError(errors);
-  }
-
   const result = await TripApi.createTrip(newTripData);
   res.json({ result });
 });
@@ -42,7 +36,7 @@ exports.tripDeleteGet = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: Trip delete GET");
 });
 
-// Handle book delete on POST.
+// Handle trip delete on POST.
 exports.tripDeletePost = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: Trip delete POST");
 });
