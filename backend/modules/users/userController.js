@@ -1,10 +1,8 @@
 // This middleware helps to catch any errors that occur within the handler and forwards them to the Express error-handling middleware via next(). Without try...catch block. No next keyword needed
 const asyncHandler = require("express-async-handler");
-const jsonschema = require("jsonschema");
 
 const UserApi = require("./userModel");
 const { BadRequestError } = require("../../expressError");
-const userNewSchema = require("./userNewSchema.json");
 
 // Displays list of all Users.
 exports.userList = asyncHandler(async (req, res, next) => {

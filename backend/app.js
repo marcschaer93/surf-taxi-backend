@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require("cors");
+
 const userRoutes = require("./modules/users");
 const tripRoutes = require("./modules/trips/tripRoutes");
 const { NotFoundError } = require("./expressError");
@@ -8,6 +10,9 @@ const app = express();
 
 // Parse JSON-encoded bodies
 app.use(express.json());
+
+// Enable CORS for all routes
+app.use(cors());
 
 // Parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));

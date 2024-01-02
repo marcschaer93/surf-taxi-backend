@@ -31,8 +31,8 @@ router.post("/:id/delete", tripController.tripDeletePost);
 // GET request to update Trip.
 router.get("/:id/update", tripController.tripUpdateGet);
 
-// POST request to update Trip.
-router.post("/:id/update", tripController.tripUpdatePost);
+// PATCH request to update Trip.
+router.patch("/:id/update", tripController.tripUpdatePatch);
 
 // GET request for one Trip.
 router.get("/:id", tripController.tripDetail);
