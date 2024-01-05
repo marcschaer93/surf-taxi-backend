@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-// import { allTrips } from "./api";
-import * as api from "./api";
+import * as Api from "./api";
 
 function App() {
   const [trips, setTrips] = useState(null);
@@ -8,7 +7,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchedTrips = await api.allTrips();
+        const fetchedTrips = await Api.allTrips();
         setTrips(fetchedTrips);
       } catch (error) {
         // Handle error

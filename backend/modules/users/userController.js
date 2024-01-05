@@ -18,9 +18,9 @@ exports.userDetail = asyncHandler(async (req, res, next) => {
   res.json(user);
 });
 
-// Handle Trip create on POST.
-exports.userCreatePost = asyncHandler(async (req, res, next) => {
-  const newUserData = req.body;
-  const result = await UserApi.createUser(newUserData);
-  res.json({ result });
-});
+// Handle User registration on POST.
+// exports.userRegisterPost = asyncHandler(async (req, res, next) => {
+//   const newUserData = req.body;
+//   const result = await UserApi.register(newUserData);
+//   res.json({ result });
+// });

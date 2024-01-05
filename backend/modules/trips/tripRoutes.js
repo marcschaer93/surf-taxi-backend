@@ -2,7 +2,7 @@ const tripController = require("./tripController");
 
 const express = require("express");
 const router = express.Router();
-const validateInputs = require("../../middleware/validateInputs");
+const { validateInputs } = require("../../middleware/validateInputs");
 const tripNewSchema = require("./tripNewSchema.json");
 
 module.exports = router;

@@ -44,8 +44,6 @@ async function recreateDatabase() {
     console.log("Database and tables recreated successfully.");
   } catch (error) {
     console.error("Error recreating database:", error);
-    //   } finally {
-    //     db.end(); // Close the pool after completion
   }
 }
 

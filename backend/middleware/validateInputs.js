@@ -1,7 +1,7 @@
 const jsonschema = require("jsonschema");
 const { BadRequestError } = require("../expressError"); // Your error handling logic
 
-function validateInputs(schema) {
+const validateInputs = (schema) => {
   return (req, res, next) => {
     // const data = dataKey ? req[dataKey] : req.body; // Allows specifying different data sources
 
@@ -12,6 +12,6 @@ function validateInputs(schema) {
     }
     next();
   };
-}
+};
 
-module.exports = validateInputs;
+module.exports = { validateInputs };

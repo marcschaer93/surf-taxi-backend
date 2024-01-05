@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 
+const authRoutes = require("./modules/auth/authRoutes");
 const userRoutes = require("./modules/users");
 const tripRoutes = require("./modules/trips/tripRoutes");
 const { NotFoundError } = require("./expressError");
@@ -18,6 +19,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 // Mounting the API routes
+app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/trips", tripRoutes);
 
