@@ -4,6 +4,10 @@ const jwt = require("jsonwebtoken");
 
 const UserApi = require(".././users/userModel");
 const { BadRequestError } = require("../../expressError");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../../helpers/tokens");
 
 // Handle User registration on POST.
 // exports.authRegisterPost = asyncHandler(async (req, res, next) => {
@@ -22,17 +26,8 @@ exports.authRegisterPost = asyncHandler(async (req, res, next) => {
 
   const newUser = result.newUser;
 
-  // Generate Access Token
-  const accessToken = jwt.sign(
-    { username: newUser.username },
-    process.env.ACCESS_TOKEN_SECRET
-  );
-
-  // Generate Refresh Token
-  const refreshToken = jwt.sign(
-    { username: newUser.username },
-    process.env.REFRESH_TOKEN_SECRET
-  );
+  const accessToken = generateAccessToken(newUser);
+  const refreshToken = generateRefreshToken(newUser);
 
   res.json({ accessToken: accessToken, refreshToken: refreshToken });
 });
