@@ -7,6 +7,34 @@ const { BCRYPT_WORK_FACTOR } = require("../../config");
 /** Related functions for users. */
 
 class UserApi {
+  /** authenticate user with username, password.
+   *
+   * Returns user
+   *
+   * Throws UnauthorizedError is user not found or wrong password.
+   **/
+  static async authenticate(username, password) {
+    const result = await db.query(
+      `
+    SELECT *
+    FROM users
+    WHERE username = $1
+    `,
+      [username]
+    );
+
+    const user = result.rows[0];
+
+    if (user) {
+      const isValid = await bcrypt.compare(password, user.password);
+      if (isValid) {
+        delete user.password;
+        return user;
+      }
+    }
+    throw new UnauthorizedError("Invalid username/password");
+  }
+
   /**
    * Retrieves all users from the database.
    * Returns an array of users.

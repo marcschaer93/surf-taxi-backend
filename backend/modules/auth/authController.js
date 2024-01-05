@@ -9,14 +9,6 @@ const {
   generateRefreshToken,
 } = require("../../helpers/tokens");
 
-// Handle User registration on POST.
-// exports.authRegisterPost = asyncHandler(async (req, res, next) => {
-//   const newUserData = req.body;
-
-//   const result = await UserApi.register(newUserData);
-//   res.json({ result });
-// });
-
 exports.authRegisterPost = asyncHandler(async (req, res, next) => {
   const newUserData = req.body;
 
@@ -28,6 +20,18 @@ exports.authRegisterPost = asyncHandler(async (req, res, next) => {
 
   const accessToken = generateAccessToken(newUser);
   const refreshToken = generateRefreshToken(newUser);
+
+  res.json({ accessToken: accessToken, refreshToken: refreshToken });
+});
+
+exports.authUserPost = asyncHandler(async (req, res, next) => {
+  const { username, password } = req.body;
+
+  const user = await UserApi.authenticate(username, password);
+  console.log({ user });
+
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
 
   res.json({ accessToken: accessToken, refreshToken: refreshToken });
 });

@@ -5,6 +5,7 @@
   "type": "object",
   "required": [
     "username",
+    "password",
     "first_name",
     "last_name",
     "email",
@@ -20,7 +21,16 @@
     "username": {
       "title": "The username Schema",
       "type": "string",
+      "minLength": 1,
+      "maxLength": 30,
       "examples": ["marcschaer"]
+    },
+    "password": {
+      "title": "The password Schema",
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 20,
+      "examples": ["password1993"]
     },
     "first_name": {
       "title": "The first_name Schema",
