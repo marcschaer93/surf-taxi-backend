@@ -5,13 +5,16 @@ import "./index.css";
 import CssBaseline from "@mui/material/CssBaseline";
 
 import { ThemeProvider } from "@mui/material/styles";
-import { mainTheme } from "../utils/mainTheme.js";
+import { mainTheme } from "./utils/mainTheme.js";
+import { AuthProvider } from "./utils/authProvider.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ThemeProvider theme={mainTheme}>
       <CssBaseline />
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

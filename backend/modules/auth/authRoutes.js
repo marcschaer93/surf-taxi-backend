@@ -18,9 +18,16 @@ router.post(
   authController.authRegisterPost
 );
 
-// POST request for new access- and refreshToken if valid {username, password}.
+// POST request for access- and refreshToken if valid {username, password}.
 router.post(
   "/token",
   validateInputs(userAuthSchema),
   authController.authUserPost
+);
+
+// Route to refresh tokens if accessToken has expired
+router.post(
+  "/refresh-token",
+  //   validateInputs(userAuthSchema),
+  authController.refreshToken
 );

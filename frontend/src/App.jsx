@@ -1,26 +1,29 @@
 import { useEffect, useState } from "react";
-import * as Api from "./api";
+// import * as Api from "./api";
+import * as Api from "./services/tripService";
+import Login from "./components/Login";
 
 function App() {
   const [trips, setTrips] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const fetchedTrips = await Api.allTrips();
-        setTrips(fetchedTrips);
-      } catch (error) {
-        // Handle error
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const fetchedTrips = await Api.allTrips();
+  //       setTrips(fetchedTrips);
+  //     } catch (error) {
+  //       // Handle error
+  //       console.error(error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+  // console.log({ trips });
 
-  console.log({ trips });
   return (
     <>
-      {trips ? (
+      <Login />
+      {/* {trips ? (
         <div>
           <h1>All Trips</h1>
           <ul>
@@ -31,7 +34,7 @@ function App() {
         </div>
       ) : (
         <div>No Trips</div>
-      )}
+      )} */}
     </>
   );
 }

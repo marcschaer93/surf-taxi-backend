@@ -26,6 +26,7 @@ async function recreateDatabase() {
         is_admin boolean NOT NULL DEFAULT false
     );
     `);
+
     // Recreate trips table
     await db.query(`
     CREATE TABLE trips (
@@ -47,5 +48,4 @@ async function recreateDatabase() {
   }
 }
 
-// Run the function
 recreateDatabase();

@@ -1,11 +1,15 @@
-const express = require("express");
 const cors = require("cors");
+const express = require("express");
+const cookieParser = require("cookie-parser");
 
 const authRoutes = require("./modules/auth/authRoutes");
-const userRoutes = require("./modules/users");
+const userRoutes = require("./modules/users/userRoutes");
 const tripRoutes = require("./modules/trips/tripRoutes");
-const { NotFoundError } = require("./expressError");
-require("colors");
+const { authenticateJWT } = require("./middleware/isAuthenticated");
+const {
+  handle404Error,
+  handleGenericError,
+} = require("./middleware/errorHandler");
 
 const app = express();
 
@@ -18,25 +22,21 @@ app.use(cors());
 // Parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
 
+// Use cookie-parser middleware
+app.use(cookieParser());
+
+// Authenticate Middleware
+app.use(authenticateJWT);
+
 // Mounting the API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/trips", tripRoutes);
 
 /** Handle 404 errors -- this matches everything */
-app.use(function (req, res, next) {
-  return next(new NotFoundError());
-});
+app.use(handle404Error);
 
 /** Generic error handler; anything unhandled goes here. */
-app.use(function (err, req, res, next) {
-  if (process.env.NODE_ENV !== "test") console.error("ERROR".red, err);
-  const status = err.status || 500;
-  const message = err.message || "Something went wrong";
-
-  return res.status(status).json({
-    error: { message, status },
-  });
-});
+app.use(handleGenericError);
 
 module.exports = app;

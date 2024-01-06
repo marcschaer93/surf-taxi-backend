@@ -3,6 +3,7 @@ const { getDatabaseUri } = require("../config");
 
 const pool = new Pool({
   connectionString: getDatabaseUri(),
+
   //more config options below:
 
   //   user: "marcschaer", //"your_username",
@@ -16,6 +17,8 @@ const pool = new Pool({
 
 module.exports = {
   query: (text, params) => pool.query(text, params),
+
+  // Not in use so far...
   connect: () => pool.connect(), // Function to acquire a client from the pool
   end: () => pool.end(), // Function to close the pool
 };

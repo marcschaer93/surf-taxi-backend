@@ -1,60 +1,65 @@
-// const jwt = require("jsonwebtoken");
-// const ExpressError = require(".././expressError");
-
-// /** Middleware: Authenticate user. */
-
-// const authenticateToken = async (req, res, next) => {
-//   try {
-//     const authHeader = req.headers["authorization"];
-//     console.log("authHeader", authHeader);
-//     // If authHeader, split it and get the token
-//     const token = authHeader && authHeader.split(" ")[1];
-
-//     if (!token) {
-//       // Unauthorized
-//       return res.status(401).json({ message: "Unauthorized: Missing token" });
-//     }
-
-//     const payload = await jwt.verify(token, SECRET_KEY);
-
-//     req.curr_username = payload.username;
-//     req.curr_admin = payload.admin;
-
-//     return next();
-//   } catch (err) {
-//     console.error(err);
-//     return next(new ExpressError("Unauthorized: Invalid token", 401));
-//   }
-// };
-
-// module.exports = { authenticateToken };
-
 const jwt = require("jsonwebtoken");
-const ExpressError = require(".././expressError");
+const { UnauthorizedError } = require("../expressError");
 
 /** Middleware: Authenticate user using cookies. */
 
-const authenticateTokenWithCookies = async (req, res, next) => {
+//$$
+// Define an array of routes that do not require authentication
+// const nonAuthRoutes = ["/public", "/login", "/signup"];
+
+const authenticateJWT = async (req, res, next) => {
   try {
     const accessToken = req.cookies.access_token; // Access the access token from the cookies
+    console.log("accessToken", accessToken);
 
-    if (!accessToken) {
-      // Unauthorized
-      return res
-        .status(401)
-        .json({ message: "Unauthorized: Missing access token" });
+    // $$
+    // Skip authentication for non-auth routes
+    // if (nonAuthRoutes.includes(req.path)) {
+    //   return next();
+    // }
+
+    // Its not a Error without valid token
+
+    // if (!accessToken) {
+    //   // Unauthorized
+    //   return res
+    //     .status(401)
+    //     .json({ message: "Unauthorized: Missing access token" });
+    // }
+
+    if (accessToken) {
+      const payload = await jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
+
+      req.username = payload.username;
+      // req.curr_admin = payload.admin;
     }
-
-    const payload = await jwt.verify(accessToken, SECRET_KEY);
-
-    req.curr_username = payload.username;
-    req.curr_admin = payload.admin;
 
     return next();
   } catch (err) {
     console.error(err);
-    return next(new ExpressError("Unauthorized: Invalid access token", 401));
   }
 };
 
-module.exports = { authenticateTokenWithCookies };
+/** Middleware: Requires user is authenticated. */
+
+function ensureLoggedIn(req, res, next) {
+  try {
+    if (!req.username) throw new UnauthorizedError();
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+}
+
+/** Middleware: Requires correct username. */
+
+const ensureCorrectUser = (req, res, next) => {
+  try {
+    if (req.username !== req.params.username) throw new UnauthorizedError();
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+};
+
+module.exports = { authenticateJWT, ensureCorrectUser, ensureLoggedIn };

@@ -1,7 +1,11 @@
 const db = require("../../db/db");
 const bcrypt = require("bcrypt");
 
-const { NotFoundError, BadRequestError } = require("../../expressError");
+const {
+  NotFoundError,
+  BadRequestError,
+  UnauthorizedError,
+} = require("../../expressError");
 const { BCRYPT_WORK_FACTOR } = require("../../config");
 
 /** Related functions for users. */

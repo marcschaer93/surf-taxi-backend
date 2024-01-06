@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 const { validateInputs } = require("../../middleware/validateInputs");
 const tripNewSchema = require("./tripNewSchema.json");
+const { ensureLoggedIn } = require("../../middleware/isAuthenticated");
 
 module.exports = router;
 
@@ -38,4 +39,4 @@ router.patch("/:id/update", tripController.tripUpdatePatch);
 router.get("/:id", tripController.tripDetail);
 
 // GET request for list of all Trips.
-router.get("/", tripController.tripList);
+router.get("/", ensureLoggedIn, tripController.tripList);
