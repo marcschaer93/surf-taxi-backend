@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import CssBaseline from "@mui/material/CssBaseline";
+import { BrowserRouter } from "react-router-dom";
 
 import { ThemeProvider } from "@mui/material/styles";
 import { mainTheme } from "./utils/mainTheme.js";
@@ -13,7 +14,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <ThemeProvider theme={mainTheme}>
       <CssBaseline />
       <AuthProvider>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>
   </React.StrictMode>

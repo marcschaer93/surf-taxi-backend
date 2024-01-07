@@ -1,26 +1,18 @@
-import * as Api from "../services/authService";
+import { loginUser } from ".././services/authService";
 import { useLocalStorage } from "./useLocalStorage";
-import Cookies from "universal-cookie";
-
-const cookies = new Cookies();
 
 export const useAuth = () => {
   const [user, setUser] = useLocalStorage("user", null);
 
-  const login = async (username, password) => {
+  const login = async (credentials) => {
     try {
-      const userData = await Api.loginUser(username, password);
+      const { accessToken, refreshToken, user } = await loginUser(credentials);
 
-      const { accessToken, refreshToken, user } = userData;
-      console.log("user", user);
-      console.log({ accessToken });
+      console.log("Access Token:", accessToken);
+      console.log("Refresh Token:", refreshToken);
+      console.log("User:", user);
 
-      cookies.set("access_token", accessToken, {
-        path: "/",
-        httpOnly: true,
-        secure: true, // Set to true if using HTTPS
-      });
-
+      localStorage.setItem("access_token", accessToken);
       localStorage.setItem("refresh_token", refreshToken);
 
       if (user) {
@@ -41,12 +33,7 @@ export const useAuth = () => {
       console.log("user", user);
       console.log({ accessToken });
 
-      cookies.set("access_token", accessToken, {
-        path: "/",
-        httpOnly: true,
-        secure: true, // Set to true if using HTTPS
-      });
-
+      localStorage.setItem("access_token", accessToken);
       localStorage.setItem("refresh_token", refreshToken);
 
       if (user) {
@@ -60,15 +47,10 @@ export const useAuth = () => {
   };
 
   const logout = async () => {
-    cookies.remove("access_token", {
-      path: "/",
-      httpOnly: true,
-      secure: true, // Set to true if using HTTPS
-    });
-
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("access_token");
     setUser(null);
     localStorage.removeItem("user");
-    localStorage.removeItem("refresh_token");
   };
 
   return { user, login, register, logout };

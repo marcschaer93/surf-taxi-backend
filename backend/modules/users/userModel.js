@@ -17,7 +17,7 @@ class UserApi {
    *
    * Throws UnauthorizedError is user not found or wrong password.
    **/
-  static async authenticate(username, password) {
+  static async authenticate({ username, password }) {
     const result = await db.query(
       `
     SELECT *

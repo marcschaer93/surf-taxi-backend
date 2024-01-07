@@ -1,7 +1,6 @@
 // API configuration
 
 import axios from "axios";
-import { setRefreshToken, setAccessToken } from "./tokenService";
 
 // Your backend API base URL (localhost for dev)
 const BASE_URL =
@@ -17,7 +16,22 @@ export const apiService = axios.create({
 
 // INTERCEPTORS
 
-// Axios response interceptor for handling token expiration
+// Calculate a time window before token expiration to trigger refresh (e.g., 1 minute before expiration)
+const REFRESH_TIME_WINDOW = 60; // in seconds
+
+// Add a request interceptor
+apiService.interceptors.request.use(
+  (config) => {
+    const accessToken = localStorage.getItem("access_token");
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Add a response interceptor
 apiService.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -29,16 +43,18 @@ apiService.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem("refreshToken");
+        const refreshToken = localStorage.getItem("refresh_token");
         const response = await apiService.post("/auth/refresh-token", {
           refreshToken,
         });
         const { accessToken } = response.data;
+        console.log("new accessToken", accessToken);
 
-        setAccessToken(accessToken);
+        localStorage.setItem("access_token", accessToken);
 
         // Retry the original request with the new token
-        return axios(originalRequest);
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        return apiService(originalRequest);
       } catch (error) {
         // Handle refresh token error or redirect to login
       }

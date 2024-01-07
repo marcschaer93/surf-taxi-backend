@@ -1,36 +1,17 @@
-import Cookies from "universal-cookie";
+// Function to set refresh token in localStorage
+export const storeAccessTokenLocalStorage = (token) => {
+  localStorage.setItem("access_token", token);
+};
 
-const cookies = new Cookies();
-
-// Function to set access token in cookies
-export const setAccessToken = (token) => {
-  // const accessToken = cookies.access_token;
-  const accessToken = cookies.get("access_token");
-
-  if (accessToken) {
-    // Remove the access token cookie
-    cookies.remove("access_token", {
-      path: "/",
-      httpOnly: true,
-      secure: true, // Set to true if using HTTPS
-    });
-  }
-
-  cookies.set("access_token", token, {
-    path: "/",
-    httpOnly: true,
-    secure: true, // Set to true if using HTTPS
-  });
+export const removeAccessTokenLocalStorage = () => {
+  localStorage.removeItem("access_token");
 };
 
 // Function to set refresh token in localStorage
-export const setRefreshToken = (token) => {
-  const refreshToken = localStorage.get("refresh_token");
-
-  if (refreshToken) {
-    // Remove the refresh token from localStorage
-    localStorage.removeItem("refresh_token");
-  }
-
+export const storeRefreshTokenLocalStorage = (token) => {
   localStorage.setItem("refresh_token", token);
+};
+
+export const removeRefreshTokenLocalStorage = () => {
+  localStorage.removeItem("refresh_token");
 };

@@ -1,55 +1,47 @@
 const jwt = require("jsonwebtoken");
-const { UnauthorizedError } = require("../expressError");
+const { UnauthorizedError, ExpressError } = require("../expressError");
 
-/** Middleware: Authenticate user using cookies. */
-
-//$$
-// Define an array of routes that do not require authentication
-// const nonAuthRoutes = ["/public", "/login", "/signup"];
-
+/** Middleware: Authenticate user using JWT. */
 const authenticateJWT = async (req, res, next) => {
   try {
-    const accessToken = req.cookies.access_token; // Access the access token from the cookies
-    console.log("accessToken", accessToken);
+    const authHeader = req.headers.authorization;
+    const accessToken = authHeader && authHeader.split(" ")[1];
 
-    // $$
-    // Skip authentication for non-auth routes
-    // if (nonAuthRoutes.includes(req.path)) {
-    //   return next();
-    // }
-
-    // Its not a Error without valid token
-
-    // if (!accessToken) {
-    //   // Unauthorized
-    //   return res
-    //     .status(401)
-    //     .json({ message: "Unauthorized: Missing access token" });
-    // }
-
-    if (accessToken) {
-      const payload = await jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
-
-      req.username = payload.username;
-      // req.curr_admin = payload.admin;
+    if (!accessToken) {
+      throw new ExpressError(401, "Unauthorized: Access token missing");
     }
+
+    const payload = await jwt.verify(
+      accessToken,
+      process.env.ACCESS_TOKEN_SECRET
+    );
+    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+
+    if (payload.exp <= currentTime) {
+      req.username = null;
+      throw new ExpressError(401, "Unauthorized: Token expired");
+    }
+
+    req.username = payload.username;
+    // req.curr_admin = payload.admin;
 
     return next();
   } catch (err) {
-    console.error(err);
+    return next(err);
   }
 };
 
 /** Middleware: Requires user is authenticated. */
 
-function ensureLoggedIn(req, res, next) {
-  try {
-    if (!req.username) throw new UnauthorizedError();
-    return next();
-  } catch (err) {
-    return next(err);
-  }
-}
+// function ensureLoggedIn(req, res, next) {
+//   try {
+//     console.log("req.username req", req.username);
+//     if (!req.username) throw new UnauthorizedError();
+//     return next();
+//   } catch (err) {
+//     return next(err);
+//   }
+// }
 
 /** Middleware: Requires correct username. */
 
@@ -62,4 +54,4 @@ const ensureCorrectUser = (req, res, next) => {
   }
 };
 
-module.exports = { authenticateJWT, ensureCorrectUser, ensureLoggedIn };
+module.exports = { authenticateJWT, ensureCorrectUser };

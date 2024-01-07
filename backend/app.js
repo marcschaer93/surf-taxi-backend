@@ -13,6 +13,9 @@ const {
 
 const app = express();
 
+// Use cookie-parser middleware
+// app.use(cookieParser());
+
 // Parse JSON-encoded bodies
 app.use(express.json());
 
@@ -22,11 +25,8 @@ app.use(cors());
 // Parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
 
-// Use cookie-parser middleware
-app.use(cookieParser());
-
 // Authenticate Middleware
-app.use(authenticateJWT);
+// app.use(authenticateJWT);
 
 // Mounting the API routes
 app.use("/api/auth", authRoutes);

@@ -18,8 +18,8 @@ exports.authRegisterPost = asyncHandler(async (req, res, next) => {
 
   const newUser = result.newUser;
 
-  const accessToken = generateAccessToken(newUser);
-  const refreshToken = generateRefreshToken(newUser);
+  const accessToken = generateAccessToken(newUser.username);
+  const refreshToken = generateRefreshToken(newUser.username);
 
   res.json({
     accessToken: accessToken,
@@ -28,13 +28,15 @@ exports.authRegisterPost = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.authUserPost = asyncHandler(async (req, res, next) => {
-  const { username, password } = req.body;
+exports.authUser = asyncHandler(async (req, res, next) => {
+  const user = await UserApi.authenticate(req.body);
 
-  const user = await UserApi.authenticate(username, password);
+  if (!user) {
+    throw new ExpressError(401, "Invalid credentials.");
+  }
 
-  const accessToken = generateAccessToken(user);
-  const refreshToken = generateRefreshToken(user);
+  const accessToken = generateAccessToken(user.username);
+  const refreshToken = generateRefreshToken(user.username);
 
   res.json({
     accessToken: accessToken,
@@ -48,15 +50,14 @@ exports.refreshToken = asyncHandler(async (req, res, next) => {
 
   if (!refreshToken) throw new ExpressError(401, "No refresh token provided");
 
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err) {
-      throw new ExpressError(403, "Invalid refresh token");
-    }
-  });
+  const payload = await jwt.verify(
+    refreshToken,
+    process.env.REFRESH_TOKEN_SECRET
+  );
+  console.log("payload", payload.username);
+  const { username } = payload;
 
-  console.log("refresh-token-user", user);
-
-  const newAccessToken = generateAccessToken(user);
+  const newAccessToken = generateAccessToken(username);
 
   res.json({ accessToken: newAccessToken });
 });

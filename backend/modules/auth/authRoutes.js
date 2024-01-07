@@ -19,11 +19,7 @@ router.post(
 );
 
 // POST request for access- and refreshToken if valid {username, password}.
-router.post(
-  "/token",
-  validateInputs(userAuthSchema),
-  authController.authUserPost
-);
+router.post("/token", validateInputs(userAuthSchema), authController.authUser);
 
 // Route to refresh tokens if accessToken has expired
 router.post(

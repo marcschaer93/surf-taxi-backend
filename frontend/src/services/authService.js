@@ -12,7 +12,7 @@ export const registerUser = async (userData) => {
   }
 };
 
-export const loginUser = async (username, password) => {
+export const loginUser = async ({ username, password }) => {
   try {
     const response = await apiService.post("/auth/token", {
       username,
@@ -20,9 +20,12 @@ export const loginUser = async (username, password) => {
     });
 
     if (response.status === 200) {
-      return response.data;
+      const { accessToken, refreshToken, user } = response.data;
+      return { accessToken, refreshToken, user };
+    } else {
+      throw new Error("Login failed");
     }
   } catch (error) {
-    // throw new Error(error.response.data.message);
+    throw new Error("Login failed");
   }
 };
