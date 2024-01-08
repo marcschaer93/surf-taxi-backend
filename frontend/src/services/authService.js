@@ -20,8 +20,7 @@ export const loginUser = async ({ username, password }) => {
     });
 
     if (response.status === 200) {
-      const { accessToken, refreshToken, user } = response.data;
-      return { accessToken, refreshToken, user };
+      return response.data;
     } else {
       throw new Error("Login failed");
     }

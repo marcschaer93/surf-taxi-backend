@@ -16,10 +16,7 @@ export const apiService = axios.create({
 
 // INTERCEPTORS
 
-// Calculate a time window before token expiration to trigger refresh (e.g., 1 minute before expiration)
-const REFRESH_TIME_WINDOW = 60; // in seconds
-
-// Add a request interceptor
+// Add a request interceptor. On every request, it adds accessToken to headers
 apiService.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("access_token");
@@ -31,7 +28,7 @@ apiService.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Add a response interceptor
+// Add a response interceptor. Check every Response. If token expires, generates new.
 apiService.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -44,10 +41,13 @@ apiService.interceptors.response.use(
 
       try {
         const refreshToken = localStorage.getItem("refresh_token");
-        const response = await apiService.post("/auth/refresh-token", {
-          refreshToken,
-        });
-        const { accessToken } = response.data;
+        const refreshTokenResponse = await apiService.post(
+          "/auth/refresh-token",
+          {
+            refreshToken,
+          }
+        );
+        const { accessToken } = refreshTokenResponse.data;
         console.log("new accessToken", accessToken);
 
         localStorage.setItem("access_token", accessToken);

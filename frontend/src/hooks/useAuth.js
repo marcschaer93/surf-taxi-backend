@@ -1,4 +1,7 @@
-import { loginUser } from ".././services/authService";
+import { useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
+
+import { loginUser } from "../services/authService";
 import { useLocalStorage } from "./useLocalStorage";
 
 export const useAuth = () => {
@@ -49,9 +52,31 @@ export const useAuth = () => {
   const logout = async () => {
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("access_token");
-    setUser(null);
     localStorage.removeItem("user");
+    setUser(null);
   };
+
+  const checkTokenExpiration = () => {
+    const accessToken = localStorage.getItem("access_token");
+    if (accessToken) {
+      // Decode the token to extract the expiration time
+      const decodedToken = jwtDecode(accessToken);
+      const expirationTime = decodedToken.exp;
+      console.log("exp", expirationTime);
+
+      const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+
+      if (currentTime >= expirationTime) {
+        // Token has expired, set user to null and redirect to login
+        logout();
+      }
+    }
+  };
+
+  // Call the expiration check function when the hook is initialized or when a user action occurs
+  useEffect(() => {
+    checkTokenExpiration();
+  }, []);
 
   return { user, login, register, logout };
 };

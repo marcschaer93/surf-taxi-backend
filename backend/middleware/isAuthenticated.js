@@ -8,7 +8,7 @@ const authenticateJWT = async (req, res, next) => {
     const accessToken = authHeader && authHeader.split(" ")[1];
 
     if (!accessToken) {
-      throw new ExpressError(401, "Unauthorized: Access token missing");
+      throw new ExpressError("Unauthorized: Access token missing", 401);
     }
 
     const payload = await jwt.verify(
@@ -16,11 +16,21 @@ const authenticateJWT = async (req, res, next) => {
       process.env.ACCESS_TOKEN_SECRET
     );
     const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+    const tokenExp = payload.exp;
 
-    if (payload.exp <= currentTime) {
-      req.username = null;
-      throw new ExpressError(401, "Unauthorized: Token expired");
+    // Calculate a threshold time (e.g., 1 minute before expiration)
+    const thresholdTime = tokenExp - 15; // 1 minute before expiration
+
+    // If the current time is past the threshold time, return 401
+    if (currentTime >= thresholdTime) {
+      // return res.status(401).json({ error: "Token is soon to expire" });
+      throw new ExpressError("Token is soon to expire", 401);
     }
+
+    // if (payload.exp <= currentTime) {
+    //   req.username = null;
+    //   throw new ExpressError(401, "Unauthorized: Token expired");
+    // }
 
     req.username = payload.username;
     // req.curr_admin = payload.admin;
