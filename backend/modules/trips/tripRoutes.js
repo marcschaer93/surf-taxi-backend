@@ -40,4 +40,4 @@ router.patch("/:id/update", tripController.tripUpdatePatch);
 router.get("/:id", tripController.tripDetail);
 
 // GET request for list of all Trips.
-router.get("/", authenticateJWT, tripController.tripList);
+router.get("/", tripController.tripList);

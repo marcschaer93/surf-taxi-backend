@@ -2,7 +2,7 @@
 const asyncHandler = require("express-async-handler");
 
 const TripApi = require("./tripModel");
-const { BadRequestError } = require("../../expressError");
+const { BadRequestError } = require("../../helpers/expressError");
 
 // Display list of all Trips.
 exports.tripList = asyncHandler(async (req, res) => {

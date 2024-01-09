@@ -1,7 +1,5 @@
-
 CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  username VARCHAR(25) UNIQUE NOT NULL,
+  username VARCHAR(25) PRIMARY KEY,
   password TEXT NOT NULL,
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
@@ -24,16 +22,19 @@ CREATE TABLE trips (
   start_location TEXT,
   destination TEXT,
   stops TEXT,
-  trip_info TEXT,
+  travel_info TEXT,
   seats INTEGER,
-  costs TEXT,
-  user_id INTEGER REFERENCES users(id)
+  costs TEXT
 );
 
+CREATE TABLE trip_members (
+  username VARCHAR(25) 
+    REFERENCES users(username) ON DELETE CASCADE,
+  trip_id INTEGER 
+    REFERENCES trips(id) ON DELETE CASCADE,
+  is_trip_creator BOOLEAN,
+  request_status VARCHAR(20),
+  PRIMARY KEY (username, trip_id)
+);
 
-
--- CREATE TABLE routes (
---   id SERIAL PRIMARY KEY,
---   trip_id INTEGER REFERENCES trips(id)
--- );
-
+  -- request_status ENUM('pending', 'approved', 'rejected') DEFAULT NULL,

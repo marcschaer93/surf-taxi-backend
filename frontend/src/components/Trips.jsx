@@ -7,8 +7,9 @@ export const Trips = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchedTrips = await Api.allTrips();
-        setTrips(fetchedTrips);
+        const allTripsData = await Api.allTrips();
+        const allTrips = allTripsData.trips;
+        setTrips(allTrips);
       } catch (error) {
         // Handle error
         console.error(error);

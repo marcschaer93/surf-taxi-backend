@@ -19,12 +19,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const loggedInUser = await login(credentials);
-      console.log("loggedInUser", loggedInUser);
-    } catch (error) {
-      console.error(error);
-    }
+    login(credentials);
   };
 
   return (

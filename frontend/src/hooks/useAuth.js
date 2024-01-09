@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
-import { loginUser } from "../services/authService";
+// import { loginUser } from "../services/authService";
+import * as Api from "../services/authService";
 import { useLocalStorage } from "./useLocalStorage";
 
 export const useAuth = () => {
@@ -9,7 +10,8 @@ export const useAuth = () => {
 
   const login = async (credentials) => {
     try {
-      const { accessToken, refreshToken, user } = await loginUser(credentials);
+      const loginResponse = await Api.loginUser(credentials);
+      const { accessToken, refreshToken, user } = loginResponse;
 
       console.log("Access Token:", accessToken);
       console.log("Refresh Token:", refreshToken);
@@ -21,7 +23,6 @@ export const useAuth = () => {
       if (user) {
         setUser(user);
         localStorage.setItem("user", JSON.stringify(user));
-        return user;
       }
     } catch (err) {
       console.error(err);
@@ -30,9 +31,9 @@ export const useAuth = () => {
 
   const register = async (data) => {
     try {
-      const newUserData = await Api.registerUser(data);
+      const registerResponse = await Api.registerUser(data);
 
-      const { accessToken, refreshToken, user } = newUserData;
+      const { accessToken, refreshToken, user } = registerResponse;
       console.log("user", user);
       console.log({ accessToken });
 
@@ -62,7 +63,6 @@ export const useAuth = () => {
       // Decode the token to extract the expiration time
       const decodedToken = jwtDecode(accessToken);
       const expirationTime = decodedToken.exp;
-      console.log("exp", expirationTime);
 
       const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
 

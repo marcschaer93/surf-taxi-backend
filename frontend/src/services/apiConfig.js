@@ -48,8 +48,6 @@ apiService.interceptors.response.use(
           }
         );
         const { accessToken } = refreshTokenResponse.data;
-        console.log("new accessToken", accessToken);
-
         localStorage.setItem("access_token", accessToken);
 
         // Retry the original request with the new token

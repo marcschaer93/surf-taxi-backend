@@ -2,7 +2,7 @@
 const asyncHandler = require("express-async-handler");
 
 const UserApi = require("./userModel");
-const { BadRequestError } = require("../../expressError");
+const { BadRequestError } = require("../../helpers/expressError");
 
 // Displays list of all Users.
 exports.userList = asyncHandler(async (req, res, next) => {

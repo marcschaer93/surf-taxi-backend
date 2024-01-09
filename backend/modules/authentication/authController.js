@@ -2,18 +2,18 @@
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 
-const UserApi = require(".././users/userModel");
-const { BadRequestError, ExpressError } = require("../../expressError");
+const AuthApi = require("../authentication/authModel");
+const { BadRequestError, ExpressError } = require("../../helpers/expressError");
 const {
   generateAccessToken,
   generateRefreshToken,
 } = require("../../helpers/tokens");
 
-exports.authRegisterPost = asyncHandler(async (req, res, next) => {
+exports.authRegister = asyncHandler(async (req, res, next) => {
   const newUserData = req.body;
 
   // Register user using data from req.body
-  const result = await UserApi.register(newUserData);
+  const result = await AuthApi.register(newUserData);
   console.log({ result });
 
   const newUser = result.newUser;
@@ -29,7 +29,7 @@ exports.authRegisterPost = asyncHandler(async (req, res, next) => {
 });
 
 exports.authUser = asyncHandler(async (req, res, next) => {
-  const user = await UserApi.authenticate(req.body);
+  const user = await AuthApi.authenticate(req.body);
 
   if (!user) {
     throw new ExpressError(401, "Invalid credentials.");
@@ -47,16 +47,14 @@ exports.authUser = asyncHandler(async (req, res, next) => {
 
 exports.refreshToken = asyncHandler(async (req, res, next) => {
   const { refreshToken } = req.body;
-
-  if (!refreshToken) throw new ExpressError(401, "No refresh token provided");
+  // if (!refreshToken) throw new ExpressError("No refresh token provided", 401);
 
   const payload = await jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET
   );
-  console.log("payload", payload.username);
-  const { username } = payload;
 
+  const { username } = payload;
   const newAccessToken = generateAccessToken(username);
 
   res.json({ accessToken: newAccessToken });

@@ -1,5 +1,5 @@
 const db = require("../../db/db");
-const { NotFoundError } = require("../../expressError");
+const { NotFoundError } = require("../../helpers/expressError");
 const asyncHandler = require("express-async-handler");
 
 /** Related functions for trips. */
@@ -40,10 +40,9 @@ class TripApi {
       start_location,
       destination,
       stops,
-      trip_info,
+      travel_info,
       seats,
       costs,
-      user_id,
     } = data;
 
     const query = `
@@ -51,11 +50,10 @@ class TripApi {
         start_location,
         destination,
         stops,
-        trip_info,
+        travel_info,
         seats,
-        costs,
-        user_id)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        costs)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *
       `;
 
@@ -64,10 +62,9 @@ class TripApi {
       start_location,
       destination,
       stops,
-      trip_info,
+      travel_info,
       seats,
       costs,
-      user_id,
     ];
 
     const newTrip = await db.query(query, values);

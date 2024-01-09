@@ -6,10 +6,9 @@
   "required": [
     "start_location",
     "destination",
-    "trip_info",
+    "travel_info",
     "costs",
-    "seats",
-    "user_id"
+    "seats"
   ],
   "properties": {
     "date": {
@@ -32,7 +31,7 @@
       "type": "string",
       "examples": ["Hossegor"]
     },
-    "trip_info": {
+    "travel_info": {
       "title": "The trip_info Schema",
       "type": "string",
       "examples": ["surftrip"]
@@ -46,11 +45,6 @@
       "title": "The seats Schema",
       "type": "integer",
       "examples": [2]
-    },
-    "user_id": {
-      "title": "The user_id Schema",
-      "type": "integer",
-      "examples": [1]
     }
   },
   "examples": [
@@ -59,10 +53,9 @@
       "start_location": "Bern",
       "destination": "Santander",
       "stops": "Hossegor",
-      "trip_info": "surftrip",
+      "travel_info": "surftrip",
       "costs": "split gas \u0026 tolls",
-      "seats": 2,
-      "user_id": 1
+      "seats": 2
     }
   ]
 }

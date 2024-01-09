@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
-const { UnauthorizedError, ExpressError } = require("../expressError");
+const { UnauthorizedError, ExpressError } = require("../helpers/expressError");
 
 /** Middleware: Authenticate user using JWT. */
+
 const authenticateJWT = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -15,24 +16,21 @@ const authenticateJWT = async (req, res, next) => {
       accessToken,
       process.env.ACCESS_TOKEN_SECRET
     );
-    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+
     const tokenExp = payload.exp;
+    const username = payload.username;
 
     // Calculate a threshold time (e.g., 1 minute before expiration)
     const thresholdTime = tokenExp - 15; // 1 minute before expiration
 
+    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+
     // If the current time is past the threshold time, return 401
     if (currentTime >= thresholdTime) {
-      // return res.status(401).json({ error: "Token is soon to expire" });
       throw new ExpressError("Token is soon to expire", 401);
     }
 
-    // if (payload.exp <= currentTime) {
-    //   req.username = null;
-    //   throw new ExpressError(401, "Unauthorized: Token expired");
-    // }
-
-    req.username = payload.username;
+    req.username = username;
     // req.curr_admin = payload.admin;
 
     return next();
@@ -40,18 +38,6 @@ const authenticateJWT = async (req, res, next) => {
     return next(err);
   }
 };
-
-/** Middleware: Requires user is authenticated. */
-
-// function ensureLoggedIn(req, res, next) {
-//   try {
-//     console.log("req.username req", req.username);
-//     if (!req.username) throw new UnauthorizedError();
-//     return next();
-//   } catch (err) {
-//     return next(err);
-//   }
-// }
 
 /** Middleware: Requires correct username. */
 

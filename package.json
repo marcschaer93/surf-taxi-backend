@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "cookie-parser": "^1.4.6",
-    "universal-cookie": "^7.0.0"
-  }
-}

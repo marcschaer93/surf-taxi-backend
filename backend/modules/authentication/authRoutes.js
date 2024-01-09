@@ -2,9 +2,10 @@ const express = require("express");
 
 const router = express.Router();
 const authController = require("./authController.js");
-const { validateInputs } = require("../../middleware/validateInputs");
+const { validateInputs } = require("../../middleware/validateInputs.js");
 const userRegisterSchema = require("./userRegisterSchema.json");
 const userAuthSchema = require("./userAuthSchema.json");
+const refreshTokenSchema = require("./refreshTokenSchema.json");
 
 // export our router to be mounted by the parent application
 module.exports = router;
@@ -15,7 +16,7 @@ module.exports = router;
 router.post(
   "/register",
   validateInputs(userRegisterSchema),
-  authController.authRegisterPost
+  authController.authRegister
 );
 
 // POST request for access- and refreshToken if valid {username, password}.
@@ -24,6 +25,6 @@ router.post("/token", validateInputs(userAuthSchema), authController.authUser);
 // Route to refresh tokens if accessToken has expired
 router.post(
   "/refresh-token",
-  //   validateInputs(userAuthSchema),
+  validateInputs(refreshTokenSchema),
   authController.refreshToken
 );

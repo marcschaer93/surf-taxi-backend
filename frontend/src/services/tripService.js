@@ -12,7 +12,7 @@ export const createTrip = async (tripData) => {
 export const allTrips = async () => {
   try {
     const response = await apiService.get("/trips");
-    return response.data.trips;
+    return response.data;
   } catch (error) {
     throw new Error(error.response.data.message);
   }

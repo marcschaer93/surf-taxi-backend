@@ -1,5 +1,5 @@
 require("colors");
-const { NotFoundError } = require("../expressError");
+const { NotFoundError } = require("../helpers/expressError");
 
 /** Handle 404 errors -- this matches everything */
 const handle404Error = (req, res, next) => {

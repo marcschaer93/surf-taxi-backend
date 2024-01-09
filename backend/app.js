@@ -2,7 +2,7 @@ const cors = require("cors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 
-const authRoutes = require("./modules/auth/authRoutes");
+const authRoutes = require("./modules/authentication/authRoutes");
 const userRoutes = require("./modules/users/userRoutes");
 const tripRoutes = require("./modules/trips/tripRoutes");
 const { authenticateJWT } = require("./middleware/isAuthenticated");
