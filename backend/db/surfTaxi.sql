@@ -6,10 +6,10 @@ DROP TABLE IF EXISTS trips CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
 -- Recreate tables
-\i schema.sql
+\i db/schema.sql
 
 -- Seed the tables
-\i seed.sql
+\i db/seed.sql
 
 
 

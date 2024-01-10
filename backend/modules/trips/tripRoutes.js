@@ -20,6 +20,7 @@ router.get("/create", tripController.tripCreateGet);
 // POST request for creating Trip.
 router.post(
   "/create",
+  authenticateJWT,
   validateInputs(tripNewSchema),
   tripController.tripCreatePost
 );

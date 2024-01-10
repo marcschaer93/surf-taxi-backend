@@ -54,6 +54,7 @@ apiService.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return apiService(originalRequest);
       } catch (error) {
+        console.error("Token refresh failed:", error);
         // Handle refresh token error or redirect to login
       }
     }

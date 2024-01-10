@@ -17,7 +17,6 @@ export const Trips = () => {
     };
     fetchData();
   }, []);
-  console.log({ trips });
 
   return (
     <>

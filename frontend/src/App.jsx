@@ -1,35 +1,20 @@
 import { useEffect, useState } from "react";
 // import * as Api from "./api";
 import * as Api from "./services/tripService";
-import Login from "./components/Login";
-import { Secret } from "./components/Secret";
-import { Trips } from "./components/Trips";
-import RequireAuth from "./components/RequireAuth";
-
+import { Login } from "./pages/Login";
 import { Route, Routes } from "react-router-dom";
+
+import { Trips } from "./components/Trips";
+import { Home } from "./pages/Home";
+import { RequireAuth } from "./components/RequireAuth";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<h1>HOME</h1>} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route
-          path="/secret"
-          element={
-            <RequireAuth>
-              <Secret />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/trips"
-          element={
-            <RequireAuth>
-              <Trips />
-            </RequireAuth>
-          }
-        />
+        <Route path="/trips" element={<Trips />} />
       </Routes>
     </>
   );

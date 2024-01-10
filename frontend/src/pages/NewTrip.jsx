@@ -1,0 +1,20 @@
+import { useAuthContext } from "../utils/authProvider";
+import { TripForm } from "../components/form/TripForm";
+
+export const NewTrip = () => {
+  const auth = useAuthContext();
+
+  if (!auth.user)
+    return (
+      <>
+        <h1>{`NewTrip --> Login required!`}</h1>
+      </>
+    );
+
+  return (
+    <div>
+      <h1>New Trip</h1>
+      <TripForm />
+    </div>
+  );
+};

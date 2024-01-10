@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
-// import { loginUser } from "../services/authService";
 import * as Api from "../services/authService";
 import { useLocalStorage } from "./useLocalStorage";
 
 export const useAuth = () => {
+  // Storing user data in localStorage keeps the user logged in even after a page reload. It's convenient but can be less secure compared to storing data only in state.
   const [user, setUser] = useLocalStorage("user", null);
 
   const login = async (credentials) => {
@@ -13,9 +13,9 @@ export const useAuth = () => {
       const loginResponse = await Api.loginUser(credentials);
       const { accessToken, refreshToken, user } = loginResponse;
 
-      console.log("Access Token:", accessToken);
-      console.log("Refresh Token:", refreshToken);
-      console.log("User:", user);
+      // console.log("Access Token:", accessToken);
+      // console.log("Refresh Token:", refreshToken);
+      // console.log("Current_User:", user);
 
       localStorage.setItem("access_token", accessToken);
       localStorage.setItem("refresh_token", refreshToken);
@@ -34,7 +34,8 @@ export const useAuth = () => {
       const registerResponse = await Api.registerUser(data);
 
       const { accessToken, refreshToken, user } = registerResponse;
-      console.log("user", user);
+      console.log("Current_User:", user);
+
       console.log({ accessToken });
 
       localStorage.setItem("access_token", accessToken);
@@ -57,6 +58,11 @@ export const useAuth = () => {
     setUser(null);
   };
 
+  useEffect(() => {
+    console.log("Current_User", user);
+    checkTokenExpiration(); // Ensure it runs when the user state changes
+  }, [user]);
+
   const checkTokenExpiration = () => {
     const accessToken = localStorage.getItem("access_token");
     if (accessToken) {
@@ -73,9 +79,14 @@ export const useAuth = () => {
     }
   };
 
-  // Call the expiration check function when the hook is initialized or when a user action occurs
+  // This sets up an interval that checks the token expiration every 60 seconds (you can adjust the time as needed). The interval is cleared when the component unmounts to prevent memory leaks. Adjust the timing based on how frequently you want to check the token expiration.
   useEffect(() => {
-    checkTokenExpiration();
+    const intervalId = setInterval(() => {
+      checkTokenExpiration();
+    }, 1000); // Check every 5 seconds (adjust the time interval as needed)
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(intervalId);
   }, []);
 
   return { user, login, register, logout };
