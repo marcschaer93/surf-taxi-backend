@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 
 import { useAuthContext } from "../../utils/authProvider";
-import * as Api from "../../services/tripService";
 
-export const TripForm = () => {
+export const TripForm = ({ addTrip }) => {
   const { user } = useAuthContext();
 
   const [formData, setFormData] = useState({
@@ -25,7 +24,8 @@ export const TripForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    Api.createTrip(formData);
+    console.log("formData", formData);
+    addTrip(formData);
   };
 
   const {
@@ -62,7 +62,12 @@ export const TripForm = () => {
           onChange={handleChange}
         />
         <input type="text" name="costs" value={costs} onChange={handleChange} />
-        <input type="text" name="seats" value={seats} onChange={handleChange} />
+        <input
+          type="number"
+          name="seats"
+          value={seats}
+          onChange={handleChange}
+        />
 
         <button type="submit">Add Trip</button>
       </form>

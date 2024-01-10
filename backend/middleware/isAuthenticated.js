@@ -21,7 +21,7 @@ const authenticateJWT = async (req, res, next) => {
     const username = payload.username;
 
     // Calculate a threshold time (e.g., 1 minute before expiration)
-    const thresholdTime = tokenExp - 15; // 1 minute before expiration
+    const thresholdTime = tokenExp - 60; // 1 minute before expiration
 
     const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
 

@@ -1,23 +1,7 @@
 import { useEffect, useState } from "react";
-import * as Api from "../services/tripService";
 
-export const Trips = () => {
-  const [trips, setTrips] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const allTripsData = await Api.allTrips();
-        const allTrips = allTripsData.trips;
-        setTrips(allTrips);
-      } catch (error) {
-        // Handle error
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
-
+export const Trips = ({ trips }) => {
+  console.log("trips", trips);
   return (
     <>
       {trips ? (

@@ -1,5 +1,7 @@
 import { apiService } from "./apiConfig";
 
+// provides functions for authentication
+
 export const registerUser = async (userData) => {
   try {
     const response = await apiService.post("/auth/register", userData);

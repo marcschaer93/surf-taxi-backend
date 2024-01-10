@@ -2,19 +2,19 @@
 const asyncHandler = require("express-async-handler");
 
 const TripApi = require("./tripModel");
-const { BadRequestError } = require("../../helpers/expressError");
+const { BadRequestError, ExpressError } = require("../../helpers/expressError");
 
 // Display list of all Trips.
 exports.tripList = asyncHandler(async (req, res) => {
   const trips = await TripApi.getAllTrips();
-  res.json({ trips });
+  return res.status(201).json({ trips });
 });
 
 // Display detail page for a specific Trip.
 exports.tripDetail = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const trip = await TripApi.getTrip(id);
-  res.json(trip);
+  return res.status(201).json(trip);
 });
 
 // Display trip create form on GET.
@@ -24,9 +24,10 @@ exports.tripCreateGet = asyncHandler(async (req, res) => {
 
 // Handle Trip create on POST.
 exports.tripCreatePost = asyncHandler(async (req, res) => {
-  const newTripData = req.body;
-  const result = await TripApi.createTrip(newTripData);
-  res.json({ result });
+  const validTripData = req.body;
+  const newTrip = await TripApi.createTrip(validTripData);
+
+  return res.status(201).json({ newTrip });
 });
 
 // Display trip delete form on GET.
@@ -49,6 +50,15 @@ exports.tripUpdatePatch = asyncHandler(async (req, res) => {
   const tripId = req.params.id;
   const updateTripData = req.body;
 
-  const result = await TripApi.updateTrip(tripId, updateTripData);
-  res.json({ result });
+  const updatedTrip = await TripApi.updateTrip(tripId, updateTripData);
+
+  if (updatedTrip) {
+    res.status(201).json({
+      success: true,
+      message: "Trip created successfully",
+      updatedTrip,
+    });
+  } else {
+    res.status(500).json({ success: false, message: "Failed to update trip" });
+  }
 });

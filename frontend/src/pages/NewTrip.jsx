@@ -1,7 +1,7 @@
 import { useAuthContext } from "../utils/authProvider";
 import { TripForm } from "../components/form/TripForm";
 
-export const NewTrip = () => {
+export const NewTrip = ({ addTrip }) => {
   const auth = useAuthContext();
 
   if (!auth.user)
@@ -14,7 +14,7 @@ export const NewTrip = () => {
   return (
     <div>
       <h1>New Trip</h1>
-      <TripForm />
+      <TripForm addTrip={addTrip} />
     </div>
   );
 };

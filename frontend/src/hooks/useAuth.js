@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
-import * as Api from "../services/authService";
+import * as Api from "../api/auth";
 import { useLocalStorage } from "./useLocalStorage";
 
 export const useAuth = () => {
@@ -83,7 +83,7 @@ export const useAuth = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       checkTokenExpiration();
-    }, 1000); // Check every 5 seconds (adjust the time interval as needed)
+    }, 600000); // Check every 10 minutes (adjust the time interval as needed)
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(intervalId);

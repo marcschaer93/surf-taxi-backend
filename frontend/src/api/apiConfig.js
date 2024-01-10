@@ -1,4 +1,5 @@
 // API configuration
+// contains an axios instance including interceptors for the outgoing HTTP requests and incoming responses. Moreover, the process of refreshing JWTs is handled in here.
 
 import axios from "axios";
 

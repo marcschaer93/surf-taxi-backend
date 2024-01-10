@@ -1,4 +1,4 @@
-import { apiService } from "./apiConfig";
+import { apiService } from "../api/apiConfig";
 
 export const fetchUserData = async () => {
   try {

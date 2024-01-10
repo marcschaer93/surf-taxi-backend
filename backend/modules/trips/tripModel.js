@@ -10,8 +10,9 @@ class TripApi {
    * Returns an array of users.
    */
   static async getAllTrips() {
-    let result = await db.query(`SELECT * FROM trips`);
+    const result = await db.query(`SELECT * FROM trips`);
     const trips = result.rows;
+    // No error, because i want to pass empty trip_list if no trips
     return trips;
   }
 
@@ -34,7 +35,7 @@ class TripApi {
    * @param {object} data - Trip data to create a new trip.
    * @returns {object} - Success message and the newly created trip object.
    */
-  static createTrip = asyncHandler(async (data) => {
+  static async createTrip(data) {
     const {
       date,
       start_location,
@@ -67,14 +68,15 @@ class TripApi {
       costs,
     ];
 
-    const newTrip = await db.query(query, values);
+    const result = await db.query(query, values);
+    const newTrip = result.rows[0];
 
-    return {
-      success: true,
-      message: "Trip created successfully",
-      newTrip: newTrip.rows[0],
-    };
-  });
+    if (!newTrip) {
+      throw new ExpressError("Failed to create trip", 500);
+    }
+
+    return newTrip;
+  }
 
   /**
    * Updates a trip in the database.
@@ -82,7 +84,7 @@ class TripApi {
    * @param {object} data - Trip data to update.
    * @returns {object} - Success message and the newly updated trip object.
    */
-  static updateTrip = asyncHandler(async (id, data) => {
+  static async updateTrip(id, data) {
     const keys = Object.keys(data);
     const updateValues = [...Object.values(data), id];
 
@@ -93,14 +95,9 @@ class TripApi {
       RETURNING *
     `;
 
-    const updatedTrip = await db.query(updateQuery, updateValues);
-
-    return {
-      success: true,
-      message: "Trip updated successfully",
-      updatedTrip: updatedTrip.rows[0],
-    };
-  });
+    const result = await db.query(updateQuery, updateValues);
+    const updatedTrip = result.rows[0];
+  }
 }
 
 module.exports = TripApi;

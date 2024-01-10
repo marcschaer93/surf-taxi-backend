@@ -3,12 +3,12 @@ import { Trips } from "../components/Trips";
 import { NewTrip } from "./NewTrip";
 import { RequireAuth } from "../components/RequireAuth";
 
-export const Home = () => {
+export const Home = ({ trips, addTrip }) => {
   return (
     <div>
       <Login />
-      <Trips />
-      <NewTrip />
+      <Trips trips={trips} />
+      <NewTrip addTrip={addTrip} />
     </div>
   );
 };
