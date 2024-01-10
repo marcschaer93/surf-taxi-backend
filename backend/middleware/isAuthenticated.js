@@ -22,7 +22,6 @@ const authenticateJWT = async (req, res, next) => {
 
     // Calculate a threshold time (e.g., 1 minute before expiration)
     const thresholdTime = tokenExp - 60; // 1 minute before expiration
-
     const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
 
     // If the current time is past the threshold time, return 401

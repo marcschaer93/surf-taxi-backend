@@ -97,6 +97,12 @@ class TripApi {
 
     const result = await db.query(updateQuery, updateValues);
     const updatedTrip = result.rows[0];
+
+    if (!updatedTrip) {
+      throw new ExpressError("Failed to update trip", 500);
+    }
+
+    return updatedTrip;
   }
 }
 

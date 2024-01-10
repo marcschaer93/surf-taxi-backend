@@ -36,6 +36,7 @@ class AuthApi {
         return user;
       }
     }
+
     throw new UnauthorizedError("Invalid username/password");
   }
 
@@ -95,13 +96,10 @@ class AuthApi {
 
     const result = await db.query(query, values);
     const newUser = result.rows[0];
+
     if (!newUser) throw new Error("User registration failed");
 
-    return {
-      success: true,
-      message: "User registered successfully",
-      newUser: newUser,
-    };
+    return newUser;
   }
 }
 

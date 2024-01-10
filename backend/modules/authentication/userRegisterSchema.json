@@ -91,6 +91,8 @@
       "examples": ["surfer"]
     }
   },
+  "additionalProperties": false,
+
   "examples": [
     {
       "username": "marcschaer",

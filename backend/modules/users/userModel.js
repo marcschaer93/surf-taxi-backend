@@ -32,8 +32,10 @@ class UserApi {
       username,
     ]);
     const user = result.rows[0];
+
     if (!user)
       throw new NotFoundError(`No user found with username: ${username}`);
+
     return user;
   }
 }

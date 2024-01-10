@@ -17,48 +17,38 @@ exports.tripDetail = asyncHandler(async (req, res) => {
   return res.status(201).json(trip);
 });
 
-// Display trip create form on GET.
-exports.tripCreateGet = asyncHandler(async (req, res) => {
-  res.send("NOT IMPLEMENTED: trip create Form");
-});
-
 // Handle Trip create on POST.
-exports.tripCreatePost = asyncHandler(async (req, res) => {
-  const validTripData = req.body;
-  const newTrip = await TripApi.createTrip(validTripData);
+exports.tripCreate = asyncHandler(async (req, res) => {
+  // Ensure that the req.body has been validated prior to reaching this point
+  const newTrip = await TripApi.createTrip(req.body);
 
   return res.status(201).json({ newTrip });
 });
 
-// Display trip delete form on GET.
-exports.tripDeleteGet = asyncHandler(async (req, res) => {
-  res.send("NOT IMPLEMENTED: Trip delete GET");
-});
-
 // Handle trip delete on POST.
-exports.tripDeletePost = asyncHandler(async (req, res) => {
+exports.tripDelete = asyncHandler(async (req, res) => {
   res.send("NOT IMPLEMENTED: Trip delete POST");
 });
 
-// Display trip update form on GET.
-exports.tripUpdateGet = asyncHandler(async (req, res) => {
-  res.send("NOT IMPLEMENTED: Trip update GET");
-});
-
 // Handle trip update on PATCH.
-exports.tripUpdatePatch = asyncHandler(async (req, res) => {
+exports.tripUpdate = asyncHandler(async (req, res) => {
   const tripId = req.params.id;
-  const updateTripData = req.body;
+  const updatedTrip = await TripApi.updateTrip(tripId, req.body);
 
-  const updatedTrip = await TripApi.updateTrip(tripId, updateTripData);
-
-  if (updatedTrip) {
-    res.status(201).json({
-      success: true,
-      message: "Trip created successfully",
-      updatedTrip,
-    });
-  } else {
-    res.status(500).json({ success: false, message: "Failed to update trip" });
-  }
+  return res.status(200).json({ updatedTrip });
 });
+
+// Display trip create form on GET.
+// exports.tripCreateGet = asyncHandler(async (req, res) => {
+//   res.send("NOT IMPLEMENTED: trip create Form");
+// });
+
+// Display trip delete form on GET.
+// exports.tripDeleteGet = asyncHandler(async (req, res) => {
+//   res.send("NOT IMPLEMENTED: Trip delete GET");
+// });
+
+// Display trip update form on GET.
+// exports.tripUpdateGet = asyncHandler(async (req, res) => {
+//   res.send("NOT IMPLEMENTED: Trip update GET");
+// });

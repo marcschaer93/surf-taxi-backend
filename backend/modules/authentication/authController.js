@@ -10,13 +10,7 @@ const {
 } = require("../../helpers/tokens");
 
 exports.authRegister = asyncHandler(async (req, res, next) => {
-  const newUserData = req.body;
-
-  // Register user using data from req.body
-  const result = await AuthApi.register(newUserData);
-  console.log({ result });
-
-  const newUser = result.newUser;
+  const newUser = await AuthApi.register(req.body);
 
   const accessToken = generateAccessToken(newUser.username);
   const refreshToken = generateRefreshToken(newUser.username);
@@ -31,10 +25,6 @@ exports.authRegister = asyncHandler(async (req, res, next) => {
 exports.authUser = asyncHandler(async (req, res, next) => {
   const user = await AuthApi.authenticate(req.body);
 
-  if (!user) {
-    throw new ExpressError(401, "Invalid credentials.");
-  }
-
   const accessToken = generateAccessToken(user.username);
   const refreshToken = generateRefreshToken(user.username);
 
@@ -47,7 +37,6 @@ exports.authUser = asyncHandler(async (req, res, next) => {
 
 exports.refreshToken = asyncHandler(async (req, res, next) => {
   const { refreshToken } = req.body;
-  // if (!refreshToken) throw new ExpressError("No refresh token provided", 401);
 
   const payload = await jwt.verify(
     refreshToken,

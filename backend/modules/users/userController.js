@@ -7,15 +7,19 @@ const { BadRequestError } = require("../../helpers/expressError");
 // Displays list of all Users.
 exports.userList = asyncHandler(async (req, res, next) => {
   const users = await UserApi.getAllUsers();
-  if (!users) return res.send(`User List is empty!`);
-  res.json({ users });
+  // if (!users) return res.send(`User List is empty!`);
+
+  // list can be empty!
+  res.status(200).json({ users });
 });
 
 // Displays detail page for a specific User
 exports.userDetail = asyncHandler(async (req, res, next) => {
   const { username } = req.params;
   const user = await UserApi.getUser(username);
-  res.json(user);
+
+  //
+  res.status(200).json(user);
 });
 
 // Handle User registration on POST.
