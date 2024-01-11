@@ -17,7 +17,7 @@ router.post(
   "/create",
   authenticateJWT,
   validateInputs(tripNewSchema),
-  tripController.tripCreate
+  tripController.createTrip
 );
 
 // POST request to delete Trip.

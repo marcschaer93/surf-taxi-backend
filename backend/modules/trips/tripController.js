@@ -12,13 +12,13 @@ exports.tripList = asyncHandler(async (req, res) => {
 
 // Display detail page for a specific Trip.
 exports.tripDetail = asyncHandler(async (req, res) => {
-  const trip = await TripApi.getTrip(req.params.id);
+  const tripDetail = await TripApi.getTrip(req.params.id);
 
-  res.status(200).json(trip);
+  res.status(200).json({ tripDetail });
 });
 
 // Handle Trip create on POST.
-exports.tripCreate = asyncHandler(async (req, res) => {
+exports.createTrip = asyncHandler(async (req, res) => {
   const newTrip = await TripApi.createTrip(req.body, req.username);
 
   res.status(201).json({ newTrip });

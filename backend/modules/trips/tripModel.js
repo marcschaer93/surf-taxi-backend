@@ -22,8 +22,38 @@ class TripApi {
    * @param {integer} id - id of the trip to retrieve.
    * @returns {object} - Trip object.
    */
+  // static async getTrip(id) {
+  //   const result = await db.query(`SELECT * FROM trips WHERE id=$1`, [id]);
+  //   const trip = result.rows[0];
+  //   if (!trip) throw new NotFoundError(`No trip found with ID: ${id}`);
+  //   return trip;
+  // }
   static async getTrip(id) {
-    let result = await db.query(`SELECT * FROM trips WHERE id=$1`, [id]);
+    const result = await db.query(
+      `
+    SELECT
+      T.id,
+      T.date,
+      T.start_location,
+      T.destination,
+      T.stops,
+      T.travel_info,
+      T.seats,
+      T.costs,
+      T.seats - COUNT(CASE WHEN TM.username IS NOT NULL AND TM.request_status IN ('approved', 'owner') THEN TM.username END) AS available_seats,
+      json_agg(jsonb_build_object('username', TM.username, 'status', TM.request_status) ORDER BY TM.username) AS trip_members
+    FROM
+      trips AS T
+    LEFT JOIN
+      trip_members AS TM ON T.id = TM.trip_id
+    WHERE
+      T.id = $1
+    GROUP BY
+      T.id, T.date, T.start_location, T.destination, T.stops, T.travel_info, T.seats, T.costs
+    `,
+      [id]
+    );
+
     const trip = result.rows[0];
     if (!trip) throw new NotFoundError(`No trip found with ID: ${id}`);
     return trip;
@@ -79,7 +109,7 @@ class TripApi {
     `;
 
   const linkInsertValues = [
-    username, newTrip.id, true, 'approved'
+    username, newTrip.id, true, 'owner'
   ];
 
   const linkInsertResult = await db.query(linkInsertQuery, linkInsertValues);

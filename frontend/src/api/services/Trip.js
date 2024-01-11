@@ -32,6 +32,22 @@ export const allTrips = async () => {
   }
 };
 
+export const tripDetail = async (id) => {
+  try {
+    const parsedId = parseInt(id, 10);
+    const response = await apiService.get(`/trips/${parsedId}`);
+
+    if (response.status === 200) {
+      const { tripDetail } = response.data;
+      return tripDetail;
+    } else {
+      throw new Error("Failed to get trip details");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const updateTrip = async (id) => {
   try {
     const response = await apiService.patch(`/trips/${id}/update`);
