@@ -25,3 +25,8 @@
 // - Models: Presentation logic, direct responses to HTTP requests.
 // - Controllers: Database operations, direct access to the database.
 // - Routes: Business logic, direct interactions with the database.
+
+Use HTTP status code 200 for successful requests that retrieve or update a resource.
+Use HTTP status code 201 for successful requests that create a new resource on the server.
+Use HTTP status code 202 for requests that have been accepted for processing but the processing has not yet been completed.
+Use HTTP status code 204 for successful requests that delete a resource or do not have any content to return.

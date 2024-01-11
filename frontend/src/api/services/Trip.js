@@ -21,7 +21,7 @@ export const allTrips = async () => {
     const response = await apiService.get("/trips");
     console.log("response", response);
 
-    if (response.status === 201) {
+    if (response.status === 200) {
       const { trips } = response.data;
       return trips;
     } else {

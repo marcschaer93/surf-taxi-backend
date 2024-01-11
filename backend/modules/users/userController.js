@@ -21,9 +21,24 @@ exports.userDetail = asyncHandler(async (req, res, next) => {
 
 // Handle User trip request on POST
 exports.userRequestTrip = asyncHandler(async (req, res) => {
-  const { id } = req.params.id;
+  const trip_id = req.params.id;
+  const username = req.username;
+  const { request_status } = req.body;
 
-  const requestStatus = await UserApi.requestTrip(id);
+  const requestStatus = await UserApi.requestTrip(
+    username,
+    trip_id,
+    request_status
+  );
 
-  res.status(201).json(requestStatus);
+  res.status(201).json({ requestStatus });
 });
+
+// Handle User trip request update on PATCH
+// exports.userRequestTripUpdate = asyncHandler(async (req, res) => {
+//   const { id } = req.params.id;
+
+//   const requestStatus = await UserApi.requestTrip(id);
+
+//   res.status(200).json({ requestStatus });
+// });

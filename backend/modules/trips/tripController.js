@@ -7,14 +7,14 @@ const { BadRequestError, ExpressError } = require("../../helpers/expressError");
 // Display list of all Trips.
 exports.tripList = asyncHandler(async (req, res) => {
   const trips = await TripApi.getAllTrips();
-  res.status(201).json({ trips });
+  res.status(200).json({ trips });
 });
 
 // Display detail page for a specific Trip.
 exports.tripDetail = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const trip = await TripApi.getTrip(id);
-  res.status(201).json(trip);
+  const trip = await TripApi.getTrip(req.params.id);
+
+  res.status(200).json(trip);
 });
 
 // Handle Trip create on POST.
@@ -28,7 +28,7 @@ exports.tripCreate = asyncHandler(async (req, res) => {
 exports.tripDelete = asyncHandler(async (req, res) => {
   await TripApi.removeTrip(req.params.id);
 
-  res.status(200).json({ message: "Trip deleted successfully" });
+  res.status(204).json({ message: "Trip deleted successfully" });
 });
 
 // Handle trip update on PATCH.
