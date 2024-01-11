@@ -5,6 +5,7 @@ const {
   NotFoundError,
   BadRequestError,
   UnauthorizedError,
+  ExpressError,
 } = require("../../helpers/expressError");
 const { BCRYPT_WORK_FACTOR } = require("../../config");
 
@@ -37,6 +38,71 @@ class UserApi {
       throw new NotFoundError(`No user found with username: ${username}`);
 
     return user;
+  }
+
+  static async requestTrip(id, request_status) {
+    const result = await db.query(
+      `SELECT * 
+       FROM trip_members 
+       WHERE trip_id = $1
+       AND is_trip_creator = $2
+       RETURNING *`,
+      [id, false]
+    );
+
+    const requestedTrip = result.rows[0];
+    if (!requestedTrip) throw new NotFoundError(`No trip found with id: ${id}`);
+
+    const result2 = await db.query(
+      `
+      UPDATE trip_members
+      SET request_status = $1
+      WHERE id = $2
+      RETURNING *
+      `,
+      [request_status, requestedTrip.id]
+    );
+
+    const updatedTripRequest = result2.rows[0];
+
+    if (updatedTripRequest)
+      throw new ExpressError(
+        `Failed to update request status for trip with ID ${id}`
+      );
+
+    return updatedTripRequest;
+  }
+  static async requestTripUpdate(id, request_status) {
+    const result = await db.query(
+      `SELECT * 
+       FROM trip_members 
+       WHERE trip_id = $1
+       AND is_trip_creator = $2
+       RETURNING *`,
+      [id, false]
+    );
+
+    const requestedTrip = result.rows[0];
+    if (!requestedTrip) throw new NotFoundError(`No trip found with id: ${id}`);
+
+    const result2 = await db.query(
+      `
+      UPDATE trip_members
+      SET request_status = $1
+      WHERE id = $2
+      RETURNING *
+      `,
+      [request_status, requestedTrip.id]
+    );
+
+    const updatedTripRequest = result2.rows[0];
+
+    if (updatedTripRequest)
+      throw new ExpressError(
+        `Failed to update request status for trip with ID ${id}`
+      );
+
+    return updatedTripRequest;
   }
 }
 

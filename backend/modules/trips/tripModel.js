@@ -1,5 +1,5 @@
 const db = require("../../db/db");
-const { NotFoundError } = require("../../helpers/expressError");
+const { NotFoundError, ExpressError } = require("../../helpers/expressError");
 const asyncHandler = require("express-async-handler");
 
 /** Related functions for trips. */
@@ -33,49 +33,63 @@ class TripApi {
    * Creates a new trip in the database.
    *
    * @param {object} data - Trip data to create a new trip.
-   * @returns {object} - Success message and the newly created trip object.
+   * @param {string} username - The username of the trip creator.
+   * @returns {object} - The newly created trip object.
    */
-  static async createTrip(data) {
-    const {
-      date,
-      start_location,
-      destination,
-      stops,
-      travel_info,
-      seats,
-      costs,
-    } = data;
-
-    const query = `
-      INSERT INTO trips (date,
-        start_location,
-        destination,
-        stops,
-        travel_info,
-        seats,
-        costs)
+  // prettier-ignore
+  static async createTrip(data, username) {
+    //** Part 1: Adding a new trip to the trips table */
+    const tripInsertQuery = `
+      INSERT INTO trips 
+        (
+          date,
+          start_location,
+          destination,
+          stops,
+          travel_info,
+          seats,
+          costs
+        )
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *
       `;
 
-    const values = [
-      date,
-      start_location,
-      destination,
-      stops,
-      travel_info,
-      seats,
-      costs,
+    const tripInsertValues = [
+      data.date, data.start_location, data.destination, data.stops, data.travel_info, 
+      data.seats, data.costs
     ];
-
-    const result = await db.query(query, values);
-    const newTrip = result.rows[0];
+    const tripInsertResult = await db.query(tripInsertQuery, tripInsertValues);
+    const newTrip = tripInsertResult.rows[0];
 
     if (!newTrip) {
-      throw new ExpressError("Failed to create trip", 500);
+      throw new ExpressError("Failed to create new trip", 500);
     }
 
-    return newTrip;
+    //** Part 2: Adding a new link to the trip_members table */ 
+    const linkInsertQuery = `
+    INSERT INTO trip_members 
+      (
+        username,
+        trip_id,
+        is_trip_creator,
+        request_status
+      )
+    VALUES ($1, $2, $3, $4)
+    RETURNING *
+    `;
+
+  const linkInsertValues = [
+    username, newTrip.id, true, 'approved'
+  ];
+
+  const linkInsertResult = await db.query(linkInsertQuery, linkInsertValues);
+  const newTripMemberLink = linkInsertResult.rows[0];
+
+  if (!newTripMemberLink) {
+    throw new ExpressError("Failed to create a new trip_members link", 500);
+  }
+
+  return newTrip;
   }
 
   /**
@@ -103,6 +117,28 @@ class TripApi {
     }
 
     return updatedTrip;
+  }
+
+  /** Delete given trip from database; returns undefined.
+   *
+   * Throws NotFoundError if trip not found.
+   **/
+  static async removeTrip(id) {
+    const result = await db.query(
+      `DELETE
+             FROM trips
+             WHERE id = $1
+             RETURNING id`,
+      [id]
+    );
+    const removedTrip = result.rows[0];
+
+    if (!removedTrip)
+      throw new NotFoundError(
+        `Could not remove trip. No trip with id: ${id} found.`
+      );
+
+    return;
   }
 }
 

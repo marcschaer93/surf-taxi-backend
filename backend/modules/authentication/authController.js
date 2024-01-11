@@ -15,7 +15,7 @@ exports.authRegister = asyncHandler(async (req, res, next) => {
   const accessToken = generateAccessToken(newUser.username);
   const refreshToken = generateRefreshToken(newUser.username);
 
-  res.json({
+  res.status(201).json({
     accessToken: accessToken,
     refreshToken: refreshToken,
     user: newUser,
@@ -28,7 +28,7 @@ exports.authUser = asyncHandler(async (req, res, next) => {
   const accessToken = generateAccessToken(user.username);
   const refreshToken = generateRefreshToken(user.username);
 
-  res.json({
+  res.status(201).json({
     accessToken: accessToken,
     refreshToken: refreshToken,
     user: user,
@@ -46,5 +46,5 @@ exports.refreshToken = asyncHandler(async (req, res, next) => {
   const { username } = payload;
   const newAccessToken = generateAccessToken(username);
 
-  res.json({ accessToken: newAccessToken });
+  res.status(201).json({ accessToken: newAccessToken });
 });

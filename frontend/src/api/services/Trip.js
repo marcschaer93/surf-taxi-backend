@@ -31,3 +31,19 @@ export const allTrips = async () => {
     console.error(error);
   }
 };
+
+export const updateTrip = async (id) => {
+  try {
+    const response = await apiService.patch(`/trips/${id}/update`);
+    console.log("response", response);
+
+    if (response.status === 200) {
+      const { updatedTrip } = response.data;
+      return updatedTrip;
+    } else {
+      throw new Error("Failed to update trip");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};

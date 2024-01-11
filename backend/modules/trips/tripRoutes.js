@@ -21,7 +21,7 @@ router.post(
 );
 
 // POST request to delete Trip.
-router.post("/:id/delete", authenticateJWT, tripController.tripDelete);
+router.delete("/:id/delete", tripController.tripDelete);
 
 // PATCH request to update Trip.
 router.patch(

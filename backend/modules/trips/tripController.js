@@ -7,27 +7,28 @@ const { BadRequestError, ExpressError } = require("../../helpers/expressError");
 // Display list of all Trips.
 exports.tripList = asyncHandler(async (req, res) => {
   const trips = await TripApi.getAllTrips();
-  return res.status(201).json({ trips });
+  res.status(201).json({ trips });
 });
 
 // Display detail page for a specific Trip.
 exports.tripDetail = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const trip = await TripApi.getTrip(id);
-  return res.status(201).json(trip);
+  res.status(201).json(trip);
 });
 
 // Handle Trip create on POST.
 exports.tripCreate = asyncHandler(async (req, res) => {
-  // Ensure that the req.body has been validated prior to reaching this point
-  const newTrip = await TripApi.createTrip(req.body);
+  const newTrip = await TripApi.createTrip(req.body, req.username);
 
-  return res.status(201).json({ newTrip });
+  res.status(201).json({ newTrip });
 });
 
 // Handle trip delete on POST.
 exports.tripDelete = asyncHandler(async (req, res) => {
-  res.send("NOT IMPLEMENTED: Trip delete POST");
+  await TripApi.removeTrip(req.params.id);
+
+  res.status(200).json({ message: "Trip deleted successfully" });
 });
 
 // Handle trip update on PATCH.
@@ -35,7 +36,7 @@ exports.tripUpdate = asyncHandler(async (req, res) => {
   const tripId = req.params.id;
   const updatedTrip = await TripApi.updateTrip(tripId, req.body);
 
-  return res.status(200).json({ updatedTrip });
+  res.status(200).json({ updatedTrip });
 });
 
 // Display trip create form on GET.
