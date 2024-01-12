@@ -29,7 +29,7 @@ class UserApi {
    * @returns {object} - User object.
    */
   static async getUser(username) {
-    let result = await db.query(`SELECT * FROM users WHERE username = $1`, [
+    const result = await db.query(`SELECT * FROM users WHERE username = $1`, [
       username,
     ]);
     const user = result.rows[0];
@@ -40,6 +40,44 @@ class UserApi {
     return user;
   }
 
+  /**
+   * Updates user profile information.
+   * @param {string} username - Username of the user to update.
+   * @param {object} userData - Updated user data.
+   * @returns {object} - Updated user object.
+   */
+  static async updateProfile(username, userData) {
+    const keys = Object.keys(userData);
+    const updateValues = [...Object.values(userData), username];
+
+    const setClause = keys
+      .map((key, index) => `${key} = $${index + 1}`)
+      .join(", ");
+
+    const updateQuery = `
+    UPDATE users 
+    SET ${setClause}
+    WHERE username = $${keys.length + 1}
+    RETURNING *;
+  `;
+
+    const result = await db.query(updateQuery, updateValues);
+    const updatedUser = result.rows[0];
+
+    if (!updatedUser) {
+      throw new ExpressError("Failed to update user", 500);
+    }
+
+    return updatedUser;
+  }
+
+  /**
+   * Requests to join a trip.
+   * @param {string} username - Username of the user making the request.
+   * @param {string} trip_id - ID of the trip to join.
+   * @param {string} request_status - Status of the request (default: "requested").
+   * @returns {object} - New trip member link.
+   */
   static async requestTrip(username, trip_id, request_status = "requested") {
     const tripIdCheck = await db.query(`SELECT FROM trips WHERE id = $1`, [
       trip_id,
@@ -68,6 +106,12 @@ class UserApi {
     return newTripMemberLink;
   }
 
+  /**
+   * Updates the status of a trip request.
+   * @param {string} id - ID of the trip request.
+   * @param {string} request_status - New request status.
+   * @returns {object} - Updated trip request object.
+   */
   static async requestTripUpdate(id, request_status) {
     const result = await db.query(
       `SELECT * 

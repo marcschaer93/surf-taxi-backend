@@ -13,9 +13,9 @@ export const useAuth = () => {
       const loginResponse = await Api.loginUser(credentials);
       const { accessToken, refreshToken, user } = loginResponse;
 
-      // console.log("Access Token:", accessToken);
-      // console.log("Refresh Token:", refreshToken);
-      // console.log("Current_User:", user);
+      console.log("Access Token:", accessToken);
+      console.log("Refresh Token:", refreshToken);
+      console.log("Current_User:", user);
 
       localStorage.setItem("access_token", accessToken);
       localStorage.setItem("refresh_token", refreshToken);

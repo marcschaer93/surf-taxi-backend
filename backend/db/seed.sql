@@ -1,17 +1,17 @@
 -- Seed data for Users table
-INSERT INTO users (username, password, first_name, last_name, email, is_admin)
+INSERT INTO users (username, password, first_name, last_name, email, role)
 VALUES ('testuser',
         '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
         'Test',
         'User',
         'joel@joelburton.com',
-        FALSE),
+        'user'),
        ('testadmin',
         '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
         'Test',
         'Admin!',
         'joel@joelburton.com',
-        TRUE);
+        'admin');
 
 -- Seed data for Trips table
 INSERT INTO trips (date, start_location, destination, stops, travel_info, seats, costs)

@@ -6,7 +6,8 @@ const { validateInputs } = require("../../middleware/validateInputs");
 const tripNewSchema = require("./tripNewSchema.json");
 const tripUpdateSchema = require("./tripUpdateSchema.json");
 
-const { authenticateJWT } = require("../../middleware/isAuthenticated");
+const { authenticate } = require("../../middleware/authenticate");
+const { authorize } = require("../../middleware/authorize");
 
 module.exports = router;
 
@@ -15,18 +16,23 @@ module.exports = router;
 // POST request for creating Trip.
 router.post(
   "/create",
-  authenticateJWT,
+  authenticate,
   validateInputs(tripNewSchema),
   tripController.createTrip
 );
 
 // POST request to delete Trip.
-router.delete("/:id/delete", tripController.tripDelete);
+router.delete(
+  "/:id/delete",
+  authenticate,
+  authorize("admin"),
+  tripController.tripDelete
+);
 
 // PATCH request to update Trip.
 router.patch(
   "/:id/update",
-  authenticateJWT,
+  authenticate,
   validateInputs(tripUpdateSchema),
   tripController.tripUpdate
 );
@@ -37,11 +43,10 @@ router.get("/:id", tripController.tripDetail);
 // GET request for list of all Trips.
 router.get("/", tripController.tripList);
 
+// ---------------------------------------------------
+
 // // GET request to delete Trip.
 // router.get("/:id/delete", tripController.tripDelete);
 
 // GET request to update Trip.
 // router.get("/:id/update", tripController.tripUpdate);
-
-// GET request for creating a Trip. NOTE This must come before routes that display Trip (uses id).
-// router.get("/create", tripController.tripCreate);

@@ -13,7 +13,7 @@ CREATE TABLE users (
   languages TEXT,
   profile_img_url TEXT,
   bio TEXT,
-  is_admin BOOLEAN NOT NULL DEFAULT FALSE
+  role TEXT NOT NULL DEFAULT 'user'
 );
 
 CREATE TABLE trips (

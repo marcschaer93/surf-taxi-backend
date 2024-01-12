@@ -3,7 +3,7 @@ const { UnauthorizedError, ExpressError } = require("../helpers/expressError");
 
 /** Middleware: Authenticate user using JWT. */
 
-const authenticateJWT = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
     const accessToken = authHeader && authHeader.split(" ")[1];
@@ -18,19 +18,17 @@ const authenticateJWT = async (req, res, next) => {
     );
 
     const tokenExp = payload.exp;
-    const username = payload.username;
-
     // Calculate a threshold time (e.g., 1 minute before expiration)
     const thresholdTime = tokenExp - 60; // 1 minute before expiration
     const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-
     // If the current time is past the threshold time, return 401
     if (currentTime >= thresholdTime) {
       throw new ExpressError("Token is soon to expire", 401);
     }
 
-    req.username = username;
-    // req.curr_admin = payload.admin;
+    // add payload (username, role) to the request object
+    req.username = payload.username;
+    req.role = payload.role;
 
     return next();
   } catch (err) {
@@ -38,15 +36,4 @@ const authenticateJWT = async (req, res, next) => {
   }
 };
 
-/** Middleware: Requires correct username. */
-
-const ensureCorrectUser = (req, res, next) => {
-  try {
-    if (req.username !== req.params.username) throw new UnauthorizedError();
-    return next();
-  } catch (err) {
-    return next(err);
-  }
-};
-
-module.exports = { authenticateJWT, ensureCorrectUser };
+module.exports = { authenticate };

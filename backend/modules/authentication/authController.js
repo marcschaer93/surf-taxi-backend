@@ -12,8 +12,8 @@ const {
 exports.authRegister = asyncHandler(async (req, res, next) => {
   const newUser = await AuthApi.register(req.body);
 
-  const accessToken = generateAccessToken(newUser.username);
-  const refreshToken = generateRefreshToken(newUser.username);
+  const accessToken = generateAccessToken(newUser);
+  const refreshToken = generateRefreshToken(newUser);
 
   res.status(201).json({
     accessToken: accessToken,
@@ -25,8 +25,8 @@ exports.authRegister = asyncHandler(async (req, res, next) => {
 exports.authUser = asyncHandler(async (req, res, next) => {
   const user = await AuthApi.authenticate(req.body);
 
-  const accessToken = generateAccessToken(user.username);
-  const refreshToken = generateRefreshToken(user.username);
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
 
   res.status(200).json({
     accessToken: accessToken,

@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const authRoutes = require("./modules/authentication/authRoutes");
 const userRoutes = require("./modules/users/userRoutes");
 const tripRoutes = require("./modules/trips/tripRoutes");
-const { authenticateJWT } = require("./middleware/isAuthenticated");
+const { authenticateJWT } = require("./middleware/authenticate");
 const {
   handle404Error,
   handleGenericError,

@@ -18,14 +18,6 @@ export const TripDetail = () => {
     };
 
     fetchTripById(); // Fetch the trip data when the component mounts
-
-    // If you want to refetch the data whenever tripId changes, include tripId in the dependency array:
-    // fetchTripById();
-
-    // Cleanup function if needed
-    return () => {
-      // Cleanup logic if necessary
-    };
   }, [id]);
 
   return (

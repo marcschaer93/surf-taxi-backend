@@ -2,7 +2,7 @@
 const asyncHandler = require("express-async-handler");
 
 const UserApi = require("./userModel");
-const { BadRequestError } = require("../../helpers/expressError");
+const { BadRequestError, ExpressError } = require("../../helpers/expressError");
 
 // Displays list of all Users.
 exports.userList = asyncHandler(async (req, res, next) => {
@@ -17,6 +17,16 @@ exports.userDetail = asyncHandler(async (req, res, next) => {
   const user = await UserApi.getUser(username);
 
   res.status(200).json(user);
+});
+
+// Handle Profile update on PATCH
+exports.updateUserProfile = asyncHandler(async (req, res, next) => {
+  const updateData = req.body;
+  if (!updateData) throw new ExpressError("No updataData available", 500);
+
+  const updatedUser = await UserApi.updateProfile(req.username, updateData);
+
+  res.status(200).json(updatedUser);
 });
 
 // Handle User trip request on POST
