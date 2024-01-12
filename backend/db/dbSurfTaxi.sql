@@ -1,4 +1,4 @@
--- Run in Terminal --> psql -U marcschaer -d surf_taxi -a -f db/surfTaxi.sql
+-- Run in Terminal --> psql -U marcschaer -d surf_taxi -a -f db/dbSurfTaxi.sql
 
 -- Delete and recreate tables for surf_taxi db
 DROP TABLE IF EXISTS trip_members CASCADE;
@@ -6,10 +6,10 @@ DROP TABLE IF EXISTS trips CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
 -- Recreate tables
-\i db/schema.sql
+\i db/dbSchema.sql
 
 -- Seed the tables
-\i db/seed.sql
+\i db/dbSeed.sql
 
 
 

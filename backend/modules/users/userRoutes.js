@@ -3,12 +3,13 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../db/db.js");
 const userController = require("./userController.js");
-const { validateInputs } = require("../../middleware/validateInputs");
 const { authenticate } = require("../../middleware/authenticate.js");
 const {
   ensureCorrectUser,
   authorize,
 } = require("../../middleware/authorize.js");
+const { updateProfileSchema } = require("./userSchemas/updateProfileSchema.js");
+const { validateInputs } = require("../../middleware/validateInputs.js");
 
 // export our router to be mounted by the parent application
 module.exports = router;

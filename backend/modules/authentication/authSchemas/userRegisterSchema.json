@@ -1,7 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema",
-  "$id": "http://example.com/example.json",
-  "title": "Root Schema",
+  "title": "user Register Schema",
   "type": "object",
   "required": [
     "username",
@@ -89,6 +87,11 @@
       "title": "The bio Schema",
       "type": "string",
       "examples": ["surfer"]
+    },
+    "role": {
+      "type": "string",
+      "enum": ["user", "admin"],
+      "default": "user"
     }
   },
   "additionalProperties": false,
@@ -105,7 +108,8 @@
       "country": "switzerland",
       "languages": ["german", "english", "french"],
       "profile_img_url": "google.com",
-      "bio": "surfer"
+      "bio": "surfer",
+      "role": "user"
     }
   ]
 }

@@ -1,17 +1,28 @@
-const jsonschema = require("jsonschema");
-const { BadRequestError } = require("../helpers/expressError"); // Your error handling logic
+const { checkSchema, validationResult } = require("express-validator");
+const { BadRequestError, ValidationError } = require("../helpers/expressError");
 
-const validateInputs = (schema) => {
-  return (req, res, next) => {
-    // const data = dataKey ? req[dataKey] : req.body; // Allows specifying different data sources
+const validateInputs2 = (schema) => async (req, res, next) => {
+  try {
+    // Run schema validation
+    await checkSchema(schema).run(req);
+    // await Promise.all(validations.map((validation) => validation.run(req)));
 
-    const validator = jsonschema.validate(req.body, schema);
-    if (!validator.valid) {
-      const errors = validator.errors.map((e) => e.stack);
-      return next(new BadRequestError(errors));
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      //   const errorMessages = errors.array().map((error) => ({
+      //     type: "field",
+      //     value: undefined,
+      //     msg: "Please provide a valid first name.",
+      //     path: "first_name",
+      //     location: "body",
+      //   }));
+
+      throw new ValidationError(errors.array());
     }
     next();
-  };
+  } catch (error) {
+    next(error);
+  }
 };
 
-module.exports = { validateInputs };
+module.exports = { validateInputs2 };

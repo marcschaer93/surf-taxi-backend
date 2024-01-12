@@ -21,11 +21,13 @@ exports.userDetail = asyncHandler(async (req, res, next) => {
 
 // Handle Profile update on PATCH
 exports.updateUserProfile = asyncHandler(async (req, res, next) => {
-  const updateData = req.body;
-  if (!updateData) throw new ExpressError("No updataData available", 500);
+  // Check if req.body is an empty object
+  if (Object.keys(req.body).length === 0)
+    throw new BadRequestError(
+      "No updataData available. req.body object is empty."
+    );
 
-  const updatedUser = await UserApi.updateProfile(req.username, updateData);
-
+  const updatedUser = await UserApi.updateProfile(req.username, req.body);
   res.status(200).json(updatedUser);
 });
 

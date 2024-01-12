@@ -7,7 +7,7 @@ const { BadRequestError, ExpressError } = require("../../helpers/expressError");
 const {
   generateAccessToken,
   generateRefreshToken,
-} = require("../../helpers/tokens");
+} = require("../../helpers/jwtTokens");
 
 exports.authRegister = asyncHandler(async (req, res, next) => {
   const newUser = await AuthApi.register(req.body);

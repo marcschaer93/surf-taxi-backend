@@ -9,7 +9,7 @@ require("colors");
 class ExpressError extends Error {
   constructor(message, status) {
     super();
-    this.message = message;
+    this.message = message.red;
     this.status = status;
   }
 }
@@ -46,10 +46,20 @@ class ForbiddenError extends ExpressError {
   }
 }
 
+/** 400 BAD REQUEST error specific for Inputs which validate express-validator. */
+
+class ValidationError extends ExpressError {
+  constructor(validationErrors) {
+    super("Validation for inputs failed", 400);
+    this.validationErrors = validationErrors;
+  }
+}
+
 module.exports = {
   ExpressError,
   NotFoundError,
   UnauthorizedError,
   BadRequestError,
   ForbiddenError,
+  ValidationError,
 };

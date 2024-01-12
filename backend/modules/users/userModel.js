@@ -54,19 +54,22 @@ class UserApi {
       .map((key, index) => `${key} = $${index + 1}`)
       .join(", ");
 
+    const returnClause = keys.map((key, index) => `${key}`).join(", ");
+
     const updateQuery = `
     UPDATE users 
     SET ${setClause}
     WHERE username = $${keys.length + 1}
-    RETURNING *;
-  `;
+    RETURNING ${returnClause}
+    `;
 
     const result = await db.query(updateQuery, updateValues);
-    const updatedUser = result.rows[0];
+    const updatedFields = result.rows[0];
 
-    if (!updatedUser) {
+    if (!updatedFields) {
       throw new ExpressError("Failed to update user", 500);
     }
+    const updatedUser = { username: username, updatedFields: updatedFields };
 
     return updatedUser;
   }
@@ -85,6 +88,20 @@ class UserApi {
 
     if (!tripIdCheck.rows[0])
       throw new NotFoundError(`No trip found with id: ${trip_id}`);
+
+    const duplicateCheck = await db.query(
+      `
+      SELECT FROM trip_members 
+      WHERE username = $1
+      AND trip_id = $2
+      `,
+      [username, trip_id]
+    );
+
+    if (duplicateCheck.rows[0])
+      throw new BadRequestError(
+        `You have already requested to join trip with ID: ${trip_id}`
+      );
 
     const result = await db.query(
       `

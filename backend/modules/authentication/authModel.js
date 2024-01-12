@@ -62,6 +62,9 @@ class AuthApi {
       bio,
     } = data;
 
+    // Convert birth_year to a number
+    // const parsedBirthYear = parseInt(birth_year, 10);
+
     const duplicateCheck = await db.query(
       `SELECT FROM users WHERE username = $1`,
       [username]

@@ -8,7 +8,10 @@ const authorize = (requiredRole) => (req, res, next) => {
   if (userRole === requiredRole) {
     next();
   } else {
-    throw new UnauthorizedError();
+    // throw new UnauthorizedError("No access with your role.");
+    throw new UnauthorizedError(
+      `You do not have access with your current role (${userRole}). Required role is ${requiredRole}.`
+    );
   }
 };
 
