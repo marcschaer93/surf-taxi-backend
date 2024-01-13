@@ -1,4 +1,4 @@
-const userUpdateProfileSchema = {
+const updateUserProfileSchema = {
   // username: {
   //   in: ["body"],
   //   isString: {
@@ -151,4 +151,4 @@ const userUpdateProfileSchema = {
   },
 };
 
-module.exports = { userUpdateProfileSchema };
+module.exports = { updateUserProfileSchema };

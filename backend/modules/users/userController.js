@@ -5,21 +5,24 @@ const UserApi = require("./userModel");
 const { BadRequestError, ExpressError } = require("../../helpers/expressError");
 
 // Displays list of all Users.
-exports.userList = asyncHandler(async (req, res, next) => {
+
+exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const users = await UserApi.getAllUsers();
 
   res.status(200).json({ users }); // list can be empty!
 });
 
 // Displays detail page for a specific User
-exports.userDetail = asyncHandler(async (req, res, next) => {
+
+exports.getUserDetails = asyncHandler(async (req, res, next) => {
   const { username } = req.params;
-  const user = await UserApi.getUser(username);
+  const user = await UserApi.getUserDetails(username);
 
   res.status(200).json(user);
 });
 
 // Handle Profile update on PATCH
+
 exports.updateUserProfile = asyncHandler(async (req, res, next) => {
   // Check if req.body is an empty object
   if (Object.keys(req.body).length === 0)
@@ -27,17 +30,22 @@ exports.updateUserProfile = asyncHandler(async (req, res, next) => {
       "No updataData available. req.body object is empty."
     );
 
-  const updatedUser = await UserApi.updateProfile(req.username, req.body);
+  const updatedUser = await UserApi.updateUserProfile(req.username, req.body);
   res.status(200).json(updatedUser);
 });
 
-// Handle User trip request on POST
-exports.userRequestTrip = asyncHandler(async (req, res) => {
+//
+/** REQUEST TRIP MEMBERSHIP (creates new TRIP MEMBERSHIP)
+ *
+ * Handle User trip request on POST
+ *
+ **/
+exports.requestTripMembership = asyncHandler(async (req, res) => {
   const tripId = req.params.id;
   const username = req.username;
   const { requestStatus } = req.body;
 
-  const requestedTrip = await UserApi.requestTrip(
+  const requestedTrip = await UserApi.requestTripMembership(
     username,
     tripId,
     requestStatus
@@ -46,12 +54,17 @@ exports.userRequestTrip = asyncHandler(async (req, res) => {
   res.status(201).json({ requestedTrip });
 });
 
-// Handle User trip cancel on DELETE if not ('approved')
-exports.cancelUserTripRequest = asyncHandler(async (req, res) => {
+/** CANCEL MY TRIP MEMBERSHIP REQUEST
+ *
+ * Handle cancel trip membership on DELETE
+ * as PASSENGER if not already ('approved')
+ * and not TRIP OWNER
+ **/
+exports.cancelTripMembership = asyncHandler(async (req, res) => {
   const tripId = req.params.id;
   const username = req.username;
 
-  const cancelledTripRequest = await UserApi.cancelTripRequest(
+  const cancelledTripRequest = await UserApi.cancelTripMembership(
     username,
     tripId
   );
@@ -60,11 +73,20 @@ exports.cancelUserTripRequest = asyncHandler(async (req, res) => {
   res.status(204).send();
 });
 
-// Handle User trip request update on PATCH
-// exports.userRequestTripUpdate = asyncHandler(async (req, res) => {
-//   const { id } = req.params.id;
+/** RESPOND TO TRIP MEMBERSHIP REQUEST
+ *
+ * Handle respond to trip membership on PATCH as TRIP OWNER
+ **/
+exports.respondTripMembership = asyncHandler(async (req, res) => {
+  const tripId = req.params.id;
+  const tripPassengerUsername = req.params.username;
 
-//   const requestStatus = await UserApi.requestTrip(id);
+  const tripOwnerUsername = req.username;
+  const requestStatus = await UserApi.respondTripMembership(
+    tripId,
+    tripOwnerUsername,
+    tripPassengerUsername
+  );
 
-//   res.status(200).json({ requestStatus });
-// });
+  res.status(200).json({ requestStatus });
+});

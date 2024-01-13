@@ -9,12 +9,12 @@ const {
   authorize,
 } = require("../../middleware/authorize.js");
 const {
-  userUpdateProfileSchema,
-} = require("./userSchemas/userUpdateProfileSchema.js");
+  updateUserProfileSchema,
+} = require("./userSchemas/updateUserProfileSchema.js");
 const { validateInputs } = require("../../middleware/validateInputs.js");
 const {
-  userRequestTripSchema,
-} = require("./userSchemas/userRequestTripSchema.js");
+  requestTripMembershipSchema,
+} = require("./userSchemas/requestTripMembershipSchema.js");
 
 // export our router to be mounted by the parent application
 module.exports = router;
@@ -22,31 +22,45 @@ module.exports = router;
 // USER ROUTES
 
 // GET request for all Users.
-router.get("/", authenticate, authorize("admin"), userController.userList);
+router.get("/", authenticate, authorize("admin"), userController.getAllUsers);
 
 // GET request for one User
-router.get("/:username", authenticate, userController.userDetail);
+router.get("/:username", authenticate, userController.getUserDetails);
 
 // PATCH request to update user profile
 router.patch(
-  "/:username/update",
+  "/:username",
   authenticate,
   ensureCorrectUser,
-  validateInputs(userUpdateProfileSchema),
+  validateInputs(updateUserProfileSchema),
   userController.updateUserProfile
 );
 
-// POST request to REQUEST for a trip
+// POST request to REQUEST for a trip membership
 router.post(
   "/:username/trips/:id",
   authenticate,
-  validateInputs(userRequestTripSchema),
-  userController.userRequestTrip
+  validateInputs(requestTripMembershipSchema),
+  userController.requestTripMembership
 );
 
-// DELETE request to CANCEL a request for a trip if not already "approved"
+// PATCH request to RESPOND to a requested trip membership
+router.patch(
+  "/:username/trips/:id",
+  authenticate,
+  //   validateInputs(respondTripMembershipSchema),
+  userController.respondTripMembership
+);
+
+/** DELETE request to CANCEL a requested trip membership
+ *
+ * Cancels a requested trip membership if:
+ * - the user is not the trip "owner"
+ * - it's already "approved."
+ *
+ **/
 router.delete(
   "/:username/trips/:id",
   authenticate,
-  userController.cancelUserTripRequest
+  userController.cancelTripMembership
 );

@@ -1,14 +1,18 @@
-const db = require("../../db/db");
-const { NotFoundError, ExpressError } = require("../../helpers/expressError");
 const asyncHandler = require("express-async-handler");
 
-/** Related functions for trips. */
+const db = require("../../db/db");
+const { NotFoundError, ExpressError } = require("../../helpers/expressError");
 
+/** TRIP API
+ *
+ * Related functions for trips.
+ **/
 class TripApi {
-  /**
+  /** ALL TRIPS
+   *
    * Retrieves all users from the database.
    * Returns an array of users.
-   */
+   **/
   static async getAllTrips() {
     const result = await db.query(`SELECT * FROM trips`);
     const trips = result.rows;
@@ -16,19 +20,14 @@ class TripApi {
     return trips;
   }
 
-  /**
+  /** SINGLE TRIP
+   *
    * Retrieves a trip by trip_id from the database.
    * Throws NotFoundError if the trip doesn't exist.
    * @param {integer} id - id of the trip to retrieve.
    * @returns {object} - Trip object.
-   */
-  // static async getTrip(id) {
-  //   const result = await db.query(`SELECT * FROM trips WHERE id=$1`, [id]);
-  //   const trip = result.rows[0];
-  //   if (!trip) throw new NotFoundError(`No trip found with ID: ${id}`);
-  //   return trip;
-  // }
-  static async getTrip(id) {
+   **/
+  static async getTripDetails(id) {
     const result = await db.query(
       `
     SELECT
@@ -59,13 +58,14 @@ class TripApi {
     return trip;
   }
 
-  /**
+  /** NEW TRIP
+   *
    * Creates a new trip in the database.
    *
    * @param {object} data - Trip data to create a new trip.
    * @param {string} username - The username of the trip creator.
    * @returns {object} - The newly created trip object.
-   */
+   **/
   // prettier-ignore
   static async createTrip(data, username) {
     //** Part 1: Adding a new trip to the trips table */
@@ -122,12 +122,13 @@ class TripApi {
   return newTrip;
   }
 
-  /**
+  /** UPDATE TRIP
+   *
    * Updates a trip in the database.
    *
    * @param {object} data - Trip data to update.
    * @returns {object} - Success message and the newly updated trip object.
-   */
+   **/
   static async updateTrip(id, data) {
     const keys = Object.keys(data);
     const updateValues = [...Object.values(data), id];
@@ -149,11 +150,13 @@ class TripApi {
     return updatedTrip;
   }
 
-  /** Delete given trip from database; returns undefined.
+  /** DELETE TRIP
+   *
+   *  Delete given trip from database; returns undefined.
    *
    * Throws NotFoundError if trip not found.
    **/
-  static async removeTrip(id) {
+  static async deleteTrip(id) {
     const result = await db.query(
       `DELETE
              FROM trips

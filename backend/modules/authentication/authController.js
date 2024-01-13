@@ -9,8 +9,8 @@ const {
   generateRefreshToken,
 } = require("../../helpers/jwtTokens");
 
-exports.authRegister = asyncHandler(async (req, res, next) => {
-  const newUser = await AuthApi.register(req.body);
+exports.registerUser = asyncHandler(async (req, res, next) => {
+  const newUser = await AuthApi.registerUser(req.body);
 
   const accessToken = generateAccessToken(newUser);
   const refreshToken = generateRefreshToken(newUser);
@@ -22,8 +22,8 @@ exports.authRegister = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.authUser = asyncHandler(async (req, res, next) => {
-  const user = await AuthApi.authenticate(req.body);
+exports.loginUser = asyncHandler(async (req, res, next) => {
+  const user = await AuthApi.loginUser(req.body);
 
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);

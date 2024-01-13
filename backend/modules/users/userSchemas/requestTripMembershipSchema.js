@@ -1,4 +1,4 @@
-const userRequestTripSchema = {
+const requestTripMembershipSchema = {
   // id: {
   //   in: ["query"],
   //   notEmpty: true,
@@ -52,4 +52,4 @@ const userRequestTripSchema = {
   },
 };
 
-module.exports = { userRequestTripSchema };
+module.exports = { requestTripMembershipSchema };

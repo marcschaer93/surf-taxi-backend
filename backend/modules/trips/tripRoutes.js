@@ -5,8 +5,8 @@ const tripController = require("./tripController");
 const { authenticate } = require("../../middleware/authenticate");
 const { authorize } = require("../../middleware/authorize");
 const { validateInputs } = require("../../middleware/validateInputs");
-const { tripNewSchema } = require("../trips/tripSchemas/tripNewSchema");
-const { tripUpdateSchema } = require("../trips/tripSchemas/tripUpdateSchema");
+const { createTripSchema } = require("./tripSchemas/createTripSchema");
+const { updateTripSchema } = require("./tripSchemas/updateTripSchema");
 
 module.exports = router;
 
@@ -14,33 +14,33 @@ module.exports = router;
 
 // POST request for creating Trip.
 router.post(
-  "/create",
+  "/",
   authenticate,
-  validateInputs(tripNewSchema),
+  validateInputs(createTripSchema),
   tripController.createTrip
 );
 
 // POST request to delete Trip.
 router.delete(
-  "/:id/delete",
+  "/:id",
   authenticate,
   authorize("admin"),
-  tripController.tripDelete
+  tripController.deleteTrip
 );
 
 // PATCH request to update Trip.
 router.patch(
-  "/:id/update",
+  "/:id",
   authenticate,
-  validateInputs(tripUpdateSchema),
-  tripController.tripUpdate
+  validateInputs(updateTripSchema),
+  tripController.updateTrip
 );
 
 // GET request for one Trip.
-router.get("/:id", tripController.tripDetail);
+router.get("/:id", tripController.getTripDetails);
 
 // GET request for list of all Trips.
-router.get("/", tripController.tripList);
+router.get("/", tripController.getAllTrips);
 
 // ---------------------------------------------------
 

@@ -8,16 +8,20 @@ const {
 } = require("../../helpers/expressError");
 const { BCRYPT_WORK_FACTOR } = require("../../config");
 
-/** Related functions for authentication. */
-
+/** AUTHENTICATION API
+ *
+ * Related functions for authentication.
+ **/
 class AuthApi {
-  /** authenticate user with username, password.
+  /** LOGIN USER
+   *
+   * authenticate user with username, password.
    *
    * Returns user
    *
    * Throws UnauthorizedError is user not found or wrong password.
    **/
-  static async authenticate({ username, password }) {
+  static async loginUser({ username, password }) {
     const result = await db.query(
       `
     SELECT *
@@ -40,13 +44,14 @@ class AuthApi {
     throw new UnauthorizedError("Invalid username/password");
   }
 
-  /**
+  /** REGISTER USER
+   *
    * Registers a new user in the database.
    * Throws BadRequestError if the username already exists.
    * @param {object} data - User data to create a new user.
    * @returns {object} - Success message and the newly registered user object.
-   */
-  static async register(data) {
+   **/
+  static async registerUser(data) {
     const {
       username,
       password,

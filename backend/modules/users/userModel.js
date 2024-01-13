@@ -9,26 +9,30 @@ const {
 } = require("../../helpers/expressError");
 const { BCRYPT_WORK_FACTOR } = require("../../config");
 
-/** Related functions for users. */
-
+/** USER API
+ *
+ * Related functions for users.
+ **/
 class UserApi {
-  /**
+  /** ALL USERS
+   *
    * Retrieves all users from the database.
    * Returns an array of users.
-   */
+   **/
   static async getAllUsers() {
     let result = await db.query(`SELECT * FROM users`);
     const users = result.rows;
     return users;
   }
 
-  /**
+  /**  SINGLE USER
+   *
    * Retrieves a user by username from the database.
    * Throws NotFoundError if the user doesn't exist.
    * @param {string} username - Username of the user to retrieve.
    * @returns {object} - User object.
-   */
-  static async getUser(username) {
+   **/
+  static async getUserDetails(username) {
     const result = await db.query(`SELECT * FROM users WHERE username = $1`, [
       username,
     ]);
@@ -40,13 +44,14 @@ class UserApi {
     return user;
   }
 
-  /**
+  /** UPDATE USER PROFILE
+   *
    * Updates user profile information.
    * @param {string} username - Username of the user to update.
    * @param {object} userData - Updated user data.
    * @returns {object} - Updated user object.
-   */
-  static async updateProfile(username, userData) {
+   **/
+  static async updateUserProfile(username, userData) {
     const keys = Object.keys(userData);
     const updateValues = [...Object.values(userData), username];
 
@@ -74,14 +79,19 @@ class UserApi {
     return updatedUser;
   }
 
-  /**
+  /** REQUEST A TRIP
+   *
    * Requests to join a trip.
    * @param {string} username - Username of the user making the request.
    * @param {string} trip_id - ID of the trip to join.
    * @param {string} request_status - Status of the request (default: "requested").
    * @returns {object} - New trip member link.
-   */
-  static async requestTrip(username, trip_id, request_status = "requested") {
+   **/
+  static async requestTripMembership(
+    username,
+    trip_id,
+    request_status = "requested"
+  ) {
     const tripIdCheck = await db.query(`SELECT FROM trips WHERE id = $1`, [
       trip_id,
     ]);
@@ -123,7 +133,10 @@ class UserApi {
     return newTripMemberLink;
   }
 
-  static async cancelTripRequest(username, id) {
+  /** CANCEL A TRIP REQUEST
+   *
+   **/
+  static async cancelTripMembership(username, id) {
     const result = await db.query(
       `
       DELETE
@@ -156,40 +169,54 @@ class UserApi {
     return removedTripMembership;
   }
 
-  /**
+  /** RESPOND A TRIP MEMBERSHIP REQUEST
+   *
    * Updates the status of a trip request.
    * @param {string} id - ID of the trip request.
    * @param {string} request_status - New request status.
    * @returns {object} - Updated trip request object.
-   */
-  static async requestTripUpdate(id, request_status) {
-    const result = await db.query(
+   **/
+  static async respondTripMembership(
+    tripId,
+    tripOwnerUsername,
+    tripPassengerUsername,
+    membershipStatus
+  ) {
+    // Check if the person making the request is the trip owner
+    const ownerCheck = await db.query(
       `SELECT * 
        FROM trip_members 
        WHERE trip_id = $1
        AND is_trip_creator = $2
        RETURNING *`,
-      [id, false]
+      [tripId, true]
     );
 
-    const requestedTrip = result.rows[0];
-    if (!requestedTrip) throw new NotFoundError(`No trip found with id: ${id}`);
+    const requestedTrip = ownerCheck.rows[0];
+    if (!requestedTrip)
+      throw new NotFoundError(`No trip found with id: ${tripId}`);
+
+    if (requestedTrip.username !== tripOwnerUsername)
+      throw new ExpressError(
+        `You are not the Owner of the trip and not allowed to respond`
+      );
 
     const result2 = await db.query(
       `
       UPDATE trip_members
       SET request_status = $1
       WHERE id = $2
+      AND username = $3
       RETURNING *
       `,
-      [request_status, requestedTrip.id]
+      [membershipStatus, tripId, tripPassengerUsername]
     );
 
     const updatedTripRequest = result2.rows[0];
 
     if (updatedTripRequest)
       throw new ExpressError(
-        `Failed to update request status for trip with ID ${id}`
+        `Failed to update request status for trip with ID ${tripId}`
       );
 
     return updatedTripRequest;

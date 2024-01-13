@@ -5,14 +5,14 @@ const TripApi = require("./tripModel");
 const { BadRequestError, ExpressError } = require("../../helpers/expressError");
 
 // Display list of all Trips.
-exports.tripList = asyncHandler(async (req, res) => {
+exports.getAllTrips = asyncHandler(async (req, res) => {
   const trips = await TripApi.getAllTrips();
   res.status(200).json({ trips });
 });
 
 // Display detail page for a specific Trip.
-exports.tripDetail = asyncHandler(async (req, res) => {
-  const tripDetail = await TripApi.getTrip(req.params.id);
+exports.getTripDetails = asyncHandler(async (req, res) => {
+  const tripDetail = await TripApi.getTripDetails(req.params.id);
 
   res.status(200).json({ tripDetail });
 });
@@ -25,14 +25,14 @@ exports.createTrip = asyncHandler(async (req, res) => {
 });
 
 // Handle trip delete on POST.
-exports.tripDelete = asyncHandler(async (req, res) => {
-  await TripApi.removeTrip(req.params.id);
+exports.deleteTrip = asyncHandler(async (req, res) => {
+  await TripApi.deleteTrip(req.params.id);
 
   res.status(204).json({ message: "Trip deleted successfully" });
 });
 
 // Handle trip update on PATCH.
-exports.tripUpdate = asyncHandler(async (req, res) => {
+exports.updateTrip = asyncHandler(async (req, res) => {
   const tripId = req.params.id;
   const updatedTrip = await TripApi.updateTrip(tripId, req.body);
 

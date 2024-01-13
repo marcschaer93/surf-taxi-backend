@@ -2,7 +2,7 @@ import { apiService } from "../apiConfig";
 
 export const createTrip = async (tripData) => {
   try {
-    const response = await apiService.post("/trips/create", tripData);
+    const response = await apiService.post("/trips", tripData);
     console.log("response", response);
 
     if (response.status === 201) {
@@ -50,7 +50,7 @@ export const tripDetail = async (id) => {
 
 export const updateTrip = async (id) => {
   try {
-    const response = await apiService.patch(`/trips/${id}/update`);
+    const response = await apiService.patch(`/trips/${id}`);
     console.log("response", response);
 
     if (response.status === 200) {
