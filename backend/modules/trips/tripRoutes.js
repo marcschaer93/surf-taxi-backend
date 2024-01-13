@@ -1,13 +1,12 @@
-const tripController = require("./tripController");
-
 const express = require("express");
 const router = express.Router();
-// const tripNewSchema = require("./tripNewSchema.json");
-// const tripUpdateSchema = require("./tripUpdateSchema.json");
 
+const tripController = require("./tripController");
 const { authenticate } = require("../../middleware/authenticate");
 const { authorize } = require("../../middleware/authorize");
 const { validateInputs } = require("../../middleware/validateInputs");
+const { tripNewSchema } = require("../trips/tripSchemas/tripNewSchema");
+const { tripUpdateSchema } = require("../trips/tripSchemas/tripUpdateSchema");
 
 module.exports = router;
 
@@ -17,7 +16,7 @@ module.exports = router;
 router.post(
   "/create",
   authenticate,
-  // validateInputs(tripNewSchema),
+  validateInputs(tripNewSchema),
   tripController.createTrip
 );
 
@@ -33,7 +32,7 @@ router.delete(
 router.patch(
   "/:id/update",
   authenticate,
-  // validateInputs(tripUpdateSchema),
+  validateInputs(tripUpdateSchema),
   tripController.tripUpdate
 );
 

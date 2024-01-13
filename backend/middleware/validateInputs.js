@@ -1,7 +1,7 @@
 const { checkSchema, validationResult } = require("express-validator");
 const { BadRequestError, ValidationError } = require("../helpers/expressError");
 
-const validateInputs2 = (schema) => async (req, res, next) => {
+const validateInputs = (schema) => async (req, res, next) => {
   try {
     // Run schema validation
     await checkSchema(schema).run(req);
@@ -25,4 +25,4 @@ const validateInputs2 = (schema) => async (req, res, next) => {
   }
 };
 
-module.exports = { validateInputs2 };
+module.exports = { validateInputs };

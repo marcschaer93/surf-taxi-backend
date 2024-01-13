@@ -2,12 +2,10 @@ const express = require("express");
 
 const router = express.Router();
 const authController = require("./authController.js");
-// const userRegisterSchema = require("./userRegisterSchema.json");
-// const userAuthSchema = require("./userAuthSchema.json");
-// const refreshTokenSchema = require("./refreshTokenSchema.json");
-
 const { validateInputs } = require("../../middleware/validateInputs.js");
-const { userRegisterSchema } = require("./authSchemas/userRegisterSchema.js");
+const { authRegisterSchema } = require("./authSchemas/authRegisterSchema.js");
+const { authLoginSchema } = require("./authSchemas/authLoginSchema.js");
+const { refreshTokenSchema } = require("./authSchemas/refreshTokenSchema.js");
 
 // export our router to be mounted by the parent application
 module.exports = router;
@@ -17,16 +15,16 @@ module.exports = router;
 // POST request for creating User with valid registration inputs.
 router.post(
   "/register",
-  // validateInputs(userRegisterSchema),
+  validateInputs(authRegisterSchema),
   authController.authRegister
 );
 
 // POST request for access- and refreshToken if valid {username, password}.
-router.post("/token", authController.authUser);
+router.post("/token", validateInputs(authLoginSchema), authController.authUser);
 
 // Route to refresh accessToken with refreshToken if accessToken has expired
 router.post(
   "/refresh-token",
-  // validateInputs(refreshTokenSchema),
+  validateInputs(refreshTokenSchema),
   authController.refreshToken
 );

@@ -8,7 +8,9 @@ const {
   ensureCorrectUser,
   authorize,
 } = require("../../middleware/authorize.js");
-const { updateProfileSchema } = require("./userSchemas/updateProfileSchema.js");
+const {
+  userUpdateProfileSchema,
+} = require("./userSchemas/userUpdateProfileSchema.js");
 const { validateInputs } = require("../../middleware/validateInputs.js");
 
 // export our router to be mounted by the parent application
@@ -27,6 +29,7 @@ router.patch(
   "/:username/update",
   authenticate,
   ensureCorrectUser,
+  validateInputs(userUpdateProfileSchema),
   userController.updateUserProfile
 );
 
