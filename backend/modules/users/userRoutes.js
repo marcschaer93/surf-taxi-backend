@@ -12,6 +12,9 @@ const {
   userUpdateProfileSchema,
 } = require("./userSchemas/userUpdateProfileSchema.js");
 const { validateInputs } = require("../../middleware/validateInputs.js");
+const {
+  userRequestTripSchema,
+} = require("./userSchemas/userRequestTripSchema.js");
 
 // export our router to be mounted by the parent application
 module.exports = router;
@@ -33,15 +36,17 @@ router.patch(
   userController.updateUserProfile
 );
 
-// POST request to request for a trip
+// POST request to REQUEST for a trip
 router.post(
   "/:username/trips/:id",
   authenticate,
+  validateInputs(userRequestTripSchema),
   userController.userRequestTrip
 );
 
-// PATCH request to update a request for a trip
-// router.patch(
-//   "/:username/trips/:id/update",
-//   userController.userRequestTripUpdate
-// );
+// DELETE request to CANCEL a request for a trip if not already "approved"
+router.delete(
+  "/:username/trips/:id",
+  authenticate,
+  userController.cancelUserTripRequest
+);

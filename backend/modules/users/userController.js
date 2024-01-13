@@ -33,17 +33,31 @@ exports.updateUserProfile = asyncHandler(async (req, res, next) => {
 
 // Handle User trip request on POST
 exports.userRequestTrip = asyncHandler(async (req, res) => {
-  const trip_id = req.params.id;
+  const tripId = req.params.id;
   const username = req.username;
-  const { request_status } = req.body;
+  const { requestStatus } = req.body;
 
-  const requestStatus = await UserApi.requestTrip(
+  const requestedTrip = await UserApi.requestTrip(
     username,
-    trip_id,
-    request_status
+    tripId,
+    requestStatus
   );
 
-  res.status(201).json({ requestStatus });
+  res.status(201).json({ requestedTrip });
+});
+
+// Handle User trip cancel on DELETE if not ('approved')
+exports.cancelUserTripRequest = asyncHandler(async (req, res) => {
+  const tripId = req.params.id;
+  const username = req.username;
+
+  const cancelledTripRequest = await UserApi.cancelTripRequest(
+    username,
+    tripId
+  );
+
+  // Respond with success if cancellation is successful
+  res.status(204).send();
 });
 
 // Handle User trip request update on PATCH

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "title": "Root Schema",
+  "type": "object",
+  "required": ["refreshToken"],
+
+  "properties": {
+    "refreshToken": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_.+/=]*$"
+    }
+  },
+  "additionalProperties": false
+}

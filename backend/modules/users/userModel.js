@@ -123,6 +123,39 @@ class UserApi {
     return newTripMemberLink;
   }
 
+  static async cancelTripRequest(username, id) {
+    const result = await db.query(
+      `
+      DELETE
+      FROM trip_members
+      WHERE trip_id = $1
+      AND username = $2
+      RETURNING *
+      `,
+      [id, username]
+    );
+
+    const removedTripMembership = result.rows[0];
+
+    if (!removedTripMembership) {
+      throw new NotFoundError(
+        `No trip membership found with id: ${id} and username ${username}`
+      );
+    }
+
+    if (removedTripMembership.request_status === "approved") {
+      throw new NotFoundError(
+        `The trip membership status for trip with id ${id} and username ${username} is already 'approved', make a 'Cancel-Approved-Trip-Request'`
+      );
+    } else if (removedTripMembership.request_status === "owner") {
+      throw new NotFoundError(
+        `You are the owner for trip with id ${id} and username ${username}. Make a 'Remove-Trip-As-Owner-Request'`
+      );
+    }
+
+    return removedTripMembership;
+  }
+
   /**
    * Updates the status of a trip request.
    * @param {string} id - ID of the trip request.

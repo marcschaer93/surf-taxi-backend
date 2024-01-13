@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "title": "Root Schema",
+  "type": "object",
+  "required": [
+    "start_location",
+    "destination",
+    "travel_info",
+    "costs",
+    "seats"
+  ],
+  "properties": {
+    "date": {
+      "title": "The date Schema",
+      "type": "string",
+      "examples": ["2023-12-31"]
+    },
+    "start_location": {
+      "title": "The start_location Schema",
+      "type": "string",
+      "examples": ["Bern"]
+    },
+    "destination": {
+      "title": "The destination Schema",
+      "type": "string",
+      "examples": ["Santander"]
+    },
+    "stops": {
+      "title": "The stops Schema",
+      "type": "string",
+      "examples": ["Hossegor"]
+    },
+    "travel_info": {
+      "title": "The trip_info Schema",
+      "type": "string",
+      "examples": ["surftrip"]
+    },
+    "costs": {
+      "title": "The costs Schema",
+      "type": "string",
+      "examples": ["split gas \u0026 tolls"]
+    },
+    "seats": {
+      "title": "The seats Schema",
+      "type": "integer",
+      "examples": [2]
+    }
+  },
+  "additionalProperties": false,
+
+  "examples": [
+    {
+      "date": "2023-12-31",
+      "start_location": "Bern",
+      "destination": "Santander",
+      "stops": "Hossegor",
+      "travel_info": "surftrip",
+      "costs": "split gas \u0026 tolls",
+      "seats": 2
+    }
+  ]
+}
