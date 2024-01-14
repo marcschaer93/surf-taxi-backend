@@ -16,7 +16,7 @@ export const registerUser = async (userData) => {
 
 export const loginUser = async ({ username, password }) => {
   try {
-    const response = await apiService.post("/auth/token", {
+    const response = await apiService.post("/auth/login", {
       username,
       password,
     });

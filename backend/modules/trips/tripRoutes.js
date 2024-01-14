@@ -17,7 +17,7 @@ router.post(
   "/",
   authenticate,
   validateInputs(createTripSchema),
-  tripController.createTrip
+  tripController.createNewTrip
 );
 
 // POST request to delete Trip.
@@ -25,7 +25,7 @@ router.delete(
   "/:id",
   authenticate,
   authorize("admin"),
-  tripController.deleteTrip
+  tripController.deleteOneTrip
 );
 
 // PATCH request to update Trip.
@@ -33,11 +33,11 @@ router.patch(
   "/:id",
   authenticate,
   validateInputs(updateTripSchema),
-  tripController.updateTrip
+  tripController.updateOneTrip
 );
 
 // GET request for one Trip.
-router.get("/:id", tripController.getTripDetails);
+router.get("/:id", tripController.getOneTrip);
 
 // GET request for list of all Trips.
 router.get("/", tripController.getAllTrips);

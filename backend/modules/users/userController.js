@@ -7,51 +7,56 @@ const { BadRequestError, ExpressError } = require("../../helpers/expressError");
 // Displays list of all Users.
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
-  const users = await UserApi.getAllUsers();
+  const allUsers = await UserApi.getAllUsers();
 
-  res.status(200).json({ users }); // list can be empty!
+  res.status(200).json({ allUsers }); // list can be empty!
 });
 
 // Displays detail page for a specific User
 
-exports.getUserDetails = asyncHandler(async (req, res, next) => {
+exports.getOneUser = asyncHandler(async (req, res, next) => {
   const { username } = req.params;
-  const user = await UserApi.getUserDetails(username);
+  const user = await UserApi.getOneUser(username);
 
-  res.status(200).json(user);
+  res.status(200).json({ user });
 });
 
 // Handle Profile update on PATCH
 
-exports.updateUserProfile = asyncHandler(async (req, res, next) => {
-  // Check if req.body is an empty object
-  if (Object.keys(req.body).length === 0)
+exports.updateOneUserProfile = asyncHandler(async (req, res, next) => {
+  const isRequestBodyEmpty = Object.keys(req.body).length === 0;
+
+  if (isRequestBodyEmpty) {
     throw new BadRequestError(
       "No updataData available. req.body object is empty."
     );
+  }
 
-  const updatedUser = await UserApi.updateUserProfile(req.username, req.body);
-  res.status(200).json(updatedUser);
+  const updatedUserProfile = await UserApi.updateOneUserProfile(
+    req.username,
+    req.body
+  );
+  res.status(200).json({ updatedUserProfile });
 });
 
 //
-/** REQUEST TRIP MEMBERSHIP (creates new TRIP MEMBERSHIP)
+/** REQUEST TRIP MEMBERS (creates new TRIP MEMBER)
  *
  * Handle User trip request on POST
  *
  **/
-exports.requestTripMembership = asyncHandler(async (req, res) => {
-  const tripId = req.params.id;
-  const username = req.username;
-  const { requestStatus } = req.body;
+exports.createNewTripMemberRequest = asyncHandler(async (req, res, next) => {
+  const tripId = parseInt(req.params.id);
+  const tripPassengerUsername = req.username;
+  const { memberStatus } = req.body;
 
-  const requestedTrip = await UserApi.requestTripMembership(
-    username,
+  const newTripMemberRequest = await UserApi.createNewTripMemberRequest(
+    tripPassengerUsername,
     tripId,
-    requestStatus
+    memberStatus
   );
 
-  res.status(201).json({ requestedTrip });
+  res.status(201).json({ newTripMemberRequest });
 });
 
 /** CANCEL MY TRIP MEMBERSHIP REQUEST
@@ -60,33 +65,36 @@ exports.requestTripMembership = asyncHandler(async (req, res) => {
  * as PASSENGER if not already ('approved')
  * and not TRIP OWNER
  **/
-exports.cancelTripMembership = asyncHandler(async (req, res) => {
-  const tripId = req.params.id;
-  const username = req.username;
+exports.cancelOneTripMemberRequest = asyncHandler(async (req, res, next) => {
+  const tripId = parseInt(req.params.id);
+  const tripPassengerUsername = req.username;
 
-  const cancelledTripRequest = await UserApi.cancelTripMembership(
-    username,
+  const cancelledTripMemberRequest = await UserApi.cancelOneTripMemberRequest(
+    tripPassengerUsername,
     tripId
   );
 
-  // Respond with success if cancellation is successful
-  res.status(204).send();
+  res
+    .status(204)
+    .json({ message: "Trip member request cancelled successfully" });
 });
 
 /** RESPOND TO TRIP MEMBERSHIP REQUEST
  *
  * Handle respond to trip membership on PATCH as TRIP OWNER
  **/
-exports.respondTripMembership = asyncHandler(async (req, res) => {
-  const tripId = req.params.id;
+exports.respondOneTripMemberRequest = asyncHandler(async (req, res, next) => {
+  const tripId = parseInt(req.params.id);
+  const memberStatusResponse = req.body.memberStatus;
+  const tripOwnerUsername = req.username;
   const tripPassengerUsername = req.params.username;
 
-  const tripOwnerUsername = req.username;
-  const requestStatus = await UserApi.respondTripMembership(
+  const respondToTripMemberRequest = await UserApi.respondOneTripMemberRequest(
     tripId,
     tripOwnerUsername,
-    tripPassengerUsername
+    tripPassengerUsername,
+    memberStatusResponse
   );
 
-  res.status(200).json({ requestStatus });
+  res.status(200).json({ respondToTripMemberRequest });
 });

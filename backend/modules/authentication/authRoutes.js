@@ -16,19 +16,19 @@ module.exports = router;
 router.post(
   "/register",
   validateInputs(authRegisterSchema),
-  authController.registerUser
+  authController.registerOneUser
 );
 
 // POST request for access- and refreshToken if valid {username, password}.
 router.post(
   "/login",
   validateInputs(authLoginSchema),
-  authController.loginUser
+  authController.loginOneUser
 );
 
 // Route to refresh accessToken with refreshToken if accessToken has expired
 router.post(
   "/refresh-token",
   validateInputs(refreshTokenSchema),
-  authController.refreshToken
+  authController.createNewRefreshToken
 );

@@ -1,13 +1,13 @@
-const requestTripMembershipSchema = {
+const createNewTripMemberRequestSchema = {
   // id: {
   //   in: ["query"],
   //   notEmpty: true,
   //   errorMessage: "Please provide a valid id in Query.",
   // },
-  request_status: {
+  memberStatus: {
     in: ["body"],
     isString: {
-      errorMessage: "Please provide a valid request_status.",
+      errorMessage: "Please provide a valid memberStatus.",
     },
     notEmpty: true,
     custom: {
@@ -35,7 +35,7 @@ const requestTripMembershipSchema = {
   unexpectedProperties: {
     custom: {
       options: (value, { req }) => {
-        const allowedProperties = Object.keys(userRequestTripSchema);
+        const allowedProperties = Object.keys(createNewTripMemberRequestSchema);
         const unexpectedProps = Object.keys(req.body).filter(
           (prop) => !allowedProperties.includes(prop)
         );
@@ -52,4 +52,4 @@ const requestTripMembershipSchema = {
   },
 };
 
-module.exports = { requestTripMembershipSchema };
+module.exports = { createNewTripMemberRequestSchema };

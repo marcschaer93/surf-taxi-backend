@@ -27,7 +27,7 @@ class TripApi {
    * @param {integer} id - id of the trip to retrieve.
    * @returns {object} - Trip object.
    **/
-  static async getTripDetails(id) {
+  static async getOneTrip(id) {
     const result = await db.query(
       `
     SELECT
@@ -67,7 +67,7 @@ class TripApi {
    * @returns {object} - The newly created trip object.
    **/
   // prettier-ignore
-  static async createTrip(data, username) {
+  static async createNewTrip(data, username) {
     //** Part 1: Adding a new trip to the trips table */
     const tripInsertQuery = `
       INSERT INTO trips 
@@ -129,7 +129,7 @@ class TripApi {
    * @param {object} data - Trip data to update.
    * @returns {object} - Success message and the newly updated trip object.
    **/
-  static async updateTrip(id, data) {
+  static async updateOneTrip(id, data) {
     const keys = Object.keys(data);
     const updateValues = [...Object.values(data), id];
 
@@ -156,7 +156,7 @@ class TripApi {
    *
    * Throws NotFoundError if trip not found.
    **/
-  static async deleteTrip(id) {
+  static async deleteOneTrip(id) {
     const result = await db.query(
       `DELETE
              FROM trips

@@ -25,7 +25,7 @@ export const allTrips = async () => {
       const { trips } = response.data;
       return trips;
     } else {
-      throw new Error("Failed to get all trips");
+      throw new Error(`Failed to get all trips. Status: ${response.status}`);
     }
   } catch (error) {
     console.error(error);

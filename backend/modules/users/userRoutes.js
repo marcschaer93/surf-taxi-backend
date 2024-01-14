@@ -13,8 +13,8 @@ const {
 } = require("./userSchemas/updateUserProfileSchema.js");
 const { validateInputs } = require("../../middleware/validateInputs.js");
 const {
-  requestTripMembershipSchema,
-} = require("./userSchemas/requestTripMembershipSchema.js");
+  createNewTripMemberRequestSchema,
+} = require("./userSchemas/createNewTripMemberRequestSchema.js");
 
 // export our router to be mounted by the parent application
 module.exports = router;
@@ -25,7 +25,7 @@ module.exports = router;
 router.get("/", authenticate, authorize("admin"), userController.getAllUsers);
 
 // GET request for one User
-router.get("/:username", authenticate, userController.getUserDetails);
+router.get("/:username", authenticate, userController.getOneUser);
 
 // PATCH request to update user profile
 router.patch(
@@ -33,15 +33,15 @@ router.patch(
   authenticate,
   ensureCorrectUser,
   validateInputs(updateUserProfileSchema),
-  userController.updateUserProfile
+  userController.updateOneUserProfile
 );
 
 // POST request to REQUEST for a trip membership
 router.post(
   "/:username/trips/:id",
   authenticate,
-  validateInputs(requestTripMembershipSchema),
-  userController.requestTripMembership
+  validateInputs(createNewTripMemberRequestSchema),
+  userController.createNewTripMemberRequest
 );
 
 // PATCH request to RESPOND to a requested trip membership
@@ -49,7 +49,7 @@ router.patch(
   "/:username/trips/:id",
   authenticate,
   //   validateInputs(respondTripMembershipSchema),
-  userController.respondTripMembership
+  userController.respondOneTripMemberRequest
 );
 
 /** DELETE request to CANCEL a requested trip membership
@@ -62,5 +62,5 @@ router.patch(
 router.delete(
   "/:username/trips/:id",
   authenticate,
-  userController.cancelTripMembership
+  userController.cancelOneTripMemberRequest
 );

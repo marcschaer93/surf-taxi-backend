@@ -21,7 +21,7 @@ class AuthApi {
    *
    * Throws UnauthorizedError is user not found or wrong password.
    **/
-  static async loginUser({ username, password }) {
+  static async loginOneUser({ username, password }) {
     const result = await db.query(
       `
     SELECT *
@@ -51,7 +51,7 @@ class AuthApi {
    * @param {object} data - User data to create a new user.
    * @returns {object} - Success message and the newly registered user object.
    **/
-  static async registerUser(data) {
+  static async registerOneUser(data) {
     const {
       username,
       password,

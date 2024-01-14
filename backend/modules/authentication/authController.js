@@ -1,4 +1,4 @@
-// This middleware helps to catch any errors that occur within the handler and forwards them to the Express error-handling middleware via next(). Without try...catch block. No next keyword needed
+// ASYNCHANDLER - This middleware helps to catch any errors that occur within the handler and forwards them to the Express error-handling middleware via next(). Without try...catch block. This then sends the error to client.
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 
@@ -9,33 +9,33 @@ const {
   generateRefreshToken,
 } = require("../../helpers/jwtTokens");
 
-exports.registerUser = asyncHandler(async (req, res, next) => {
-  const newUser = await AuthApi.registerUser(req.body);
+exports.registerOneUser = asyncHandler(async (req, res, next) => {
+  const newRegisteredUser = await AuthApi.registerOneUser(req.body);
 
-  const accessToken = generateAccessToken(newUser);
-  const refreshToken = generateRefreshToken(newUser);
+  const accessToken = generateAccessToken(newRegisteredUser);
+  const refreshToken = generateRefreshToken(newRegisteredUser);
 
   res.status(201).json({
     accessToken: accessToken,
     refreshToken: refreshToken,
-    user: newUser,
+    user: newRegisteredUser,
   });
 });
 
-exports.loginUser = asyncHandler(async (req, res, next) => {
-  const user = await AuthApi.loginUser(req.body);
+exports.loginOneUser = asyncHandler(async (req, res, next) => {
+  const loggedInUser = await AuthApi.loginOneUser(req.body);
 
-  const accessToken = generateAccessToken(user);
-  const refreshToken = generateRefreshToken(user);
+  const accessToken = generateAccessToken(loggedInUser);
+  const refreshToken = generateRefreshToken(loggedInUser);
 
   res.status(200).json({
     accessToken: accessToken,
     refreshToken: refreshToken,
-    user: user,
+    user: loggedInUser,
   });
 });
 
-exports.refreshToken = asyncHandler(async (req, res, next) => {
+exports.createNewRefreshToken = asyncHandler(async (req, res, next) => {
   const { refreshToken } = req.body;
 
   const payload = await jwt.verify(

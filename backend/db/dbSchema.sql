@@ -32,9 +32,9 @@ CREATE TABLE trip_members (
     REFERENCES users(username) ON DELETE CASCADE,
   trip_id INTEGER 
     REFERENCES trips(id) ON DELETE CASCADE,
-  is_trip_creator BOOLEAN,
-  request_status VARCHAR(20),
+  member_status VARCHAR(20),
   PRIMARY KEY (username, trip_id)
 );
 
-  -- request_status ENUM('pending', 'approved', 'rejected') DEFAULT NULL,
+-- memberStatus can be ('pending', 'rejected', 'requested', 'tripOwner', 'passenger')
+
