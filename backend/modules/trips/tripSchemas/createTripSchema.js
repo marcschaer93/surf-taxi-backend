@@ -63,7 +63,7 @@ const createTripSchema = {
   unexpectedProperties: {
     custom: {
       options: (value, { req }) => {
-        const allowedProperties = Object.keys(tripNewSchema);
+        const allowedProperties = Object.keys(createTripSchema);
         const unexpectedProps = Object.keys(req.body).filter(
           (prop) => !allowedProperties.includes(prop)
         );

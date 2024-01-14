@@ -49,7 +49,7 @@ router.patch(
   "/:username/trips/:id",
   authenticate,
   //   validateInputs(respondTripMembershipSchema),
-  userController.respondOneTripMemberRequest
+  userController.respondToTripMemberRequest
 );
 
 /** DELETE request to CANCEL a requested trip membership
@@ -62,5 +62,5 @@ router.patch(
 router.delete(
   "/:username/trips/:id",
   authenticate,
-  userController.cancelOneTripMemberRequest
+  userController.deleteOneTripMemberRequest
 );

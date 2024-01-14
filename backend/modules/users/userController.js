@@ -65,11 +65,11 @@ exports.createNewTripMemberRequest = asyncHandler(async (req, res, next) => {
  * as PASSENGER if not already ('approved')
  * and not TRIP OWNER
  **/
-exports.cancelOneTripMemberRequest = asyncHandler(async (req, res, next) => {
+exports.deleteOneTripMemberRequest = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.id);
   const tripPassengerUsername = req.username;
 
-  const cancelledTripMemberRequest = await UserApi.cancelOneTripMemberRequest(
+  const deletedTripMember = await UserApi.deleteOneTripMemberRequest(
     tripPassengerUsername,
     tripId
   );
@@ -83,18 +83,18 @@ exports.cancelOneTripMemberRequest = asyncHandler(async (req, res, next) => {
  *
  * Handle respond to trip membership on PATCH as TRIP OWNER
  **/
-exports.respondOneTripMemberRequest = asyncHandler(async (req, res, next) => {
+exports.respondToTripMemberRequest = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.id);
   const memberStatusResponse = req.body.memberStatus;
   const tripOwnerUsername = req.username;
   const tripPassengerUsername = req.params.username;
 
-  const respondToTripMemberRequest = await UserApi.respondOneTripMemberRequest(
+  const respondedTripMemberRequest = await UserApi.respondToTripMemberRequest(
     tripId,
     tripOwnerUsername,
     tripPassengerUsername,
     memberStatusResponse
   );
 
-  res.status(200).json({ respondToTripMemberRequest });
+  res.status(200).json({ respondedTripMemberRequest });
 });

@@ -69,7 +69,7 @@ const updateTripSchema = {
   unexpectedProperties: {
     custom: {
       options: (value, { req }) => {
-        const allowedProperties = Object.keys(tripUpdateSchema);
+        const allowedProperties = Object.keys(updateTripSchema);
         const unexpectedProps = Object.keys(req.body).filter(
           (prop) => !allowedProperties.includes(prop)
         );

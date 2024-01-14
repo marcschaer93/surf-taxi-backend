@@ -32,7 +32,8 @@ CREATE TABLE trip_members (
     REFERENCES users(username) ON DELETE CASCADE,
   trip_id INTEGER 
     REFERENCES trips(id) ON DELETE CASCADE,
-  member_status VARCHAR(20),
+  member_status VARCHAR(20), 
+  status_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (username, trip_id)
 );
 

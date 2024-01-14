@@ -101,15 +101,15 @@ class TripApi {
       (
         username,
         trip_id,
-        is_trip_creator,
-        request_status
+        member_status,
+        status_timestamp
       )
-    VALUES ($1, $2, $3, $4)
+    VALUES ($1, $2, $3, CURRENT_TIMESTAMP )
     RETURNING *
     `;
 
   const linkInsertValues = [
-    username, newTrip.id, true, 'owner'
+    username, newTrip.id, 'owner'
   ];
 
   const linkInsertResult = await db.query(linkInsertQuery, linkInsertValues);
