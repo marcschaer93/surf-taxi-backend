@@ -39,8 +39,8 @@ class TripApi {
       T.travel_info,
       T.seats,
       T.costs,
-      T.seats - COUNT(CASE WHEN TM.username IS NOT NULL AND TM.request_status IN ('approved', 'owner') THEN TM.username END) AS available_seats,
-      json_agg(jsonb_build_object('username', TM.username, 'status', TM.request_status) ORDER BY TM.username) AS trip_members
+      T.seats - COUNT(CASE WHEN TM.username IS NOT NULL AND TM.member_status IN ('approved', 'owner') THEN TM.username END) AS available_seats,
+      json_agg(jsonb_build_object('username', TM.username, 'status', TM.member_status) ORDER BY TM.username) AS trip_members
     FROM
       trips AS T
     LEFT JOIN
@@ -67,7 +67,7 @@ class TripApi {
    * @returns {object} - The newly created trip object.
    **/
   // prettier-ignore
-  static async createNewTrip(data, username) {
+  static async createNewTrip(data, creatorUsername) {
     //** Part 1: Adding a new trip to the trips table */
     const tripInsertQuery = `
       INSERT INTO trips 
@@ -109,7 +109,7 @@ class TripApi {
     `;
 
   const linkInsertValues = [
-    username, newTrip.id, 'owner'
+    creatorUsername, newTrip.id, 'owner'
   ];
 
   const linkInsertResult = await db.query(linkInsertQuery, linkInsertValues);

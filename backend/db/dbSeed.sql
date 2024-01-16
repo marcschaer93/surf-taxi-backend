@@ -21,10 +21,12 @@ VALUES
   ('2024-01-25', 'City C', 'City D', 'City E', 'Trip from C to D with a stop at E', 3, '25 USD');
 
 -- Seed data for TripMembers table
-INSERT INTO trip_members (username, trip_id, member_status)
+
+
+INSERT INTO trip_members (username, trip_id, member_status, status_timestamp)
 VALUES
-  ('testuser', 1, 'passenger'),
-  ('testadmin', 1,  'pending'),
-  ('testadmin', 3,  'tripOwner'),
-  ('testadmin', 2,  'rejected'),
-  ('testuser', 2,  'requested')
+  ('testuser', 1, 'passenger', '2024-01-01 12:00:00.000000' ),
+  ('testadmin', 1,  'pending', '2024-01-01 12:00:00.000000'),
+  ('testadmin', 3,  'tripOwner', '2024-01-01 12:00:00.000000'),
+  ('testadmin', 2,  'rejected', '2024-01-01 12:00:00.000000'),
+  ('testuser', 2,  'requested', '2024-01-01 12:00:00.000000')

@@ -16,7 +16,7 @@ const createTripSchema = {
         return isValid(parsedDate);
       },
       errorMessage:
-        "Please provide a valid date in ISO 8601 format: 2023-03-20T23:15:30",
+        "Please provide a valid timestamp in ISO 8601 format: 2023-03-20T23:15:30",
     },
   },
   start_location: {
