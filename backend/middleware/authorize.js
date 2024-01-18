@@ -26,6 +26,19 @@ const ensureCorrectUser = (req, res, next) => {
   }
 };
 
+/** Middleware: Requires not tripOwner. */
+
+// const ensureNotOwnTrip = (req, res, next) => {
+//   if (req.username === req.params.username) {
+//     return next(
+//       new UnauthorizedError(
+//         "You are the trip owner and cannot perform this action."
+//       )
+//     );
+//   }
+//   return next();
+// };
+
 /** Middleware: Requires logged in and admin role. */
 
 const ensureAdmin = (req, res, next) => {

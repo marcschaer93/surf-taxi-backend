@@ -7,6 +7,7 @@ const { authenticate } = require("../../middleware/authenticate.js");
 const {
   ensureCorrectUser,
   authorize,
+  ensureNotOwnTrip,
 } = require("../../middleware/authorize.js");
 const {
   updateUserProfileSchema,
@@ -38,18 +39,19 @@ router.patch(
 
 // POST request to REQUEST for a trip membership
 router.post(
-  "/:username/trips/:id",
+  "/:username/trips/:id/join-request",
   authenticate,
   //   validateInputs(createNewTripMemberRequestSchema),
-  userController.createNewTripMemberRequest
+  userController.requestToJoin
 );
 
 // PATCH request to RESPOND to a requested trip membership
 router.patch(
-  "/:username/trips/:id",
+  "/:username/trips/:id/respond-to-request",
   authenticate,
+  ensureCorrectUser,
   //   validateInputs(respondTripMembershipSchema),
-  userController.respondToTripMemberRequest
+  userController.respondToJoinRequest
 );
 
 /** DELETE request to CANCEL a requested trip membership
@@ -60,7 +62,7 @@ router.patch(
  *
  **/
 router.delete(
-  "/:username/trips/:id",
+  "/:username/trips/:id/remove-join-request",
   authenticate,
-  userController.deleteMyTripMemberRequest
+  userController.removeMyJoinRequest
 );

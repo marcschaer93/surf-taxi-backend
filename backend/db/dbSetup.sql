@@ -4,9 +4,9 @@
 \prompt 'Return for yes or control-C to cancel > ' foo
 
 -- Delete and recreate tables for surf_taxi db
-DROP TABLE IF EXISTS trip_members CASCADE;
-DROP TABLE IF EXISTS trips CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS trips CASCADE;
+DROP TABLE IF EXISTS passengers CASCADE;
 
 -- Recreate tables
 \i db/dbSchema.sql

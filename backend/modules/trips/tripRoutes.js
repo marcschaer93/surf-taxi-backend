@@ -16,7 +16,7 @@ module.exports = router;
 router.post(
   "/",
   authenticate,
-  ensureCorrectUser,
+  // ensureCorrectUser,
   validateInputs(createTripSchema),
   tripController.createNewTrip
 );

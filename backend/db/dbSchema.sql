@@ -18,6 +18,7 @@ CREATE TABLE users (
 
 CREATE TABLE trips (
   id SERIAL PRIMARY KEY, 
+  owner TEXT REFERENCES users(username),  -- Reference to the user organizing the trip
   date TIMESTAMP,
   start_location TEXT,
   destination TEXT,
@@ -27,15 +28,28 @@ CREATE TABLE trips (
   costs TEXT
 );
 
-CREATE TABLE trip_members (
+-- CREATE TABLE trip_members (
+--   username VARCHAR(25) 
+--     REFERENCES users(username) ON DELETE CASCADE,
+--   trip_id INTEGER 
+--     REFERENCES trips(id) ON DELETE CASCADE,
+--   member_status VARCHAR(20), 
+--   status_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   PRIMARY KEY (username, trip_id)
+-- );
+-- memberStatus can be ('pending', 'rejected', 'requested', 'tripOwner', 'passenger')
+
+CREATE TABLE passengers (
   username VARCHAR(25) 
     REFERENCES users(username) ON DELETE CASCADE,
   trip_id INTEGER 
     REFERENCES trips(id) ON DELETE CASCADE,
-  member_status VARCHAR(20), 
-  status_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  reservation_status VARCHAR(20), 
+  reservation_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (username, trip_id)
 );
 
--- memberStatus can be ('pending', 'rejected', 'requested', 'tripOwner', 'passenger')
+-- confirmed: The user's seat reservation has been confirmed.
+-- pending: The reservation is pending confirmation.
+-- rejected: The reservation has been rejected by the trip organizer.
 

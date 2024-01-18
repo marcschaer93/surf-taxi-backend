@@ -14,10 +14,21 @@ const {
   TEST_DATE,
 } = require("../../testSetupRoutes");
 
-beforeAll(commonBeforeAll);
-beforeEach(commonBeforeEach);
-afterEach(commonAfterEach);
-afterAll(commonAfterAll);
+beforeAll(async () => {
+  await commonBeforeAll();
+});
+
+beforeEach(async () => {
+  await commonBeforeEach();
+});
+
+afterEach(async () => {
+  await commonAfterEach();
+});
+
+afterAll(async () => {
+  await commonAfterAll();
+});
 
 /************************************** GET /api/trips */
 
@@ -32,6 +43,7 @@ describe("GET /api/trips", function () {
       allTrips: [
         {
           id: testTripIds[0],
+          owner: "testuser",
           date: TEST_DATE,
           start_location: "Interlaken",
           destination: "Sao Torpes",
@@ -43,6 +55,7 @@ describe("GET /api/trips", function () {
         {
           id: testTripIds[1],
           date: TEST_DATE,
+          owner: "marcschaer",
           start_location: "Sidi Ifni",
           destination: "Marseille",
           stops: "Imsoune",
@@ -77,17 +90,17 @@ describe("GET /api/trips/:id", function () {
       trip: {
         id: testTripIds[0],
         date: TEST_DATE,
+        owner: "testuser",
         start_location: "Interlaken",
         destination: "Sao Torpes",
         stops: "Somo",
         travel_info: "surftrip",
-        available_seats: "4",
         costs: "split gas & tolls",
         seats: 5,
-        trip_members: [
+        passengers: [
           {
-            status: "owner",
-            username: "testuser",
+            status: null,
+            username: null,
           },
         ],
       },
@@ -101,24 +114,22 @@ describe("POST /api/trips", function () {
   test("ok for user_role", async function () {
     const resp = await request(app)
       .post(`/api/trips`)
-      .send(
-        {
-          date: new Date(TEST_DATE), // Use a JavaScript Date object
-          start_location: "newTestTrip",
-          destination: "testland",
-          stops: "Somo",
-          travel_info: "surftrip",
-          costs: "split gas & tolls",
-          seats: 5,
-        },
-        "testuser"
-      )
+      .send({
+        date: new Date(TEST_DATE), // Use a JavaScript Date object
+        start_location: "newTestTrip",
+        destination: "testland",
+        stops: "Somo",
+        travel_info: "surftrip",
+        costs: "split gas & tolls",
+        seats: 5,
+      })
       .set("authorization", `Bearer ${u1AccessToken}`);
     expect(resp.statusCode).toEqual(201);
     expect(resp.body).toEqual({
       newTrip: {
         id: expect.any(Number),
         date: TEST_DATE,
+        owner: "testuser",
         start_location: "newTestTrip",
         destination: "testland",
         stops: "Somo",
@@ -136,7 +147,7 @@ describe("POST /api/trips", function () {
       .send({
         start_location: "Interlaken",
       });
-    expect(resp.statusCode).toEqual(401);
+    expect(resp.statusCode).toEqual(400);
   });
 
   test("bad request with invalid data", async function () {
@@ -147,7 +158,7 @@ describe("POST /api/trips", function () {
       })
       .set("authorization", `Bearer ${u1AccessToken}`);
 
-    expect(resp.statusCode).toEqual(401);
+    expect(resp.statusCode).toEqual(400);
   });
 });
 

@@ -34,7 +34,11 @@ exports.deleteOneTrip = asyncHandler(async (req, res) => {
 // Handle trip update on PATCH.
 exports.updateOneTrip = asyncHandler(async (req, res) => {
   const tripId = req.params.id;
-  const updatedTrip = await TripApi.updateOneTrip(tripId, req.body);
+  const updatedTrip = await TripApi.updateOneTrip(
+    tripId,
+    req.body,
+    req.username
+  );
 
   res.status(200).json({ updatedTrip });
 });

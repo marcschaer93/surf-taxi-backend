@@ -46,16 +46,20 @@ exports.updateUserProfile = asyncHandler(async (req, res, next) => {
  * Handle User trip request on POST
  *
  **/
-exports.createNewTripMemberRequest = asyncHandler(async (req, res, next) => {
+exports.requestToJoin = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.id);
-  const loggedInPassenger = req.username;
+  const currentUser = req.username;
 
-  const newTripMemberRequest = await UserApi.createNewTripMemberRequest(
-    tripId,
-    loggedInPassenger
-  );
+  const newJoinRequest = await UserApi.requestToJoin(tripId, currentUser);
 
-  res.status(201).json(newTripMemberRequest);
+  res.status(201).json({
+    success: true,
+    data: {
+      newJoinRequest,
+      tripOwner: req.params.username,
+      passenger: currentUser,
+    },
+  });
 });
 
 /** CANCEL MY TRIP MEMBERSHIP REQUEST
@@ -64,39 +68,36 @@ exports.createNewTripMemberRequest = asyncHandler(async (req, res, next) => {
  * as PASSENGER if not already ('approved')
  * and not TRIP OWNER
  **/
-exports.deleteMyTripMemberRequest = asyncHandler(async (req, res, next) => {
+exports.removeMyJoinRequest = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.id);
-  const loggedInPassenger = req.username;
+  const currentUser = req.username;
 
-  await UserApi.deleteMyTripMemberRequest(tripId, loggedInPassenger);
+  await UserApi.removeMyJoinRequest(tripId, currentUser);
 
   res
     .status(204)
-    .json({ message: "Trip member request cancelled successfully" });
+    .json({ message: "Passenger join request cancelled successfully" });
 });
 
 /** RESPOND TO TRIP MEMBERSHIP REQUEST
  *
  * Handle respond to trip membership on PATCH as TRIP OWNER
  **/
-exports.respondToTripMemberRequest = asyncHandler(async (req, res, next) => {
+exports.respondToJoinRequest = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.id);
-  const memberStatusResponse = req.body.memberStatus;
-  const loggedInTripOwner = req.username;
+  const reservationStatusResponse = req.body.reservationStatus;
   const passenger = req.params.username;
+  const currentUser = req.username;
 
-  if (ownerUsername === passengerUsername) {
-    throw new ExpressError(
-      `You are the trip Owner, you can't respond to own trip.`
-    );
-  }
-
-  const respondedRequest = await UserApi.respondToTripMemberRequest(
+  const respondedRequest = await UserApi.respondToJoinRequest(
     tripId,
-    loggedInTripOwner,
+    currentUser,
     passenger,
-    memberStatusResponse
+    reservationStatusResponse
   );
 
-  res.status(200).json({ respondedRequest });
+  res.status(200).json({
+    success: true,
+    data: { respondedRequest, tripOwner: currentUser, passenger: passenger },
+  });
 });

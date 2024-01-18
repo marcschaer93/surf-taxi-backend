@@ -17,7 +17,7 @@ async function commonBeforeAll() {
   // noinspection SqlWithoutWhere
   await db.query("DELETE FROM trips");
   await db.query("DELETE FROM users");
-  await db.query("DELETE FROM trip_members");
+  await db.query("DELETE FROM passengers");
 
   await AuthApi.registerOneUser({
     username: "testuser",
@@ -95,16 +95,14 @@ async function commonBeforeAll() {
   testTripIds[1] = resultTrip2.id;
 
   //   await User.applyToJob("u1", testJobIds[0]);
-  //   await UserApi.createNewTripMemberRequest("u1", testJobIds[0]);
+  await UserApi.requestToJoin(testTripIds[1], "testuser");
 }
-
 async function commonBeforeEach() {
   await db.query("BEGIN");
 }
 
 async function commonAfterEach() {
   await db.query("ROLLBACK");
-  await db.release(); // Release the connection back to the pool
 }
 
 async function commonAfterAll() {

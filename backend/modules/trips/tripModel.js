@@ -1,7 +1,11 @@
 const asyncHandler = require("express-async-handler");
 
 const db = require("../../db");
-const { NotFoundError, ExpressError } = require("../../helpers/expressError");
+const {
+  NotFoundError,
+  ExpressError,
+  BadRequestError,
+} = require("../../helpers/expressError");
 
 /** TRIP API
  *
@@ -33,22 +37,22 @@ class TripApi {
     SELECT
       T.id,
       T.date,
+      T.owner,
       T.start_location,
       T.destination,
       T.stops,
       T.travel_info,
       T.seats,
       T.costs,
-      T.seats - COUNT(CASE WHEN TM.username IS NOT NULL AND TM.member_status IN ('approved', 'owner') THEN TM.username END) AS available_seats,
-      json_agg(jsonb_build_object('username', TM.username, 'status', TM.member_status) ORDER BY TM.username) AS trip_members
+      json_agg(jsonb_build_object('username', P.username, 'status', P.reservation_status) ORDER BY P.username) AS passengers
     FROM
       trips AS T
     LEFT JOIN
-      trip_members AS TM ON T.id = TM.trip_id
+      passengers AS P ON T.id = P.trip_id
     WHERE
       T.id = $1
     GROUP BY
-      T.id, T.date, T.start_location, T.destination, T.stops, T.travel_info, T.seats, T.costs
+      T.id, T.date, T.owner, T.start_location, T.destination, T.stops, T.travel_info, T.seats, T.costs
     `,
       [id]
     );
@@ -137,17 +141,14 @@ class TripApi {
 
   //   return newTrip;
   // }
-  static async createNewTrip(data, ownerUsername) {
-    try {
-      // Start a transaction
-      await db.query("BEGIN");
-
-      // Part 1: Insert a new trip to 'trips' table
-      const createNewTripResult = await db.query(
-        `
+  static async createNewTrip(tripData, currentUser) {
+    // Part 1: Insert a new trip to 'trips' table
+    const createNewTripResult = await db.query(
+      `
         INSERT INTO trips 
           (
             date,
+            owner,
             start_location,
             destination,
             stops,
@@ -155,58 +156,30 @@ class TripApi {
             seats,
             costs
           )
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         RETURNING *
         `,
-        [
-          data.date,
-          data.start_location,
-          data.destination,
-          data.stops,
-          data.travel_info,
-          data.seats,
-          data.costs,
-        ]
+      [
+        tripData.date,
+        currentUser,
+        tripData.start_location,
+        tripData.destination,
+        tripData.stops,
+        tripData.travel_info,
+        tripData.seats,
+        tripData.costs,
+      ]
+    );
+
+    const newTrip = createNewTripResult.rows[0];
+    if (!newTrip) {
+      throw new ExpressError(
+        "Failed to create a new trip in the trips table",
+        500
       );
-
-      const newTrip = createNewTripResult.rows[0];
-      if (!newTrip) {
-        throw new ExpressError(
-          "Failed to create a new trip in the trips table",
-          500
-        );
-      }
-
-      // Part 2: Insert a new trip_member to 'trip_members' table with the new created trip data
-      const createNewTripMemberResult = await db.query(
-        `
-        INSERT INTO trip_members 
-          (
-            username,
-            trip_id,
-            member_status,
-            status_timestamp
-          )
-        VALUES ($1, $2, $3, CURRENT_TIMESTAMP )
-        RETURNING *
-        `,
-        [ownerUsername, newTrip.id, "owner"]
-      );
-
-      const newTripMember = createNewTripMemberResult.rows[0];
-      if (!newTripMember) {
-        throw new ExpressError("Failed to create new trip member", 500);
-      }
-
-      // Commit the transaction
-      await db.query("COMMIT");
-
-      return newTrip;
-    } catch (error) {
-      // Rollback the transaction in case of an error
-      await db.query("ROLLBACK");
-      throw error;
     }
+
+    return newTrip;
   }
 
   /** UPDATE TRIP
@@ -216,9 +189,9 @@ class TripApi {
    * @param {object} data - Trip data to update.
    * @returns {object} - Success message and the newly updated trip object.
    **/
-  static async updateOneTrip(id, data) {
-    const keys = Object.keys(data);
-    const updateValues = [...Object.values(data), id];
+  static async updateOneTrip(tripId, updateData, currentUser) {
+    const keys = Object.keys(updateData);
+    const updateValues = [...Object.values(updateData), tripId];
 
     const updateQuery = `
       UPDATE trips
@@ -230,9 +203,10 @@ class TripApi {
     const result = await db.query(updateQuery, updateValues);
     const updatedTrip = result.rows[0];
 
-    if (!updatedTrip) {
-      throw new ExpressError("Failed to update trip", 500);
-    }
+    if (!updatedTrip) throw new ExpressError("Failed to update trip", 500);
+
+    if (updatedTrip.owner !== currentUser)
+      throw new BadRequestError("Not trip owner. Can't update trip.");
 
     return updatedTrip;
   }
@@ -243,13 +217,13 @@ class TripApi {
    *
    * Throws NotFoundError if trip not found.
    **/
-  static async deleteOneTrip(id) {
+  static async deleteOneTrip(tripId) {
     const result = await db.query(
       `DELETE
              FROM trips
              WHERE id = $1
              RETURNING id`,
-      [id]
+      [tripId]
     );
     const removedTrip = result.rows[0];
 

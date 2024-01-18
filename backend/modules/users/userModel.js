@@ -55,9 +55,9 @@ class UserApi {
    * @param {object} userData - Updated user data.
    * @returns {object} - Updated user object.
    **/
-  static async updateUserProfile(username, userData) {
-    const keys = Object.keys(userData);
-    const updateValues = [...Object.values(userData), username];
+  static async updateUserProfile(currentUser, updateData) {
+    const keys = Object.keys(updateData);
+    const updateValues = [...Object.values(updateData), currentUser];
 
     const setClause = keys
       .map((key, index) => `${key} = $${index + 1}`)
@@ -78,7 +78,7 @@ class UserApi {
     if (!updatedFields) {
       throw new ExpressError("Failed to update user", 500);
     }
-    const updatedUser = { username: username, updatedFields: updatedFields };
+    const updatedUser = { username: currentUser, updatedFields: updatedFields };
 
     return updatedUser;
   }
@@ -91,7 +91,7 @@ class UserApi {
    * @param {string} request_status - Status of the request (default: "requested").
    * @returns {object} - New trip member link.
    **/
-  static async createNewTripMemberRequest(tripId, loggedInPassenger) {
+  static async requestToJoin(tripId, currentUser) {
     const tripCheckResult = await db.query(
       `SELECT * FROM trips WHERE id = $1`,
       [tripId]
@@ -99,24 +99,24 @@ class UserApi {
 
     const trip = tripCheckResult.rows[0];
     if (!trip) throw new NotFoundError(`No trip found with id: ${tripId}`);
+    if (trip.owner === currentUser)
+      throw new BadRequestError(
+        `Can't Request. You are the owner of the trip with ID: ${tripId}.`
+      );
 
-    const tripMemberCheckResult = await db.query(
+    const passengerCheckResult = await db.query(
       `
-      SELECT * FROM trip_members 
+      SELECT * FROM passengers
       WHERE username = $1
       AND trip_id = $2
       `,
-      [loggedInPassenger, tripId]
+      [currentUser, tripId]
     );
 
-    const tripMember = tripMemberCheckResult.rows[0];
+    const passenger = passengerCheckResult.rows[0];
 
-    if (tripMember) {
-      if (tripMember.member_status === "owner") {
-        throw new BadRequestError(
-          `Can't Request. You are the owner of the trip with ID: ${tripId}.`
-        );
-      } else if (tripMember.member_status === "rejected") {
+    if (passenger) {
+      if (passenger.reservation_status === "rejected") {
         throw new BadRequestError(
           `You got already rejected to join the trip with ID: ${tripId}.`
         );
@@ -127,71 +127,67 @@ class UserApi {
       );
     }
 
-    const insertTripMemberRequestResult = await db.query(
+    const insertPassengerResult = await db.query(
       `
-      INSERT INTO trip_members
-      (username, trip_id, member_status, status_timestamp)
+      INSERT INTO passengers
+      (username, trip_id, reservation_status, reservation_timestamp)
       VALUES ($1, $2, $3, CURRENT_TIMESTAMP )
       RETURNING *
       `,
-      [loggedInPassenger, tripId, "requested"]
+      [currentUser, tripId, "requested"]
     );
 
-    const newTripMemberRequest = insertTripMemberRequestResult.rows[0];
+    const newJoinRequest = insertPassengerResult.rows[0];
 
-    if (!newTripMemberRequest)
+    if (!newJoinRequest)
       throw new ExpressError(
         `Failed to insert request status for trip with ID ${tripId}`
       );
 
-    return newTripMemberRequest;
+    return newJoinRequest;
   }
 
   /** DELETE A TRIP REQUEST
    *
    **/
-  static async deleteMyTripMemberRequest(tripId, loggedInPassenger) {
-    const validTripResult = await db.query(
+  static async removeMyJoinRequest(tripId, currentUser) {
+    const validPassengerResult = await db.query(
       `
       SELECT *
-      FROM trip_members 
+      FROM passengers
       WHERE trip_id = $1
       AND username = $2
       `,
-      [tripId, loggedInPassenger]
+      [tripId, currentUser]
     );
 
-    const requestedTrip = validTripResult.rows[0];
-    if (!requestedTrip)
+    const passenger = validPassengerResult.rows[0];
+    if (!passenger)
       throw new NotFoundError(
-        `No trip member found with id: ${tripId} and username ${loggedInPassenger}`
+        `No passenger found with id: ${tripId} and username ${currentUser}`
       );
 
-    if (requestedTrip.member_status === "approved") {
-      throw new NotFoundError(
-        `The trip membership status for trip with id ${tripId} and username ${loggedInPassenger} is already 'approved', make a 'Cancel-Approved-Trip-Request'`
-      );
-    } else if (requestedTrip.member_status === "owner") {
-      throw new NotFoundError(
-        `You are the owner for trip with id ${tripId} and username ${loggedInPassenger}. Make a 'Remove-Trip-As-Owner-Request'`
+    if (passenger.reservation_status === "confirmed") {
+      throw new BadRequestError(
+        `The trip membership status for trip with id ${tripId} and username ${currentUser} is already 'approved', make a 'Cancel-Approved-Trip-Request'`
       );
     }
 
     const deletedResult = await db.query(
       `
       DELETE
-      FROM trip_members
+      FROM passengers
       WHERE trip_id = $1
       AND username = $2
       RETURNING *
       `,
-      [tripId, loggedInPassenger]
+      [tripId, currentUser]
     );
-    const deletedTripMember = deletedResult.rows[0];
-    if (!deletedTripMember)
-      throw new NotFoundError(`Could not delete trip_member!`);
+    const removedJoinRequest = deletedResult.rows[0];
+    if (!removedJoinRequest)
+      throw new NotFoundError(`Could not remove join request!`);
 
-    return deletedTripMember;
+    return removedJoinRequest;
   }
 
   /** RESPOND A TRIP MEMBERSHIP REQUEST
@@ -201,51 +197,53 @@ class UserApi {
    * @param {string} request_status - New request status.
    * @returns {object} - Updated trip request object.
    **/
-  static async respondToTripMemberRequest(
+  static async respondToJoinRequest(
     tripId,
-    loggedInTripOwner,
+    currentUser,
     passenger,
-    memberStatusResponse
+    reservationStatusResponse
   ) {
-    const validTripResult = await db.query(
+    const validPassengerResult = await db.query(
       `
       SELECT *
-      FROM trip_members 
+      FROM passengers
       WHERE trip_id = $1
       AND username = $2
       `,
-      [tripId, loggedInTripOwner]
+      [tripId, passenger]
     );
 
-    const requestedTrip = validTripResult.rows[0];
-    if (!requestedTrip)
-      throw new NotFoundError(`No trip found with id: ${tripId}`);
-
-    const isTripOwner = requestedTrip.member_status === "tripOwner";
-    if (!isTripOwner)
-      throw new ExpressError(
-        `You are not the Owner of the trip and not allowed to respond`
+    const joinRequest = validPassengerResult.rows[0];
+    if (!joinRequest)
+      throw new NotFoundError(
+        `No passenger/ join request found with id: ${tripId} and username${passenger}`
       );
+
+    // const isTripOwner = requestedTrip.member_status === "tripOwner";
+    // if (!isTripOwner)
+    //   throw new ExpressError(
+    //     `You are not the Owner of the trip and not allowed to respond`
+    //   );
 
     // Update member_status and get the updated row
     const updateResult = await db.query(
       `
-      UPDATE trip_members
-      SET member_status = $1, status_timestamp = CURRENT_TIMESTAMP
+      UPDATE passengers
+      SET reservation_status = $1, reservation_timestamp = CURRENT_TIMESTAMP
       WHERE trip_id = $2 AND username = $3
       RETURNING *
       `,
-      [memberStatusResponse, tripId, passenger]
+      [reservationStatusResponse, tripId, passenger]
     );
 
-    const respondToTripMemberRequest = updateResult.rows[0];
+    const respondToJoinRequest = updateResult.rows[0];
 
-    if (!respondToTripMemberRequest)
+    if (!respondToJoinRequest)
       throw new ExpressError(
         `Failed to update request status for trip with ID ${tripId}`
       );
 
-    return respondToTripMemberRequest;
+    return respondToJoinRequest;
   }
 }
 
