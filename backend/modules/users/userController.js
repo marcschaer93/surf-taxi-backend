@@ -23,7 +23,7 @@ exports.getOneUser = asyncHandler(async (req, res, next) => {
 
 // Handle Profile update on PATCH
 
-exports.updateOneUserProfile = asyncHandler(async (req, res, next) => {
+exports.updateUserProfile = asyncHandler(async (req, res, next) => {
   const isRequestBodyEmpty = Object.keys(req.body).length === 0;
 
   if (isRequestBodyEmpty) {
@@ -32,8 +32,9 @@ exports.updateOneUserProfile = asyncHandler(async (req, res, next) => {
     );
   }
 
+  const loggedInUser = req.username;
   const updatedUserProfile = await UserApi.updateOneUserProfile(
-    req.username,
+    loggedInUser,
     req.body
   );
   res.status(200).json({ updatedUserProfile });
@@ -47,16 +48,14 @@ exports.updateOneUserProfile = asyncHandler(async (req, res, next) => {
  **/
 exports.createNewTripMemberRequest = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.id);
-  const tripPassengerUsername = req.username;
-  const { memberStatus } = req.body;
+  const loggedInPassenger = req.username;
 
   const newTripMemberRequest = await UserApi.createNewTripMemberRequest(
-    tripPassengerUsername,
     tripId,
-    memberStatus
+    loggedInPassenger
   );
 
-  res.status(201).json({ newTripMemberRequest });
+  res.status(201).json(newTripMemberRequest);
 });
 
 /** CANCEL MY TRIP MEMBERSHIP REQUEST
@@ -65,14 +64,11 @@ exports.createNewTripMemberRequest = asyncHandler(async (req, res, next) => {
  * as PASSENGER if not already ('approved')
  * and not TRIP OWNER
  **/
-exports.deleteOneTripMemberRequest = asyncHandler(async (req, res, next) => {
+exports.deleteMyTripMemberRequest = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.id);
-  const tripPassengerUsername = req.username;
+  const loggedInPassenger = req.username;
 
-  const deletedTripMember = await UserApi.deleteOneTripMemberRequest(
-    tripPassengerUsername,
-    tripId
-  );
+  await UserApi.deleteMyTripMemberRequest(tripId, loggedInPassenger);
 
   res
     .status(204)
@@ -86,15 +82,21 @@ exports.deleteOneTripMemberRequest = asyncHandler(async (req, res, next) => {
 exports.respondToTripMemberRequest = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.id);
   const memberStatusResponse = req.body.memberStatus;
-  const tripOwnerUsername = req.username;
-  const tripPassengerUsername = req.params.username;
+  const loggedInTripOwner = req.username;
+  const passenger = req.params.username;
 
-  const respondedTripMemberRequest = await UserApi.respondToTripMemberRequest(
+  if (ownerUsername === passengerUsername) {
+    throw new ExpressError(
+      `You are the trip Owner, you can't respond to own trip.`
+    );
+  }
+
+  const respondedRequest = await UserApi.respondToTripMemberRequest(
     tripId,
-    tripOwnerUsername,
-    tripPassengerUsername,
+    loggedInTripOwner,
+    passenger,
     memberStatusResponse
   );
 
-  res.status(200).json({ respondedTripMemberRequest });
+  res.status(200).json({ respondedRequest });
 });

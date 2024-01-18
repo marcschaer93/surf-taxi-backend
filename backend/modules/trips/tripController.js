@@ -13,7 +13,6 @@ exports.getAllTrips = asyncHandler(async (req, res) => {
 // Display detail page for a specific Trip.
 exports.getOneTrip = asyncHandler(async (req, res) => {
   const trip = await TripApi.getOneTrip(parseInt(req.params.id));
-  // const trip = await TripApi.getOneTrip(req.params.id);
 
   res.status(200).json({ trip });
 });

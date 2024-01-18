@@ -1,7 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
-const db = require("../../db/db.js");
+const db = require("../../db/index.js");
 const userController = require("./userController.js");
 const { authenticate } = require("../../middleware/authenticate.js");
 const {
@@ -33,14 +33,14 @@ router.patch(
   authenticate,
   ensureCorrectUser,
   validateInputs(updateUserProfileSchema),
-  userController.updateOneUserProfile
+  userController.updateUserProfile
 );
 
 // POST request to REQUEST for a trip membership
 router.post(
   "/:username/trips/:id",
   authenticate,
-  validateInputs(createNewTripMemberRequestSchema),
+  //   validateInputs(createNewTripMemberRequestSchema),
   userController.createNewTripMemberRequest
 );
 
@@ -62,5 +62,5 @@ router.patch(
 router.delete(
   "/:username/trips/:id",
   authenticate,
-  userController.deleteOneTripMemberRequest
+  userController.deleteMyTripMemberRequest
 );

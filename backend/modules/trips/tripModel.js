@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 
-const db = require("../../db/db");
+const db = require("../../db");
 const { NotFoundError, ExpressError } = require("../../helpers/expressError");
 
 /** TRIP API
@@ -66,60 +66,147 @@ class TripApi {
    * @param {string} username - The username of the trip creator.
    * @returns {object} - The newly created trip object.
    **/
-  // prettier-ignore
-  static async createNewTrip(data, creatorUsername) {
-    //** Part 1: Adding a new trip to the trips table */
-    const tripInsertQuery = `
-      INSERT INTO trips 
-        (
-          date,
-          start_location,
-          destination,
-          stops,
-          travel_info,
-          seats,
-          costs
-        )
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING *
-      `;
+  // static async createNewTrip(data, creatorUsername) {
+  //   // Part 1: Insert a new trip to 'trips' table
+  //   const createNewTripResult = await db.query(
+  //     `
+  //     INSERT INTO trips
+  //       (
+  //         date,
+  //         start_location,
+  //         destination,
+  //         stops,
+  //         travel_info,
+  //         seats,
+  //         costs
+  //       )
+  //     VALUES ($1, $2, $3, $4, $5, $6, $7)
+  //     RETURNING *
+  //     `,
+  //     [
+  //       data.date,
+  //       data.start_location,
+  //       data.destination,
+  //       data.stops,
+  //       data.travel_info,
+  //       data.seats,
+  //       data.costs,
+  //     ]
+  //   );
 
-    const tripInsertValues = [
-      data.date, data.start_location, data.destination, data.stops, data.travel_info, 
-      data.seats, data.costs
-    ];
-    const tripInsertResult = await db.query(tripInsertQuery, tripInsertValues);
-    const newTrip = tripInsertResult.rows[0];
+  //   const newTrip = createNewTripResult.rows[0];
+  //   if (!newTrip) {
+  //     throw new ExpressError(
+  //       "Failed to create a new trip in the trips table",
+  //       500
+  //     );
+  //   }
 
-    if (!newTrip) {
-      throw new ExpressError("Failed to create new trip", 500);
+  //   // Part 2: Insert a new trip_member to 'trip_members' table with the new created trip data
+  //   const createNewTripMemberResult = await db.query(
+  //     `
+  //     INSERT INTO trip_members
+  //       (
+  //         username,
+  //         trip_id,
+  //         member_status,
+  //         status_timestamp
+  //       )
+  //     VALUES ($1, $2, $3, CURRENT_TIMESTAMP )
+  //     RETURNING *
+  //     `,
+  //     [creatorUsername, newTrip.id, "owner"]
+  //   );
+
+  //   const newTripMember = createNewTripMemberResult.rows[0];
+
+  //   if (!newTripMember) {
+  //     // await db.query(
+  //     //   `DELETE
+  //     // FROM trips
+  //     // WHERE id = $1
+  //     // RETURNING id`,
+  //     //   [newTrip.id]
+  //     // );
+  //     this.deleteOneTrip(newTrip.id);
+  //     throw new ExpressError(
+  //       "Failed to create new trip member. Newly created trip will also be deleted",
+  //       500
+  //     );
+  //   }
+
+  //   return newTrip;
+  // }
+  static async createNewTrip(data, ownerUsername) {
+    try {
+      // Start a transaction
+      await db.query("BEGIN");
+
+      // Part 1: Insert a new trip to 'trips' table
+      const createNewTripResult = await db.query(
+        `
+        INSERT INTO trips 
+          (
+            date,
+            start_location,
+            destination,
+            stops,
+            travel_info,
+            seats,
+            costs
+          )
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING *
+        `,
+        [
+          data.date,
+          data.start_location,
+          data.destination,
+          data.stops,
+          data.travel_info,
+          data.seats,
+          data.costs,
+        ]
+      );
+
+      const newTrip = createNewTripResult.rows[0];
+      if (!newTrip) {
+        throw new ExpressError(
+          "Failed to create a new trip in the trips table",
+          500
+        );
+      }
+
+      // Part 2: Insert a new trip_member to 'trip_members' table with the new created trip data
+      const createNewTripMemberResult = await db.query(
+        `
+        INSERT INTO trip_members 
+          (
+            username,
+            trip_id,
+            member_status,
+            status_timestamp
+          )
+        VALUES ($1, $2, $3, CURRENT_TIMESTAMP )
+        RETURNING *
+        `,
+        [ownerUsername, newTrip.id, "owner"]
+      );
+
+      const newTripMember = createNewTripMemberResult.rows[0];
+      if (!newTripMember) {
+        throw new ExpressError("Failed to create new trip member", 500);
+      }
+
+      // Commit the transaction
+      await db.query("COMMIT");
+
+      return newTrip;
+    } catch (error) {
+      // Rollback the transaction in case of an error
+      await db.query("ROLLBACK");
+      throw error;
     }
-
-    //** Part 2: Adding a new link to the trip_members table */ 
-    const linkInsertQuery = `
-    INSERT INTO trip_members 
-      (
-        username,
-        trip_id,
-        member_status,
-        status_timestamp
-      )
-    VALUES ($1, $2, $3, CURRENT_TIMESTAMP )
-    RETURNING *
-    `;
-
-  const linkInsertValues = [
-    creatorUsername, newTrip.id, 'owner'
-  ];
-
-  const linkInsertResult = await db.query(linkInsertQuery, linkInsertValues);
-  const newTripMemberLink = linkInsertResult.rows[0];
-
-  if (!newTripMemberLink) {
-    throw new ExpressError("Failed to create a new trip_members link", 500);
-  }
-
-  return newTrip;
   }
 
   /** UPDATE TRIP

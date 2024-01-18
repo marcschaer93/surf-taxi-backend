@@ -17,7 +17,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE trips (
-  id SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY, 
   date TIMESTAMP,
   start_location TEXT,
   destination TEXT,

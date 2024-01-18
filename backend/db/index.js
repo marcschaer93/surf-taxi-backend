@@ -1,3 +1,5 @@
+// index.js as entry file (same as db.js)
+
 const { Pool } = require("pg");
 const { getDatabaseUri } = require("../config");
 

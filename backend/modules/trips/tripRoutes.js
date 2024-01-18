@@ -3,7 +3,7 @@ const router = express.Router();
 
 const tripController = require("./tripController");
 const { authenticate } = require("../../middleware/authenticate");
-const { authorize } = require("../../middleware/authorize");
+const { authorize, ensureCorrectUser } = require("../../middleware/authorize");
 const { validateInputs } = require("../../middleware/validateInputs");
 const { createTripSchema } = require("./tripSchemas/createTripSchema");
 const { updateTripSchema } = require("./tripSchemas/updateTripSchema");
@@ -16,6 +16,7 @@ module.exports = router;
 router.post(
   "/",
   authenticate,
+  ensureCorrectUser,
   validateInputs(createTripSchema),
   tripController.createNewTrip
 );

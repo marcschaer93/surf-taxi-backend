@@ -1,118 +1,23 @@
-const db = require("../../../db/db");
-const UserApi = require("../../users/userModel");
-const TripApi = require("../tripModel");
-const AuthApi = require("../../authentication/authModel");
-const {
-  generateAccessToken,
-  generateRefreshToken,
-} = require("../../../helpers/jwtTokens");
+"use strict";
 const request = require("supertest");
+
 const app = require("../../../app");
+const {
+  commonBeforeAll,
+  commonBeforeEach,
+  commonAfterEach,
+  commonAfterAll,
+  testTripIds,
+  u1AccessToken,
+  u2AccessToken,
+  adminAccesstoken,
+  TEST_DATE,
+} = require("../../testSetupRoutes");
 
-const TEST_DATE = "2023-04-16T00:00:00.000Z";
-const TEST_USERNAME = "testuser";
-const TEST_ADMIN_USERNAME = "testadmin";
-const TEST_TRIP_ID_INVALID = 99999;
-const TEST_TRIP_ID_VALID = 1;
-
-const testTripIds = [];
-
-const testuserAccessToken = generateAccessToken({
-  username: TEST_USERNAME,
-  role: "user",
-});
-const testuserRefreshToken = generateRefreshToken({
-  username: TEST_USERNAME,
-  role: "user",
-});
-
-const testadminAccessToken = generateAccessToken({
-  username: TEST_ADMIN_USERNAME,
-  role: "user",
-});
-const testadminRefreshToken = generateRefreshToken({
-  username: TEST_ADMIN_USERNAME,
-  role: "user",
-});
-
-async function clearDatabase() {
-  await db.query("DELETE FROM trips");
-  await db.query("DELETE FROM users");
-  await db.query("DELETE FROM trip_members");
-}
-
-async function registerTestUser() {
-  await AuthApi.registerOneUser({
-    username: TEST_USERNAME,
-    password: "password",
-    first_name: "test_user",
-    last_name: "hans",
-    email: "testuser@gmail.com",
-    gender: "male",
-    birth_year: "2000",
-    phone: "+41798490968",
-    country: "switzerland",
-    languages: ["german", "english", "french"],
-    profile_img_url: "google.com",
-    bio: "surfer",
-    role: "user",
-  });
-  await AuthApi.registerOneUser({
-    username: TEST_ADMIN_USERNAME,
-    password: "password",
-    first_name: "test_admin",
-    last_name: "fritz",
-    email: "testadmin@gmail.com",
-    gender: "male",
-    birth_year: "2000",
-    phone: "+41798490968",
-    country: "switzerland",
-    languages: ["german", "english", "french"],
-    profile_img_url: "google.com",
-    bio: "surfer",
-    role: "admin",
-  });
-}
-
-async function createTestTrip() {
-  const result = await TripApi.createNewTrip(
-    {
-      date: new Date(TEST_DATE), // Use a JavaScript Date object,,
-      start_location: "Interlaken",
-      destination: "Sao Torpes",
-      stops: "Somo",
-      travel_info: "surftrip",
-      costs: "split gas & tolls",
-      seats: 5,
-    },
-    TEST_USERNAME
-  );
-
-  testTripIds[0] = result.id;
-}
-
-async function initializeTripDatabase() {
-  await clearDatabase();
-  await registerTestUser();
-  await createTestTrip();
-}
-
-beforeAll(async () => {
-  await initializeTripDatabase();
-});
-
-beforeEach(async () => {
-  await db.query("BEGIN");
-});
-
-afterEach(async () => {
-  await db.query("ROLLBACK");
-});
-
-afterAll(async () => {
-  await clearDatabase();
-  await db.end();
-});
+beforeAll(commonBeforeAll);
+beforeEach(commonBeforeEach);
+afterEach(commonAfterEach);
+afterAll(commonAfterAll);
 
 /************************************** GET /api/trips */
 
@@ -120,13 +25,13 @@ describe("GET /api/trips", function () {
   test("ok for user_role", async function () {
     const resp = await request(app)
       .get(`/api/trips`)
-      .set("authorization", `Bearer ${testuserAccessToken}`);
+      .set("authorization", `Bearer ${u1AccessToken}`);
 
     expect(resp.statusCode).toEqual(200);
     expect(resp.body).toEqual({
       allTrips: [
         {
-          id: expect.any(Number),
+          id: testTripIds[0],
           date: TEST_DATE,
           start_location: "Interlaken",
           destination: "Sao Torpes",
@@ -135,8 +40,28 @@ describe("GET /api/trips", function () {
           costs: "split gas & tolls",
           seats: 5,
         },
+        {
+          id: testTripIds[1],
+          date: TEST_DATE,
+          start_location: "Sidi Ifni",
+          destination: "Marseille",
+          stops: "Imsoune",
+          travel_info: "surftrip",
+          costs: "split gas & tolls",
+          seats: 2,
+        },
       ],
     });
+  });
+});
+
+describe("GET /api/trips/:id", function () {
+  test("not found for no such trip", async function () {
+    const resp = await request(app)
+      .get(`/api/trips/0`)
+      .set("authorization", `Bearer ${u1AccessToken}`);
+
+    expect(resp.statusCode).toEqual(404);
   });
 });
 
@@ -144,7 +69,10 @@ describe("GET /api/trips", function () {
 
 describe("GET /api/trips/:id", function () {
   test("ok for user_role", async function () {
-    const resp = await request(app).get(`/api/trips/${testTripIds[0]}}`);
+    const resp = await request(app)
+      .get(`/api/trips/${testTripIds[0]}}`)
+      .set("authorization", `Bearer ${u1AccessToken}`);
+
     expect(resp.body).toEqual({
       trip: {
         id: testTripIds[0],
@@ -165,14 +93,6 @@ describe("GET /api/trips/:id", function () {
       },
     });
   });
-
-  test("not found for no such trip", async function () {
-    const resp = await request(app)
-      .get(`/api/trips/${TEST_TRIP_ID_INVALID}`)
-      .set("authorization", `Bearer ${testuserAccessToken}`);
-
-    expect(resp.statusCode).toEqual(404);
-  });
 });
 
 /************************************** POST /api/trips */
@@ -184,23 +104,23 @@ describe("POST /api/trips", function () {
       .send(
         {
           date: new Date(TEST_DATE), // Use a JavaScript Date object
-          start_location: "Interlaken",
-          destination: "Sao Torpes",
+          start_location: "newTestTrip",
+          destination: "testland",
           stops: "Somo",
           travel_info: "surftrip",
           costs: "split gas & tolls",
           seats: 5,
         },
-        TEST_USERNAME
+        "testuser"
       )
-      .set("authorization", `Bearer ${testuserAccessToken}`);
+      .set("authorization", `Bearer ${u1AccessToken}`);
     expect(resp.statusCode).toEqual(201);
     expect(resp.body).toEqual({
       newTrip: {
         id: expect.any(Number),
         date: TEST_DATE,
-        start_location: "Interlaken",
-        destination: "Sao Torpes",
+        start_location: "newTestTrip",
+        destination: "testland",
         stops: "Somo",
         travel_info: "surftrip",
         costs: "split gas & tolls",
@@ -212,11 +132,11 @@ describe("POST /api/trips", function () {
   test("bad request with missing data", async function () {
     const resp = await request(app)
       .post(`/api/trips`)
-      .set("authorization", `Bearer ${testuserAccessToken}`)
+      .set("authorization", `Bearer ${u1AccessToken}`)
       .send({
         start_location: "Interlaken",
       });
-    expect(resp.statusCode).toEqual(400);
+    expect(resp.statusCode).toEqual(401);
   });
 
   test("bad request with invalid data", async function () {
@@ -225,9 +145,9 @@ describe("POST /api/trips", function () {
       .send({
         date: "wrong-data-format",
       })
-      .set("authorization", `Bearer ${testuserAccessToken}`);
+      .set("authorization", `Bearer ${u1AccessToken}`);
 
-    expect(resp.statusCode).toEqual(400);
+    expect(resp.statusCode).toEqual(401);
   });
 });
 

@@ -1,4 +1,4 @@
-const db = require("../../db/db");
+const db = require("../../db");
 const bcrypt = require("bcrypt");
 
 const {
@@ -33,11 +33,15 @@ class UserApi {
    * @returns {object} - User object.
    **/
   static async getOneUser(username) {
-    const result = await db.query(`SELECT * FROM users WHERE username = $1`, [
-      username,
-    ]);
+    const result = await db.query(
+      `
+      SELECT * 
+      FROM users 
+      WHERE username = $1
+      `,
+      [username]
+    );
     const user = result.rows[0];
-
     if (!user)
       throw new NotFoundError(`No user found with username: ${username}`);
 
@@ -51,7 +55,7 @@ class UserApi {
    * @param {object} userData - Updated user data.
    * @returns {object} - Updated user object.
    **/
-  static async updateOneUserProfile(username, userData) {
+  static async updateUserProfile(username, userData) {
     const keys = Object.keys(userData);
     const updateValues = [...Object.values(userData), username];
 
@@ -87,43 +91,53 @@ class UserApi {
    * @param {string} request_status - Status of the request (default: "requested").
    * @returns {object} - New trip member link.
    **/
-  static async createNewTripMemberRequest(
-    username,
-    tripId,
-    memberStatus = "requested"
-  ) {
-    const tripIdCheck = await db.query(`SELECT FROM trips WHERE id = $1`, [
-      tripId,
-    ]);
+  static async createNewTripMemberRequest(tripId, loggedInPassenger) {
+    const tripCheckResult = await db.query(
+      `SELECT * FROM trips WHERE id = $1`,
+      [tripId]
+    );
 
-    if (!tripIdCheck.rows[0])
-      throw new NotFoundError(`No trip found with id: ${tripId}`);
+    const trip = tripCheckResult.rows[0];
+    if (!trip) throw new NotFoundError(`No trip found with id: ${tripId}`);
 
-    const duplicateCheck = await db.query(
+    const tripMemberCheckResult = await db.query(
       `
-      SELECT FROM trip_members 
+      SELECT * FROM trip_members 
       WHERE username = $1
       AND trip_id = $2
       `,
-      [username, tripId]
+      [loggedInPassenger, tripId]
     );
 
-    if (duplicateCheck.rows[0])
+    const tripMember = tripMemberCheckResult.rows[0];
+
+    if (tripMember) {
+      if (tripMember.member_status === "owner") {
+        throw new BadRequestError(
+          `Can't Request. You are the owner of the trip with ID: ${tripId}.`
+        );
+      } else if (tripMember.member_status === "rejected") {
+        throw new BadRequestError(
+          `You got already rejected to join the trip with ID: ${tripId}.`
+        );
+      }
+
       throw new BadRequestError(
         `You have already requested to join trip with ID: ${tripId}`
       );
+    }
 
-    const result = await db.query(
+    const insertTripMemberRequestResult = await db.query(
       `
       INSERT INTO trip_members
       (username, trip_id, member_status, status_timestamp)
       VALUES ($1, $2, $3, CURRENT_TIMESTAMP )
       RETURNING *
-    `,
-      [username, tripId, memberStatus]
+      `,
+      [loggedInPassenger, tripId, "requested"]
     );
 
-    const newTripMemberRequest = result.rows[0];
+    const newTripMemberRequest = insertTripMemberRequestResult.rows[0];
 
     if (!newTripMemberRequest)
       throw new ExpressError(
@@ -136,28 +150,30 @@ class UserApi {
   /** DELETE A TRIP REQUEST
    *
    **/
-  static async deleteOneTripMemberRequest(username, tripId) {
+  static async deleteMyTripMemberRequest(tripId, loggedInPassenger) {
     const validTripResult = await db.query(
-      `SELECT *
-       FROM trip_members 
-       WHERE trip_id = $1
-       AND username = $2`,
-      [tripId, username]
+      `
+      SELECT *
+      FROM trip_members 
+      WHERE trip_id = $1
+      AND username = $2
+      `,
+      [tripId, loggedInPassenger]
     );
 
     const requestedTrip = validTripResult.rows[0];
     if (!requestedTrip)
       throw new NotFoundError(
-        `No trip member found with id: ${tripId} and username ${username}`
+        `No trip member found with id: ${tripId} and username ${loggedInPassenger}`
       );
 
     if (requestedTrip.member_status === "approved") {
       throw new NotFoundError(
-        `The trip membership status for trip with id ${tripId} and username ${username} is already 'approved', make a 'Cancel-Approved-Trip-Request'`
+        `The trip membership status for trip with id ${tripId} and username ${loggedInPassenger} is already 'approved', make a 'Cancel-Approved-Trip-Request'`
       );
     } else if (requestedTrip.member_status === "owner") {
       throw new NotFoundError(
-        `You are the owner for trip with id ${tripId} and username ${username}. Make a 'Remove-Trip-As-Owner-Request'`
+        `You are the owner for trip with id ${tripId} and username ${loggedInPassenger}. Make a 'Remove-Trip-As-Owner-Request'`
       );
     }
 
@@ -169,7 +185,7 @@ class UserApi {
       AND username = $2
       RETURNING *
       `,
-      [tripId, username]
+      [tripId, loggedInPassenger]
     );
     const deletedTripMember = deletedResult.rows[0];
     if (!deletedTripMember)
@@ -187,16 +203,18 @@ class UserApi {
    **/
   static async respondToTripMemberRequest(
     tripId,
-    tripOwnerUsername,
-    tripPassengerUsername,
+    loggedInTripOwner,
+    passenger,
     memberStatusResponse
   ) {
     const validTripResult = await db.query(
-      `SELECT *
-       FROM trip_members 
-       WHERE trip_id = $1
-       AND username = $2`,
-      [tripId, tripOwnerUsername]
+      `
+      SELECT *
+      FROM trip_members 
+      WHERE trip_id = $1
+      AND username = $2
+      `,
+      [tripId, loggedInTripOwner]
     );
 
     const requestedTrip = validTripResult.rows[0];
@@ -211,11 +229,13 @@ class UserApi {
 
     // Update member_status and get the updated row
     const updateResult = await db.query(
-      `UPDATE trip_members
-     SET member_status = $1, status_timestamp = CURRENT_TIMESTAMP
-     WHERE trip_id = $2 AND username = $3
-     RETURNING *`,
-      [memberStatusResponse, tripId, tripPassengerUsername]
+      `
+      UPDATE trip_members
+      SET member_status = $1, status_timestamp = CURRENT_TIMESTAMP
+      WHERE trip_id = $2 AND username = $3
+      RETURNING *
+      `,
+      [memberStatusResponse, tripId, passenger]
     );
 
     const respondToTripMemberRequest = updateResult.rows[0];
