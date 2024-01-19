@@ -10,7 +10,7 @@ const {
   testTripIds,
   u1AccessToken,
   u2AccessToken,
-  adminAccesstoken,
+  adminAccessToken,
   TEST_DATE,
 } = require("../../testSetupRoutes");
 
@@ -28,6 +28,19 @@ afterEach(async () => {
 
 afterAll(async () => {
   await commonAfterAll();
+});
+
+/* GET /api/users/:username/profile */
+
+describe("GET /api/users/:username/profile", function () {
+  test("OK to get own user profile", async function () {
+    const resp = await request(app)
+      .get(`/api/users/testuser/profile`)
+      .set("authorization", `Bearer ${u1AccessToken}`);
+
+    expect(resp.statusCode).toEqual(200);
+    expect(resp.body.user.username).toEqual("testuser");
+  });
 });
 
 /***************************** POST /api/users/:username/trips/:id/join-request */

@@ -1,6 +1,7 @@
 "use strict";
 const request = require("supertest");
 
+const db = require("../../../db");
 const app = require("../../../app");
 const {
   commonBeforeAll,
@@ -10,7 +11,7 @@ const {
   testTripIds,
   u1AccessToken,
   u2AccessToken,
-  adminAccesstoken,
+  adminAccessToken,
   TEST_DATE,
 } = require("../../testSetupRoutes");
 
@@ -72,6 +73,17 @@ describe("DELETE /api/passenger/trips/:tripId/join", function () {
   });
 
   test("FAIL remove own join request if already 'confirmed'", async function () {
+    // change join request to confirmed first..
+    await db.query(
+      `
+      UPDATE passengers
+      SET reservation_status = $3
+      WHERE trip_id = $1 
+      AND username = $2
+      `,
+      [testTripIds[1], "testuser", "confirmed"]
+    );
+
     const resp = await request(app)
       .delete(`/api/passengers/trips/${testTripIds[1]}/join`)
       .set("authorization", `Bearer ${u1AccessToken}`);

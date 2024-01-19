@@ -10,7 +10,7 @@ const {
   testTripIds,
   u1AccessToken,
   u2AccessToken,
-  adminAccesstoken,
+  adminAccessToken,
   TEST_DATE,
 } = require("../../testSetupRoutes");
 
@@ -83,7 +83,7 @@ describe("GET /api/trips/:id", function () {
 describe("GET /api/trips/:id", function () {
   test("ok for user_role", async function () {
     const resp = await request(app)
-      .get(`/api/trips/${testTripIds[0]}}`)
+      .get(`/api/trips/${testTripIds[0]}`)
       .set("authorization", `Bearer ${u1AccessToken}`);
 
     expect(resp.body).toEqual({

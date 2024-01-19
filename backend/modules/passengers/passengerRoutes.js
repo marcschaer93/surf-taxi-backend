@@ -12,7 +12,6 @@ const {
 
 const { validateInputs } = require("../../middleware/validateInputs.js");
 
-// export our router to be mounted by the parent application
 module.exports = router;
 
 // PASSENGER ROUTES --> /api/passengers/trips/...

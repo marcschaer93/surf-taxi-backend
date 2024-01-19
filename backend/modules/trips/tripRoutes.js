@@ -23,7 +23,7 @@ router.post(
 
 // POST request to delete Trip.
 router.delete(
-  "/:id",
+  "/:tripId",
   authenticate,
   authorize("admin"),
   tripController.deleteOneTrip
@@ -31,22 +31,14 @@ router.delete(
 
 // PATCH request to update Trip.
 router.patch(
-  "/:id",
+  "/:tripId",
   authenticate,
   validateInputs(updateTripSchema),
   tripController.updateOneTrip
 );
 
 // GET request for one Trip.
-router.get("/:id", tripController.getOneTrip);
+router.get("/:tripId", tripController.getOneTrip);
 
 // GET request for list of all Trips.
 router.get("/", tripController.getAllTrips);
-
-// ---------------------------------------------------
-
-// // GET request to delete Trip.
-// router.get("/:id/delete", tripController.tripDelete);
-
-// GET request to update Trip.
-// router.get("/:id/update", tripController.tripUpdate);

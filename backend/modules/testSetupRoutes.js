@@ -35,6 +35,7 @@ async function commonBeforeAll() {
     bio: "surfer",
     role: "user",
   });
+
   await AuthApi.registerOneUser({
     username: "testadmin",
     password: "password",
@@ -50,6 +51,7 @@ async function commonBeforeAll() {
     bio: "surfer",
     role: "admin",
   });
+
   await AuthApi.registerOneUser({
     username: "marcschaer",
     password: "Marc1993",
@@ -103,7 +105,11 @@ async function commonBeforeEach() {
 }
 
 async function commonAfterEach() {
-  await db.query("ROLLBACK");
+  try {
+    await db.query("ROLLBACK");
+  } catch (error) {
+    console.error("Error during rollback:", error);
+  }
 }
 
 async function commonAfterAll() {

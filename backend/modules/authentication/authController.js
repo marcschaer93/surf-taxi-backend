@@ -16,9 +16,12 @@ exports.registerOneUser = asyncHandler(async (req, res, next) => {
   const refreshToken = generateRefreshToken(newRegisteredUser);
 
   res.status(201).json({
-    accessToken: accessToken,
-    refreshToken: refreshToken,
-    user: newRegisteredUser,
+    success: true,
+    data: {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      user: newRegisteredUser,
+    },
   });
 });
 

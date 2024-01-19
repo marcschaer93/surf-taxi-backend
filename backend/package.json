@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "jest --watch",
+    "test": "jest --watch --maxWorkers=1",
     "dev": "nodemon server.js",
     "start": "node server.js"
   },
@@ -30,10 +30,14 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
+    "sqlite3": "^5.1.7",
     "supertest": "^6.3.4"
   },
   "jest": {
     "testEnvironment": "node",
+    "setupFiles": [
+      "<rootDir>/modules/testSetupRoutes.js"
+    ],
     "testPathIgnorePatterns": [
       "/node_modules/"
     ]

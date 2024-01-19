@@ -12,7 +12,7 @@ exports.getAllTrips = asyncHandler(async (req, res) => {
 
 // Display detail page for a specific Trip.
 exports.getOneTrip = asyncHandler(async (req, res) => {
-  const trip = await TripApi.getOneTrip(parseInt(req.params.id));
+  const trip = await TripApi.getOneTrip(parseInt(req.params.tripId));
 
   res.status(200).json({ trip });
 });
@@ -26,14 +26,14 @@ exports.createNewTrip = asyncHandler(async (req, res) => {
 
 // Handle trip delete on POST.
 exports.deleteOneTrip = asyncHandler(async (req, res) => {
-  await TripApi.deleteOneTrip(parseInt(req.params.id));
+  await TripApi.deleteOneTrip(parseInt(req.params.tripId));
 
   res.status(204).json({ message: "Trip deleted successfully" });
 });
 
 // Handle trip update on PATCH.
 exports.updateOneTrip = asyncHandler(async (req, res) => {
-  const tripId = req.params.id;
+  const tripId = req.params.tripId;
   const updatedTrip = await TripApi.updateOneTrip(
     tripId,
     req.body,
@@ -42,18 +42,3 @@ exports.updateOneTrip = asyncHandler(async (req, res) => {
 
   res.status(200).json({ updatedTrip });
 });
-
-// Display trip create form on GET.
-// exports.tripCreateGet = asyncHandler(async (req, res) => {
-//   res.send("NOT IMPLEMENTED: trip create Form");
-// });
-
-// Display trip delete form on GET.
-// exports.tripDeleteGet = asyncHandler(async (req, res) => {
-//   res.send("NOT IMPLEMENTED: Trip delete GET");
-// });
-
-// Display trip update form on GET.
-// exports.tripUpdateGet = asyncHandler(async (req, res) => {
-//   res.send("NOT IMPLEMENTED: Trip update GET");
-// });
