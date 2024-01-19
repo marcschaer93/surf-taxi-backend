@@ -4,6 +4,7 @@ const db = require("../db");
 const UserApi = require("./users/userModel");
 const TripApi = require("./trips/tripModel");
 const AuthApi = require("./authentication/authModel");
+const PassengerApi = require("./passengers/passengerModel");
 const {
   generateAccessToken,
   generateRefreshToken,
@@ -95,7 +96,7 @@ async function commonBeforeAll() {
   testTripIds[1] = resultTrip2.id;
 
   //   await User.applyToJob("u1", testJobIds[0]);
-  await UserApi.requestToJoin(testTripIds[1], "testuser");
+  await PassengerApi.requestToJoin(testTripIds[1], "testuser");
 }
 async function commonBeforeEach() {
   await db.query("BEGIN");

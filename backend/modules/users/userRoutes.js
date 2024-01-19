@@ -38,21 +38,21 @@ router.patch(
 );
 
 // POST request to REQUEST for a trip membership
-router.post(
-  "/:username/trips/:id/join-request",
-  authenticate,
-  //   validateInputs(createNewTripMemberRequestSchema),
-  userController.requestToJoin
-);
+// router.post(
+//   "/:username/trips/:id/join-request",
+//   authenticate,
+//   //   validateInputs(createNewTripMemberRequestSchema),
+//   userController.requestToJoin
+// );
 
 // PATCH request to RESPOND to a requested trip membership
-router.patch(
-  "/:username/trips/:id/respond-to-request",
-  authenticate,
-  ensureCorrectUser,
-  //   validateInputs(respondTripMembershipSchema),
-  userController.respondToJoinRequest
-);
+// router.patch(
+//   "/:username/trips/:id/respond-to-request",
+//   authenticate,
+//   ensureCorrectUser,
+//   //   validateInputs(respondTripMembershipSchema),
+//   userController.respondToJoinRequest
+// );
 
 /** DELETE request to CANCEL a requested trip membership
  *
@@ -61,8 +61,8 @@ router.patch(
  * - it's already "approved."
  *
  **/
-router.delete(
-  "/:username/trips/:id/remove-join-request",
-  authenticate,
-  userController.removeMyJoinRequest
-);
+// router.delete(
+//   "/:username/trips/:id/remove-join-request",
+//   authenticate,
+//   userController.removeMyJoinRequest
+// );

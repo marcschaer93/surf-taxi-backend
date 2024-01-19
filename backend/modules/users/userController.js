@@ -46,21 +46,21 @@ exports.updateUserProfile = asyncHandler(async (req, res, next) => {
  * Handle User trip request on POST
  *
  **/
-exports.requestToJoin = asyncHandler(async (req, res, next) => {
-  const tripId = parseInt(req.params.id);
-  const currentUser = req.username;
+// exports.requestToJoin = asyncHandler(async (req, res, next) => {
+//   const tripId = parseInt(req.params.id);
+//   const currentUser = req.username;
 
-  const newJoinRequest = await UserApi.requestToJoin(tripId, currentUser);
+//   const newJoinRequest = await UserApi.requestToJoin(tripId, currentUser);
 
-  res.status(201).json({
-    success: true,
-    data: {
-      newJoinRequest,
-      tripOwner: req.params.username,
-      passenger: currentUser,
-    },
-  });
-});
+//   res.status(201).json({
+//     success: true,
+//     data: {
+//       newJoinRequest,
+//       tripOwner: req.params.username,
+//       passenger: currentUser,
+//     },
+//   });
+// });
 
 /** CANCEL MY TRIP MEMBERSHIP REQUEST
  *
@@ -68,36 +68,36 @@ exports.requestToJoin = asyncHandler(async (req, res, next) => {
  * as PASSENGER if not already ('approved')
  * and not TRIP OWNER
  **/
-exports.removeMyJoinRequest = asyncHandler(async (req, res, next) => {
-  const tripId = parseInt(req.params.id);
-  const currentUser = req.username;
+// exports.removeMyJoinRequest = asyncHandler(async (req, res, next) => {
+//   const tripId = parseInt(req.params.id);
+//   const currentUser = req.username;
 
-  await UserApi.removeMyJoinRequest(tripId, currentUser);
+//   await UserApi.removeMyJoinRequest(tripId, currentUser);
 
-  res
-    .status(204)
-    .json({ message: "Passenger join request cancelled successfully" });
-});
+//   res
+//     .status(204)
+//     .json({ message: "Passenger join request cancelled successfully" });
+// });
 
 /** RESPOND TO TRIP MEMBERSHIP REQUEST
  *
  * Handle respond to trip membership on PATCH as TRIP OWNER
  **/
-exports.respondToJoinRequest = asyncHandler(async (req, res, next) => {
-  const tripId = parseInt(req.params.id);
-  const reservationStatusResponse = req.body.reservationStatus;
-  const passenger = req.params.username;
-  const currentUser = req.username;
+// exports.respondToJoinRequest = asyncHandler(async (req, res, next) => {
+//   const tripId = parseInt(req.params.id);
+//   const reservationStatusResponse = req.body.reservationStatus;
+//   const passenger = req.params.username;
+//   const currentUser = req.username;
 
-  const respondedRequest = await UserApi.respondToJoinRequest(
-    tripId,
-    currentUser,
-    passenger,
-    reservationStatusResponse
-  );
+//   const respondedRequest = await UserApi.respondToJoinRequest(
+//     tripId,
+//     currentUser,
+//     passenger,
+//     reservationStatusResponse
+//   );
 
-  res.status(200).json({
-    success: true,
-    data: { respondedRequest, tripOwner: currentUser, passenger: passenger },
-  });
-});
+//   res.status(200).json({
+//     success: true,
+//     data: { respondedRequest, tripOwner: currentUser, passenger: passenger },
+//   });
+// });

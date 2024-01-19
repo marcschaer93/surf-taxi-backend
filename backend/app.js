@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const authRoutes = require("./modules/authentication/authRoutes");
 const userRoutes = require("./modules/users/userRoutes");
 const tripRoutes = require("./modules/trips/tripRoutes");
+const passengerRoutes = require("./modules/passengers/passengerRoutes");
 const { authenticateJWT } = require("./middleware/authenticate");
 const {
   handle404Error,
@@ -25,13 +26,11 @@ app.use(cors());
 // Parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
 
-// Authenticate Middleware
-// app.use(authenticateJWT);
-
 // Mounting the API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/trips", tripRoutes);
+app.use("/api/passengers/trips", passengerRoutes);
 
 /** Handle 404 errors -- this matches everything */
 app.use(handle404Error);
