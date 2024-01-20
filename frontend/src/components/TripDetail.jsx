@@ -10,6 +10,7 @@ export const TripDetail = () => {
     const fetchTripById = async () => {
       try {
         const tripDetail = await Api.tripDetail(id);
+        console.log("tripDetail", tripDetail);
         setTrip(tripDetail);
       } catch (error) {
         console.error("Error fetching trip:", error);

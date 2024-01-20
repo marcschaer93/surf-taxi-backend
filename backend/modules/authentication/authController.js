@@ -9,8 +9,8 @@ const {
   generateRefreshToken,
 } = require("../../helpers/jwtTokens");
 
-exports.registerOneUser = asyncHandler(async (req, res, next) => {
-  const newRegisteredUser = await AuthApi.registerOneUser(req.body);
+exports.registerUser = asyncHandler(async (req, res, next) => {
+  const newRegisteredUser = await AuthApi.registerUser(req.body);
 
   const accessToken = generateAccessToken(newRegisteredUser);
   const refreshToken = generateRefreshToken(newRegisteredUser);
@@ -25,16 +25,19 @@ exports.registerOneUser = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.loginOneUser = asyncHandler(async (req, res, next) => {
-  const loggedInUser = await AuthApi.loginOneUser(req.body);
+exports.loginUser = asyncHandler(async (req, res, next) => {
+  const loggedInUser = await AuthApi.loginUser(req.body);
 
   const accessToken = generateAccessToken(loggedInUser);
   const refreshToken = generateRefreshToken(loggedInUser);
 
   res.status(200).json({
-    accessToken: accessToken,
-    refreshToken: refreshToken,
-    user: loggedInUser,
+    success: true,
+    data: {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      user: loggedInUser,
+    },
   });
 });
 
@@ -49,5 +52,7 @@ exports.createNewRefreshToken = asyncHandler(async (req, res, next) => {
   const { username } = payload;
   const newAccessToken = generateAccessToken(username);
 
-  res.status(200).json({ accessToken: newAccessToken });
+  res
+    .status(200)
+    .json({ success: true, data: { accessToken: newAccessToken } });
 });

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const asyncHandler = require("express-async-handler");
 
 const tripController = require("./tripController");
 const { authenticate } = require("../../middleware/authenticate");
@@ -39,6 +40,7 @@ router.patch(
 
 // GET request for one Trip.
 router.get("/:tripId", tripController.getOneTrip);
+// router.get("/:tripId", asyncHandler(tripController.getOneTrip));
 
 // GET request for list of all Trips.
 router.get("/", tripController.getAllTrips);

@@ -20,7 +20,6 @@ exports.requestToJoin = asyncHandler(async (req, res, next) => {
     success: true,
     data: {
       newJoinRequest,
-      //   tripOwner: req.params.username,
       passenger: currentUser,
     },
   });
@@ -40,7 +39,10 @@ exports.cancelJoinRequest = asyncHandler(async (req, res, next) => {
 
   res
     .status(204)
-    .json({ message: "Passenger join request cancelled successfully" });
+    .json({
+      success: true,
+      data: { message: "Passenger join request cancelled successfully" },
+    });
 });
 
 /** RESPOND TO JOIN REQUEST

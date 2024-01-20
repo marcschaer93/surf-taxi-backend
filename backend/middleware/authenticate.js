@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+
 const { UnauthorizedError, ExpressError } = require("../helpers/expressError");
 
 /** Middleware: Authenticate user using JWT. */

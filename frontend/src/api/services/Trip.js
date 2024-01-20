@@ -19,32 +19,89 @@ export const createTrip = async (tripData) => {
 export const allTrips = async () => {
   try {
     const response = await apiService.get("/trips");
-    console.log("response", response);
+    console.log("RESPONSE", response);
 
-    if (response.status === 200) {
-      const { trips } = response.data;
-      return trips;
-    } else {
-      throw new Error(`Failed to get all trips. Status: ${response.status}`);
+    // Check for success or error in the response
+    if (response.data.error) {
+      // Handle error case
+      console.error(
+        `Error (${response.data.error.code}): ${response.data.error.message}`
+      );
     }
+
+    // Handle success case
+    const data = response.data.data;
+    return data;
+    // Process data as needed
   } catch (error) {
-    console.error(error);
+    // Handle any exceptions or errors that occurred during the try block
+    console.error(`Unexpected error: ${error.message}`);
   }
 };
 
-export const tripDetail = async (id) => {
-  try {
-    const parsedId = parseInt(id, 10);
-    const response = await apiService.get(`/trips/${parsedId}`);
+// export const tripDetail = async (tripId) => {
+//   try {
+//     // const tripId = parseInt(id, 10);
+//     console.log("tripId", tripId);
+//     const response = await apiService.get(`/trips/${tripId}`);
+//     console.log("RESPONSE tripDetails", response);
 
-    if (response.status === 200) {
-      const { tripDetail } = response.data;
-      return tripDetail;
-    } else {
-      throw new Error("Failed to get trip details");
-    }
+//     if (response.data.error) {
+//       console.log("$$$");
+//       console.error(
+//         `Error (${response.data.error.code}): ${response.data.error.message}`
+//       );
+//     }
+//     const data = response.data.data;
+//     return data;
+//   } catch (error) {
+//     console.error(`Unexpected error: ${error.message}`);
+//   }
+// };
+
+// export const tripDetail = async (tripId) => {
+//   try {
+//     const response = await apiService.get(`/trips/${tripId}`);
+
+//     if (response.data.error) {
+//       console.log("$$$");
+//       console.error(
+//         `Error (${response.data.error.code}): ${response.data.error.message}`
+//       );
+//     }
+
+//     const data = response.data.data;
+//     return data;
+//   } catch (error) {
+//     if (error.response && error.response.status === 404) {
+//       console.error(
+//         `Trip not found (404): ${error.response.data.error.message}`
+//       );
+//     } else {
+//       console.error(`Unexpected error: ${error.message}`);
+//     }
+//   }
+// };
+
+export const tripDetail = async (tripId) => {
+  try {
+    const response = await apiService.get(`/trips/${tripId}`);
+    const data = response.data.data;
+    return data;
   } catch (error) {
-    console.error(error);
+    if (error.response) {
+      const status = error.response.status;
+      const errorMessage =
+        error.response.data?.error?.message || "Unknown error";
+
+      if (status === 404) {
+        console.error(`Trip not found (404): ${errorMessage}`);
+      } else {
+        console.error(`Request failed (${status}): ${errorMessage}`);
+      }
+    } else {
+      console.error(`Unexpected error: ${error.message}`);
+    }
   }
 };
 

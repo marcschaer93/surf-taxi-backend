@@ -30,3 +30,21 @@ Use HTTP status code 200 for successful requests that retrieve or update a resou
 Use HTTP status code 201 for successful requests that create a new resource on the server.
 Use HTTP status code 202 for requests that have been accepted for processing but the processing has not yet been completed.
 Use HTTP status code 204 for successful requests that delete a resource or do not have any content to return.
+
+400 Bad Request - This means that client-side input fails validation.
+401 Unauthorized - This means the user isn't not authorized to access a resource. It usually returns when the user isn't authenticated.
+403 Forbidden - This means the user is authenticated, but it's not allowed to access a resource.
+404 Not Found - This indicates that a resource is not found.
+500 Internal server error - This is a generic server error. It probably shouldn't be thrown explicitly.
+502 Bad Gateway - This indicates an invalid response from an upstream server.
+503 Service Unavailable - This indicates that something unexpected happened on server side (It can be anything like server overload, some parts of the system failed, etc.).
+
+GOLDEN JEST LINE: --maxWorkers=1
+
+"scripts": {
+"test": "jest --watch --maxWorkers=1",
+"dev": "nodemon server.js",
+"start": "node server.js"
+},
+
+tests only file after file. Performance issues when big, but works with my setup

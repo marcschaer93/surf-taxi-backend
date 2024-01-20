@@ -19,9 +19,9 @@ class TripApi {
    **/
   static async getAllTrips() {
     const result = await db.query(`SELECT * FROM trips`);
-    const trips = result.rows;
+    const allTrips = result.rows;
     // No error, because i want to pass empty trip_list if no trips
-    return trips;
+    return allTrips;
   }
 
   /** SINGLE TRIP
@@ -57,9 +57,12 @@ class TripApi {
       [id]
     );
 
-    const trip = result.rows[0];
-    if (!trip) throw new NotFoundError(`No trip found with ID: ${id}`);
-    return trip;
+    const tripDetails = result.rows[0];
+    if (!tripDetails) {
+      throw new NotFoundError(`No tripDetails found with ID: ${id}`);
+    }
+
+    return tripDetails;
   }
 
   /** NEW TRIP
@@ -70,78 +73,8 @@ class TripApi {
    * @param {string} username - The username of the trip creator.
    * @returns {object} - The newly created trip object.
    **/
-  // static async createNewTrip(data, creatorUsername) {
-  //   // Part 1: Insert a new trip to 'trips' table
-  //   const createNewTripResult = await db.query(
-  //     `
-  //     INSERT INTO trips
-  //       (
-  //         date,
-  //         start_location,
-  //         destination,
-  //         stops,
-  //         travel_info,
-  //         seats,
-  //         costs
-  //       )
-  //     VALUES ($1, $2, $3, $4, $5, $6, $7)
-  //     RETURNING *
-  //     `,
-  //     [
-  //       data.date,
-  //       data.start_location,
-  //       data.destination,
-  //       data.stops,
-  //       data.travel_info,
-  //       data.seats,
-  //       data.costs,
-  //     ]
-  //   );
 
-  //   const newTrip = createNewTripResult.rows[0];
-  //   if (!newTrip) {
-  //     throw new ExpressError(
-  //       "Failed to create a new trip in the trips table",
-  //       500
-  //     );
-  //   }
-
-  //   // Part 2: Insert a new trip_member to 'trip_members' table with the new created trip data
-  //   const createNewTripMemberResult = await db.query(
-  //     `
-  //     INSERT INTO trip_members
-  //       (
-  //         username,
-  //         trip_id,
-  //         member_status,
-  //         status_timestamp
-  //       )
-  //     VALUES ($1, $2, $3, CURRENT_TIMESTAMP )
-  //     RETURNING *
-  //     `,
-  //     [creatorUsername, newTrip.id, "owner"]
-  //   );
-
-  //   const newTripMember = createNewTripMemberResult.rows[0];
-
-  //   if (!newTripMember) {
-  //     // await db.query(
-  //     //   `DELETE
-  //     // FROM trips
-  //     // WHERE id = $1
-  //     // RETURNING id`,
-  //     //   [newTrip.id]
-  //     // );
-  //     this.deleteOneTrip(newTrip.id);
-  //     throw new ExpressError(
-  //       "Failed to create new trip member. Newly created trip will also be deleted",
-  //       500
-  //     );
-  //   }
-
-  //   return newTrip;
-  // }
-  static async createNewTrip(tripData, currentUser) {
+  static async createNewTrip(tripData, loggedInUser) {
     // Part 1: Insert a new trip to 'trips' table
     const createNewTripResult = await db.query(
       `
@@ -161,7 +94,7 @@ class TripApi {
         `,
       [
         tripData.date,
-        currentUser,
+        loggedInUser,
         tripData.start_location,
         tripData.destination,
         tripData.stops,

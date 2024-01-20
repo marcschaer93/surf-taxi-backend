@@ -32,7 +32,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/trips", tripRoutes);
 app.use("/api/passengers/trips", passengerRoutes);
 
-/** Handle 404 errors -- this matches everything */
+// /** Handle 404 errors -- this matches everything */
 app.use(handle404Error);
 
 /** Generic error handler; anything unhandled goes here. */

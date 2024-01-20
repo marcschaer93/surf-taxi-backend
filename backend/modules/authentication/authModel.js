@@ -13,37 +13,6 @@ const { BCRYPT_WORK_FACTOR } = require("../../config");
  * Related functions for authentication.
  **/
 class AuthApi {
-  /** LOGIN USER
-   *
-   * authenticate user with username, password.
-   *
-   * Returns user
-   *
-   * Throws UnauthorizedError is user not found or wrong password.
-   **/
-  static async loginOneUser({ username, password }) {
-    const result = await db.query(
-      `
-    SELECT *
-    FROM users
-    WHERE username = $1
-    `,
-      [username]
-    );
-
-    const user = result.rows[0];
-
-    if (user) {
-      const isValid = await bcrypt.compare(password, user.password);
-      if (isValid) {
-        delete user.password;
-        return user;
-      }
-    }
-
-    throw new UnauthorizedError("Invalid username/password");
-  }
-
   /** REGISTER USER
    *
    * Registers a new user in the database.
@@ -51,7 +20,7 @@ class AuthApi {
    * @param {object} data - User data to create a new user.
    * @returns {object} - Success message and the newly registered user object.
    **/
-  static async registerOneUser(data) {
+  static async registerUser(data) {
     const {
       username,
       password,
@@ -70,44 +39,75 @@ class AuthApi {
     // Convert birth_year to a number
     // const parsedBirthYear = parseInt(birth_year, 10);
 
-    const duplicateCheck = await db.query(
+    const duplicateCheckResult = await db.query(
       `SELECT FROM users WHERE username = $1`,
       [username]
     );
 
-    if (duplicateCheck.rows[0])
+    const duplicatedUser = duplicateCheckResult.rows[0];
+    if (duplicatedUser)
       throw new BadRequestError(`Duplicate username: ${username}`);
-
     const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 
-    const query = `
-          INSERT INTO users 
-          (username, password, first_name, last_name, email, gender, birth_year, phone, country, languages, profile_img_url, bio)
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-          RETURNING *
-          `;
+    const registerResult = await db.query(
+      `
+      INSERT INTO users 
+      (username, password, first_name, last_name, email, gender, birth_year, phone, country, languages, profile_img_url, bio)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+      RETURNING *
+      `,
+      [
+        username,
+        hashedPassword,
+        first_name,
+        last_name,
+        email,
+        gender,
+        birth_year,
+        phone,
+        country,
+        languages,
+        profile_img_url,
+        bio,
+      ]
+    );
 
-    const values = [
-      username,
-      hashedPassword,
-      first_name,
-      last_name,
-      email,
-      gender,
-      birth_year,
-      phone,
-      country,
-      languages,
-      profile_img_url,
-      bio,
-    ];
+    const newRegisteredUser = registerResult.rows[0];
+    if (!newRegisteredUser) throw new Error("User registration failed");
 
-    const result = await db.query(query, values);
-    const newUser = result.rows[0];
+    return newRegisteredUser;
+  }
 
-    if (!newUser) throw new Error("User registration failed");
+  /** LOGIN USER
+   *
+   * authenticate user with username, password.
+   *
+   * Returns user
+   *
+   * Throws UnauthorizedError is user not found or wrong password.
+   **/
+  static async loginUser({ username, password }) {
+    const authenticationResult = await db.query(
+      `
+      SELECT *
+      FROM users
+      WHERE username = $1
+      `,
+      [username]
+    );
 
-    return newUser;
+    const loggedInUser = authenticationResult.rows[0];
+
+    if (loggedInUser) {
+      const isValid = await bcrypt.compare(password, user.password);
+
+      if (isValid) {
+        delete loggedInUser.password;
+        return loggedInUser;
+      }
+    }
+
+    throw new UnauthorizedError("Invalid username/password");
   }
 }
 
