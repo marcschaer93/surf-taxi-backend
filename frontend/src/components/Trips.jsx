@@ -3,7 +3,7 @@ import { TripDetail } from "./TripDetail";
 import { Link } from "react-router-dom";
 
 export const Trips = ({ trips }) => {
-  console.log("trips", trips);
+  // console.log("trips", trips);
   return (
     <>
       {trips ? (

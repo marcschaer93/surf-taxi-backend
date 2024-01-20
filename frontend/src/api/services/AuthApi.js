@@ -1,0 +1,33 @@
+import { ApiService } from "../apiConfig";
+import { handleApiError } from "../apiConfig";
+
+// provides functions for authentication
+
+export const registerUser = async (userData) => {
+  try {
+    const response = await ApiService.post("/auth/register", userData);
+    return response.data.data;
+  } catch (error) {
+    handleApiError(error);
+    return error;
+    // return null; // or throw error if needed
+    // Optionally rethrow or return a specific value based on your needs
+  }
+};
+
+export const loginUser = async ({ username, password }) => {
+  try {
+    const response = await ApiService.post("/auth/login", {
+      username,
+      password,
+    });
+    if (response.status === 200) {
+      return response.data.data;
+    }
+  } catch (error) {
+    handleApiError(error);
+    return error;
+    // return null; // or throw error if needed
+    // Optionally rethrow or return a specific value based on your needs
+  }
+};

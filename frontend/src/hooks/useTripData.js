@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import * as Api from "../api/services/Trip";
+// import * as Api from "../services/TripApi";
+import * as TripApi from "../api/services/TripApi";
 
 export const useTripData = () => {
   const [trips, setTrips] = useState([]);
@@ -8,7 +9,7 @@ export const useTripData = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const allTrips = await Api.allTrips();
+        const allTrips = await TripApi.getAllTrips();
         setTrips(allTrips);
         setTripsLoading(false);
       } catch (error) {

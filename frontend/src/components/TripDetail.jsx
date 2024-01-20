@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import * as Api from "../api/services/Trip";
+// import * as Api from "../services/TripApi";
+import * as TripApi from "../api/services/TripApi";
 
 export const TripDetail = () => {
   const { id } = useParams();
@@ -9,7 +10,7 @@ export const TripDetail = () => {
   useEffect(() => {
     const fetchTripById = async () => {
       try {
-        const tripDetail = await Api.tripDetail(id);
+        const tripDetail = await TripApi.getOneTrip(id);
         console.log("tripDetail", tripDetail);
         setTrip(tripDetail);
       } catch (error) {

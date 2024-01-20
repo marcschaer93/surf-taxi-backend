@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
-import * as Api from "../api/auth";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+// import * as Api from "../services/AuthApi";
+import * as AuthApi from "../api/services/AuthApi";
 import { useLocalStorage } from "./useLocalStorage";
 
 export const useAuth = () => {
@@ -10,12 +14,8 @@ export const useAuth = () => {
 
   const login = async (credentials) => {
     try {
-      const loginResponse = await Api.loginUser(credentials);
+      const loginResponse = await AuthApi.loginUser(credentials);
       const { accessToken, refreshToken, user } = loginResponse;
-
-      console.log("Access Token:", accessToken);
-      console.log("Refresh Token:", refreshToken);
-      console.log("Current_User:", user);
 
       localStorage.setItem("access_token", accessToken);
       localStorage.setItem("refresh_token", refreshToken);
@@ -24,19 +24,18 @@ export const useAuth = () => {
         setUser(user);
         localStorage.setItem("user", JSON.stringify(user));
       }
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error("$", error);
+      // toast.error("Login failed. Please try again.");
     }
   };
 
   const register = async (data) => {
     try {
-      const registerResponse = await Api.registerUser(data);
+      const registerResponse = await AuthApi.registerUser(data);
 
       const { accessToken, refreshToken, user } = registerResponse;
-      console.log("Current_User:", user);
-
-      console.log({ accessToken });
+      console.log("Logged in User:", user);
 
       localStorage.setItem("access_token", accessToken);
       localStorage.setItem("refresh_token", refreshToken);
@@ -48,6 +47,8 @@ export const useAuth = () => {
       }
     } catch (err) {
       console.error(err);
+      // Use react-toastify to show a friendly error message
+      toast.error("Registration failed. Please try again.");
     }
   };
 
@@ -59,8 +60,9 @@ export const useAuth = () => {
   };
 
   useEffect(() => {
-    console.log("Current_User", user);
-    checkTokenExpiration(); // Ensure it runs when the user state changes
+    console.log("Logged in User:", user);
+
+    // checkTokenExpiration(); // Ensure it runs when the user state changes
   }, [user]);
 
   const checkTokenExpiration = () => {

@@ -7,18 +7,36 @@ import axios from "axios";
 const BASE_URL =
   import.meta.env.VITE_REACT_APP_BASE_URL || "http://localhost:3000";
 
-// Create an instance of axios with custom configurations (apiService)
-export const apiService = axios.create({
+// Create an instance of axios with custom configurations (ApiService)
+export const ApiService = axios.create({
   baseURL: `${BASE_URL}/api`,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
+// API ERROR HANDLER
+
+export const handleApiError = (error) => {
+  if (error.response) {
+    const status = error.response.status;
+    const errorMessage = error.response.data?.error?.message || "Unknown error";
+
+    if (status === 404) {
+      console.warn(`Trip not found (404): ${errorMessage}`);
+      // throw new TripNotFoundError(errorMessage);
+    } else {
+      console.error(`Request failed (${status}): ${errorMessage}`);
+    }
+  } else {
+    console.error(`Unexpected error: ${error.message}`);
+  }
+};
+
 // INTERCEPTORS
 
 // Add a request interceptor. On every request, it adds accessToken to headers
-apiService.interceptors.request.use(
+ApiService.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("access_token");
     if (accessToken) {
@@ -30,7 +48,7 @@ apiService.interceptors.request.use(
 );
 
 // Add a response interceptor. Check every Response. If token expires, generates new.
-apiService.interceptors.response.use(
+ApiService.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
@@ -42,7 +60,7 @@ apiService.interceptors.response.use(
 
       try {
         const refreshToken = localStorage.getItem("refresh_token");
-        const refreshTokenResponse = await apiService.post(
+        const refreshTokenResponse = await ApiService.post(
           "/auth/refresh-token",
           {
             refreshToken,
@@ -53,7 +71,7 @@ apiService.interceptors.response.use(
 
         // Retry the original request with the new token
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        return apiService(originalRequest);
+        return ApiService(originalRequest);
       } catch (error) {
         console.error("Token refresh failed:", error);
         // Handle refresh token error or redirect to login

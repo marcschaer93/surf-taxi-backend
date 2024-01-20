@@ -48,3 +48,9 @@ GOLDEN JEST LINE: --maxWorkers=1
 },
 
 tests only file after file. Performance issues when big, but works with my setup
+
+### response.data (Axios):
+
+Axios is a popular HTTP client library, and when using Axios, the response object has a data property that contains the payload of the response.
+
+This assumes you are using Axios, and it retrieves the payload from the response using Axios's data property twice. The first data accesses the payload of the HTTP response, and the second data accesses a property within the payload.
