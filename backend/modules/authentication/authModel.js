@@ -99,7 +99,7 @@ class AuthApi {
     const loggedInUser = authenticationResult.rows[0];
 
     if (loggedInUser) {
-      const isValid = await bcrypt.compare(password, user.password);
+      const isValid = await bcrypt.compare(password, loggedInUser.password);
 
       if (isValid) {
         delete loggedInUser.password;

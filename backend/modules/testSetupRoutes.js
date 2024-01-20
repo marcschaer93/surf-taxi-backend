@@ -20,7 +20,7 @@ async function commonBeforeAll() {
   await db.query("DELETE FROM users");
   await db.query("DELETE FROM passengers");
 
-  await AuthApi.registerOneUser({
+  await AuthApi.registerUser({
     username: "testuser",
     password: "password",
     first_name: "test_user",
@@ -36,7 +36,7 @@ async function commonBeforeAll() {
     role: "user",
   });
 
-  await AuthApi.registerOneUser({
+  await AuthApi.registerUser({
     username: "testadmin",
     password: "password",
     first_name: "test_admin",
@@ -52,7 +52,7 @@ async function commonBeforeAll() {
     role: "admin",
   });
 
-  await AuthApi.registerOneUser({
+  await AuthApi.registerUser({
     username: "marcschaer",
     password: "Marc1993",
     first_name: "marc",
@@ -150,5 +150,6 @@ module.exports = {
   adminAccessToken,
   u1AccessToken,
   u2AccessToken,
+  u1RefreshToken,
   TEST_DATE,
 };
