@@ -1,26 +1,35 @@
 import { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+
 import { useParams } from "react-router-dom";
 // import * as Api from "../services/TripApi";
 import * as TripApi from "../api/services/TripApi";
+import { ErrorBoundary, useErrorBoundary } from "react-error-boundary";
 
 export const TripDetail = () => {
-  const { id } = useParams();
+  const { showBoundary } = useErrorBoundary();
+  const { tripId } = useParams();
   const [trip, setTrip] = useState(null);
 
   useEffect(() => {
-    const fetchTripById = async () => {
+    const getData = async () => {
       try {
-        const tripDetail = await TripApi.getOneTrip(id);
-        console.log("tripDetail", tripDetail);
+        const tripDetail = await TripApi.getOneTrip(tripId);
+        if (!tripDetail) {
+          toast.error("Trip not found. Please check the provided ID.");
+          // redirect
+        }
+
         setTrip(tripDetail);
-      } catch (error) {
-        console.error("Error fetching trip:", error);
+      } catch (err) {
+        showBoundary(err);
+        console.error("Error fetching trip:", err);
         // Handle error, e.g., redirect to an error page
       }
     };
 
-    fetchTripById(); // Fetch the trip data when the component mounts
-  }, [id]);
+    getData(); // Fetch the trip data when the component mounts
+  }, [tripId]);
 
   return (
     <div>

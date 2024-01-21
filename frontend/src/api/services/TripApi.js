@@ -24,12 +24,13 @@ export const getOneTrip = async (tripId) => {
     return response.data.data;
   } catch (error) {
     handleApiError(error);
+    return null;
   }
 };
 
-export const updateOneTrip = async (id) => {
+export const updateOneTrip = async (tripId) => {
   try {
-    const response = await ApiService.patch(`/trips/${id}`);
+    const response = await ApiService.patch(`/trips/${tripId}`);
     return response.data.data;
   } catch (error) {
     handleApiError(error);

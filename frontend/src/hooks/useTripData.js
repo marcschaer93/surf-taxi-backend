@@ -1,24 +1,33 @@
 import { useState, useEffect } from "react";
 // import * as Api from "../services/TripApi";
 import * as TripApi from "../api/services/TripApi";
+// import useErrorHandler from "react-error-boundary";
+import { useErrorBoundary } from "react-error-boundary";
 
 export const useTripData = () => {
+  // const handleError = useErrorHandler();
+  const { showBoundary } = useErrorBoundary();
+
   const [trips, setTrips] = useState([]);
+  const [error, setError] = useState(null);
   const [tripsLoading, setTripsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const getData = async () => {
       try {
         const allTrips = await TripApi.getAllTrips();
         setTrips(allTrips);
         setTripsLoading(false);
       } catch (error) {
+        // Show error boundary
+        showBoundary(error);
+
         console.error("Error fetching trips:", error);
         setTrips([]);
         setTripsLoading(false);
       }
     };
-    fetchData();
+    getData();
   }, []);
 
   const addTrip = async (tripData) => {
