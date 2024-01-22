@@ -15,6 +15,7 @@ export const getAllTrips = async () => {
     return response.data.data;
   } catch (error) {
     handleApiError(error);
+    throw error;
   }
 };
 

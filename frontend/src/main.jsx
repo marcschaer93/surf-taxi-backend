@@ -8,13 +8,13 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { ThemeProvider } from "@mui/material/styles";
-import { mainTheme } from "./utils/mainTheme.js";
+import { theme } from "./utils/theme.js";
 import { AuthProvider } from "./context/authProvider.jsx";
 import { ReactErrorBoundary } from "./pages/Error/ReactErrorBoundary.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ThemeProvider theme={mainTheme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <AuthProvider>
         <BrowserRouter>

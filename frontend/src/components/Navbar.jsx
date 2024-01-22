@@ -6,11 +6,17 @@ import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
 import { useTheme } from "@mui/material";
 import React, { useContext } from "react";
+import { Badge } from "@mui/material";
+import Mail from "@mui/icons-material/Mail";
+import Notifications from "@mui/icons-material/Notifications";
+
+import SurfingIcon from "@mui/icons-material/Surfing";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
 
 import { useAuthContext } from "../context/authProvider";
-
-// import { CurrentUserContext } from "../utils/UserContext";
 import { navLinkStyle } from "../styles/navbarStyles";
+import { SearchBar } from "./ui/SearchBar";
 
 /**
  * Navbar Component
@@ -31,10 +37,16 @@ export const Navbar = () => {
       <AppBar position="static">
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Button component={NavLink} to="/" size="large" color="inherit">
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+            >
               SURF TAXI
             </Typography>
+            <SurfingIcon sx={{ display: { sx: "block", sm: "none" } }} />
           </Button>
+          <SearchBar />
 
           <Box sx={{ display: "flex", gap: "20px" }}>
             <Button
@@ -92,6 +104,13 @@ export const Navbar = () => {
               </Button>
             )}
           </Box>
+          <Badge badgeContent={4} color="secondary">
+            <Mail color="" />
+          </Badge>
+          <Badge badgeContent={2} color="secondary">
+            <Notifications color="" />
+          </Badge>
+          <Avatar alt="Marc Schär" src="../assets/images/avatar.jpg" />
         </Toolbar>
       </AppBar>
     </Box>

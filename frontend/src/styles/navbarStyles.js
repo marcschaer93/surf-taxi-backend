@@ -1,4 +1,4 @@
-import { mainTheme } from "../utils/mainTheme";
+import { theme } from "../utils/theme";
 
 const navbarStyles = {
   navLinkStyle: {
@@ -12,7 +12,7 @@ const navbarStyles = {
     },
     "&.active": {
       color: "#fff", // White color for active link
-      borderBottomColor: mainTheme.palette.secondary.main, // Red line underneath active link
+      borderBottomColor: theme.palette.secondary.main, // Red line underneath active link
     },
   },
 };
