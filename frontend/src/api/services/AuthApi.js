@@ -9,7 +9,7 @@ export const registerUser = async (userData) => {
     return response.data.data;
   } catch (error) {
     handleApiError(error);
-    return error;
+    throw error;
     // return null; // or throw error if needed
     // Optionally rethrow or return a specific value based on your needs
   }
@@ -26,7 +26,7 @@ export const loginUser = async ({ username, password }) => {
     }
   } catch (error) {
     handleApiError(error);
-    return error;
+    throw error;
     // return null; // or throw error if needed
     // Optionally rethrow or return a specific value based on your needs
   }

@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-// import * as Api from "../services/TripApi";
-import * as TripApi from "../api/services/TripApi";
-// import useErrorHandler from "react-error-boundary";
 import { useErrorBoundary } from "react-error-boundary";
 
+import * as TripApi from "../api/services/TripApi";
+
 export const useTripData = () => {
-  // const handleError = useErrorHandler();
   const { showBoundary } = useErrorBoundary();
 
   const [trips, setTrips] = useState([]);

@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
-// import * as Api from "../services/AuthApi";
 import * as AuthApi from "../api/services/AuthApi";
 import { useLocalStorage } from "./useLocalStorage";
 
@@ -12,25 +9,26 @@ export const useAuth = () => {
   // Storing user data in localStorage keeps the user logged in even after a page reload. It's convenient but can be less secure compared to storing data only in state.
   const [user, setUser] = useLocalStorage("user", null);
 
-  const login = async (credentials) => {
+  const handleLogin = async (credentials) => {
     try {
       const loginResponse = await AuthApi.loginUser(credentials);
-      const { accessToken, refreshToken, user } = loginResponse;
+      const { accessToken, refreshToken, loggedInUser } = loginResponse;
 
       localStorage.setItem("access_token", accessToken);
       localStorage.setItem("refresh_token", refreshToken);
 
-      if (user) {
-        setUser(user);
+      if (loggedInUser) {
+        toast.success("Login successful");
+        setUser(loggedInUser);
         localStorage.setItem("user", JSON.stringify(user));
       }
-    } catch (error) {
-      console.error("$", error);
-      // toast.error("Login failed. Please try again.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Login failed. Please try again.");
     }
   };
 
-  const register = async (data) => {
+  const handleRegister = async (data) => {
     try {
       const registerResponse = await AuthApi.registerUser(data);
 
@@ -41,27 +39,27 @@ export const useAuth = () => {
       localStorage.setItem("refresh_token", refreshToken);
 
       if (user) {
+        toast.success("Registration successful");
         setUser(user);
         localStorage.setItem("user", JSON.stringify(user));
         return user;
       }
     } catch (err) {
       console.error(err);
-      // Use react-toastify to show a friendly error message
       toast.error("Registration failed. Please try again.");
     }
   };
 
-  const logout = async () => {
+  const handleLogout = async () => {
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
+    toast.success("Logout successful");
     setUser(null);
   };
 
   useEffect(() => {
     console.log("Logged in User:", user);
-
     // checkTokenExpiration(); // Ensure it runs when the user state changes
   }, [user]);
 
@@ -91,5 +89,5 @@ export const useAuth = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  return { user, login, register, logout };
+  return { user, handleLogin, handleRegister, handleLogout };
 };

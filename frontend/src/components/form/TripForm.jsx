@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { useAuthContext } from "../../utils/authProvider";
+import { useAuthContext } from "../../context/authProvider";
 
 export const TripForm = ({ addTrip }) => {
   const { user } = useAuthContext();

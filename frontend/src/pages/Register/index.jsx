@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 
-import { LoginForm } from "./LoginForm";
-// import { RegisterForm } from "../components/RegisterForm";
+// import LoginForm from "../Login/LoginForm";
+import { RegisterForm } from "./RegisterForm";
 
 /**
  * Login Component
@@ -11,9 +11,9 @@ import { LoginForm } from "./LoginForm";
  * @returns {JSX.Element} - Login or Register form based on the URL parameter
  */
 
-export const Login = () => {
+export const Register = () => {
   // const { formType } = useParams();
 
   // return <div>{formType === "login" ? <LoginForm /> : <RegisterForm />}</div>;
-  return <LoginForm />;
+  return <RegisterForm />;
 };

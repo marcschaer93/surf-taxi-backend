@@ -1,9 +1,12 @@
 // The FallbackComponent prop contains the fallback UI component to render in the event of an error. When this happens, ErrorBoundary invokes the callback function passed to onError. Otherwise, if no error occurs, ErrorBoundary renders the child components that it wraps. In other terms, this snippet does exactly what the error boundary defined previously does, but with less and more readable code.
 
-import ErrorPage from "./ErrorPage";
+// Wrapped around App in main.jsx
+
 import { ErrorBoundary } from "react-error-boundary";
 
-export default function ReactErrorBoundary(props) {
+import ErrorPage from "./ErrorPage";
+
+export const ReactErrorBoundary = (props) => {
   return (
     <ErrorBoundary
       FallbackComponent={ErrorPage}
@@ -25,4 +28,4 @@ export default function ReactErrorBoundary(props) {
       {props.children}
     </ErrorBoundary>
   );
-}
+};

@@ -1,4 +1,4 @@
-import { useAuthContext } from "../utils/authProvider";
+import { useAuthContext } from "../context/authProvider";
 import { TripForm } from "../components/form/TripForm";
 
 export const NewTrip = ({ addTrip }) => {

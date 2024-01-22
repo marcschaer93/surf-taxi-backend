@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
 import { useParams } from "react-router-dom";
-// import * as Api from "../services/TripApi";
 import * as TripApi from "../api/services/TripApi";
 import { ErrorBoundary, useErrorBoundary } from "react-error-boundary";
 
