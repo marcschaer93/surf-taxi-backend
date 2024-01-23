@@ -1,5 +1,5 @@
-import { useAuthContext } from "../context/authProvider";
-import { TripForm } from "../components/form/TripForm";
+import { useAuthContext } from "../../context/authProvider";
+import { TripForm } from "./TripForm";
 
 export const NewTrip = ({ addTrip }) => {
   const auth = useAuthContext();

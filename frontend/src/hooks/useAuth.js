@@ -18,7 +18,7 @@ export const useAuth = () => {
       localStorage.setItem("refresh_token", refreshToken);
 
       if (loggedInUser) {
-        toast.success("Login successful");
+        // toast.success("Login successful");
         setUser(loggedInUser);
         localStorage.setItem("user", JSON.stringify(user));
       }
@@ -54,7 +54,7 @@ export const useAuth = () => {
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
-    toast.success("Logout successful");
+    // toast.success("Logout successful");
     setUser(null);
   };
 

@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
 import { useParams } from "react-router-dom";
-import * as TripApi from "../api/services/TripApi";
+import * as TripApi from "../../api/services/TripApi";
 import { ErrorBoundary, useErrorBoundary } from "react-error-boundary";
 
-export const TripDetail = () => {
-  const { showBoundary } = useErrorBoundary();
+export const TripDetails = () => {
+  const { showBoundary } = useErrorBoundary(); // use the show the error in async function (ERROR BOUNDARY LIMITATIONS)
+
   const { tripId } = useParams();
   const [trip, setTrip] = useState(null);
 

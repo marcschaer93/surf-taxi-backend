@@ -1,9 +1,9 @@
 import { Login } from "../Login";
-import { NewTrip } from "../NewTrip";
+import { NewTrip } from "../Trips/NewTrip";
 import { RequireAuth } from "../../components/RequireAuth";
 import { useAuthContext } from "../../context/authProvider";
 import { Box } from "@mui/material";
-import { Trips } from "../../components/Trips";
+import { AllTrips } from "../Trips/AllTrips";
 
 export const Home = ({ trips, addTrip }) => {
   const { user } = useAuthContext();
@@ -18,7 +18,7 @@ export const Home = ({ trips, addTrip }) => {
         )}
       </div>
       <Box>
-        <Trips trips={trips} />
+        <AllTrips trips={trips} />
       </Box>
     </>
   );

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { TripDetail } from "./TripDetail";
+import { TripDetails } from "./TripDetails";
 import { Link } from "react-router-dom";
 
-export const Trips = ({ trips }) => {
+export const AllTrips = ({ trips }) => {
   // console.log("trips", trips);
   return (
     <>
