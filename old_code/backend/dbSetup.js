@@ -1,4 +1,4 @@
-const db = require("../backend/db");
+const db = require("../../backend/db");
 
 // run ─ node db/dbSetup.js to recreate DB
 

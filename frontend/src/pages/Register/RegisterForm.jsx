@@ -29,7 +29,7 @@ import {
 
 export const RegisterForm = () => {
   //   const theme = useTheme();
-  const { handleRegister } = useAuthContext();
+  const { handleRegister, user } = useAuthContext();
 
   const {
     control,
@@ -50,21 +50,19 @@ export const RegisterForm = () => {
   //   const { setToken } = useContext(CurrentUserContext);
   const navigate = useNavigate();
 
-  // reac-hook-form method with auto arg: form-data
+  // react-hook-form method with auto arg: form-data
   const onFormSubmit = async (formData) => {
-    handleRegister(formData);
-    navigate("/");
-    reset();
+    const registerResponse = await handleRegister(formData);
 
-    // if (registrationResult.token) {
-    //   const token = registrationResult.token;
-    //   //   setToken(token);
-    // } else {
-    //   setError("username", {
-    //     type: "manual",
-    //     message: `${registrationResult.error}`,
-    //   });
-    // }
+    if (registerResponse.error === "DuplicateUsername") {
+      setError("username", {
+        type: "manual",
+        message: `Username is taken. Log in or choose another.`,
+      });
+    } else {
+      navigate("/");
+      reset();
+    }
   };
 
   return (

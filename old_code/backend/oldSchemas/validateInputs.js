@@ -1,5 +1,5 @@
 const jsonschema = require("jsonschema");
-const { BadRequestError } = require("../../backend/helpers/expressError"); // Your error handling logic
+const { BadRequestError } = require("../../../backend/helpers/expressError"); // Your error handling logic
 
 const validateInputs = (schema) => {
   return (req, res, next) => {

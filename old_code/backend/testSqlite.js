@@ -2,14 +2,14 @@
 
 const { setupSqliteTests, db } = require("./setupSqliteTests");
 
-const UserApi = require("../backend/modules/users/userModel");
-const TripApi = require("../backend/modules/trips/tripModel");
-const AuthApi = require("../backend/modules/authentication/authModel");
-const PassengerApi = require("../backend/modules/passengers/passengerModel");
+const UserApi = require("../../backend/modules/users/userModel");
+const TripApi = require("../../backend/modules/trips/tripModel");
+const AuthApi = require("../../backend/modules/authentication/authModel");
+const PassengerApi = require("../../backend/modules/passengers/passengerModel");
 const {
   generateAccessToken,
   generateRefreshToken,
-} = require("../backend/helpers/jwtTokens");
+} = require("../../backend/helpers/jwtTokens");
 
 const TEST_DATE = "2023-04-16T00:00:00.000Z";
 

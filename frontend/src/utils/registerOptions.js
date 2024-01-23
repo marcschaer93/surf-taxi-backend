@@ -7,16 +7,43 @@ export const registerOptions = {
     },
   },
   gender: {
-    required: "Plese choose gender!",
+    // required: "Plese choose gender!",
   },
   username: {
     required: "Enter username!",
+    minLength: {
+      value: 4,
+      message: "must be at least 4 characters!",
+    },
+    maxLength: {
+      value: 20,
+      message: "must shorter than 16 characters!",
+    },
   },
   password: {
     required: "Enter password!",
     minLength: {
-      value: 6,
+      value: 5,
       message: "must be at least 6 characters!",
     },
+    maxLength: {
+      value: 20,
+      message: "must shorter than 16 characters!",
+    },
   },
+  lastName: {
+    required: "Enter your last name!",
+  },
+  email: {
+    requires: "Please provide a valid email address.",
+  },
+
+  birthYear: {
+    // requires: "Please provide a valid birth year.",
+  },
+  phone: {},
+  country: {},
+  languages: {},
+  profileImgUrl: {},
+  bio: {},
 };

@@ -26,12 +26,40 @@ export default function App() {
         // USER ROUTES
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/profile-edit" element={<EditProfile />} />
+        <Route
+          path="/profile"
+          element={
+            <RequireAuth>
+              <Profile />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/profile-edit"
+          element={
+            <RequireAuth>
+              <EditProfile />
+            </RequireAuth>
+          }
+        />
         // TRIP ROUTES
         <Route path="/trips" element={<AllTrips trips={trips} />} />
-        <Route path="/my-trips" element={<MyTrips />} />
-        <Route path="/trips/:tripId" element={<TripDetails />} />
+        <Route
+          path="/my-trips"
+          element={
+            <RequireAuth>
+              <MyTrips />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/trips/:tripId"
+          element={
+            <RequireAuth>
+              <TripDetails />
+            </RequireAuth>
+          }
+        />
       </Routes>
     </>
   );

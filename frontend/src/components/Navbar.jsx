@@ -70,15 +70,17 @@ export const Navbar = () => {
           <SearchBar />
 
           <Box sx={{ display: { xs: "none", sm: "flex" }, gap: "20px" }}>
-            <Button
-              component={NavLink}
-              to="/my-trips"
-              size="large"
-              color="inherit"
-              sx={navLinkStyle}
-            >
-              MyTrips
-            </Button>
+            {user && (
+              <Button
+                component={NavLink}
+                to="/my-trips"
+                size="large"
+                color="inherit"
+                sx={navLinkStyle}
+              >
+                MyTrips
+              </Button>
+            )}
 
             {!user && (
               <Button

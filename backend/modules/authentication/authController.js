@@ -31,12 +31,14 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
   const accessToken = generateAccessToken(loggedInUser);
   const refreshToken = generateRefreshToken(loggedInUser);
 
+  console.log("loggedInuser", loggedInUser);
+
   res.status(200).json({
     success: true,
     data: {
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      user: loggedInUser,
+      accessToken,
+      refreshToken,
+      loggedInUser,
     },
   });
 });

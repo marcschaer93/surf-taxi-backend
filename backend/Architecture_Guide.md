@@ -54,3 +54,14 @@ tests only file after file. Performance issues when big, but works with my setup
 Axios is a popular HTTP client library, and when using Axios, the response object has a data property that contains the payload of the response.
 
 This assumes you are using Axios, and it retrieves the payload from the response using Axios's data property twice. The first data accesses the payload of the HTTP response, and the second data accesses a property within the payload.
+
+return error;:
+
+Returns the error as a value.
+If the calling code expects a promise, it will be resolved with the error value.
+Requires explicit error checking in the calling code.
+throw error;:
+
+Throws an exception immediately.
+Control is transferred to the nearest catch block up the call stack.
+Convenient when using try...catch in the calling code.

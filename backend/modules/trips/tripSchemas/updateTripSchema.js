@@ -21,7 +21,7 @@ const updateTripSchema = {
     },
     optional: true, // This property is optional
   },
-  start_location: {
+  startLocation: {
     in: ["body"],
     isString: {
       errorMessage: "Please provide a valid start location.",
@@ -42,7 +42,7 @@ const updateTripSchema = {
     },
     optional: true, // This property is optional
   },
-  travel_info: {
+  travelInfo: {
     in: ["body"],
     isString: {
       errorMessage: "Please provide valid travel information.",

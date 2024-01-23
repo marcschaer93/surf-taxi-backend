@@ -24,15 +24,15 @@ class AuthApi {
     const {
       username,
       password,
-      first_name,
-      last_name,
+      firstName,
+      lastName,
       email,
       gender,
-      birth_year,
+      birthYear,
       phone,
       country,
       languages,
-      profile_img_url,
+      profileImgUrl,
       bio,
     } = data;
 
@@ -47,27 +47,27 @@ class AuthApi {
     const duplicatedUser = duplicateCheckResult.rows[0];
     if (duplicatedUser)
       throw new BadRequestError(`Duplicate username: ${username}`);
-    const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 
+    const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
     const registerResult = await db.query(
       `
       INSERT INTO users 
       (username, password, first_name, last_name, email, gender, birth_year, phone, country, languages, profile_img_url, bio)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-      RETURNING *
+      RETURNING username, first_name AS "firstName", last_name AS "lastName", email, gender, birth_year AS "birthYear", phone, languages, profile_img_url AS "profileImgUrl", bio
       `,
       [
         username,
         hashedPassword,
-        first_name,
-        last_name,
+        firstName,
+        lastName,
         email,
         gender,
-        birth_year,
+        birthYear,
         phone,
         country,
         languages,
-        profile_img_url,
+        profileImgUrl,
         bio,
       ]
     );
@@ -89,7 +89,7 @@ class AuthApi {
   static async loginUser({ username, password }) {
     const authenticationResult = await db.query(
       `
-      SELECT *
+      SELECT username, password, first_name AS "firstName", last_name AS "lastName", email, gender, birth_year AS "birthYear", phone, languages, profile_img_url AS "profileImgUrl", bio
       FROM users
       WHERE username = $1
       `,

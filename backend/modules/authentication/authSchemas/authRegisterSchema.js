@@ -36,13 +36,13 @@ const authRegisterSchema = {
   //   },
   // },
 
-  first_name: {
+  firstName: {
     in: ["body"],
     isString: {
       errorMessage: "Please provide a valid first name.",
     },
   },
-  last_name: {
+  lastName: {
     in: ["body"],
     isString: {
       errorMessage: "Please provide a valid last name.",
@@ -58,12 +58,16 @@ const authRegisterSchema = {
     },
   },
   gender: {
+    optional: true,
+
     in: ["body"],
     isString: {
       errorMessage: "Please provide a valid gender.",
     },
   },
-  birth_year: {
+  birthYear: {
+    optional: true,
+
     in: ["body"],
     isInt: {
       options: { min: 1900, max: new Date().getFullYear() },
@@ -72,18 +76,24 @@ const authRegisterSchema = {
     toInt: true,
   },
   phone: {
+    optional: true,
+
     in: ["body"],
     isString: {
       errorMessage: "Please provide a valid phone number.",
     },
   },
   country: {
+    optional: true,
+
     in: ["body"],
     isString: {
       errorMessage: "Please provide a valid country.",
     },
   },
   languages: {
+    optional: true,
+
     in: ["body"],
     isArray: {
       errorMessage: "Languages must be an array.",
@@ -94,19 +104,25 @@ const authRegisterSchema = {
       errorMessage: "Each language in the array must be a string.",
     },
   },
-  profile_img_url: {
+  profileImgUrl: {
+    optional: true,
+
     in: ["body"],
     isURL: {
       errorMessage: "Please provide a valid URL for the profile image.",
     },
   },
   bio: {
+    optional: true,
+
     in: ["body"],
     isString: {
       errorMessage: "Please provide a valid bio.",
     },
   },
   role: {
+    optional: true,
+
     in: ["body"],
     isString: {
       errorMessage: "Invalid user role.",

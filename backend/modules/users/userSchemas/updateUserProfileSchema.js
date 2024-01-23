@@ -38,14 +38,14 @@ const updateUserProfileSchema = {
   //   },
   // },
 
-  first_name: {
+  firstName: {
     in: ["body"],
     isString: {
       errorMessage: "Please provide a valid first name.",
     },
     optional: true,
   },
-  last_name: {
+  lastName: {
     in: ["body"],
     isString: {
       errorMessage: "Please provide a valid last name.",
@@ -69,7 +69,7 @@ const updateUserProfileSchema = {
     },
     optional: true,
   },
-  birth_year: {
+  birthYear: {
     in: ["body"],
     isInt: {
       options: { min: 1900, max: new Date().getFullYear() },
@@ -104,7 +104,7 @@ const updateUserProfileSchema = {
     },
     optional: true,
   },
-  profile_img_url: {
+  profileImgUrl: {
     in: ["body"],
     isURL: {
       errorMessage: "Please provide a valid URL for the profile image.",
@@ -123,7 +123,7 @@ const updateUserProfileSchema = {
   unexpectedProperties: {
     custom: {
       options: (value, { req }) => {
-        const allowedProperties = Object.keys(userUpdateProfileSchema);
+        const allowedProperties = Object.keys(updateUserProfileSchema);
         const unexpectedProps = Object.keys(req.body).filter(
           (prop) => !allowedProperties.includes(prop)
         );

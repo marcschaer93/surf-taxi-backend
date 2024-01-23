@@ -1,6 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 import * as AuthApi from "../api/services/AuthApi";
 import { useLocalStorage } from "./useLocalStorage";
@@ -8,6 +9,7 @@ import { useLocalStorage } from "./useLocalStorage";
 export const useAuth = () => {
   // Storing user data in localStorage keeps the user logged in even after a page reload. It's convenient but can be less secure compared to storing data only in state.
   const [user, setUser] = useLocalStorage("user", null);
+  const navigate = useNavigate();
 
   const handleLogin = async (credentials) => {
     try {
@@ -31,21 +33,26 @@ export const useAuth = () => {
   const handleRegister = async (data) => {
     try {
       const registerResponse = await AuthApi.registerUser(data);
-
       const { accessToken, refreshToken, user } = registerResponse;
-      console.log("Logged in User:", user);
-
-      localStorage.setItem("access_token", accessToken);
-      localStorage.setItem("refresh_token", refreshToken);
 
       if (user) {
-        toast.success("Registration successful");
+        localStorage.setItem("access_token", accessToken);
+        localStorage.setItem("refresh_token", refreshToken);
         setUser(user);
         localStorage.setItem("user", JSON.stringify(user));
+        console.log("Logged in User:", user);
         return user;
       }
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const errorMessage = error.response.data.error.message;
+        if (errorMessage.includes("Duplicate username")) {
+          // Handle duplicate username error
+          return { error: "DuplicateUsername" };
+        }
+      }
+
+      console.error(error);
       toast.error("Registration failed. Please try again.");
     }
   };
@@ -54,8 +61,8 @@ export const useAuth = () => {
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
-    // toast.success("Logout successful");
     setUser(null);
+    navigate("/");
   };
 
   useEffect(() => {

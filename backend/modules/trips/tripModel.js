@@ -90,7 +90,15 @@ class TripApi {
             costs
           )
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-        RETURNING *
+        RETURNING 
+          date, 
+          owner, 
+          start_location AS 'startLocation', 
+          destination, 
+          stops, 
+          travel_info AS 'travelInfo', 
+          seats, 
+          costs
         `,
       [
         tripData.date,
@@ -130,8 +138,16 @@ class TripApi {
       UPDATE trips
       SET ${keys.map((key, index) => `${key} = $${index + 1}`).join(",")}
       WHERE id = $${keys.length + 1}
-      RETURNING *
-    `;
+      RETURNING 
+        date, 
+        owner, 
+        start_location AS 'startLocation', 
+        destination, 
+        stops, 
+        travel_info AS 'travelInfo', 
+        seats, 
+        costs
+  `;
 
     const result = await db.query(updateQuery, updateValues);
     const updatedTrip = result.rows[0];

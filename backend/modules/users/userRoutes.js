@@ -37,4 +37,9 @@ router.patch(
 );
 
 // GET request for all trips and reservations of user
-router.get("/:username/trips", userController.getAllUserTrips);
+router.get(
+  "/:username/trips",
+  authenticate,
+  ensureCorrectUser,
+  userController.getAllUserTrips
+);

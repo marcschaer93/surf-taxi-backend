@@ -132,7 +132,7 @@ class PassengerApi {
   static async respondToJoinRequest(tripId, currentUser, passenger, response) {
     const validPassengerResult = await db.query(
       `
-          SELECT *
+          SELECT trip_id AS 'tripId', reservation_status AS 'reservationStatus', reservation_timestamp AS 'reservationTimestamp'
           FROM passengers
           WHERE trip_id = $1
           AND username = $2
@@ -152,7 +152,7 @@ class PassengerApi {
           UPDATE passengers
           SET reservation_status = $1, reservation_timestamp = CURRENT_TIMESTAMP
           WHERE trip_id = $2 AND username = $3
-          RETURNING reservation_status
+          RETURNING reservation_status AS 'reservationStatus'
           `,
       [response, tripId, passenger]
     );

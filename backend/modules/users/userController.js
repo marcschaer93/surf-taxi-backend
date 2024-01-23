@@ -36,7 +36,7 @@ exports.updateUserProfile = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: updatedUserProfile });
 });
 
-// Displays list of all Trips from Users. (trip owner & join request trips)
+// Displays list of all Trips from Users. (trip owner & join request trips and saved trips)
 exports.getAllUserTrips = asyncHandler(async (req, res, next) => {
   res.send("getAllUserTrips is NOT IMPLEMENTED YET!");
 });

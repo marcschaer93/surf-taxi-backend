@@ -19,7 +19,7 @@ const createTripSchema = {
         "Please provide a valid timestamp in ISO 8601 format: 2023-03-20T23:15:30",
     },
   },
-  start_location: {
+  startLocation: {
     in: ["body"],
     isString: {
       errorMessage: "Please provide a valid start location.",
@@ -38,7 +38,7 @@ const createTripSchema = {
     },
     optional: true, // This property is optional
   },
-  travel_info: {
+  travelInfo: {
     in: ["body"],
     isString: {
       errorMessage: "Please provide valid travel information.",

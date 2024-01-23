@@ -20,7 +20,9 @@ class UserApi {
    * Returns an array of users.
    **/
   static async getAllUsers() {
-    const result = await db.query(`SELECT * FROM users`);
+    const result = await db.query(
+      `SELECT username, first_name AS "firstName", last_name AS "lastName", email, gender, birth_year AS "birthYear", phone, languages, profile_img_url AS "profileImgUrl", bio FROM users`
+    );
 
     const allUsers = result.rows;
     return allUsers;
@@ -36,7 +38,7 @@ class UserApi {
   static async getOneUser(username) {
     const result = await db.query(
       `
-      SELECT * 
+      SELECT username, first_name AS "firstName", last_name AS "lastName", email, gender, birth_year AS "birthYear", phone, languages, profile_img_url AS "profileImgUrl", bio
       FROM users 
       WHERE username = $1
       `,
@@ -72,7 +74,7 @@ class UserApi {
     UPDATE users 
     SET ${setClause}
     WHERE username = $${keys.length + 1}
-    RETURNING *
+    RETURNING username, "first_name" AS "firstName", "last_name" AS "lastName", email, gender, "birth_year" AS "birthYear", phone, languages, "profile_img_url" AS "profileImgUrl", bio
     `;
 
     const updateResult = await db.query(updateQuery, updateValues);

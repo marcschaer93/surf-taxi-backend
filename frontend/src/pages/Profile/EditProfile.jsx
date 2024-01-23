@@ -32,6 +32,7 @@ import {
 export const EditProfile = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
+  console.log("user", user);
 
   const { username, firstName, lastName, email } = user;
   const {
