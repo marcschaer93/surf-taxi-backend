@@ -44,10 +44,10 @@ describe("GET /api/trips", function () {
         id: testTripIds[0],
         owner: "testuser",
         date: TEST_DATE,
-        start_location: "Interlaken",
+        startLocation: "Interlaken",
         destination: "Sao Torpes",
         stops: "Somo",
-        travel_info: "surftrip",
+        travelInfo: "surftrip",
         costs: "split gas & tolls",
         seats: 5,
       },
@@ -55,10 +55,10 @@ describe("GET /api/trips", function () {
         id: testTripIds[1],
         date: TEST_DATE,
         owner: "marcschaer",
-        start_location: "Sidi Ifni",
+        startLocation: "Sidi Ifni",
         destination: "Marseille",
         stops: "Imsoune",
-        travel_info: "surftrip",
+        travelInfo: "surftrip",
         costs: "split gas & tolls",
         seats: 2,
       },
@@ -89,10 +89,10 @@ describe("GET /api/trips/:tripId", function () {
       id: testTripIds[0],
       date: TEST_DATE,
       owner: "testuser",
-      start_location: "Interlaken",
+      startLocation: "Interlaken",
       destination: "Sao Torpes",
       stops: "Somo",
-      travel_info: "surftrip",
+      travelInfo: "surftrip",
       costs: "split gas & tolls",
       seats: 5,
       passengers: [
@@ -113,10 +113,10 @@ describe("POST /api/trips", function () {
       .post(`/api/trips`)
       .send({
         date: new Date(TEST_DATE), // Use a JavaScript Date object
-        start_location: "newTestTrip",
+        startLocation: "newTestTrip",
         destination: "testland",
         stops: "Somo",
-        travel_info: "surftrip",
+        travelInfo: "surftrip",
         costs: "split gas & tolls",
         seats: 5,
       })
@@ -127,10 +127,10 @@ describe("POST /api/trips", function () {
       id: expect.any(Number),
       date: TEST_DATE,
       owner: "testuser",
-      start_location: "newTestTrip",
+      startLocation: "newTestTrip",
       destination: "testland",
       stops: "Somo",
-      travel_info: "surftrip",
+      travelInfo: "surftrip",
       costs: "split gas & tolls",
       seats: 5,
     });
@@ -141,7 +141,7 @@ describe("POST /api/trips", function () {
       .post(`/api/trips`)
       .set("authorization", `Bearer ${u1AccessToken}`)
       .send({
-        start_location: "Interlaken",
+        startLocation: "Interlaken",
       });
     expect(resp.statusCode).toEqual(400);
   });

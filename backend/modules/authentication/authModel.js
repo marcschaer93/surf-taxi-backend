@@ -1,6 +1,8 @@
-const db = require("../../db");
 const bcrypt = require("bcrypt");
 
+const db = require("../../db");
+const sqlReady = require("../../helpers/sqlReady");
+const jsReady = require("../../helpers/jsReady");
 const {
   NotFoundError,
   BadRequestError,
@@ -36,9 +38,6 @@ class AuthApi {
       bio,
     } = data;
 
-    // Convert birth_year to a number
-    // const parsedBirthYear = parseInt(birth_year, 10);
-
     const duplicateCheckResult = await db.query(
       `SELECT FROM users WHERE username = $1`,
       [username]
@@ -51,10 +50,33 @@ class AuthApi {
     const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
     const registerResult = await db.query(
       `
-      INSERT INTO users 
-      (username, password, first_name, last_name, email, gender, birth_year, phone, country, languages, profile_img_url, bio)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-      RETURNING username, first_name AS "firstName", last_name AS "lastName", email, gender, birth_year AS "birthYear", phone, languages, profile_img_url AS "profileImgUrl", bio
+        INSERT INTO users 
+          (
+            username, 
+            password, 
+            first_name, 
+            last_name, 
+            email, 
+            gender, 
+            birth_year, 
+            phone, 
+            country, 
+            languages, 
+            profile_img_url, 
+            bio
+          )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+        RETURNING 
+          username, 
+          first_name, 
+          last_name, 
+          email, 
+          gender, 
+          birth_year, 
+          phone, 
+          languages, 
+          profile_img_url, 
+          bio
       `,
       [
         username,
@@ -72,7 +94,9 @@ class AuthApi {
       ]
     );
 
-    const newRegisteredUser = registerResult.rows[0];
+    const newRegisteredUser = jsReady.convertKeysToCamelCase(
+      registerResult.rows[0]
+    );
     if (!newRegisteredUser) throw new Error("User registration failed");
 
     return newRegisteredUser;
@@ -89,14 +113,16 @@ class AuthApi {
   static async loginUser({ username, password }) {
     const authenticationResult = await db.query(
       `
-      SELECT username, password, first_name AS "firstName", last_name AS "lastName", email, gender, birth_year AS "birthYear", phone, languages, profile_img_url AS "profileImgUrl", bio
-      FROM users
-      WHERE username = $1
+        SELECT *
+        FROM users
+        WHERE username = $1
       `,
       [username]
     );
 
-    const loggedInUser = authenticationResult.rows[0];
+    const loggedInUser = jsReady.convertKeysToCamelCase(
+      authenticationResult.rows[0]
+    );
 
     if (loggedInUser) {
       const isValid = await bcrypt.compare(password, loggedInUser.password);

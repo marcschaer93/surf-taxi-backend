@@ -1,5 +1,8 @@
-const db = require("../../db");
 const bcrypt = require("bcrypt");
+
+const db = require("../../db");
+const sqlReady = require("../../helpers/sqlReady");
+const jsReady = require("../../helpers/jsReady");
 
 const {
   NotFoundError,
@@ -21,10 +24,25 @@ class UserApi {
    **/
   static async getAllUsers() {
     const result = await db.query(
-      `SELECT username, first_name AS "firstName", last_name AS "lastName", email, gender, birth_year AS "birthYear", phone, languages, profile_img_url AS "profileImgUrl", bio FROM users`
+      `
+        SELECT 
+          username, 
+          first_name, 
+          last_name, 
+          email, 
+          gender, 
+          birth_year, 
+          phone, 
+          languages, 
+          profile_img_url, 
+          bio 
+        FROM users
+      `
     );
 
-    const allUsers = result.rows;
+    const allUsers = result.rows.map((row) =>
+      jsReady.convertKeysToCamelCase(row)
+    );
     return allUsers;
   }
 
@@ -38,14 +56,24 @@ class UserApi {
   static async getOneUser(username) {
     const result = await db.query(
       `
-      SELECT username, first_name AS "firstName", last_name AS "lastName", email, gender, birth_year AS "birthYear", phone, languages, profile_img_url AS "profileImgUrl", bio
-      FROM users 
-      WHERE username = $1
+        SELECT 
+          username, 
+          first_name, 
+          last_name,
+          email,
+          gender, 
+          birth_year, 
+          phone, 
+          languages, 
+          profile_img_url, 
+          bio
+        FROM users 
+        WHERE username = $1
       `,
       [username]
     );
 
-    const user = result.rows[0];
+    const user = jsReady.convertKeysToCamelCase(result.rows[0]);
     if (!user)
       throw new NotFoundError(`No user found with username: ${username}`);
 
@@ -59,10 +87,11 @@ class UserApi {
    * @param {object} userData - Updated user data.
    * @returns {object} - Updated user object.
    **/
-  static async updateUserProfile(currentUser, updateData) {
-    const keys = Object.keys(updateData);
-    const updateValues = [...Object.values(updateData), currentUser];
+  static async updateUserProfile(loggedInUser, updateData) {
+    const insertData = sqlReady.convertKeysToSnakeCase(updateData);
 
+    const keys = Object.keys(data);
+    const updateValues = [...Object.values(insertData), loggedInUser];
     const setClause = keys
       .map((key, index) => `${key} = $${index + 1}`)
       .join(", ");
@@ -74,12 +103,23 @@ class UserApi {
     UPDATE users 
     SET ${setClause}
     WHERE username = $${keys.length + 1}
-    RETURNING username, "first_name" AS "firstName", "last_name" AS "lastName", email, gender, "birth_year" AS "birthYear", phone, languages, "profile_img_url" AS "profileImgUrl", bio
+    RETURNING
+      username, 
+      first_name, 
+      last_name,
+      email,
+      gender, 
+      birth_year, 
+      phone, 
+      languages, 
+      profile_img_url, 
+      bio
     `;
 
     const updateResult = await db.query(updateQuery, updateValues);
-
-    const updatedUserProfile = updateResult.rows[0];
+    const updatedUserProfile = jsReady.convertKeysToCamelCase(
+      updateResult.rows[0]
+    );
     if (!updatedUserProfile) {
       throw new ExpressError("Failed to update user profile", 500);
     }

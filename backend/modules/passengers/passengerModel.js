@@ -1,5 +1,8 @@
-const db = require("../../db");
 const bcrypt = require("bcrypt");
+
+const db = require("../../db");
+const sqlReady = require("../../helpers/sqlReady");
+const jsReady = require("../../helpers/jsReady");
 
 const {
   NotFoundError,
@@ -69,7 +72,9 @@ class PassengerApi {
       [currentUser, tripId, "requested"]
     );
 
-    const newJoinRequest = insertPassengerResult.rows[0];
+    const newJoinRequest = jsReady.convertKeysToCamelCase(
+      insertPassengerResult.rows[0]
+    );
 
     if (!newJoinRequest)
       throw new ExpressError(
@@ -115,7 +120,9 @@ class PassengerApi {
       `,
       [tripId, currentUser]
     );
-    const removedJoinRequest = deletedResult.rows[0];
+    const removedJoinRequest = jsReady.convertKeysToCamelCase(
+      deletedResult.rows[0]
+    );
     if (!removedJoinRequest)
       throw new NotFoundError(`Could not remove join request!`);
 
@@ -132,7 +139,7 @@ class PassengerApi {
   static async respondToJoinRequest(tripId, currentUser, passenger, response) {
     const validPassengerResult = await db.query(
       `
-          SELECT trip_id AS 'tripId', reservation_status AS 'reservationStatus', reservation_timestamp AS 'reservationTimestamp'
+          SELECT *
           FROM passengers
           WHERE trip_id = $1
           AND username = $2
@@ -157,7 +164,9 @@ class PassengerApi {
       [response, tripId, passenger]
     );
 
-    const tripJoinResponse = updateResult.rows[0];
+    const tripJoinResponse = jsReady.convertKeysToCamelCase(
+      updateResult.rows[0]
+    );
 
     if (!tripJoinResponse)
       throw new ExpressError(

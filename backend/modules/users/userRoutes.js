@@ -25,11 +25,11 @@ module.exports = router;
 router.get("/", authenticate, authorize("admin"), userController.getAllUsers);
 
 // GET request for one user (profile)
-router.get("/:username/profile", authenticate, userController.getOneUser);
+router.get("/:username", authenticate, userController.getOneUser);
 
 // PATCH request to update user (profile)
 router.patch(
-  "/:username/profile",
+  "/:username",
   authenticate,
   ensureCorrectUser,
   validateInputs(updateUserProfileSchema),

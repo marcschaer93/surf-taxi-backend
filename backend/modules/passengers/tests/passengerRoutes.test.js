@@ -42,11 +42,11 @@ describe("POST /api/passengers/trips/:tripId/join", function () {
     expect(resp.statusCode).toEqual(201);
     expect(resp.body.success).toEqual(true);
     expect(resp.body.data.passenger).toEqual("marcschaer");
-    expect(resp.body.data.newJoinRequest.reservation_status).toEqual(
+    expect(resp.body.data.newJoinRequest.reservationStatus).toEqual(
       "requested"
     );
     expect(resp.body.data.newJoinRequest.username).toEqual("marcschaer");
-    expect(resp.body.data.newJoinRequest.trip_id).toEqual(testTripIds[0]);
+    expect(resp.body.data.newJoinRequest.tripId).toEqual(testTripIds[0]);
   });
 
   test("FAIL to make a join request as tripOwner to own trip", async function () {

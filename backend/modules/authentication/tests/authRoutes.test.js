@@ -122,7 +122,6 @@ describe("POST /api/auth/login", function () {
     expect(resp.body.success).toEqual(true);
     expect(resp.body.data.accessToken).toEqual(expect.any(String));
     expect(resp.body.data.refreshToken).toEqual(expect.any(String));
-    // expect(resp.body.data.user.username).toEqual("testuser");
   });
 
   test("FAIL for NOT registered user", async function () {

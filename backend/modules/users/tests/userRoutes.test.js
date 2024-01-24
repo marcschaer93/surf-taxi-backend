@@ -32,10 +32,10 @@ afterAll(async () => {
 
 /* GET /api/users/:username/profile */
 
-describe("GET /api/users/:username/profile", function () {
+describe("GET /api/users/:username", function () {
   test("OK to get own user profile", async function () {
     const resp = await request(app)
-      .get(`/api/users/testuser/profile`)
+      .get(`/api/users/testuser`)
       .set("authorization", `Bearer ${u1AccessToken}`);
 
     expect(resp.statusCode).toEqual(200);
