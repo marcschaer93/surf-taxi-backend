@@ -8,16 +8,19 @@ import { useAuthContext } from "../../context/authProvider";
 import * as UserApi from "../../api/services/UserApi";
 
 import {
-  formContainer,
-  titleContainer,
-  underline,
-  inputs,
-  input,
-  submitContainer,
-  switchContainer,
-  link,
-  lostPasswordContainer,
-  submitButton,
+  FormContainer,
+  TitleContainer,
+  Underline,
+  InputsContainer,
+  Input,
+  SubmitContainer,
+  SubmitButton,
+  SwitchContainer,
+  LostPasswordContainer,
+  SignupLink,
+  FormTitle,
+  HalfInput,
+  HalfInputContainer,
 } from "../../styles/formStyles";
 
 /**
@@ -59,17 +62,15 @@ export const EditProfile = () => {
   };
 
   return (
-    <Box sx={formContainer}>
-      <Box sx={titleContainer}>
-        <Typography variant="h1" sx={{ fontSize: "48px", fontWeight: 700 }}>
-          Profile
-        </Typography>
-        <Box sx={underline}></Box>
-      </Box>
+    <FormContainer>
+      <TitleContainer>
+        <FormTitle variant="h1">Profile</FormTitle>
+        <Underline></Underline>
+      </TitleContainer>
 
       <form autoComplete="off" onSubmit={handleSubmit(onFormSubmit)}>
-        <Box sx={inputs} className="inputs">
-          <Box sx={input} className="input">
+        <InputsContainer className="inputs">
+          <Input className="input">
             <FormInputText
               name="username"
               control={control}
@@ -77,49 +78,48 @@ export const EditProfile = () => {
               errors={errors}
               disabled={true}
             />
-          </Box>
+          </Input>
 
-          <Box sx={{ display: "flex", gap: "20px" }}>
-            <Box sx={{ width: "230px" }}>
+          <HalfInputContainer>
+            <HalfInput>
               <FormInputText
                 name="firstName"
                 control={control}
                 label="First name"
                 errors={errors}
               />
-            </Box>
-            <Box sx={{ width: "230px" }}>
+            </HalfInput>
+            <HalfInput>
               <FormInputText
                 name="lastName"
                 control={control}
                 label="Last Name"
                 errors={errors}
               />
-            </Box>
-          </Box>
+            </HalfInput>
+          </HalfInputContainer>
 
-          <Box sx={input} className="input">
+          <Input className="input">
             <FormInputText
               name="email"
               control={control}
               label="Email"
               errors={errors}
             />
-          </Box>
-        </Box>
+          </Input>
+        </InputsContainer>
 
-        <Box sx={submitContainer} className="submit-container">
-          <Button
+        <SubmitContainer className="submit-container">
+          <SubmitButton
             variant="contained"
             color="primary"
             type="submit"
             size="medium"
-            sx={submitButton}
           >
             Save Changes
-          </Button>
-        </Box>
+          </SubmitButton>
+        </SubmitContainer>
       </form>
-    </Box>
+    </FormContainer>
   );
 };

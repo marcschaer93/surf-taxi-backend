@@ -7,16 +7,17 @@ import { useAuthContext } from "../../context/authProvider";
 import { FormInputUsername } from "../../components/form/FormInputUsername";
 import { FormInputPassword } from "../../components/form/FormInputPassword";
 import {
-  formContainer,
-  titleContainer,
-  underline,
-  inputs,
-  input,
-  submitContainer,
-  switchContainer,
-  link,
-  lostPasswordContainer,
-  submitButton,
+  FormContainer,
+  TitleContainer,
+  Underline,
+  InputsContainer,
+  Input,
+  SubmitContainer,
+  SubmitButton,
+  SwitchContainer,
+  LostPasswordContainer,
+  SignupLink,
+  FormTitle,
 } from "../../styles/formStyles";
 
 /**
@@ -35,6 +36,7 @@ export const LoginForm = () => {
     control,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -44,67 +46,101 @@ export const LoginForm = () => {
   });
 
   const onFormSubmit = async (credentials) => {
-    // const { username, password } = data;
-    handleLogin(credentials);
-    navigate("/");
-    reset();
+    try {
+      await handleLogin(credentials);
+      navigate("/");
+      reset();
+    } catch (error) {
+      // setError (react-hook-form)
+      setError("username", {
+        type: "manual",
+      });
+      setError("password", {
+        type: "manual",
+        message: error.message,
+      });
+    }
   };
 
+  // const FormContainer = styled(Box)(({ theme }) => ({
+  //   margin: "auto",
+  //   width: "90%", // Adjust the width for smaller screens
+  //   maxWidth: "400px", // Set a maximum width to avoid stretching on very large screens
+  //   padding: "20px",
+  //   paddingBottom: "50px",
+  //   marginTop: "30px",
+  //   borderRadius: "16px",
+  //   backgroundColor: "#FFFFFF",
+  //   border: "solid #CCCCCC 1px",
+  //   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+
+  //   [theme.breakpoints.up("sm")]: {
+  //     width: "600px", // Adjust width for screens larger than or equal to sm
+  //     marginTop: "60px",
+  //   },
+  // }));
+
+  // const Input = styled(Box)(({ theme }) => ({
+  //   display: "flex",
+  //   alignItems: "center",
+  //   width: "100%",
+
+  //   [theme.breakpoints.up("sm")]: {
+  //     width: "480px",
+  //   },
+  // }));
+
   return (
-    <Box sx={formContainer}>
-      <Box sx={titleContainer}>
-        <Typography variant="h1" sx={{ fontSize: "48px", fontWeight: 700 }}>
-          Login Form
-        </Typography>
-        <Box sx={underline}></Box>
-      </Box>
+    <FormContainer>
+      <TitleContainer>
+        <FormTitle variant="h4">Login Form</FormTitle>
+        <Underline></Underline>
+      </TitleContainer>
 
       <form autoComplete="off" onSubmit={handleSubmit(onFormSubmit)}>
-        <Box sx={inputs}>
-          <Box sx={input}>
+        <InputsContainer>
+          <Input>
             <FormInputUsername
               name="username"
               control={control}
               label="Username"
               errors={errors}
             />
-          </Box>
+          </Input>
 
-          <Box sx={input}>
+          <Input>
             <FormInputPassword
               name="password"
               control={control}
               label="Password"
               errors={errors}
             />
-          </Box>
-        </Box>
+          </Input>
+        </InputsContainer>
 
-        <Box
+        <LostPasswordContainer
           onClick={() => alert("Lost Password ? Sorry I can't Help you!")}
-          sx={lostPasswordContainer}
         >
           Lost Password
-        </Box>
+        </LostPasswordContainer>
 
-        <Box sx={submitContainer}>
-          <Button
+        <SubmitContainer>
+          <SubmitButton
             variant="contained"
             color="primary"
             type="submit"
             size="medium"
-            sx={submitButton}
           >
             Login
-          </Button>
-        </Box>
-        <Box sx={switchContainer}>
+          </SubmitButton>
+        </SubmitContainer>
+        <SwitchContainer>
           Not a Member yet?
-          <Box component={Link} to="/register" exact="true" sx={link}>
+          <SignupLink component={Link} to="/register" exact="true">
             Sign Up.
-          </Box>
-        </Box>
+          </SignupLink>
+        </SwitchContainer>
       </form>
-    </Box>
+    </FormContainer>
   );
 };

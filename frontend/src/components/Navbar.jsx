@@ -24,6 +24,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useAuthContext } from "../context/authProvider";
 import { navLinkStyle } from "../styles/navbarStyles";
 import { SearchBar } from "./ui/SearchBar";
+import { Popover } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 
 /**
  * Navbar Component
@@ -37,21 +39,35 @@ import { SearchBar } from "./ui/SearchBar";
 export const Navbar = () => {
   //   const theme = useTheme();
   const { handleLogin, handleLogout, user } = useAuthContext();
-  const [open, setOpen] = useState(false);
 
-  const Icons = styled(Box)(({ theme }) => ({
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const NotificationContainer = styled(Box)(({ theme }) => ({
     display: "none",
     alignItems: "center",
     gap: "20px",
     [theme.breakpoints.up("sm")]: { display: "flex" },
   }));
 
-  const UserBox = styled(Box)(({ theme }) => ({
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    [theme.breakpoints.up("sm")]: { display: "none" },
-  }));
+  // const UserBox = styled(Box)(({ theme }) => ({
+  //   display: "flex",
+  //   alignItems: "center",
+  //   gap: "10px",
+  //   [theme.breakpoints.up("sm")]: { display: "none" },
+  // }));
+
+  const logout = () => {
+    handleLogout();
+    setAnchorElUser(null);
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -81,60 +97,67 @@ export const Navbar = () => {
                 MyTrips
               </Button>
             )}
-
+          </Box>
+          <Box>
             {!user && (
               <Button
                 component={NavLink}
                 to="/login"
-                size="large"
-                color="inherit"
+                size="medium"
+                color="secondary"
                 sx={navLinkStyle}
               >
                 Login
               </Button>
             )}
           </Box>
+
           {user && (
-            <Icons>
+            <NotificationContainer>
               <Badge badgeContent={4} color="secondary">
                 <Mail color="" />
               </Badge>
               <Badge badgeContent={2} color="secondary">
                 <Notifications color="" />
               </Badge>
-              <Avatar
-                alt="Marc Schär"
-                src="../src/assets/images/avatar.jpg"
-                onClick={(e) => setOpen(true)}
-              />
-            </Icons>
+            </NotificationContainer>
           )}
 
-          <UserBox onClick={(e) => setOpen(true)}>
-            <Avatar alt="Marc Schär" src="../src/assets/images/avatar.jpg" />
-            <Typography variant="span">Marc</Typography>
-          </UserBox>
+          {user && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    alt="Marc Schär"
+                    src="../src/assets/images/avatar.jpg"
+                  />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem component={Link} to="/profile">
+                  Profile
+                </MenuItem>
+                <MenuItem>My account</MenuItem>
+                <MenuItem onClick={logout}>Logout</MenuItem>
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
-        <Menu
-          id="demo-positioned-menu"
-          aria-labelledby="demo-positioned-button"
-          open={open}
-          onClose={(e) => setOpen(false)}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-        >
-          <MenuItem component={Link} to="/profile">
-            Profile
-          </MenuItem>
-          <MenuItem>My account</MenuItem>
-          <MenuItem onClick={(e) => handleLogout()}>Logout</MenuItem>
-        </Menu>
 
         <IconButton
           size="large"

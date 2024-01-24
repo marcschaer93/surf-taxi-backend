@@ -7,15 +7,19 @@ import { Button, Typography, Box } from "@mui/material";
 import { FormInputText } from "../../components/form/FormInputText";
 import { useAuthContext } from "../../context/authProvider";
 import {
-  formContainer,
-  titleContainer,
-  underline,
-  inputs,
-  input,
-  submitContainer,
-  switchContainer,
-  link,
-  submitButton,
+  FormContainer,
+  TitleContainer,
+  Underline,
+  InputsContainer,
+  Input,
+  SubmitContainer,
+  SubmitButton,
+  SwitchContainer,
+  LostPasswordContainer,
+  SignupLink,
+  FormTitle,
+  HalfInput,
+  HalfInputContainer,
 } from "../../styles/formStyles";
 
 /**
@@ -52,91 +56,88 @@ export const RegisterForm = () => {
 
   // react-hook-form method with auto arg: form-data
   const onFormSubmit = async (formData) => {
-    const registerResponse = await handleRegister(formData);
-
-    if (registerResponse.error === "DuplicateUsername") {
-      setError("username", {
-        type: "manual",
-        message: `Username is taken. Log in or choose another.`,
-      });
-    } else {
+    try {
+      await handleRegister(formData);
       navigate("/");
       reset();
+    } catch (error) {
+      // setError (react-hook-form)
+      setError("username", {
+        type: "manual",
+        message: error.message,
+      });
     }
   };
 
   return (
-    <Box sx={formContainer}>
-      <Box sx={titleContainer}>
-        <Typography variant="h1" sx={{ fontSize: "48px", fontWeight: 700 }}>
-          Register Form
-        </Typography>
-        <Box sx={underline}></Box>
-      </Box>
+    <FormContainer>
+      <TitleContainer>
+        <FormTitle variant="h1">Register Form</FormTitle>
+        <Underline></Underline>
+      </TitleContainer>
       <form autoComplete="off" onSubmit={handleSubmit(onFormSubmit)}>
-        <Box sx={inputs}>
-          <Box sx={input}>
+        <InputsContainer>
+          <Input>
             <FormInputText
               name="username"
               control={control}
               label="Username"
               errors={errors}
             />
-          </Box>
-          <Box sx={{ display: "flex", gap: "20px" }}>
-            <Box sx={{ width: "230px" }}>
+          </Input>
+          <HalfInputContainer>
+            <HalfInput>
               <FormInputText
                 name="firstName"
                 control={control}
                 label="First name"
                 errors={errors}
               />
-            </Box>
-            <Box sx={{ width: "230px" }}>
+            </HalfInput>
+            <HalfInput>
               <FormInputText
                 name="lastName"
                 control={control}
                 label="Last Name"
                 errors={errors}
               />
-            </Box>
-          </Box>
-          <Box sx={input}>
+            </HalfInput>
+          </HalfInputContainer>
+          <Input>
             <FormInputText
               name="email"
               control={control}
               label="Email"
               errors={errors}
             />
-          </Box>
-          <Box sx={input}>
+          </Input>
+          <Input>
             <FormInputText
               name="password"
               control={control}
               label="Password"
               errors={errors}
             />
-          </Box>
-        </Box>
+          </Input>
+        </InputsContainer>
 
-        <Box sx={submitContainer}>
-          <Button
+        <SubmitContainer>
+          <SubmitButton
             variant="contained"
             color="primary"
             type="submit"
             size="medium"
-            sx={submitButton}
           >
             Register
-          </Button>
-        </Box>
+          </SubmitButton>
+        </SubmitContainer>
       </form>
-      <Box sx={switchContainer}>
+      <SwitchContainer>
         Already a Member ?
-        <Box component={Link} to="/login" exact="true" sx={link}>
+        <SignupLink component={Link} to="/login" exact="true">
           Login
-        </Box>
-      </Box>
-    </Box>
+        </SignupLink>
+      </SwitchContainer>
+    </FormContainer>
   );
 };

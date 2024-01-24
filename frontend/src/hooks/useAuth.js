@@ -20,13 +20,16 @@ export const useAuth = () => {
       localStorage.setItem("refresh_token", refreshToken);
 
       if (loggedInUser) {
-        // toast.success("Login successful");
         setUser(loggedInUser);
         localStorage.setItem("user", JSON.stringify(user));
       }
-    } catch (err) {
-      console.error(err);
-      toast.error("Login failed. Please try again.");
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        throw new Error(`Invalid userame or password`);
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
+      console.error(error);
     }
   };
 
@@ -48,12 +51,10 @@ export const useAuth = () => {
         const errorMessage = error.response.data.error.message;
         if (errorMessage.includes("Duplicate username")) {
           // Handle duplicate username error
-          return { error: "DuplicateUsername" };
+          throw new Error(`Username is taken. Log in or choose another.`);
         }
       }
-
       console.error(error);
-      toast.error("Registration failed. Please try again.");
     }
   };
 
