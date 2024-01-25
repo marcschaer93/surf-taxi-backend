@@ -129,7 +129,8 @@ export const Navbar = () => {
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     alt="Marc Schär"
-                    src="../src/assets/images/avatar.jpg"
+                    // src="../src/assets/images/avatar.jpg"
+                    src={user.profileImgUrl}
                   />
                 </IconButton>
               </Tooltip>

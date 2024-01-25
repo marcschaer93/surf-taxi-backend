@@ -1,15 +1,15 @@
 const updateUserProfileSchema = {
-  // username: {
-  //   in: ["body"],
-  //   isString: {
-  //     errorMessage: "Please provide a valid username.",
-  //   },
-  //   isLength: {
-  //     options: { min: 1, max: 30 },
-  //     errorMessage: "Username must be between 1 and 30 characters.",
-  //   },
-  //   optional: true,
-  // },
+  username: {
+    in: ["body"],
+    isString: {
+      errorMessage: "Please provide a valid username.",
+    },
+    isLength: {
+      options: { min: 1, max: 30 },
+      errorMessage: "Username must be between 1 and 30 characters.",
+    },
+    optional: true,
+  },
   // password: {
   //   in: ["body"],
   //   isString: {

@@ -89,8 +89,9 @@ class UserApi {
    **/
   static async updateUserProfile(loggedInUser, updateData) {
     const insertData = sqlReady.convertKeysToSnakeCase(updateData);
+    console.log("insertData", insertData);
 
-    const keys = Object.keys(data);
+    const keys = Object.keys(insertData);
     const updateValues = [...Object.values(insertData), loggedInUser];
     const setClause = keys
       .map((key, index) => `${key} = $${index + 1}`)

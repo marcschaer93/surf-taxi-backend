@@ -4,8 +4,10 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { Button, Typography, Box } from "@mui/material";
 
 import { FormInputText } from "../../components/form/FormInputText";
+import { FormInputMultiline } from "../../components/form/FormInputMultiline";
 import { useAuthContext } from "../../context/authProvider";
 import * as UserApi from "../../api/services/UserApi";
+import { GenderRadioButtons } from "../../components/form/GenderRadioButtons";
 
 import {
   FormContainer,
@@ -35,7 +37,6 @@ import {
 export const EditProfile = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  console.log("user", user);
 
   const { username, firstName, lastName, email } = user;
   const {
@@ -53,11 +54,12 @@ export const EditProfile = () => {
   });
 
   const onFormSubmit = (formData) => {
-    const { firstName, lastName, email } = formData;
-    const dataWithoutUsername = { firstName, lastName, email };
+    // console.log("data", data);
+    // const { firstName, lastName, email } = data;
+    // const dataWithoutUsername = { firstName, lastName, email };
 
-    UserApi.updateUserProfile(dataWithoutUsername);
-    setCurrentUser(() => data);
+    UserApi.updateUserProfile(user.username, formData);
+    // setCurrentUser(() => data);
     navigate("/");
   };
 
@@ -69,8 +71,8 @@ export const EditProfile = () => {
       </TitleContainer>
 
       <form autoComplete="off" onSubmit={handleSubmit(onFormSubmit)}>
-        <InputsContainer className="inputs">
-          <Input className="input">
+        <InputsContainer>
+          <Input>
             <FormInputText
               name="username"
               control={control}
@@ -107,9 +109,40 @@ export const EditProfile = () => {
               errors={errors}
             />
           </Input>
+          <Input>
+            <FormInputText
+              name="avatar"
+              control={control}
+              label="Avatar URL"
+              errors={errors}
+            />
+          </Input>
+          <Input>
+            <FormInputText
+              name="facebook"
+              control={control}
+              label="Facebook URL"
+              errors={errors}
+            />
+          </Input>
+          <FormInputText
+            name="instagram"
+            control={control}
+            label="Instagram,"
+            errors={errors}
+          />
+          <FormInputMultiline
+            name="bio"
+            control={control}
+            label="Bio"
+            errors={errors}
+            rows={3}
+          />
+
+          <GenderRadioButtons control={control} />
         </InputsContainer>
 
-        <SubmitContainer className="submit-container">
+        <SubmitContainer>
           <SubmitButton
             variant="contained"
             color="primary"
