@@ -81,8 +81,9 @@ export const Navbar = () => {
             >
               SURF TAXI
             </Typography>
-            <SurfingIcon sx={{ display: { sx: "block", sm: "none" } }} />
+            {/* <SurfingIcon sx={{ display: { sx: "block", sm: "none" } }} /> */}
           </Button>
+
           <SearchBar />
 
           <Box sx={{ display: { xs: "none", sm: "flex" }, gap: "20px" }}>
@@ -128,9 +129,14 @@ export const Navbar = () => {
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
+                    sx={{
+                      width: { xs: 24, sm: 32 },
+                      height: { xs: 24, sm: 32 },
+                    }}
                     alt="Marc Schär"
-                    // src="../src/assets/images/avatar.jpg"
-                    src={user.profileImgUrl}
+                    src="../src/assets/images/avatar.jpg"
+                    s
+                    // src={user.profileImgUrl}
                   />
                 </IconButton>
               </Tooltip>

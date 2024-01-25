@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { TripDetails } from "./TripDetails";
 import { Link } from "react-router-dom";
+import { Box } from "@mui/material";
+
+import { TripDetails } from "./TripDetails";
 
 export const AllTrips = ({ trips }) => {
   // console.log("trips", trips);
@@ -11,12 +13,20 @@ export const AllTrips = ({ trips }) => {
           <h1>All Trips</h1>
           <ul>
             {trips.map((trip) => (
-              <li key={trip.id}>
-                {" "}
+              <Box component="li" key={trip.id}>
+                {/* <TripDetails tripDetails={trip} /> */}
+                //{" "}
                 <Link to={`/trips/${trip.id}`}>
-                  {`${trip.start_location} - ${trip.destination}`}
+                  // {`${trip.start_location} - ${trip.destination}`}
+                  //{" "}
                 </Link>
-              </li>
+              </Box>
+              // <li key={trip.id}>
+              //   {" "}
+              //   <Link to={`/trips/${trip.id}`}>
+              //     {`${trip.start_location} - ${trip.destination}`}
+              //   </Link>
+              // </li>
             ))}
           </ul>
         </div>

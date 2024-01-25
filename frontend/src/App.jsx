@@ -12,6 +12,13 @@ import { Register } from "./pages/Register";
 import { EditProfile } from "./pages/Profile/EditProfile";
 import { Profile } from "./pages/Profile";
 import { MyTrips } from "./pages/Trips/MyTrips";
+import { styled, useTheme } from "@mui/material/styles";
+
+import { BottomNavBar } from "./components/BottomNavBar";
+
+// const MainContent = styled(Box)(({ theme }) => ({
+//   // paddingBottom: "16px", // Adjust the padding based on your design
+// }));
 
 export default function App() {
   const { trips, setTrips, addTrip } = useTripData();
@@ -20,6 +27,7 @@ export default function App() {
     <>
       <Navbar />
 
+      {/* <MainContent> */}
       <Routes>
         // HOME
         <Route path="/" element={<Home trips={trips} addTrip={addTrip} />} />
@@ -61,6 +69,9 @@ export default function App() {
           }
         />
       </Routes>
+      {/* </MainContent> */}
+
+      <BottomNavBar sx={{ display: { sm: "none" } }} />
     </>
   );
 }
