@@ -1,4 +1,5 @@
-import { ApiService, handleApiError } from "../apiConfig";
+import { ApiService } from "../apiConfig";
+import { handleApiError } from "../apiErrorHandler";
 
 export const createNewTrip = async (tripData) => {
   try {

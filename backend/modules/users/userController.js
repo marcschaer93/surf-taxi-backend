@@ -15,6 +15,9 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
 exports.getOneUser = asyncHandler(async (req, res, next) => {
   const { username } = req.params;
   const user = await UserApi.getOneUser(username);
+  // const userData = await UserApi.getOneUser(username);
+  // const userTrips = await TripApi;
+  // const userPassenger = await PassengerApi;
 
   res.status(200).json({ success: true, data: user });
 });
@@ -38,5 +41,18 @@ exports.updateUserProfile = asyncHandler(async (req, res, next) => {
 
 // Displays list of all Trips from Users. (trip owner & join request trips and saved trips)
 exports.getAllUserTrips = asyncHandler(async (req, res, next) => {
-  res.send("getAllUserTrips is NOT IMPLEMENTED YET!");
+  const loggedInUser = req.username;
+  const allUserTrips = await UserApi.getAllUserTrips(loggedInUser);
+
+  const myTripsAsOwner = allUserTrips.filter(
+    (trip) => trip.tripOwner === loggedInUser
+  );
+
+  const myTripsAsPassenger = allUserTrips.filter(
+    (trip) => trip.passengerUsername === loggedInUser
+  );
+
+  res
+    .status(200)
+    .json({ success: true, data: { myTripsAsOwner, myTripsAsPassenger } });
 });

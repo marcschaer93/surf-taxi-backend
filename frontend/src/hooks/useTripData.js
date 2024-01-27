@@ -2,30 +2,57 @@ import { useState, useEffect } from "react";
 import { useErrorBoundary } from "react-error-boundary";
 
 import * as TripApi from "../api/services/TripApi";
+import * as UserApi from "../api/services/UserApi";
+import { useAuthContext } from "../context/authProvider";
 
 export const useTripData = () => {
+  const { user } = useAuthContext();
   const { showBoundary } = useErrorBoundary();
 
-  const [trips, setTrips] = useState([]);
+  const [allTrips, setAllTrips] = useState([]);
+  const [userTrips, setUserTrips] = useState([]);
+
   const [error, setError] = useState(null);
-  const [tripsLoading, setTripsLoading] = useState(true);
+  const [allTripsLoading, setAllTripsLoading] = useState(true);
+  const [userTripsLoading, setUserTripsLoading] = useState(true);
 
   useEffect(() => {
-    const getData = async () => {
+    const getAllTripsData = async () => {
       try {
-        const allTrips = await TripApi.getAllTrips();
-        setTrips(allTrips);
-        setTripsLoading(false);
+        const tripsData = await TripApi.getAllTrips();
+
+        setAllTrips(tripsData);
+        setAllTripsLoading(false);
       } catch (error) {
         // Show error boundary
         showBoundary(error);
 
         console.error("Error fetching trips:", error);
-        setTrips([]);
-        setTripsLoading(false);
+        setAllTrips([]);
+        setAllTripsLoading(false);
       }
     };
-    getData();
+
+    const getUserTripsData = async () => {
+      try {
+        const { username } = user;
+        if (username) {
+          const userTripsData = await UserApi.getAllUserTrips(username);
+          setUserTrips(userTripsData);
+          setUserTripsLoading(false);
+        } else {
+          throw new Error("User information not available.");
+        }
+      } catch (error) {
+        // Show error boundary
+        showBoundary(error);
+        console.error("Error fetching trips:", error);
+        setUserTrips([]);
+        setUserTripsLoading(false);
+      }
+    };
+    getAllTripsData();
+    getUserTripsData();
   }, []);
 
   const addTrip = async (tripData) => {
@@ -35,7 +62,7 @@ export const useTripData = () => {
 
     if (newTrip) {
       // Adding the new trip to the current list of trips if successful
-      setTrips((prevTrips) => [...prevTrips, newTrip]);
+      setAllTrips((prevTrips) => [...prevTrips, newTrip]);
       console.log("Trip created successfully:", newTrip);
     } else {
       // Using this block later to notify the user of an unsuccessful trip creation
@@ -43,5 +70,5 @@ export const useTripData = () => {
     }
   };
 
-  return { trips, setTrips, addTrip };
+  return { allTrips, userTrips, setAllTrips, addTrip };
 };

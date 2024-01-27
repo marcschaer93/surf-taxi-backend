@@ -97,7 +97,7 @@ import { theme } from "../utils/theme";
 
 export const FormContainer = styled(Box)(({ theme }) => ({
   margin: "auto",
-  width: "90%",
+  width: "100%",
   // maxWidth: "400px",
   padding: "20px",
   paddingBottom: "50px",

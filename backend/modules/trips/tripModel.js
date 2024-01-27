@@ -28,6 +28,21 @@ class TripApi {
     // No error if allTrips is empty!
     return allTrips;
   }
+  // static async getAllTrips() {
+  //   const result = await db.query(
+  //     `
+  //       SELECT trips.*, passengers.reservation_status
+  //       FROM trips
+  //       INNER JOIN passengers ON trips.id = passengers.trip_id
+  //     `
+  //   );
+  //   const allTrips = result.rows.map((row) =>
+  //     jsReady.convertKeysToCamelCase(row)
+  //   );
+
+  //   // No error if allTrips is empty!
+  //   return allTrips;
+  // }
 
   /** SINGLE TRIP
    *
@@ -36,7 +51,7 @@ class TripApi {
    * @param {integer} id - id of the trip to retrieve.
    * @returns {object} - Trip object.
    **/
-  static async getOneTrip(id) {
+  static async getOneTrip(tripId) {
     const result = await db.query(
       `
         SELECT
@@ -59,7 +74,7 @@ class TripApi {
         GROUP BY
           T.id, T.date, T.owner, T.start_location, T.destination, T.stops, T.travel_info, T.seats, T.costs
     `,
-      [id]
+      [tripId]
     );
 
     const tripDetails = jsReady.convertKeysToCamelCase(result.rows[0]);

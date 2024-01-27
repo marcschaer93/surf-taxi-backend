@@ -40,7 +40,7 @@ export const BottomNavBar = () => {
           >
             <BottomNavigationAction
               component={NavLink}
-              to="/"
+              to="/trips"
               label="Explore"
               icon={<SearchIcon />}
             />
@@ -77,7 +77,7 @@ export const BottomNavBar = () => {
           >
             <BottomNavigationAction
               component={NavLink}
-              to="/"
+              to="/trips"
               label="Explore"
               icon={<RestoreIcon />}
             />

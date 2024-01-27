@@ -11,6 +11,21 @@ export const useAuth = () => {
   const [user, setUser] = useLocalStorage("user", null);
   const navigate = useNavigate();
 
+  // const [loggedInUser, setLoggedInUser] = useLocalStorage("loggedInUser", null);
+  // const getUserData = async (username) => {
+  //   try {
+  //     const userData = await UserApi.
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (loggedInUser) {
+  //     getUserData(username);
+  //   }
+  // }, [loggedInUser]);
+
   const handleLogin = async (credentials) => {
     try {
       const loginResponse = await AuthApi.loginUser(credentials);

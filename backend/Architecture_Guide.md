@@ -65,3 +65,16 @@ throw error;:
 Throws an exception immediately.
 Control is transferred to the nearest catch block up the call stack.
 Convenient when using try...catch in the calling code.
+
+On Login:
+
+Fetch user profile details (name, avatar, etc.).
+Fetch authentication tokens.
+Fetch basic information needed for the main dashboard.
+Lazy Loading/On Demand:
+
+Fetch additional user details (preferences, settings) when the user navigates to their profile settings.
+Fetch trip-related data when the user accesses the "My Trips" section.
+Background Fetching/Preloading:
+
+Periodically check for new surf requests or notifications in the background to provide real-time updates.

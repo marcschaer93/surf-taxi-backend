@@ -1,5 +1,5 @@
 import { ApiService } from "../apiConfig";
-import { handleApiError } from "../apiConfig";
+import { handleApiError } from "../apiErrorHandler";
 
 // provides functions for authentication
 

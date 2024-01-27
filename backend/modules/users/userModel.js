@@ -127,6 +127,35 @@ class UserApi {
 
     return updatedUserProfile;
   }
+
+  static async getAllUserTrips(loggedInUser) {
+    const allUserTripsResult = await db.query(
+      `
+      SELECT 
+        trips.id AS trip_id,
+        trips.owner AS trip_owner,
+        trips.date,
+        trips.start_location,
+        trips.destination,
+        trips.stops,
+        trips.travel_info,
+        trips.seats,
+        trips.costs,
+        passengers.username AS passenger_username,
+        passengers.reservation_status
+      FROM trips
+      LEFT JOIN passengers ON trips.id = passengers.trip_id
+      WHERE trips.owner = $1 OR passengers.username = $1
+      `,
+      [loggedInUser]
+    );
+
+    const allUserTrips = allUserTripsResult.rows.map((row) =>
+      jsReady.convertKeysToCamelCase(row)
+    );
+
+    return allUserTrips;
+  }
 }
 
 module.exports = UserApi;

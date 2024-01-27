@@ -17,9 +17,7 @@ export const Home = ({ trips, addTrip }) => {
           <h1>Welcome to Surf Taxi</h1>
         )}
       </div>
-      <Box>
-        <AllTrips trips={trips} />
-      </Box>
+      <AllTrips trips={trips} />
     </>
   );
 };

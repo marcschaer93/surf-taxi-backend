@@ -26,6 +26,7 @@ import { navLinkStyle } from "../styles/navbarStyles";
 import { SearchBar } from "./ui/SearchBar";
 import { Popover } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
+import { theme } from "../utils/theme";
 
 /**
  * Navbar Component
@@ -73,16 +74,24 @@ export const Navbar = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Button component={NavLink} to="/" size="large" color="inherit">
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+          <Box>
+            <Button
+              sx={{ display: { xs: "none", sm: "block" } }}
+              component={NavLink}
+              to="/"
+              size="large"
+              color="inherit"
             >
-              SURF TAXI
-            </Typography>
-            {/* <SurfingIcon sx={{ display: { sx: "block", sm: "none" } }} /> */}
-          </Button>
+              {/* <Typography
+                variant="h6"
+                // component="div"
+                sx={{ flexGrow: 1, display: "block" }}
+              >
+              </Typography> */}
+              <SurfingIcon />
+              Surf taxi
+            </Button>
+          </Box>
 
           <SearchBar />
 

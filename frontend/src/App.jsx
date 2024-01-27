@@ -13,63 +13,37 @@ import { EditProfile } from "./pages/Profile/EditProfile";
 import { Profile } from "./pages/Profile";
 import { MyTrips } from "./pages/Trips/MyTrips";
 import { styled, useTheme } from "@mui/material/styles";
+import { Stack, Box } from "@mui/material";
+import { Sidebar } from "./components/Sidebar";
+import { Rightbar } from "./components/Rightbar";
+import { AppRoutes } from "./components/AppRoutes";
 
 import { BottomNavBar } from "./components/BottomNavBar";
 
-// const MainContent = styled(Box)(({ theme }) => ({
-//   // paddingBottom: "16px", // Adjust the padding based on your design
-// }));
+const MainContent = styled(Box)(({ theme }) => ({
+  flex: 4,
+  padding: theme.spacing(3),
+  width: "100%",
+}));
 
 export default function App() {
-  const { trips, setTrips, addTrip } = useTripData();
+  const { allTrips, userTrips, setTrips, addTrip } = useTripData();
 
   return (
     <>
       <Navbar />
 
-      {/* <MainContent> */}
-      <Routes>
-        // HOME
-        <Route path="/" element={<Home trips={trips} addTrip={addTrip} />} />
-        // USER ROUTES
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/profile"
-          element={
-            <RequireAuth>
-              <Profile />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/profile-edit"
-          element={
-            <RequireAuth>
-              <EditProfile />
-            </RequireAuth>
-          }
-        />
-        // TRIP ROUTES
-        <Route path="/trips" element={<AllTrips trips={trips} />} />
-        <Route
-          path="/my-trips"
-          element={
-            <RequireAuth>
-              <MyTrips />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/trips/:tripId"
-          element={
-            <RequireAuth>
-              <TripDetails />
-            </RequireAuth>
-          }
-        />
-      </Routes>
-      {/* </MainContent> */}
+      <Stack direction="row" spacing={2} justifyContent="space-between">
+        <Sidebar />
+        <MainContent>
+          <AppRoutes
+            allTrips={allTrips}
+            userTrips={userTrips}
+            addTrip={addTrip}
+          />
+        </MainContent>
+        <Rightbar />
+      </Stack>
 
       <BottomNavBar sx={{ display: { sm: "none" } }} />
     </>

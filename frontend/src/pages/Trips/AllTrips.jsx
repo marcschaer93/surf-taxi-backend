@@ -1,37 +1,56 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { Box, Typography, styled } from "@mui/material";
 
 import { TripDetails } from "./TripDetails";
+import { TripPreview } from "./TripPreview";
 
-export const AllTrips = ({ trips }) => {
-  // console.log("trips", trips);
+const TripList = styled(Box)(({ theme }) => ({
+  listStyle: "none",
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  margin: 0, // Remove default margin
+  padding: 0, // Remove default padding
+  gap: theme.spacing(2),
+}));
+
+const ListItem = styled(Box)(({ theme }) => ({
+  width: "95%",
+  margin: "auto",
+  padding: theme.spacing(1), // Adjust the spacing based on your preference
+}));
+
+export const AllTrips = ({ allTrips, userTrips }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = (tripId) => {
+    navigate(`/trips/${tripId}`);
+  };
+
   return (
     <>
-      {trips ? (
-        <div>
-          <h1>All Trips</h1>
-          <ul>
-            {trips.map((trip) => (
-              <Box component="li" key={trip.id}>
-                {/* <TripDetails tripDetails={trip} /> */}
-                //{" "}
-                <Link to={`/trips/${trip.id}`}>
-                  // {`${trip.start_location} - ${trip.destination}`}
-                  //{" "}
-                </Link>
-              </Box>
-              // <li key={trip.id}>
-              //   {" "}
-              //   <Link to={`/trips/${trip.id}`}>
-              //     {`${trip.start_location} - ${trip.destination}`}
-              //   </Link>
-              // </li>
+      {allTrips ? (
+        <Box>
+          <Typography sx={{ textAlign: "center" }} variant="h5">
+            All Trips
+          </Typography>
+          <TripList component="ul">
+            {allTrips.map((trip) => (
+              <ListItem
+                component="li"
+                key={trip.id}
+                onClick={() => handleCardClick(trip.id)}
+              >
+                <TripPreview trip={trip} userTrips={userTrips} />
+              </ListItem>
             ))}
-          </ul>
-        </div>
+          </TripList>
+        </Box>
       ) : (
-        <div>No Trips</div>
+        <Box>No Trips</Box>
       )}
     </>
   );

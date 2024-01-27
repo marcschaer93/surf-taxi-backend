@@ -28,11 +28,10 @@ VALUES
 
 INSERT INTO passengers (username, trip_id, reservation_status, reservation_timestamp)
 VALUES
-  ('testuser', 1, 'pending', '2024-01-01 12:00:00.000000' ),
-  ('testadmin', 1,  'pending', '2024-01-01 12:00:00.000000'),
-  ('testadmin', 3,  'confirmed', '2024-01-01 12:00:00.000000'),
-  ('testadmin', 2,  'rejected', '2024-01-01 12:00:00.000000'),
-  ('testuser', 2,  'pending', '2024-01-01 12:00:00.000000')
+  ('testuser', 3, 'pending', '2024-01-01 12:00:00.000000' ),
+  ('testadmin', 1,  'rejected', '2024-01-01 12:00:00.000000'),
+  ('testadmin', 2,  'confirmed', '2024-01-01 12:00:00.000000')
+
 
 
 -- confirmed: The user's seat reservation has been confirmed.
