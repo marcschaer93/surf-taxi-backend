@@ -10,6 +10,7 @@ import { AllTrips } from "../pages/Trips/AllTrips";
 import { MyTrips } from "../pages/Trips/MyTrips";
 import { TripDetails } from "../pages/Trips/TripDetails";
 import { RequireAuth } from "../components/RequireAuth";
+import { NewTrip } from "../pages/Trips/NewTrip";
 
 export const AppRoutes = ({ allTrips, userTrips, addTrip }) => {
   return (
@@ -50,6 +51,14 @@ export const AppRoutes = ({ allTrips, userTrips, addTrip }) => {
         element={
           <RequireAuth>
             <MyTrips userTrips={userTrips} />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/new-trip"
+        element={
+          <RequireAuth>
+            <NewTrip addTrip={addTrip} />
           </RequireAuth>
         }
       />

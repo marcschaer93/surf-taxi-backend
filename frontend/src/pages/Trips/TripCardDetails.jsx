@@ -28,11 +28,12 @@ export const TripCardDetails = ({ data, reservation }) => {
     stops,
     id: tripId,
     owner,
+    passengers,
   } = data;
 
   const isTripOwner = owner === user.username;
   const status = reservation ? reservation.reservationStatus : "Join Trip";
-  const userTripInteractionStatus = isTripOwner ? "Owner" : status;
+  const userTripInteractionStatus = isTripOwner ? null : status;
 
   const handleFavorite = (e, id) => {
     console.log(`added trip with id: ${id} to favorites. NOT IMPLEMENTED`);
@@ -63,11 +64,23 @@ export const TripCardDetails = ({ data, reservation }) => {
           <Box component="span">Stops: {stops}</Box>
         </Typography>
 
+        {passengers && isTripOwner && (
+          <Typography color="text.secondary">
+            Passengers:{" "}
+            {passengers.map((p) => (
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography>{p.username}</Typography>
+                <Typography>{p.status}</Typography>
+              </Box>
+            ))}
+          </Typography>
+        )}
+
         {/* Add other trip details here */}
       </CardContent>
 
       <CardActions>
-        {handleJoinRequest && (
+        {!isTripOwner && (
           <Button
             size="small"
             variant="outlined"
@@ -79,6 +92,16 @@ export const TripCardDetails = ({ data, reservation }) => {
         <Button size="small" onClick={handleBack} variant="outlined">
           Go Back
         </Button>
+
+        {isTripOwner && (
+          <Button
+            sx={{ color: isTripOwner ? "red" : "green" }}
+            size="small"
+            variant="text"
+          >
+            owner
+          </Button>
+        )}
 
         {handleFavorite && (
           <FavoriteButton

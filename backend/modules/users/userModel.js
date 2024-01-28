@@ -133,7 +133,7 @@ class UserApi {
       `
       SELECT 
         trips.id,
-        trips.owner AS trip_owner,
+        trips.owner AS owner,
         trips.date,
         trips.start_location,
         trips.destination,

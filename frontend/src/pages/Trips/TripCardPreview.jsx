@@ -25,7 +25,7 @@ export const TripCardPreview = ({ data, onAction, reservation }) => {
     destination,
     date,
     stops,
-    tripOwner: owner,
+    owner,
     travelInfo,
     costs,
     passengers,
@@ -36,6 +36,7 @@ export const TripCardPreview = ({ data, onAction, reservation }) => {
   console.log("isTripOwner", isTripOwner);
   const defaultButtonStatus = isTripOwner ? "Owner" : "Request Trip";
   const userTripInteractionStatus = reservation?.reservationStatus || null;
+  const tripRole = isTripOwner ? "owner" : "passenger";
 
   const handleFavorite = (e, id) => {
     e.stopPropagation();
@@ -50,7 +51,6 @@ export const TripCardPreview = ({ data, onAction, reservation }) => {
 
   const handleCardClick = () => {
     console.log("tripID$$$$", tripId);
-    // navigate(`/trips/${tripId}`, { state: { trip } });
     navigate(`/trips/${tripId}`);
   };
 
@@ -80,8 +80,12 @@ export const TripCardPreview = ({ data, onAction, reservation }) => {
         )}
 
         {isTripOwner && (
-          <Button sx={{ color: "red" }} size="small" variant="text">
-            Owner
+          <Button
+            sx={{ color: isTripOwner ? "red" : "green" }}
+            size="small"
+            variant="text"
+          >
+            owner
           </Button>
         )}
 

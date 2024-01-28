@@ -10,11 +10,11 @@ export const useTripData = () => {
   const { showBoundary } = useErrorBoundary();
 
   const [allTrips, setAllTrips] = useState([]);
-  const [userTrips, setUserTrips] = useState([]);
+  // const [userTrips, setUserTrips] = useState([]);
 
   const [error, setError] = useState(null);
   const [allTripsLoading, setAllTripsLoading] = useState(true);
-  const [userTripsLoading, setUserTripsLoading] = useState(true);
+  // const [userTripsLoading, setUserTripsLoading] = useState(true);
 
   useEffect(() => {
     const getAllTripsData = async () => {
@@ -69,24 +69,24 @@ export const useTripData = () => {
   //   }
   // }, [user]);
 
-  useEffect(() => {
-    const getAllMyTrips = async () => {
-      try {
-        const userTripsData = await UserApi.getAllUserTrips(user.username);
-        setUserTrips(userTripsData);
-        setUserTripsLoading(false);
-      } catch (error) {
-        // Show error boundary
-        showBoundary(error);
-        console.error("Error fetching trips:", error);
-        setUserTrips([]);
-        setUserTripsLoading(false);
-      }
-    };
-    if (user) {
-      getAllMyTrips();
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   const getAllMyTrips = async () => {
+  //     try {
+  //       const userTripsData = await UserApi.getAllUserTrips(user.username);
+  //       setUserTrips(userTripsData);
+  //       setUserTripsLoading(false);
+  //     } catch (error) {
+  //       // Show error boundary
+  //       showBoundary(error);
+  //       console.error("Error fetching trips:", error);
+  //       setUserTrips([]);
+  //       setUserTripsLoading(false);
+  //     }
+  //   };
+  //   if (user) {
+  //     getAllMyTrips();
+  //   }
+  // }, [user]);
 
   const addTrip = async (tripData) => {
     // parse seats to number
@@ -103,5 +103,5 @@ export const useTripData = () => {
     }
   };
 
-  return { allTrips, userTrips, setAllTrips, addTrip };
+  return { allTrips, setAllTrips, addTrip };
 };

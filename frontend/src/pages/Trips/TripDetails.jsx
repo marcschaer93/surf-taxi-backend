@@ -84,9 +84,13 @@ export const TripDetails = () => {
 
     if (trip && trip.owner !== user.username) {
       getUserReservation();
-    } else if (trip) {
-      console.log("GET PASSENGERS");
+    } else {
+      setIsLoadingUserReservation(false);
+      return;
     }
+    // } else if (trip) {
+    //   console.log("GET PASSENGERS");
+    // }
     // getUserReservation();
   }, [tripId, user, trip]);
 
