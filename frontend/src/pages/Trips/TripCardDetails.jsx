@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import { useAuthContext } from "../../context/authProvider";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const FavoriteButton = styled(Button)(({ theme }) => ({
   color: theme.palette.error.main,
@@ -18,6 +18,7 @@ const FavoriteButton = styled(Button)(({ theme }) => ({
 
 export const TripCardDetails = ({ data, reservation }) => {
   console.log("RESERVATION", reservation);
+
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const {

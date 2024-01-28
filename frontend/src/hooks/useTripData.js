@@ -21,14 +21,18 @@ export const useTripData = () => {
       try {
         const tripsData = await TripApi.getAllTrips();
 
-        if (!user) {
-          setAllTrips(tripsData);
-        } else {
-          const filteredtripsData = tripsData.filter(
-            (trip) => trip.owner !== user.username
-          );
-          setAllTrips(filteredtripsData);
-        }
+        // exclude trips where user === trip owner
+        // $$$
+        // if (!user) {
+        //   setAllTrips(tripsData);
+        // } else {
+        //   const filteredtripsData = tripsData.filter(
+        //     (trip) => trip.owner !== user.username
+        //   );
+        //   setAllTrips(filteredtripsData);
+        // }
+
+        setAllTrips(tripsData);
 
         setAllTripsLoading(false);
       } catch (error) {

@@ -23,11 +23,12 @@ export const TripDetails = () => {
   // use the show the error in async function (ERROR BOUNDARY LIMITATIONS)
   const { showBoundary } = useErrorBoundary();
   const { user } = useAuthContext();
-  const location = useLocation();
 
-  //   const { trip } = location.state;
+  const location = useLocation();
+  //   const { myTripData } = location.state;
+  //   console.log("MyTripData", myTripData);
   const { tripId } = useParams();
-  console.log("tripId", tripId);
+  //   console.log("tripId", tripId);
 
   const [trip, setTrip] = useState(null);
   const [loadingTrips, setIsLoadingTrips] = useState(true);
@@ -35,6 +36,19 @@ export const TripDetails = () => {
   const [loadingUserReservation, setIsLoadingUserReservation] = useState(true);
 
   const FavoriteButton = styled(Button)(({ theme }) => ({}));
+
+  const myTripData = location.state?.myTripData;
+  if (myTripData) {
+    // const { myTripData } = location.state;
+
+    return (
+      <>
+        <Box>
+          <TripCardDetails data={myTripData} />
+        </Box>
+      </>
+    );
+  }
 
   useEffect(() => {
     const getTripDetails = async () => {

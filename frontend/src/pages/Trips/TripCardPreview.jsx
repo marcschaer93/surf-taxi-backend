@@ -16,7 +16,12 @@ const FavoriteButton = styled(Button)(({ theme }) => ({
   color: theme.palette.error.main,
 }));
 
-export const TripCardPreview = ({ data, onAction, reservation }) => {
+export const TripCardPreview = ({
+  data,
+  onAction,
+  reservation,
+  handleCardClick,
+}) => {
   console.log("DATA$$$", data);
   const navigate = useNavigate();
   const { user } = useAuthContext();
@@ -49,10 +54,10 @@ export const TripCardPreview = ({ data, onAction, reservation }) => {
     console.log("Request to join. NOT IMPLEMENTED");
   };
 
-  const handleCardClick = () => {
-    console.log("tripID$$$$", tripId);
-    navigate(`/trips/${tripId}`);
-  };
+  // const handleCardClick = () => {
+  //   console.log("tripID$$$$", tripId);
+  //   navigate(`/trips/${tripId}`);
+  // };
 
   return (
     <Card variant="outlined" onClick={() => handleCardClick()}>

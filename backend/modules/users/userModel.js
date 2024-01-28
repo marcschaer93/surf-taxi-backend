@@ -131,22 +131,29 @@ class UserApi {
   static async getAllUserTrips(loggedInUser) {
     const allUserTripsResult = await db.query(
       `
-      SELECT 
-        trips.id,
-        trips.owner AS owner,
-        trips.date,
-        trips.start_location,
-        trips.destination,
-        trips.stops,
-        trips.travel_info,
-        trips.seats,
-        trips.costs,
-        passengers.username AS passenger_username,
-        passengers.reservation_status
-      FROM trips
-      LEFT JOIN passengers ON trips.id = passengers.trip_id
-      WHERE trips.owner = $1 OR passengers.username = $1
-      `,
+      SELECT
+        T.id,
+        T.date,
+        T.owner,
+        T.start_location,
+        T.destination,
+        T.stops,
+        T.travel_info,
+        T.seats,
+        T.costs,
+        json_agg(jsonb_build_object('username', P.username, 'status', P.reservation_status) ORDER BY P.username) AS passengers
+      FROM
+        trips AS T
+      LEFT JOIN
+        passengers AS P ON T.id = P.trip_id
+      WHERE
+        T.owner = $1 OR P.username = $1
+      GROUP BY
+        T.id, T.date, T.owner, T.start_location, T.destination, T.stops, T.travel_info, T.seats, T.costs;
+    
+  
+    `,
+
       [loggedInUser]
     );
 
@@ -156,6 +163,35 @@ class UserApi {
 
     return allUserTrips;
   }
+  // static async getAllUserTrips(loggedInUser) {
+  //   const allUserTripsResult = await db.query(
+  //     `
+  //     SELECT
+  //       trips.id,
+  //       trips.owner AS owner,
+  //       trips.date,
+  //       trips.start_location,
+  //       trips.destination,
+  //       trips.stops,
+  //       trips.travel_info,
+  //       trips.seats,
+  //       trips.costs,
+  //       passengers.username AS passenger_username,
+  //       passengers.reservation_status
+  //     FROM trips
+  //     LEFT JOIN passengers ON trips.id = passengers.trip_id
+  //     WHERE trips.owner = $1 OR passengers.username = $1
+  //     `,
+
+  //     [loggedInUser]
+  //   );
+
+  //   const allUserTrips = allUserTripsResult.rows.map((row) =>
+  //     jsReady.convertKeysToCamelCase(row)
+  //   );
+
+  //   return allUserTrips;
+  // }
 
   static async getOneUserReservation(username, tripId) {
     const oneUserReservationResult = await db.query(

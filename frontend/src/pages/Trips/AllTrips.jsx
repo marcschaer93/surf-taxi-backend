@@ -28,6 +28,11 @@ export const AllTrips = ({ allTrips }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
 
+  const handleCardClick = (tripId) => {
+    // console.log("tripID$$$$", tripId);
+    navigate(`/trips/${tripId}`);
+  };
+
   return (
     <>
       {allTrips ? (
@@ -36,7 +41,11 @@ export const AllTrips = ({ allTrips }) => {
             All Trips
           </Typography>
           {allTrips.map((trip) => (
-            <TripCardPreview key={trip.id} data={trip} />
+            <TripCardPreview
+              key={trip.id}
+              data={trip}
+              handleCardClick={() => handleCardClick(trip.id)}
+            />
           ))}
         </Box>
       ) : (
