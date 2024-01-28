@@ -4,8 +4,9 @@ const asyncHandler = require("express-async-handler");
 const TripApi = require("./tripModel");
 const { BadRequestError, ExpressError } = require("../../helpers/expressError");
 
-// Display list of all Trips.
+// Display list of all Trips. (exclude OwnTrips)
 exports.getAllTrips = asyncHandler(async (req, res, next) => {
+  const loggedInUser = req.username;
   const allTrips = await TripApi.getAllTrips();
 
   res.status(200).json({ success: true, data: allTrips });

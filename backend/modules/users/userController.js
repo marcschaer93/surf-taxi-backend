@@ -44,15 +44,27 @@ exports.getAllUserTrips = asyncHandler(async (req, res, next) => {
   const loggedInUser = req.username;
   const allUserTrips = await UserApi.getAllUserTrips(loggedInUser);
 
-  const myTripsAsOwner = allUserTrips.filter(
-    (trip) => trip.tripOwner === loggedInUser
-  );
+  // const myTripsAsOwner = allUserTrips.filter(
+  //   (trip) => trip.tripOwner === loggedInUser
+  // );
 
-  const myTripsAsPassenger = allUserTrips.filter(
-    (trip) => trip.passengerUsername === loggedInUser
-  );
+  // const myTripsAsPassenger = allUserTrips.filter(
+  //   (trip) => trip.passengerUsername === loggedInUser
+  // );
 
   res
     .status(200)
-    .json({ success: true, data: { myTripsAsOwner, myTripsAsPassenger } });
+    // .json({ success: true, data: { myTripsAsOwner, myTripsAsPassenger } });
+    .json({ success: true, data: allUserTrips });
+});
+
+// Display one User reservation for a trip
+exports.getOneUserReservation = asyncHandler(async (req, res, next) => {
+  // const loggedInUser = req.username;
+  const username = req.params.username;
+  const tripId = req.params.tripId;
+
+  const userReservation = await UserApi.getOneUserReservation(username, tripId);
+
+  res.status(200).json({ success: true, data: userReservation });
 });

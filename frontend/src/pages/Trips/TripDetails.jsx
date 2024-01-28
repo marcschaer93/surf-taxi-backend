@@ -16,62 +16,85 @@ import * as TripApi from "../../api/services/TripApi";
 import { ErrorBoundary, useErrorBoundary } from "react-error-boundary";
 import { TripCardDetails } from "./TripCardDetails";
 import * as PassengerApi from "../../api/services/PassengerApi";
+import * as UserApi from "../../api/services/UserApi";
+import { useAuthContext } from "../../context/authProvider";
 
 export const TripDetails = () => {
   // use the show the error in async function (ERROR BOUNDARY LIMITATIONS)
   const { showBoundary } = useErrorBoundary();
+  const { user } = useAuthContext();
+  const location = useLocation();
 
+  //   const { trip } = location.state;
   const { tripId } = useParams();
+  console.log("tripId", tripId);
+
   const [trip, setTrip] = useState(null);
-  const [loading, setIsLoading] = useState(true);
-  const [tripStatus, setTripStatus] = useState("");
+  const [loadingTrips, setIsLoadingTrips] = useState(true);
+  const [userReservation, setUserReservation] = useState(null);
+  const [loadingUserReservation, setIsLoadingUserReservation] = useState(true);
+
   const FavoriteButton = styled(Button)(({ theme }) => ({}));
 
-  const handleFavorite = (e) => {
-    console.log("added to favorites. NOT IMPLEMENTED");
-  };
-
-  const handleJoinRequest = async (tripId) => {
-    try {
-      console.log("Request to join. NOT IMPLEMENTED");
-      const newJoinRequest = await PassengerApi.requestToJoin(tripId);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    const getData = async () => {
+    const getTripDetails = async () => {
       try {
         const tripDetails = await TripApi.getOneTrip(tripId);
-        console.log("tripDetails", tripDetails);
         if (!tripDetails) {
           toast.error("Trip not found. Please check the provided ID.");
           // redirect
         }
-
+        console.log("tripDetails", tripDetails);
         setTrip(tripDetails);
-        setIsLoading(false);
+        setIsLoadingTrips(false);
       } catch (error) {
-        setIsLoading(false);
+        setIsLoadingTrips(false);
         showBoundary(error);
         console.error("Error fetching trip:", error);
         // Handle error, e.g., redirect to an error page
       }
     };
 
-    getData(); // Fetch the trip data when the component mounts
+    getTripDetails();
   }, [tripId]);
+
+  useEffect(() => {
+    const getUserReservation = async () => {
+      try {
+        if (user) {
+          const userReservation = await UserApi.getOneUserReservation(
+            user.username,
+            tripId
+          );
+          //   console.log("userReservation", userReservation);
+          setUserReservation(userReservation);
+          setIsLoadingUserReservation(false);
+        }
+      } catch (error) {
+        setIsLoadingUserReservation(false);
+        showBoundary(error);
+        console.error("Error fetching reservation:", error);
+      }
+    };
+
+    if (!trip) {
+      // Trip is still loading, wait for it to finish loading
+      return;
+    }
+
+    if (trip && trip.owner !== user.username) {
+      getUserReservation();
+    } else if (trip) {
+      console.log("GET PASSENGERS");
+    }
+    // getUserReservation();
+  }, [tripId, user, trip]);
 
   return (
     <>
-      {!loading ? (
+      {!loadingTrips && !loadingUserReservation ? (
         <Box>
-          <TripCardDetails
-            trip={trip}
-            handleFavorite={handleFavorite}
-            handleJoinRequest={handleJoinRequest}
-          />
+          <TripCardDetails data={trip} reservation={userReservation} />
         </Box>
       ) : (
         <Box>Loading...</Box>

@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Box, Typography, styled } from "@mui/material";
 
 import { TripDetails } from "./TripDetails";
-import { TripPreview } from "./TripPreview";
+import { TripCardPreview } from "./TripCardPreview";
+import { useAuthContext } from "../../context/authProvider";
 
 const TripList = styled(Box)(({ theme }) => ({
   listStyle: "none",
@@ -23,12 +24,9 @@ const ListItem = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1), // Adjust the spacing based on your preference
 }));
 
-export const AllTrips = ({ allTrips, userTrips }) => {
+export const AllTrips = ({ allTrips }) => {
   const navigate = useNavigate();
-
-  const handleCardClick = (tripId) => {
-    navigate(`/trips/${tripId}`);
-  };
+  const { user } = useAuthContext();
 
   return (
     <>
@@ -37,17 +35,9 @@ export const AllTrips = ({ allTrips, userTrips }) => {
           <Typography sx={{ textAlign: "center" }} variant="h5">
             All Trips
           </Typography>
-          <TripList component="ul">
-            {allTrips.map((trip) => (
-              <ListItem
-                component="li"
-                key={trip.id}
-                onClick={() => handleCardClick(trip.id)}
-              >
-                <TripPreview trip={trip} userTrips={userTrips} />
-              </ListItem>
-            ))}
-          </TripList>
+          {allTrips.map((trip) => (
+            <TripCardPreview key={trip.id} data={trip} />
+          ))}
         </Box>
       ) : (
         <Box>No Trips</Box>

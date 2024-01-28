@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Card,
@@ -8,30 +9,53 @@ import {
   styled,
 } from "@mui/material";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../context/authProvider";
 
 const FavoriteButton = styled(Button)(({ theme }) => ({
   color: theme.palette.error.main,
 }));
 
-export const TripCardPreview = ({
-  trip,
-  handleFavorite,
-  handleJoinRequest,
-}) => {
+export const TripCardPreview = ({ data, onAction, reservation }) => {
+  console.log("DATA$$$", data);
+  const navigate = useNavigate();
+  const { user } = useAuthContext();
   const {
     startLocation,
     destination,
-    data,
+    date,
     stops,
-    owner,
+    tripOwner: owner,
     travelInfo,
     costs,
     passengers,
-    // Add other relevant properties from your trip data
-  } = trip;
+    id: tripId,
+  } = data;
+
+  const isTripOwner = owner === user.username;
+  console.log("isTripOwner", isTripOwner);
+  const defaultButtonStatus = isTripOwner ? "Owner" : "Request Trip";
+  const userTripInteractionStatus = reservation?.reservationStatus || null;
+
+  const handleFavorite = (e, id) => {
+    e.stopPropagation();
+    console.log(`added trip with id: ${id} to favorites. NOT IMPLEMENTED`);
+  };
+
+  const handleJoinRequest = (e, tripId) => {
+    console.log("tripId", tripId);
+    e.stopPropagation();
+    console.log("Request to join. NOT IMPLEMENTED");
+  };
+
+  const handleCardClick = () => {
+    console.log("tripID$$$$", tripId);
+    // navigate(`/trips/${tripId}`, { state: { trip } });
+    navigate(`/trips/${tripId}`);
+  };
 
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" onClick={() => handleCardClick()}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
           {startLocation} - {destination}
@@ -42,17 +66,34 @@ export const TripCardPreview = ({
         </Typography>
 
         {/* Add other trip details here */}
+      </CardContent>
 
-        <CardActions>
+      <CardActions>
+        <Button size="small" variant="outlined">
+          More...
+        </Button>
+
+        {!isTripOwner && userTripInteractionStatus && (
           <Button size="small" variant="outlined">
-            More...
+            {userTripInteractionStatus}
           </Button>
+        )}
 
-          <FavoriteButton size="small" onClick={handleFavorite}>
+        {isTripOwner && (
+          <Button sx={{ color: "red" }} size="small" variant="text">
+            Owner
+          </Button>
+        )}
+
+        {handleFavorite && (
+          <FavoriteButton
+            size="small"
+            onClick={(e) => handleFavorite(e, data.id)}
+          >
             <FavoriteTwoToneIcon />
           </FavoriteButton>
-        </CardActions>
-      </CardContent>
+        )}
+      </CardActions>
     </Card>
   );
 };

@@ -132,7 +132,7 @@ class UserApi {
     const allUserTripsResult = await db.query(
       `
       SELECT 
-        trips.id AS trip_id,
+        trips.id,
         trips.owner AS trip_owner,
         trips.date,
         trips.start_location,
@@ -155,6 +155,30 @@ class UserApi {
     );
 
     return allUserTrips;
+  }
+
+  static async getOneUserReservation(username, tripId) {
+    const oneUserReservationResult = await db.query(
+      `
+      SELECT *
+      FROM passengers
+      WHERE passengers.username = $1 
+      AND passengers.trip_id = $2
+      `,
+      [username, tripId]
+    );
+
+    const userReservation = jsReady.convertKeysToCamelCase(
+      oneUserReservationResult.rows[0]
+    );
+
+    if (!userReservation) {
+      throw new NotFoundError(
+        `No reservation found with username: ${username} and trip id: ${tripId}`
+      );
+    }
+
+    return userReservation;
   }
 }
 

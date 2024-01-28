@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Card,
@@ -8,27 +9,48 @@ import {
   styled,
 } from "@mui/material";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
+import { useAuthContext } from "../../context/authProvider";
+import { useNavigate } from "react-router-dom";
 
 const FavoriteButton = styled(Button)(({ theme }) => ({
   color: theme.palette.error.main,
 }));
 
-export const TripCardDetails = ({
-  trip,
-  handleFavorite,
-  handleJoinRequest,
-}) => {
+export const TripCardDetails = ({ data, reservation }) => {
+  console.log("RESERVATION", reservation);
+  const { user } = useAuthContext();
+  const navigate = useNavigate();
   const {
     startLocation,
     destination,
-    data,
+    seats,
+    date,
     stops,
+    id: tripId,
     owner,
-    travelInfo,
-    costs,
-    passengers,
-    // Add other relevant properties from your trip data
-  } = trip;
+  } = data;
+
+  const isTripOwner = owner === user.username;
+  const status = reservation ? reservation.reservationStatus : "Join Trip";
+  const userTripInteractionStatus = isTripOwner ? "Owner" : status;
+
+  const handleFavorite = (e, id) => {
+    console.log(`added trip with id: ${id} to favorites. NOT IMPLEMENTED`);
+  };
+
+  const handleJoinRequest = async (tripId) => {
+    try {
+      console.log("Request to join. NOT IMPLEMENTED");
+      const newJoinRequest = await PassengerApi.requestToJoin(tripId);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleBack = () => {
+    // Navigate back to the previous page
+    navigate(-1);
+  };
 
   return (
     <Card variant="outlined">
@@ -42,17 +64,31 @@ export const TripCardDetails = ({
         </Typography>
 
         {/* Add other trip details here */}
+      </CardContent>
 
-        <CardActions>
-          <Button size="small" onClick={() => handleJoinRequest(trip.id)}>
-            Join Trip
+      <CardActions>
+        {handleJoinRequest && (
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => handleJoinRequest(data.id)}
+          >
+            {userTripInteractionStatus}
           </Button>
+        )}
+        <Button size="small" onClick={handleBack} variant="outlined">
+          Go Back
+        </Button>
 
-          <FavoriteButton size="small" onClick={handleFavorite}>
+        {handleFavorite && (
+          <FavoriteButton
+            size="small"
+            onClick={(e) => handleFavorite(e, data.id)}
+          >
             <FavoriteTwoToneIcon />
           </FavoriteButton>
-        </CardActions>
-      </CardContent>
+        )}
+      </CardActions>
     </Card>
   );
 };

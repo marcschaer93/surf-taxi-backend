@@ -5,7 +5,7 @@ import { useAuthContext } from "../../context/authProvider";
 import { Box } from "@mui/material";
 import { AllTrips } from "../Trips/AllTrips";
 
-export const Home = ({ trips, addTrip }) => {
+export const Home = ({ allTrips, userTrips, addTrip }) => {
   const { user } = useAuthContext();
 
   return (
@@ -17,7 +17,7 @@ export const Home = ({ trips, addTrip }) => {
           <h1>Welcome to Surf Taxi</h1>
         )}
       </div>
-      <AllTrips trips={trips} />
+      <AllTrips allTrips={allTrips} userTrips={userTrips} />
     </>
   );
 };

@@ -43,3 +43,10 @@ router.get(
   ensureCorrectUser,
   userController.getAllUserTrips
 );
+
+// GET request for one trip and reservation of user
+router.get(
+  "/:username/trips/:tripId",
+  authenticate,
+  userController.getOneUserReservation
+);

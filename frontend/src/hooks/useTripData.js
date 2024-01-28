@@ -21,7 +21,15 @@ export const useTripData = () => {
       try {
         const tripsData = await TripApi.getAllTrips();
 
-        setAllTrips(tripsData);
+        if (!user) {
+          setAllTrips(tripsData);
+        } else {
+          const filteredtripsData = tripsData.filter(
+            (trip) => trip.owner !== user.username
+          );
+          setAllTrips(filteredtripsData);
+        }
+
         setAllTripsLoading(false);
       } catch (error) {
         // Show error boundary
@@ -33,16 +41,40 @@ export const useTripData = () => {
       }
     };
 
-    const getUserTripsData = async () => {
+    getAllTripsData();
+  }, [user]);
+
+  // useEffect(() => {
+  //   const getUserTripsData = async () => {
+  //     try {
+  //       const { username } = user;
+  //       if (username) {
+  //         const userTripsData = await UserApi.getAllUserTrips(username);
+  //         console.log("UTD", userTripsData);
+  //         setUserTrips(userTripsData);
+  //         setUserTripsLoading(false);
+  //       } else {
+  //         throw new Error("User information not available.");
+  //       }
+  //     } catch (error) {
+  //       // Show error boundary
+  //       showBoundary(error);
+  //       console.error("Error fetching trips:", error);
+  //       setUserTrips([]);
+  //       setUserTripsLoading(false);
+  //     }
+  //   };
+  //   if (user) {
+  //     getUserTripsData();
+  //   }
+  // }, [user]);
+
+  useEffect(() => {
+    const getAllMyTrips = async () => {
       try {
-        const { username } = user;
-        if (username) {
-          const userTripsData = await UserApi.getAllUserTrips(username);
-          setUserTrips(userTripsData);
-          setUserTripsLoading(false);
-        } else {
-          throw new Error("User information not available.");
-        }
+        const userTripsData = await UserApi.getAllUserTrips(user.username);
+        setUserTrips(userTripsData);
+        setUserTripsLoading(false);
       } catch (error) {
         // Show error boundary
         showBoundary(error);
@@ -51,9 +83,10 @@ export const useTripData = () => {
         setUserTripsLoading(false);
       }
     };
-    getAllTripsData();
-    getUserTripsData();
-  }, []);
+    if (user) {
+      getAllMyTrips();
+    }
+  }, [user]);
 
   const addTrip = async (tripData) => {
     // parse seats to number

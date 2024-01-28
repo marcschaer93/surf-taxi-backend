@@ -29,3 +29,13 @@ export const getAllUserTrips = async (username) => {
     handleApiError(error);
   }
 };
+
+export const getOneUserReservation = async (username, tripId) => {
+  try {
+    const response = await ApiService.get(`/users/${username}/trips/${tripId}`);
+    console.log("userReservation", response.data.data);
+    return response.data.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
