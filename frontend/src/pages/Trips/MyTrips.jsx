@@ -41,6 +41,7 @@ export const MyTrips = () => {
 
   return (
     <>
+      {userTrips.length === 0 && <Box>No trips in Mytrips availabe...</Box>}
       {userTripsLoading && <Box>Loading...</Box>}
       {""}
       <Box>

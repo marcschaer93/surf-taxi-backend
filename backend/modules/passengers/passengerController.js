@@ -37,12 +37,10 @@ exports.cancelJoinRequest = asyncHandler(async (req, res, next) => {
 
   await PassengerApi.cancelJoinRequest(tripId, currentUser);
 
-  res
-    .status(204)
-    .json({
-      success: true,
-      data: { message: "Passenger join request cancelled successfully" },
-    });
+  res.status(204).json({
+    success: true,
+    data: { message: "Passenger join request cancelled successfully" },
+  });
 });
 
 /** RESPOND TO JOIN REQUEST
@@ -66,4 +64,11 @@ exports.respondToJoinRequest = asyncHandler(async (req, res, next) => {
     success: true,
     data: { tripJoinResponse, tripOwner: currentUser, passenger: passenger },
   });
+});
+
+exports.getTripPassengers = asyncHandler(async (req, res, next) => {
+  const tripId = parseInt(req.params.tripId);
+  const allTripPassengers = await PassengerApi.getTripPassengers(tripId);
+
+  res.status(200).json({ success: true, data: allTripPassengers });
 });

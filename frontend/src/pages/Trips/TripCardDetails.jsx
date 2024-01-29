@@ -13,15 +13,17 @@ import { useAuthContext } from "../../context/authProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as TripApi from "../../api/services/TripApi";
 import * as UserApi from "../../api/services/UserApi";
+import * as PassengerApi from "../../api/services/PassengerApi";
 import { toast } from "react-toastify";
+import { useTripData } from "../../hooks/useTripData";
 
 const FavoriteButton = styled(Button)(({ theme }) => ({
   color: theme.palette.error.main,
 }));
 
-export const TripCardDetails = ({ trip }) => {
-  console.log("trip", trip);
+export const TripCardDetails = ({ trip, handleJoinRequest }) => {
   const { user } = useAuthContext();
+  const { setAllTrips } = useTripData();
   const navigate = useNavigate();
 
   const {
@@ -50,20 +52,25 @@ export const TripCardDetails = ({ trip }) => {
     console.log(`added trip with id: ${tripId} to favorites. NOT IMPLEMENTED`);
   };
 
-  const handleJoinRequest = async (tripId) => {
-    try {
-      console.log("Request to join. NOT IMPLEMENTED");
-      const newJoinRequest = await PassengerApi.requestToJoin(tripId);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const handleJoinRequest = async (tripId) => {
+  //   try {
+  //     console.log("Request to join. NOT IMPLEMENTED");
+  //     const newJoinRequest = await PassengerApi.requestToJoin(tripId);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const handleRemoveTripAsOwner = async (e) => {
+  const handleDeleteTripAsOwner = async (e) => {
     e.stopPropagation();
     try {
       await UserApi.deleteMyTrip(tripId, user.username);
+      setAllTrips((prevTrips) => {
+        const updatedTrips = prevTrips.filter((trip) => trip.id !== tripId);
+        return updatedTrips;
+      });
       toast.success("Successfully deleted trip!");
+      navigate(-1);
     } catch (error) {
       console.error(error);
       toast.error(`Failed to remove trip`);
@@ -106,7 +113,7 @@ export const TripCardDetails = ({ trip }) => {
           <Button
             size="small"
             variant="outlined"
-            onClick={() => handleJoinRequest(tripId)}
+            onClick={() => handleJoinRequest()}
           >
             {userTripInteractionStatus}
           </Button>
@@ -127,7 +134,7 @@ export const TripCardDetails = ({ trip }) => {
 
         {isTripOwner && (
           <Button
-            onClick={(e) => handleRemoveTripAsOwner(e)}
+            onClick={(e) => handleDeleteTripAsOwner(e)}
             sx={{ color: isTripOwner ? "red" : "green" }}
             size="small"
             variant="text"

@@ -9,5 +9,6 @@ export const requestToJoin = async (tripId) => {
     return response.data.data;
   } catch (error) {
     handleApiError();
+    throw error;
   }
 };

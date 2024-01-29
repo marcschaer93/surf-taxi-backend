@@ -79,7 +79,7 @@ class TripApi {
 
     const tripDetails = jsReady.convertKeysToCamelCase(result.rows[0]);
     if (!tripDetails) {
-      throw new NotFoundError(`No tripDetails found with ID: ${id}`);
+      throw new NotFoundError(`No tripDetails found with ID: ${tripId}`);
     }
 
     return tripDetails;

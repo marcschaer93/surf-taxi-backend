@@ -16,6 +16,9 @@ module.exports = router;
 
 // PASSENGER ROUTES --> /api/passengers/trips/...
 
+/* GET request to get all passengers for trip */
+router.get("/:tripId", authenticate, passengerController.getTripPassengers);
+
 /* POST request to REQUEST to join a trip */
 router.post("/:tripId/join", authenticate, passengerController.requestToJoin);
 

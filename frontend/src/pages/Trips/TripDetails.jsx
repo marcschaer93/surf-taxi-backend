@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
@@ -23,9 +23,11 @@ export const TripDetails = () => {
   // use the show the error in async function (ERROR BOUNDARY LIMITATIONS)
   const { showBoundary } = useErrorBoundary();
   const location = useLocation();
+  const navigate = useNavigate();
   const { user } = useAuthContext();
   const { tripId } = useParams();
   const [trip, setTrip] = useState(null);
+  const [tripPassengers, setTripPassengers] = useState(null);
   const [loadingTrips, setIsLoadingTrips] = useState(true);
   const [userReservation, setUserReservation] = useState(null);
   const [loadingUserReservation, setIsLoadingUserReservation] = useState(true);
@@ -49,27 +51,37 @@ export const TripDetails = () => {
         const tripDetails = await TripApi.getOneTrip(tripId);
         if (!tripDetails) {
           toast.error("Trip not found. Please check the provided ID.");
+          navigate(-1);
           // redirect
         }
-        console.log("tripDetails", tripDetails);
         setTrip(tripDetails);
         setIsLoadingTrips(false);
       } catch (error) {
         setIsLoadingTrips(false);
-        showBoundary(error);
         console.error("Error fetching trip:", error);
-        // Handle error, e.g., redirect to an error page
       }
     };
 
     getTripDetails();
   }, [tripId]);
 
+  const handleJoinRequest = async (tripId) => {
+    try {
+      console.log("Request to join. NOT IMPLEMENTED");
+      const newJoinRequest = await PassengerApi.requestToJoin(tripId);
+      //   setTrip((prevTrip) => {
+      //     const updatedTrip = { ...prevTrip };
+      //   });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
-      {!loadingTrips ? (
+      {!loadingTrips && trip ? (
         <Box>
-          <TripCardDetails trip={trip} />
+          <TripCardDetails trip={trip} handleJoinRequest={handleJoinRequest} />
         </Box>
       ) : (
         <Box>Loading...</Box>
@@ -77,6 +89,18 @@ export const TripDetails = () => {
     </>
   );
 };
+
+useEffect(() => {
+  const getTripPassengersData = async () => {
+    try {
+      const tripPassengers = await PassengerApi.getTripPassengers(tripId);
+      setTripPassengers();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  getTripPassengersData();
+}, []);
 
 // $$$
 //

@@ -27,7 +27,7 @@ export const getOneTrip = async (tripId) => {
     return response.data.data;
   } catch (error) {
     handleApiError(error);
-    return null;
+    throw error;
   }
 };
 

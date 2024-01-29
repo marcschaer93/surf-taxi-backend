@@ -222,7 +222,7 @@ class UserApi {
       `DELETE
              FROM trips
              WHERE id = $1
-             AND username = $2
+             AND owner = $2
              RETURNING id`,
       [tripId, username]
     );
