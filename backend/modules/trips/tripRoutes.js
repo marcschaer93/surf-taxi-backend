@@ -22,7 +22,7 @@ router.post(
   tripController.createNewTrip
 );
 
-// POST request to delete Trip.
+// POST request to delete Trip as ADMIN.
 router.delete(
   "/:tripId",
   authenticate,

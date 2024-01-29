@@ -68,3 +68,15 @@ exports.getOneUserReservation = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: userReservation });
 });
+
+// Handle delete trip as trip owner
+exports.deleteMyTrip = asyncHandler(async (req, res, next) => {
+  const username = req.params.username;
+  const tripId = parseInt(req.params.tripId);
+
+  await UserApi.deleteMyTrip(tripId, username);
+
+  res
+    .status(204)
+    .json({ success: true, data: { message: "Trip deleted successfully" } });
+});

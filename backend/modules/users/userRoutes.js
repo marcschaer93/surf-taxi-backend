@@ -50,3 +50,11 @@ router.get(
   authenticate,
   userController.getOneUserReservation
 );
+
+// Delete request to delete Trip as trip owner (NOT IMPLEMENTED: Can't delete if already requests).
+router.delete(
+  "/:username/trips/:tripId",
+  authenticate,
+  ensureCorrectUser,
+  userController.deleteMyTrip
+);

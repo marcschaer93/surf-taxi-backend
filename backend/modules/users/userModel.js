@@ -141,7 +141,7 @@ class UserApi {
         T.travel_info,
         T.seats,
         T.costs,
-        json_agg(jsonb_build_object('username', P.username, 'status', P.reservation_status) ORDER BY P.username) AS passengers
+        json_agg(jsonb_build_object('username', P.username, 'reservationStatus', P.reservation_status, 'reservationTimestamp', P.reservation_timestamp ) ORDER BY P.username) AS passengers
       FROM
         trips AS T
       LEFT JOIN
@@ -215,6 +215,25 @@ class UserApi {
     }
 
     return userReservation;
+  }
+
+  static async deleteMyTrip(tripId, username) {
+    const result = await db.query(
+      `DELETE
+             FROM trips
+             WHERE id = $1
+             AND username = $2
+             RETURNING id`,
+      [tripId, username]
+    );
+    const removedTrip = jsReady.convertKeysToCamelCase(result.rows[0]);
+
+    if (!removedTrip)
+      throw new NotFoundError(
+        `Could not remove trip. No trip with id: ${tripId} found.`
+      );
+
+    return;
   }
 }
 

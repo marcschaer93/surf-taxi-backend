@@ -7,6 +7,7 @@ export const createNewTrip = async (tripData) => {
     return response.data.data;
   } catch (error) {
     handleApiError(error);
+    throw error;
   }
 };
 
@@ -36,5 +37,14 @@ export const updateOneTrip = async (tripId) => {
     return response.data.data;
   } catch (error) {
     handleApiError(error);
+  }
+};
+
+export const deleteOneTrip = async (tripId) => {
+  try {
+    const response = await ApiService.delete(`/trips/${tripId}`);
+  } catch (error) {
+    handleApiError(error);
+    throw error;
   }
 };

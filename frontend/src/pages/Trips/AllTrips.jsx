@@ -29,7 +29,6 @@ export const AllTrips = ({ allTrips }) => {
   const { user } = useAuthContext();
 
   const handleCardClick = (tripId) => {
-    // console.log("tripID$$$$", tripId);
     navigate(`/trips/${tripId}`);
   };
 
@@ -43,7 +42,7 @@ export const AllTrips = ({ allTrips }) => {
           {allTrips.map((trip) => (
             <TripCardPreview
               key={trip.id}
-              data={trip}
+              trip={trip}
               handleCardClick={() => handleCardClick(trip.id)}
             />
           ))}

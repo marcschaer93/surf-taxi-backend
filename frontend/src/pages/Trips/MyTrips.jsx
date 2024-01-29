@@ -36,14 +36,6 @@ export const MyTrips = () => {
   }, []);
 
   const handleCardClick = (trip) => {
-    // console.log("tripId$$$", trip);
-    // const myTripData = userTrips.filter((t) => t.id === tripId);
-    // console.log("myTRIP$", myTripData);
-    // console.log("MTD$$", myTripData);
-    // const location = useLocation();
-    // const { data } = location;
-    // console.log("tripID$$$$", tripId);
-    // navigate(`/trips/${data.tripId}`);
     navigate(`/trips/${trip.id}`, { state: { myTripData: trip } });
   };
 
@@ -55,8 +47,8 @@ export const MyTrips = () => {
         {userTrips.map((trip) => (
           <TripCardPreview
             key={trip.id}
-            data={trip}
-            reservation={{ reservationStatus: trip.reservationStatus }}
+            trip={trip}
+            // reservation={{ reservationStatus: trip.reservationStatus }}
             handleCardClick={() => handleCardClick(trip)}
           />
         ))}

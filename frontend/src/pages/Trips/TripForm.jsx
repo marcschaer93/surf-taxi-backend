@@ -7,10 +7,10 @@ export const TripForm = ({ addTrip }) => {
 
   const [formData, setFormData] = useState({
     date: "2023-12-31",
-    start_location: "Bern",
+    startLocation: "Bern",
     destination: "Santander",
     stops: "Hossegor",
-    travel_info: "surftrip",
+    travelInfo: "surftrip",
     costs: "split gas \u0026 tolls",
     seats: 2,
   });

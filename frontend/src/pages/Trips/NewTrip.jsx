@@ -1,20 +1,14 @@
+import { Typography, Box } from "@mui/material";
 import { useAuthContext } from "../../context/authProvider";
 import { TripForm } from "./TripForm";
 
 export const NewTrip = ({ addTrip }) => {
   const auth = useAuthContext();
 
-  if (!auth.user)
-    return (
-      <>
-        <h1>{`NewTrip --> Login required!`}</h1>
-      </>
-    );
-
   return (
-    <div>
-      <h1>New Trip</h1>
+    <Box>
+      <Typography>New Trip</Typography>
       <TripForm addTrip={addTrip} />
-    </div>
+    </Box>
   );
 };

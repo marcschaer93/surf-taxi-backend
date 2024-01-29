@@ -39,3 +39,14 @@ export const getOneUserReservation = async (username, tripId) => {
     handleApiError(error);
   }
 };
+
+export const deleteMyTrip = async (tripId, username) => {
+  try {
+    const response = await ApiService.delete(
+      `/users/${username}/trips/${tripId}`
+    );
+  } catch (error) {
+    handleApiError(error);
+    throw error;
+  }
+};

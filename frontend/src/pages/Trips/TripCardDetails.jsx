@@ -11,16 +11,19 @@ import {
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import { useAuthContext } from "../../context/authProvider";
 import { useNavigate, useLocation } from "react-router-dom";
+import * as TripApi from "../../api/services/TripApi";
+import * as UserApi from "../../api/services/UserApi";
+import { toast } from "react-toastify";
 
 const FavoriteButton = styled(Button)(({ theme }) => ({
   color: theme.palette.error.main,
 }));
 
-export const TripCardDetails = ({ data, reservation }) => {
-  console.log("RESERVATION", reservation);
-
+export const TripCardDetails = ({ trip }) => {
+  console.log("trip", trip);
   const { user } = useAuthContext();
   const navigate = useNavigate();
+
   const {
     startLocation,
     destination,
@@ -30,14 +33,21 @@ export const TripCardDetails = ({ data, reservation }) => {
     id: tripId,
     owner,
     passengers,
-  } = data;
+  } = trip;
+
+  const userAsPassenger = trip.passengers.find(
+    (p) => p.username === user.username
+  );
 
   const isTripOwner = owner === user.username;
-  const status = reservation ? reservation.reservationStatus : "Join Trip";
+  // const status = reservation ? reservation.reservationStatus : "Join Trip";
+  const status = userAsPassenger
+    ? userAsPassenger.reservationStatus
+    : "Join Trip";
   const userTripInteractionStatus = isTripOwner ? null : status;
 
-  const handleFavorite = (e, id) => {
-    console.log(`added trip with id: ${id} to favorites. NOT IMPLEMENTED`);
+  const handleFavorite = (e, tripId) => {
+    console.log(`added trip with id: ${tripId} to favorites. NOT IMPLEMENTED`);
   };
 
   const handleJoinRequest = async (tripId) => {
@@ -46,6 +56,17 @@ export const TripCardDetails = ({ data, reservation }) => {
       const newJoinRequest = await PassengerApi.requestToJoin(tripId);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleRemoveTripAsOwner = async (e) => {
+    e.stopPropagation();
+    try {
+      await UserApi.deleteMyTrip(tripId, user.username);
+      toast.success("Successfully deleted trip!");
+    } catch (error) {
+      console.error(error);
+      toast.error(`Failed to remove trip`);
     }
   };
 
@@ -85,7 +106,7 @@ export const TripCardDetails = ({ data, reservation }) => {
           <Button
             size="small"
             variant="outlined"
-            onClick={() => handleJoinRequest(data.id)}
+            onClick={() => handleJoinRequest(tripId)}
           >
             {userTripInteractionStatus}
           </Button>
@@ -104,10 +125,21 @@ export const TripCardDetails = ({ data, reservation }) => {
           </Button>
         )}
 
+        {isTripOwner && (
+          <Button
+            onClick={(e) => handleRemoveTripAsOwner(e)}
+            sx={{ color: isTripOwner ? "red" : "green" }}
+            size="small"
+            variant="text"
+          >
+            ❌
+          </Button>
+        )}
+
         {handleFavorite && (
           <FavoriteButton
             size="small"
-            onClick={(e) => handleFavorite(e, data.id)}
+            onClick={(e) => handleFavorite(e, tripId)}
           >
             <FavoriteTwoToneIcon />
           </FavoriteButton>

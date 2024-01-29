@@ -16,15 +16,10 @@ const FavoriteButton = styled(Button)(({ theme }) => ({
   color: theme.palette.error.main,
 }));
 
-export const TripCardPreview = ({
-  data,
-  onAction,
-  reservation,
-  handleCardClick,
-}) => {
-  console.log("DATA$$$", data);
+export const TripCardPreview = ({ trip, reservation, handleCardClick }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
+
   const {
     startLocation,
     destination,
@@ -35,17 +30,15 @@ export const TripCardPreview = ({
     costs,
     passengers,
     id: tripId,
-  } = data;
+  } = trip;
 
-  const isTripOwner = owner === user.username;
-  console.log("isTripOwner", isTripOwner);
+  const isTripOwner = user && owner === user.username;
   const defaultButtonStatus = isTripOwner ? "Owner" : "Request Trip";
   const userTripInteractionStatus = reservation?.reservationStatus || null;
-  const tripRole = isTripOwner ? "owner" : "passenger";
 
-  const handleFavorite = (e, id) => {
+  const handleFavorite = (e, tripId) => {
     e.stopPropagation();
-    console.log(`added trip with id: ${id} to favorites. NOT IMPLEMENTED`);
+    console.log(`added trip with id: ${tripId} to favorites. NOT IMPLEMENTED`);
   };
 
   const handleJoinRequest = (e, tripId) => {
@@ -53,11 +46,6 @@ export const TripCardPreview = ({
     e.stopPropagation();
     console.log("Request to join. NOT IMPLEMENTED");
   };
-
-  // const handleCardClick = () => {
-  //   console.log("tripID$$$$", tripId);
-  //   navigate(`/trips/${tripId}`);
-  // };
 
   return (
     <Card variant="outlined" onClick={() => handleCardClick()}>
@@ -97,7 +85,7 @@ export const TripCardPreview = ({
         {handleFavorite && (
           <FavoriteButton
             size="small"
-            onClick={(e) => handleFavorite(e, data.id)}
+            onClick={(e) => handleFavorite(e, tripId)}
           >
             <FavoriteTwoToneIcon />
           </FavoriteButton>

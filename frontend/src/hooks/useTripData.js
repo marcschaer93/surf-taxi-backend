@@ -49,31 +49,6 @@ export const useTripData = () => {
   }, [user]);
 
   // useEffect(() => {
-  //   const getUserTripsData = async () => {
-  //     try {
-  //       const { username } = user;
-  //       if (username) {
-  //         const userTripsData = await UserApi.getAllUserTrips(username);
-  //         console.log("UTD", userTripsData);
-  //         setUserTrips(userTripsData);
-  //         setUserTripsLoading(false);
-  //       } else {
-  //         throw new Error("User information not available.");
-  //       }
-  //     } catch (error) {
-  //       // Show error boundary
-  //       showBoundary(error);
-  //       console.error("Error fetching trips:", error);
-  //       setUserTrips([]);
-  //       setUserTripsLoading(false);
-  //     }
-  //   };
-  //   if (user) {
-  //     getUserTripsData();
-  //   }
-  // }, [user]);
-
-  // useEffect(() => {
   //   const getAllMyTrips = async () => {
   //     try {
   //       const userTripsData = await UserApi.getAllUserTrips(user.username);
@@ -93,17 +68,20 @@ export const useTripData = () => {
   // }, [user]);
 
   const addTrip = async (tripData) => {
-    // parse seats to number
-    const parsedSeats = parseInt(tripData.seats, 10);
-    const newTrip = await Api.createTrip({ ...tripData, seats: parsedSeats });
+    try {
+      // parse seats to number
+      const parsedSeats = parseInt(tripData.seats, 10);
+      const newTrip = await TripApi.createNewTrip({
+        ...tripData,
+        seats: parsedSeats,
+      });
 
-    if (newTrip) {
-      // Adding the new trip to the current list of trips if successful
       setAllTrips((prevTrips) => [...prevTrips, newTrip]);
       console.log("Trip created successfully:", newTrip);
-    } else {
-      // Using this block later to notify the user of an unsuccessful trip creation
-      console.log("Error creating new Trip");
+      setAllTripsLoading(false);
+    } catch (error) {
+      setAllTripsLoading(false);
+      console.error(error);
     }
   };
 
