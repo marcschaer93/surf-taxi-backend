@@ -175,6 +175,23 @@ class PassengerApi {
 
     return tripJoinResponse;
   }
+
+  static async getTripPassengers(tripId) {
+    const tripPassengersResult = await db.query(
+      `
+        SELECT * 
+        FROM passengers
+        WHERE trip_id = $1
+      `,
+      [tripId]
+    );
+
+    const tripPassengers = tripPassengersResult.rows.map((row) =>
+      jsReady.convertKeysToCamelCase(row)
+    );
+
+    return tripPassengers; // even if empty
+  }
 }
 
 module.exports = PassengerApi;

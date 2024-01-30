@@ -20,7 +20,7 @@ exports.requestToJoin = asyncHandler(async (req, res, next) => {
     success: true,
     data: {
       newJoinRequest,
-      passenger: currentUser,
+      // passenger: currentUser,
     },
   });
 });
@@ -68,7 +68,7 @@ exports.respondToJoinRequest = asyncHandler(async (req, res, next) => {
 
 exports.getTripPassengers = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.tripId);
-  const allTripPassengers = await PassengerApi.getTripPassengers(tripId);
+  const tripPassengers = await PassengerApi.getTripPassengers(tripId);
 
-  res.status(200).json({ success: true, data: allTripPassengers });
+  res.status(200).json({ success: true, data: tripPassengers });
 });
