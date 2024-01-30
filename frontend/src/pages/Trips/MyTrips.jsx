@@ -7,27 +7,27 @@ import { useErrorBoundary } from "react-error-boundary";
 import { useNavigate } from "react-router-dom";
 
 import * as UserApi from "../../api/services/UserApi";
+import { useTripData } from "../../hooks/useTripData";
 
 export const MyTrips = () => {
   const { user } = useAuthContext();
   const { showBoundary } = useErrorBoundary();
   const navigate = useNavigate();
-
-  const [userTrips, setUserTrips] = useState([]);
-  const [userTripsLoading, setUserTripsLoading] = useState(true);
+  const { myTrips, setMyTrips } = useTripData();
+  const [myTripsLoading, setMyTripsLoading] = useState(true);
 
   useEffect(() => {
     const getAllMyTrips = async () => {
       try {
-        const allUserTrips = await UserApi.getAllUserTrips(user.username);
-        setUserTrips(allUserTrips);
-        setUserTripsLoading(false);
+        const myTripsData = await UserApi.getAllUserTrips(user.username);
+        setMyTrips(myTripsData);
+        setMyTripsLoading(false);
       } catch (error) {
         // Show error boundary
         showBoundary(error);
         console.error("Error fetching trips:", error);
-        setUserTrips([]);
-        setUserTripsLoading(false);
+        setMyTrips([]);
+        setMyTripsLoading(false);
       }
     };
     if (user) {
@@ -35,23 +35,14 @@ export const MyTrips = () => {
     }
   }, []);
 
-  const handleCardClick = (trip) => {
-    navigate(`/trips/${trip.id}`, { state: { myTripData: trip } });
-  };
-
   return (
     <>
-      {userTrips.length === 0 && <Box>No trips in Mytrips availabe...</Box>}
-      {userTripsLoading && <Box>Loading...</Box>}
+      {myTrips.length === 0 && <Box>No trips in Mytrips availabe...</Box>}
+      {myTripsLoading && <Box>Loading...</Box>}
       {""}
       <Box>
-        {userTrips.map((trip) => (
-          <TripCardPreview
-            key={trip.id}
-            trip={trip}
-            // reservation={{ reservationStatus: trip.reservationStatus }}
-            handleCardClick={() => handleCardClick(trip)}
-          />
+        {myTrips.map((trip) => (
+          <TripCardPreview key={trip.id} trip={trip} />
         ))}
       </Box>
     </>

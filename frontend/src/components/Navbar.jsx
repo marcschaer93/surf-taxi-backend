@@ -144,7 +144,6 @@ export const Navbar = () => {
                     }}
                     alt="Marc Schär"
                     src="../src/assets/images/avatar.jpg"
-                    s
                     // src={user.profileImgUrl}
                   />
                 </IconButton>

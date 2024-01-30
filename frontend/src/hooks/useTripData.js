@@ -10,17 +10,15 @@ export const useTripData = () => {
   const { showBoundary } = useErrorBoundary();
 
   const [allTrips, setAllTrips] = useState([]);
-  // const [userTrips, setUserTrips] = useState([]);
+  const [myTrips, setMyTrips] = useState([]);
 
   const [error, setError] = useState(null);
   const [allTripsLoading, setAllTripsLoading] = useState(true);
-  // const [userTripsLoading, setUserTripsLoading] = useState(true);
 
   useEffect(() => {
     const getAllTripsData = async () => {
       try {
         const tripsData = await TripApi.getAllTrips();
-
         // exclude trips where user === trip owner
         // $$$
         // if (!user) {
@@ -31,20 +29,16 @@ export const useTripData = () => {
         //   );
         //   setAllTrips(filteredtripsData);
         // }
-
         setAllTrips(tripsData);
-
         setAllTripsLoading(false);
       } catch (error) {
         // Show error boundary
         showBoundary(error);
-
         console.error("Error fetching trips:", error);
         setAllTrips([]);
         setAllTripsLoading(false);
       }
     };
-
     getAllTripsData();
   }, [user]);
 
@@ -85,5 +79,5 @@ export const useTripData = () => {
     }
   };
 
-  return { allTrips, setAllTrips, addTrip };
+  return { allTrips, setAllTrips, addTrip, myTrips, setMyTrips };
 };

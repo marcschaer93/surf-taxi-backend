@@ -28,10 +28,6 @@ export const AllTrips = ({ allTrips }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
 
-  const handleCardClick = (tripId) => {
-    navigate(`/trips/${tripId}`);
-  };
-
   return (
     <>
       {allTrips ? (
@@ -40,11 +36,7 @@ export const AllTrips = ({ allTrips }) => {
             All Trips
           </Typography>
           {allTrips.map((trip) => (
-            <TripCardPreview
-              key={trip.id}
-              trip={trip}
-              handleCardClick={() => handleCardClick(trip.id)}
-            />
+            <TripCardPreview key={trip.id} trip={trip} />
           ))}
         </Box>
       ) : (

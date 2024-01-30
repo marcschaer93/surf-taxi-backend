@@ -16,25 +16,13 @@ const FavoriteButton = styled(Button)(({ theme }) => ({
   color: theme.palette.error.main,
 }));
 
-export const TripCardPreview = ({ trip, reservation, handleCardClick }) => {
+export const TripCardPreview = ({ trip }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
-
-  const {
-    startLocation,
-    destination,
-    date,
-    stops,
-    owner,
-    travelInfo,
-    costs,
-    passengers,
-    id: tripId,
-  } = trip;
-
-  const isTripOwner = user && owner === user.username;
+  const tripId = trip.id;
+  const isTripOwner = user && trip.owner === user.username;
   const defaultButtonStatus = isTripOwner ? "Owner" : "Request Trip";
-  const userTripInteractionStatus = reservation?.reservationStatus || null;
+  //   const userTripInteractionStatus = reservation?.reservationStatus || null;
 
   const handleFavorite = (e, tripId) => {
     e.stopPropagation();
@@ -42,20 +30,23 @@ export const TripCardPreview = ({ trip, reservation, handleCardClick }) => {
   };
 
   const handleJoinRequest = (e, tripId) => {
-    console.log("tripId", tripId);
     e.stopPropagation();
     console.log("Request to join. NOT IMPLEMENTED");
   };
 
+  const handleCardClick = () => {
+    navigate(`/trips/${tripId}`);
+  };
+
   return (
-    <Card variant="outlined" onClick={() => handleCardClick()}>
+    <Card variant="outlined" onClick={handleCardClick}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          {startLocation} - {destination}
+          {trip.startLocation} - {trip.destination}
         </Typography>
 
         <Typography color="text.secondary">
-          <Box component="span">Stops: {stops}</Box>
+          <Box component="span">Stops: {trip.stops}</Box>
         </Typography>
 
         {/* Add other trip details here */}
@@ -66,11 +57,11 @@ export const TripCardPreview = ({ trip, reservation, handleCardClick }) => {
           More...
         </Button>
 
-        {!isTripOwner && userTripInteractionStatus && (
+        {/* {!isTripOwner && userTripInteractionStatus && (
           <Button size="small" variant="outlined">
             {userTripInteractionStatus}
           </Button>
-        )}
+        )} */}
 
         {isTripOwner && (
           <Button
@@ -83,10 +74,7 @@ export const TripCardPreview = ({ trip, reservation, handleCardClick }) => {
         )}
 
         {handleFavorite && (
-          <FavoriteButton
-            size="small"
-            onClick={(e) => handleFavorite(e, tripId)}
-          >
+          <FavoriteButton size="small" onClick={(e) => handleFavorite(e)}>
             <FavoriteTwoToneIcon />
           </FavoriteButton>
         )}
