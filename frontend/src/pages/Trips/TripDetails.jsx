@@ -295,6 +295,7 @@ import {
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 
 import { TripDetailsCard } from "./TripDetailsCard";
+import { OwnerTripDetailsCard } from "./OwnerTripDetailsCard";
 
 export const TripDetails = () => {
   const { tripId } = useParams();
@@ -431,7 +432,22 @@ export const TripDetails = () => {
     <>
       {loading && <Box>Loading...</Box>}
 
-      {tripDetails && (
+      {tripDetails && isTripOwner && (
+        <OwnerTripDetailsCard
+          tripDetails={tripDetails}
+          passengers={passengers}
+          isTripOwner={isTripOwner}
+          handleBack={handleBack}
+          handleGoBack={handleGoBack}
+          handleConfirmCancel={handleConfirmCancel}
+          handleConfirmJoin={handleConfirmJoin}
+          userStatus={userStatus}
+          handleJoinTrip={handleJoinTrip}
+          showConfirmation={showConfirmation}
+        />
+      )}
+
+      {tripDetails && !isTripOwner && (
         <TripDetailsCard
           tripDetails={tripDetails}
           passengers={passengers}

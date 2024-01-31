@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, styled, Paper } from "@mui/material";
 import { useAuthContext } from "../../context/authProvider";
 import { useState, useEffect } from "react";
 

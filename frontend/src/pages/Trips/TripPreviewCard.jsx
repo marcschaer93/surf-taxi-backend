@@ -7,10 +7,12 @@ import {
   Button,
   Typography,
   styled,
+  Chip,
 } from "@mui/material";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/authProvider";
+import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
 
 const FavoriteButton = styled(Button)(({ theme }) => ({
   color: theme.palette.error.main,
@@ -21,8 +23,30 @@ export const TripPreviewCard = ({ trip }) => {
   const { user } = useAuthContext();
   const tripId = trip.id;
   const isTripOwner = user && trip.owner === user.username;
-  const defaultButtonStatus = isTripOwner ? "Owner" : "Request Trip";
-  //   const userTripInteractionStatus = reservation?.reservationStatus || null;
+
+  const StyledCard = styled(Card)(({ theme, isTripOwner }) => ({
+    position: "relative",
+    borderColor: isTripOwner
+      ? theme.palette.contrast.main
+      : theme.palette.grey[800],
+    borderWidth: "0.5px",
+    cursor: "pointer",
+    transition: "background 0.3s ease",
+    margin: "20px 0", // Add margin to create space between cards
+    width: "100%",
+
+    "&:hover": {
+      background: theme.palette.action.hover,
+    },
+  }));
+
+  const StyledChip = styled(Chip)({
+    position: "absolute",
+    top: 18, // Adjust the top value as needed
+    right: 18, // Adjust the right value as needed
+    fontSize: "8px",
+    fontWeight: "bold",
+  });
 
   const handleFavorite = (e, tripId) => {
     e.stopPropagation();
@@ -39,7 +63,27 @@ export const TripPreviewCard = ({ trip }) => {
   };
 
   return (
-    <Card variant="outlined" onClick={handleCardClick}>
+    <StyledCard
+      variant="outlined"
+      onClick={handleCardClick}
+      isTripOwner={isTripOwner}
+    >
+      {isTripOwner ? (
+        <StyledChip
+          sx={{ backgroundColor: "#d41b64", color: "white" }}
+          label="Owner"
+          variant="filled"
+          size="small"
+        />
+      ) : (
+        <StyledChip
+          label="Passenger"
+          color="primary"
+          variant="filled"
+          size="small"
+        />
+      )}
+
       <CardContent>
         <Typography variant="h6" gutterBottom>
           {trip.startLocation} - {trip.destination}
@@ -53,32 +97,12 @@ export const TripPreviewCard = ({ trip }) => {
       </CardContent>
 
       <CardActions>
-        {/* <Button size="small" variant="outlined">
-          More...
-        </Button> */}
-
-        {/* {!isTripOwner && userTripInteractionStatus && (
-          <Button size="small" variant="outlined">
-            {userTripInteractionStatus}
-          </Button>
-        )} */}
-
-        {isTripOwner && (
-          <Button
-            sx={{ color: isTripOwner ? "red" : "green" }}
-            size="small"
-            variant="text"
-          >
-            owner
-          </Button>
-        )}
-
         {handleFavorite && (
           <FavoriteButton size="small" onClick={(e) => handleFavorite(e)}>
-            <FavoriteTwoToneIcon />
+            <FavoriteBorderSharpIcon color="secondary" />
           </FavoriteButton>
         )}
       </CardActions>
-    </Card>
+    </StyledCard>
   );
 };

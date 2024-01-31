@@ -28,23 +28,25 @@ export const AllTrips = ({ allTrips }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
 
+  if (!allTrips) return <Box>No Trips available</Box>;
+
   // exclude trips where user is owner
-  const filteredTrips = allTrips.filter((trip) => trip.owner !== user.username);
+  const filteredTrips = allTrips.filter(
+    (trip) => trip.owner !== user?.username
+  );
+  const trips = user ? filteredTrips : allTrips;
 
   return (
     <>
-      {allTrips ? (
-        <Box>
-          <Typography sx={{ textAlign: "center" }} variant="h5">
-            All Trips
-          </Typography>
-          {filteredTrips.map((trip) => (
-            <TripPreviewCard key={trip.id} trip={trip} />
-          ))}
-        </Box>
-      ) : (
-        <Box>No Trips</Box>
-      )}
+      <Box>
+        <Typography sx={{ textAlign: "center" }} variant="h5">
+          All Trips
+        </Typography>
+
+        {trips.map((trip) => (
+          <TripPreviewCard key={trip.id} trip={trip} />
+        ))}
+      </Box>
     </>
   );
 };
