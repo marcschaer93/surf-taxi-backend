@@ -7,8 +7,35 @@ import {
   Button,
   Typography,
   styled,
+  Chip,
 } from "@mui/material";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
+import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
+import { useLocation } from "react-router-dom";
+
+const StyledCard = styled(Card)(({ theme, isTripOwner }) => ({
+  position: "relative",
+  borderColor: isTripOwner
+    ? theme.palette.contrast.main
+    : theme.palette.grey[800],
+  borderWidth: "0.5px",
+  cursor: "pointer",
+  transition: "background 0.3s ease",
+  margin: "20px 0", // Add margin to create space between cards
+  width: "100%",
+
+  "&:hover": {
+    background: theme.palette.action.hover,
+  },
+}));
+
+const OwnerStatusChip = styled(Chip)({
+  position: "absolute",
+  top: 18, // Adjust the top value as needed
+  right: 18, // Adjust the right value as needed
+  fontSize: "8px",
+  fontWeight: "bold",
+});
 
 export const TripDetailsCard = ({
   tripDetails,
@@ -22,9 +49,22 @@ export const TripDetailsCard = ({
   handleJoinTrip,
   showConfirmation,
 }) => {
+  const location = useLocation();
+  const isUserTrip = location.state?.isUserTrip;
+  console.log("isUserTrip", isUserTrip);
+
   return (
     <>
-      <Card variant="outlined">
+      <StyledCard variant="outlined">
+        {isUserTrip && (
+          <OwnerStatusChip
+            label="Passenger"
+            color="primary"
+            variant="filled"
+            size="small"
+          />
+        )}
+
         <CardContent>
           <Typography variant="h4">Trip Details</Typography>
           <Typography variant="body1" gutterBottom>
@@ -75,11 +115,9 @@ export const TripDetailsCard = ({
               )}
             </>
           )}
-
           <Button size="small" onClick={handleBack} variant="outlined">
             Go Back
           </Button>
-
           {/* <Button
               sx={{ color: trip.owner === user.username ? "red" : "green" }}
               size="small"
@@ -104,9 +142,18 @@ export const TripDetailsCard = ({
               >
                 <FavoriteTwoToneIcon />
               </FavoriteButton>
-            )} */}
+            )} */}{" "}
+          <CardActions>
+            {!isUserTrip && (
+              <FavoriteBorderSharpIcon
+                color="secondary"
+                onClick={(e) => handleFavorite(e)}
+                style={{ cursor: "pointer" }}
+              />
+            )}
+          </CardActions>
         </CardActions>
-      </Card>
+      </StyledCard>
     </>
   );
 };

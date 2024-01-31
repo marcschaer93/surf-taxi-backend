@@ -8,8 +8,32 @@ import {
   Typography,
   styled,
   Paper,
+  Chip,
 } from "@mui/material";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
+const StyledCard = styled(Card)(({ theme, isTripOwner }) => ({
+  position: "relative",
+  borderColor: isTripOwner
+    ? theme.palette.contrast.main
+    : theme.palette.grey[800],
+  borderWidth: "0.5px",
+  cursor: "pointer",
+  transition: "background 0.3s ease",
+  margin: "20px 0", // Add margin to create space between cards
+  width: "100%",
+
+  "&:hover": {
+    background: theme.palette.action.hover,
+  },
+}));
+
+const OwnerStatusChip = styled(Chip)({
+  position: "absolute",
+  top: 18, // Adjust the top value as needed
+  right: 18, // Adjust the right value as needed
+  fontSize: "8px",
+  fontWeight: "bold",
+});
 
 export const OwnerTripDetailsCard = ({
   tripDetails,
@@ -25,7 +49,13 @@ export const OwnerTripDetailsCard = ({
 }) => {
   return (
     <>
-      <Card variant="outlined">
+      <StyledCard variant="outlined">
+        <OwnerStatusChip
+          sx={{ backgroundColor: "#d41b64", color: "white" }}
+          label="Owner"
+          variant="filled"
+          size="small"
+        />
         <CardContent>
           <Typography variant="h4">Trip Details</Typography>
           <Typography variant="body1" gutterBottom>
@@ -80,34 +110,8 @@ export const OwnerTripDetailsCard = ({
           <Button size="small" onClick={handleBack} variant="outlined">
             Go Back
           </Button>
-
-          {/* <Button
-              sx={{ color: trip.owner === user.username ? "red" : "green" }}
-              size="small"
-              variant="text"
-            >
-              {trip.owner === user.username ? "owner" : ""}
-            </Button>
-            {trip.owner === user.username && (
-              <Button
-                onClick={handleDeleteTripAsOwner}
-                sx={{ color: "red" }}
-                size="small"
-                variant="text"
-              >
-                ❌
-              </Button>
-            )}
-            {currentUserAsPassenger && (
-              <FavoriteButton
-                size="small"
-                onClick={() => handleFavorite(tripId)}
-              >
-                <FavoriteTwoToneIcon />
-              </FavoriteButton>
-            )} */}
         </CardActions>
-      </Card>
+      </StyledCard>
     </>
   );
 };

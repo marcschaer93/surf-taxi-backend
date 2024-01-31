@@ -18,7 +18,7 @@ const FavoriteButton = styled(Button)(({ theme }) => ({
   color: theme.palette.error.main,
 }));
 
-export const TripPreviewCard = ({ trip }) => {
+export const TripPreviewCard = ({ trip, isUserTrip }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const tripId = trip.id;
@@ -40,7 +40,15 @@ export const TripPreviewCard = ({ trip }) => {
     },
   }));
 
-  const StyledChip = styled(Chip)({
+  const OwnerStatusChip = styled(Chip)({
+    position: "absolute",
+    top: 18, // Adjust the top value as needed
+    right: 18, // Adjust the right value as needed
+    fontSize: "8px",
+    fontWeight: "bold",
+  });
+
+  const favoriteButton = styled(Box)({
     position: "absolute",
     top: 18, // Adjust the top value as needed
     right: 18, // Adjust the right value as needed
@@ -59,7 +67,7 @@ export const TripPreviewCard = ({ trip }) => {
   };
 
   const handleCardClick = () => {
-    navigate(`/trips/${tripId}`);
+    navigate(`/trips/${tripId}`, { state: { isUserTrip } });
   };
 
   return (
@@ -68,15 +76,27 @@ export const TripPreviewCard = ({ trip }) => {
       onClick={handleCardClick}
       isTripOwner={isTripOwner}
     >
-      {isTripOwner ? (
-        <StyledChip
+      <FavoriteButton>
+        {!isUserTrip && (
+          <FavoriteBorderSharpIcon
+            color="secondary"
+            onClick={(e) => handleFavorite(e)}
+            style={{ cursor: "pointer" }}
+          />
+        )}
+      </FavoriteButton>
+
+      {isTripOwner && isUserTrip && (
+        <OwnerStatusChip
           sx={{ backgroundColor: "#d41b64", color: "white" }}
           label="Owner"
           variant="filled"
           size="small"
         />
-      ) : (
-        <StyledChip
+      )}
+
+      {isUserTrip && !isTripOwner && (
+        <OwnerStatusChip
           label="Passenger"
           color="primary"
           variant="filled"
@@ -96,13 +116,7 @@ export const TripPreviewCard = ({ trip }) => {
         {/* Add other trip details here */}
       </CardContent>
 
-      <CardActions>
-        {handleFavorite && (
-          <FavoriteButton size="small" onClick={(e) => handleFavorite(e)}>
-            <FavoriteBorderSharpIcon color="secondary" />
-          </FavoriteButton>
-        )}
-      </CardActions>
+      <CardActions></CardActions>
     </StyledCard>
   );
 };

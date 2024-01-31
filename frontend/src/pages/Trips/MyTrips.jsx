@@ -42,7 +42,7 @@ export const MyTrips = () => {
       {""}
       <Box>
         {myTrips.map((trip) => (
-          <TripPreviewCard key={trip.id} trip={trip} />
+          <TripPreviewCard key={trip.id} trip={trip} isUserTrip={true} />
         ))}
       </Box>
     </>

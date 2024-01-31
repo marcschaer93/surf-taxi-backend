@@ -1,4 +1,6 @@
 import { createTheme } from "@mui/material/styles";
+import { orange, green } from "@mui/material/colors";
+import { Button } from "@mui/material";
 
 export const theme = createTheme({
   palette: {
@@ -43,6 +45,31 @@ export const theme = createTheme({
         default: "#121212", // Dark mode background color
         paper: "#1E1E1E", // Dark mode paper color (for cards, etc.)
       },
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8, // Set your desired border radius
+          padding: "5px 20px", // Set your desired padding
+          fontWeight: "bold", // Set your desired font weight
+        },
+      },
+      variants: [
+        {
+          props: { variant: "contained", color: "primary" },
+          style: {
+            backgroundColor: orange[500], // Set your desired background color
+          },
+        },
+        {
+          props: { variant: "outlined", color: "secondary" },
+          style: {
+            borderColor: green[500], // Set your desired border color
+          },
+        },
+      ],
     },
   },
 });
