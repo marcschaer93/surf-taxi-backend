@@ -167,6 +167,7 @@
 
 // // //     getTripDetails();
 // // //   }, [tripId]);
+
 // // // $$$
 // // //
 // // //   useEffect(() => {
@@ -276,88 +277,174 @@
 // };
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { useAuthContext } from "../../context/authProvider";
 import * as PassengerApi from "../../api/services/PassengerApi";
 import * as TripApi from "../../api/services/TripApi";
 import { useTripData } from "../../hooks/useTripData";
-import TripCardDetails from "./TripCardDetails";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  Typography,
+  styled,
+} from "@mui/material";
+import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
+
+import { TripDetailsCard } from "./TripDetailsCard";
 
 export const TripDetails = () => {
   const { tripId } = useParams();
+  const navigate = useNavigate();
   const { user } = useAuthContext();
   const [tripDetails, setTripDetails] = useState(null);
   const [passengers, setPassengers] = useState([]);
-  const [userStatus, setUserStatus] = useState("Join Trip");
+  const [userStatus, setUserStatus] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const { myTrips, setMyTrips } = useTripData();
 
-  useEffect(() => {
-    const fetchTripDetails = async () => {
-      try {
-        const tripDetailsData = await TripApi.getOneTrip(tripId);
-        setTripDetails(tripDetailsData);
-      } catch (error) {
-        console.error("Error fetching trip details:", error);
-      }
-    };
-
-    const fetchPassengers = async () => {
-      try {
-        const tripPassengersData = await PassengerApi.getTripPassengers(tripId);
-        setPassengers(tripPassengersData);
-      } catch (error) {
-        console.error("Error fetching passengers:", error);
-      }
-    };
-
-    fetchTripDetails();
-    fetchPassengers();
-  }, [tripId]);
-
-  useEffect(() => {
-    const currentUserAsPassenger = passengers.find(
-      (p) => p.username === user.username
-    );
-
-    if (currentUserAsPassenger) {
-      setUserStatus(currentUserAsPassenger.reservationStatus);
-    } else {
-      setUserStatus("Join Trip");
-    }
-  }, [passengers, user.username]);
-
-  const handleJoinTrip = async () => {
+  const fetchTripDetails = async () => {
     try {
-      const newJoinRequest = await PassengerApi.requestToJoin(tripId);
-      console.log("NEW JOIN REQUEST STATUS", newJoinRequest.reservationStatus);
+      const tripDetailsData = await TripApi.getOneTrip(tripId);
+      setTripDetails(tripDetailsData);
 
-      // Update passengers state
-      setPassengers((prevPassengers) => [...prevPassengers, newJoinRequest]);
+      const tripPassengersData = await PassengerApi.getTripPassengers(tripId);
+      setPassengers(tripPassengersData);
+
+      const currentUserAsPassenger = tripPassengersData.find(
+        (p) => p.username === user.username
+      );
+
+      if (currentUserAsPassenger) {
+        setUserStatus(currentUserAsPassenger.reservationStatus);
+      }
     } catch (error) {
-      console.error("Error joining trip:", error);
+      setError(error.message || "An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchTripDetails();
+  }, [tripId, user.username]);
+
+  const handleJoinTrip = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  const handleConfirmJoin = async () => {
+    try {
+      setUserStatus("requested");
+
+      const newJoinRequest = await PassengerApi.requestToJoin(tripId);
+      setPassengers((prevPassengers) => [...prevPassengers, newJoinRequest]);
+      setMyTrips((prevTrips) => [...prevTrips, tripDetails]);
+
+      // Refresh the trip details after a successful join
+      await fetchTripDetails();
+    } catch (error) {
+      setError(error.message || "Error joining trip");
+    } finally {
+      setShowConfirmation(false);
+    }
+  };
+
+  const handleConfirmCancel = async () => {
+    try {
+      await PassengerApi.cancelJoinRequest(tripId);
+
+      setPassengers((prevPassengers) =>
+        prevPassengers.filter(
+          (passenger) => passenger.username !== user.username
+        )
+      );
+      setMyTrips((prevTrips) => prevTrips.filter((trip) => trip.id !== tripId));
+      setUserStatus(null);
+      navigate(-1);
+    } catch (error) {
+      setError(error.message || "Error cancelling trip request");
+    } finally {
+      setShowConfirmation(false);
+    }
+  };
+
+  const handleGoBack = () => {
+    setShowConfirmation(false);
+  };
+
+  const isTripOwner = user.username === tripDetails?.owner;
+
+  // return (
+  //   <div>
+  //     {loading && <p>Loading...</p>}
+  //     {error && <p>Error: {error}</p>}
+  //     {tripDetails && (
+  //       <div>
+  //         <h2>Trip Details</h2>
+  //         <p>Start Location: {tripDetails.startLocation}</p>
+  //         <p>Destination: {tripDetails.destination}</p>
+
+  //         <h3>Passengers</h3>
+  //         <ul>
+  //           {passengers.map((passenger) => (
+  //             <li key={passenger.username + passenger.trip_id}>
+  //               {`${passenger.username} - Status: ${passenger.reservationStatus}`}
+  //             </li>
+  //           ))}
+  //         </ul>
+
+  //         {!isTripOwner && (
+  //           <>
+  //             {userStatus ? (
+  //               <button onClick={handleJoinTrip}>Cancel Trip</button>
+  //             ) : (
+  //               <button onClick={handleJoinTrip}>Join Trip</button>
+  //             )}
+
+  //             {showConfirmation && (
+  //               <Confirmation
+  //                 tripDetails={tripDetails}
+  //                 onConfirm={handleConfirmJoin}
+  //                 onCancel={handleConfirmCancel}
+  //                 onGoBack={handleGoBack}
+  //                 userStatus={userStatus}
+  //               />
+  //             )}
+  //           </>
+  //         )}
+  //       </div>
+  //     )}
+  //   </div>
+  // );
+
   return (
-    <div>
+    <>
+      {loading && <Box>Loading...</Box>}
+
       {tripDetails && (
-        <div>
-          <h2>Trip Details</h2>
-          <p>Start Location: {tripDetails.startLocation}</p>
-          <p>Destination: {tripDetails.destination}</p>
-
-          <h3>Passengers</h3>
-          <ul>
-            {passengers.map((passenger) => (
-              <li key={passenger.username + passenger.trip_id}>
-                {passenger.username}
-              </li>
-            ))}
-          </ul>
-
-          <button onClick={handleJoinTrip}>{userStatus}</button>
-        </div>
+        <TripDetailsCard
+          tripDetails={tripDetails}
+          passengers={passengers}
+          isTripOwner={isTripOwner}
+          handleBack={handleBack}
+          handleGoBack={handleGoBack}
+          handleConfirmCancel={handleConfirmCancel}
+          handleConfirmJoin={handleConfirmJoin}
+          userStatus={userStatus}
+          handleJoinTrip={handleJoinTrip}
+          showConfirmation={showConfirmation}
+        />
       )}
-    </div>
+    </>
   );
 };

@@ -16,7 +16,7 @@ const FavoriteButton = styled(Button)(({ theme }) => ({
   color: theme.palette.error.main,
 }));
 
-export const TripCardPreview = ({ trip }) => {
+export const TripPreviewCard = ({ trip }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const tripId = trip.id;

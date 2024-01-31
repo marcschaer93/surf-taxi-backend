@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Box, Typography, styled } from "@mui/material";
 
 import { TripDetails } from "./TripDetails";
-import { TripCardPreview } from "./TripCardPreview";
+import { TripPreviewCard } from "./TripPreviewCard";
 import { useAuthContext } from "../../context/authProvider";
 
 const TripList = styled(Box)(({ theme }) => ({
@@ -36,7 +36,7 @@ export const AllTrips = ({ allTrips }) => {
             All Trips
           </Typography>
           {allTrips.map((trip) => (
-            <TripCardPreview key={trip.id} trip={trip} />
+            <TripPreviewCard key={trip.id} trip={trip} />
           ))}
         </Box>
       ) : (

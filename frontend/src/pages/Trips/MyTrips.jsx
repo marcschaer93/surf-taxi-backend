@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { useAuthContext } from "../../context/authProvider";
 import { useState, useEffect } from "react";
 
-import { TripCardPreview } from "./TripCardPreview";
+import { TripPreviewCard } from "./TripPreviewCard";
 import { useErrorBoundary } from "react-error-boundary";
 import { useNavigate } from "react-router-dom";
 
@@ -42,7 +42,7 @@ export const MyTrips = () => {
       {""}
       <Box>
         {myTrips.map((trip) => (
-          <TripCardPreview key={trip.id} trip={trip} />
+          <TripPreviewCard key={trip.id} trip={trip} />
         ))}
       </Box>
     </>
