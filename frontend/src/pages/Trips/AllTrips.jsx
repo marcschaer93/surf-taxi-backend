@@ -28,6 +28,9 @@ export const AllTrips = ({ allTrips }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
 
+  // exclude trips where user is owner
+  const filteredTrips = allTrips.filter((trip) => trip.owner !== user.username);
+
   return (
     <>
       {allTrips ? (
@@ -35,7 +38,7 @@ export const AllTrips = ({ allTrips }) => {
           <Typography sx={{ textAlign: "center" }} variant="h5">
             All Trips
           </Typography>
-          {allTrips.map((trip) => (
+          {filteredTrips.map((trip) => (
             <TripPreviewCard key={trip.id} trip={trip} />
           ))}
         </Box>

@@ -53,9 +53,9 @@ export const TripPreviewCard = ({ trip }) => {
       </CardContent>
 
       <CardActions>
-        <Button size="small" variant="outlined">
+        {/* <Button size="small" variant="outlined">
           More...
-        </Button>
+        </Button> */}
 
         {/* {!isTripOwner && userTripInteractionStatus && (
           <Button size="small" variant="outlined">
