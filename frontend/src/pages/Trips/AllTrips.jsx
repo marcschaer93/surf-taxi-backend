@@ -44,7 +44,7 @@ export const AllTrips = ({ allTrips }) => {
         </Typography>
 
         {trips.map((trip) => (
-          <TripPreviewCard key={trip.id} trip={trip} isUserTrip={false} />
+          <TripPreviewCard key={trip.id} trip={trip} isInMyTrips={false} />
         ))}
       </Box>
     </>

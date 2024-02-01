@@ -10,12 +10,11 @@ import {
   Paper,
   Chip,
 } from "@mui/material";
-import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
-const StyledCard = styled(Card)(({ theme, isTripOwner }) => ({
+import { theme } from "../../utils/theme";
+import { StatusChip } from "../../components/ui/StatusChip";
+
+const StyledCard = styled(Card)(({ theme }) => ({
   position: "relative",
-  borderColor: isTripOwner
-    ? theme.palette.contrast.main
-    : theme.palette.grey[800],
   borderWidth: "0.5px",
   cursor: "pointer",
   transition: "background 0.3s ease",
@@ -26,14 +25,6 @@ const StyledCard = styled(Card)(({ theme, isTripOwner }) => ({
     background: theme.palette.action.hover,
   },
 }));
-
-const OwnerStatusChip = styled(Chip)({
-  position: "absolute",
-  top: 18, // Adjust the top value as needed
-  right: 18, // Adjust the right value as needed
-  fontSize: "8px",
-  fontWeight: "bold",
-});
 
 export const OwnerTripDetailsCard = ({
   tripDetails,
@@ -47,15 +38,18 @@ export const OwnerTripDetailsCard = ({
   handleJoinTrip,
   showConfirmation,
 }) => {
+  console.log("PASSENGERS", passengers);
   return (
     <>
-      <StyledCard variant="outlined">
-        <OwnerStatusChip
-          sx={{ backgroundColor: "#d41b64", color: "white" }}
-          label="Owner"
-          variant="filled"
-          size="small"
-        />
+      <StyledCard
+        variant="outlined"
+        sx={{
+          borderColor: isTripOwner
+            ? theme.palette.contrast.main
+            : theme.palette.grey[800],
+        }}
+      >
+        <StatusChip isTripOwner={isTripOwner} />;
         <CardContent>
           <Typography variant="h4">Trip Details</Typography>
           <Typography variant="body1" gutterBottom>
@@ -71,9 +65,9 @@ export const OwnerTripDetailsCard = ({
 
           <Typography variant="h5">Passengers</Typography>
 
-          {passengers && passengers.length > 0 && (
-            <Box>
-              {passengers.map((p) => (
+          <Box>
+            {passengers && passengers.length > 0 ? (
+              passengers.map((p) => (
                 <Box
                   key={p.username + p.trip_id}
                   sx={{ display: "flex", justifyContent: "space-between" }}
@@ -81,11 +75,12 @@ export const OwnerTripDetailsCard = ({
                   <Typography>{p.username}</Typography>
                   <Typography>Status: {p.reservationStatus}</Typography>
                 </Box>
-              ))}
-            </Box>
-          )}
+              ))
+            ) : (
+              <Typography>No Passengers</Typography>
+            )}
+          </Box>
         </CardContent>
-
         <CardActions>
           {!isTripOwner && (
             <>

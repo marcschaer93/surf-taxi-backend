@@ -9,49 +9,35 @@ import {
   styled,
   Chip,
 } from "@mui/material";
-import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/authProvider";
 import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
+import { theme } from "../../utils/theme";
+import { StatusChip } from "../../components/ui/StatusChip";
 
-const FavoriteButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.error.main,
-}));
-
-export const TripPreviewCard = ({ trip, isUserTrip }) => {
+export const TripPreviewCard = ({ trip, isInMyTrips }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const tripId = trip.id;
   const isTripOwner = user && trip.owner === user.username;
+  console.log("isTripOwner", isTripOwner);
 
-  const StyledCard = styled(Card)(({ theme, isTripOwner }) => ({
+  const StyledCard = styled(Card)(({ theme }) => ({
     position: "relative",
-    borderColor: isTripOwner
-      ? theme.palette.contrast.main
-      : theme.palette.grey[800],
     borderWidth: "0.5px",
     cursor: "pointer",
     transition: "background 0.3s ease",
     margin: "20px 0", // Add margin to create space between cards
     width: "100%",
-
     "&:hover": {
       background: theme.palette.action.hover,
     },
   }));
 
-  const OwnerStatusChip = styled(Chip)({
+  const FavoriteButton = styled(Box)({
     position: "absolute",
-    top: 18, // Adjust the top value as needed
-    right: 18, // Adjust the right value as needed
-    fontSize: "8px",
-    fontWeight: "bold",
-  });
-
-  const favoriteButton = styled(Box)({
-    position: "absolute",
-    top: 18, // Adjust the top value as needed
-    right: 18, // Adjust the right value as needed
+    top: 18,
+    right: 18,
     fontSize: "8px",
     fontWeight: "bold",
   });
@@ -61,48 +47,31 @@ export const TripPreviewCard = ({ trip, isUserTrip }) => {
     console.log(`added trip with id: ${tripId} to favorites. NOT IMPLEMENTED`);
   };
 
-  const handleJoinRequest = (e, tripId) => {
-    e.stopPropagation();
-    console.log("Request to join. NOT IMPLEMENTED");
-  };
-
   const handleCardClick = () => {
-    navigate(`/trips/${tripId}`, { state: { isUserTrip } });
+    navigate(`/trips/${tripId}`, { state: { isInMyTrips } });
   };
 
   return (
     <StyledCard
       variant="outlined"
       onClick={handleCardClick}
-      isTripOwner={isTripOwner}
+      sx={{
+        borderColor: isTripOwner
+          ? theme.palette.contrast.main
+          : theme.palette.grey[800],
+      }}
     >
-      <FavoriteButton>
-        {!isUserTrip && (
+      {!isInMyTrips && (
+        <FavoriteButton>
           <FavoriteBorderSharpIcon
             color="secondary"
             onClick={(e) => handleFavorite(e)}
             style={{ cursor: "pointer" }}
           />
-        )}
-      </FavoriteButton>
-
-      {isTripOwner && isUserTrip && (
-        <OwnerStatusChip
-          sx={{ backgroundColor: "#d41b64", color: "white" }}
-          label="Owner"
-          variant="filled"
-          size="small"
-        />
+        </FavoriteButton>
       )}
 
-      {isUserTrip && !isTripOwner && (
-        <OwnerStatusChip
-          label="Passenger"
-          color="primary"
-          variant="filled"
-          size="small"
-        />
-      )}
+      {isInMyTrips && <StatusChip isTripOwner={isTripOwner} />}
 
       <CardContent>
         <Typography variant="h6" gutterBottom>

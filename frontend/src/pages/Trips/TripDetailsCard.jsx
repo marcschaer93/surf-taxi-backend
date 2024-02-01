@@ -9,15 +9,13 @@ import {
   styled,
   Chip,
 } from "@mui/material";
-import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
 import { useLocation } from "react-router-dom";
+import { theme } from "../../utils/theme";
+import { StatusChip } from "../../components/ui/StatusChip";
 
-const StyledCard = styled(Card)(({ theme, isTripOwner }) => ({
+const StyledCard = styled(Card)(({ theme }) => ({
   position: "relative",
-  borderColor: isTripOwner
-    ? theme.palette.contrast.main
-    : theme.palette.grey[800],
   borderWidth: "0.5px",
   cursor: "pointer",
   transition: "background 0.3s ease",
@@ -29,10 +27,10 @@ const StyledCard = styled(Card)(({ theme, isTripOwner }) => ({
   },
 }));
 
-const OwnerStatusChip = styled(Chip)({
+const FavoriteButton = styled(Box)({
   position: "absolute",
-  top: 18, // Adjust the top value as needed
-  right: 18, // Adjust the right value as needed
+  top: 18,
+  right: 18,
   fontSize: "8px",
   fontWeight: "bold",
 });
@@ -50,19 +48,33 @@ export const TripDetailsCard = ({
   showConfirmation,
 }) => {
   const location = useLocation();
-  const isUserTrip = location.state?.isUserTrip;
-  console.log("isUserTrip", isUserTrip);
+  const isInMyTrips = location.state?.isInMyTrips;
+
+  const handleFavorite = (e, tripId) => {
+    e.stopPropagation();
+    console.log(`added trip with id: ${tripId} to favorites. NOT IMPLEMENTED`);
+  };
 
   return (
     <>
-      <StyledCard variant="outlined">
-        {isUserTrip && (
-          <OwnerStatusChip
-            label="Passenger"
-            color="primary"
-            variant="filled"
-            size="small"
-          />
+      <StyledCard
+        variant="outlined"
+        sx={{
+          borderColor: isTripOwner
+            ? theme.palette.contrast.main
+            : theme.palette.grey[800],
+        }}
+      >
+        {isInMyTrips && <StatusChip isTripOwner={isTripOwner} />}
+
+        {!isInMyTrips && (
+          <FavoriteButton>
+            <FavoriteBorderSharpIcon
+              color="secondary"
+              onClick={(e) => handleFavorite(e)}
+              style={{ cursor: "pointer" }}
+            />
+          </FavoriteButton>
         )}
 
         <CardContent>
@@ -118,40 +130,6 @@ export const TripDetailsCard = ({
           <Button size="small" onClick={handleBack} variant="outlined">
             Go Back
           </Button>
-          {/* <Button
-              sx={{ color: trip.owner === user.username ? "red" : "green" }}
-              size="small"
-              variant="text"
-            >
-              {trip.owner === user.username ? "owner" : ""}
-            </Button>
-            {trip.owner === user.username && (
-              <Button
-                onClick={handleDeleteTripAsOwner}
-                sx={{ color: "red" }}
-                size="small"
-                variant="text"
-              >
-                ❌
-              </Button>
-            )}
-            {currentUserAsPassenger && (
-              <FavoriteButton
-                size="small"
-                onClick={() => handleFavorite(tripId)}
-              >
-                <FavoriteTwoToneIcon />
-              </FavoriteButton>
-            )} */}{" "}
-          <CardActions>
-            {!isUserTrip && (
-              <FavoriteBorderSharpIcon
-                color="secondary"
-                onClick={(e) => handleFavorite(e)}
-                style={{ cursor: "pointer" }}
-              />
-            )}
-          </CardActions>
         </CardActions>
       </StyledCard>
     </>
