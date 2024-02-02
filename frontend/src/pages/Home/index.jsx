@@ -4,8 +4,9 @@ import { RequireAuth } from "../../components/RequireAuth";
 import { useAuthContext } from "../../context/authProvider";
 import { Box } from "@mui/material";
 import { AllTrips } from "../Trips/AllTrips";
+import { Link } from "react-router-dom";
 
-export const Home = ({ allTrips, userTrips, addTrip }) => {
+export const Home = ({ allTrips, myTrips, addTrip }) => {
   const { user } = useAuthContext();
 
   return (
@@ -17,7 +18,8 @@ export const Home = ({ allTrips, userTrips, addTrip }) => {
           <h1>Welcome to Surf Taxi</h1>
         )}
       </div>
-      <AllTrips allTrips={allTrips} userTrips={userTrips} />
+      <Link to="trips">Trips</Link>
+      {/* <AllTrips allTrips={allTrips} myTrips={myTrips} /> */}
     </>
   );
 };

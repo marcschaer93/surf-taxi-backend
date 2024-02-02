@@ -10,10 +10,12 @@ export const useTripData = () => {
   const { showBoundary } = useErrorBoundary();
 
   const [allTrips, setAllTrips] = useState([]);
+  const [allTripsLoading, setAllTripsLoading] = useState(true);
+
   const [myTrips, setMyTrips] = useState([]);
+  const [myTripsLoading, setMyTripsLoading] = useState(true);
 
   const [error, setError] = useState(null);
-  const [allTripsLoading, setAllTripsLoading] = useState(true);
 
   useEffect(() => {
     const getAllTripsData = async () => {
@@ -30,36 +32,37 @@ export const useTripData = () => {
         //   setAllTrips(filteredtripsData);
         // }
         setAllTrips(tripsData);
-        setAllTripsLoading(false);
       } catch (error) {
         // Show error boundary
         showBoundary(error);
         console.error("Error fetching trips:", error);
         setAllTrips([]);
+      } finally {
         setAllTripsLoading(false);
       }
     };
     getAllTripsData();
   }, [user]);
 
-  // useEffect(() => {
-  //   const getAllMyTrips = async () => {
-  //     try {
-  //       const userTripsData = await UserApi.getAllUserTrips(user.username);
-  //       setUserTrips(userTripsData);
-  //       setUserTripsLoading(false);
-  //     } catch (error) {
-  //       // Show error boundary
-  //       showBoundary(error);
-  //       console.error("Error fetching trips:", error);
-  //       setUserTrips([]);
-  //       setUserTripsLoading(false);
-  //     }
-  //   };
-  //   if (user) {
-  //     getAllMyTrips();
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    const getAllMyTrips = async () => {
+      try {
+        const myTripsData = await UserApi.getAllUserTrips(user.username);
+        console.log("myTripsData", myTripsData);
+        setMyTrips(myTripsData);
+      } catch (error) {
+        // Show error boundary
+        showBoundary(error);
+        console.error("Error fetching trips:", error);
+        setMyTrips([]);
+      } finally {
+        setMyTripsLoading(false);
+      }
+    };
+    if (user) {
+      getAllMyTrips();
+    }
+  }, [user]);
 
   const addTrip = async (tripData) => {
     try {
@@ -70,14 +73,25 @@ export const useTripData = () => {
         seats: parsedSeats,
       });
 
-      setAllTrips((prevTrips) => [...prevTrips, newTrip]);
+      // setAllTrips((prevTrips) => [...prevTrips, newTrip]);
+      setMyTrips((prevTrips) => [...prevTrips, newTrip]);
       console.log("Trip created successfully:", newTrip);
-      setAllTripsLoading(false);
     } catch (error) {
-      setAllTripsLoading(false);
       console.error(error);
+    } finally {
+      setMyTripsLoading(false);
     }
   };
 
-  return { allTrips, setAllTrips, addTrip, myTrips, setMyTrips };
+  const deleteMyTrip = async (tripId) => {
+    try {
+      await UserApi.deleteMyTrip(tripId, user.username);
+      setMyTrips((prevTrips) => prevTrips.filter((trip) => trip.id !== tripId));
+    } catch (error) {
+      console.error(error);
+    } finally {
+    }
+  };
+
+  return { allTrips, setAllTrips, addTrip, deleteMyTrip, myTrips, setMyTrips };
 };

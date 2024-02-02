@@ -27,7 +27,7 @@ const MainContent = styled(Box)(({ theme }) => ({
 }));
 
 export default function App() {
-  const { allTrips, userTrips, setTrips, addTrip } = useTripData();
+  const { allTrips, myTrips, setMyTrips, addTrip } = useTripData();
 
   return (
     <>
@@ -38,8 +38,9 @@ export default function App() {
         <MainContent>
           <AppRoutes
             allTrips={allTrips}
-            userTrips={userTrips}
             addTrip={addTrip}
+            myTrips={myTrips}
+            setMyTrips={setMyTrips}
           />
         </MainContent>
         <Rightbar />

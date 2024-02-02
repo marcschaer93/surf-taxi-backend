@@ -12,15 +12,13 @@ import { TripDetails } from "../pages/Trips/TripDetails";
 import { RequireAuth } from "../components/RequireAuth";
 import { NewTrip } from "../pages/Trips/NewTrip";
 
-export const AppRoutes = ({ allTrips, userTrips, addTrip }) => {
+export const AppRoutes = ({ allTrips, myTrips, addTrip, setMyTrips }) => {
   return (
     <Routes>
       // HOME
       <Route
         path="/"
-        element={
-          <Home allTrips={allTrips} userTrips={userTrips} addTrip={addTrip} />
-        }
+        element={<Home allTrips={allTrips} addTrip={addTrip} />}
       />
       // USER ROUTES
       <Route path="/login" element={<Login />} />
@@ -44,13 +42,13 @@ export const AppRoutes = ({ allTrips, userTrips, addTrip }) => {
       // TRIP ROUTES
       <Route
         path="/trips"
-        element={<AllTrips allTrips={allTrips} userTrips={userTrips} />}
+        element={<AllTrips allTrips={allTrips} myTrips={myTrips} />}
       />
       <Route
         path="/my-trips"
         element={
           <RequireAuth>
-            <MyTrips userTrips={userTrips} />
+            <MyTrips myTrips={myTrips} />
           </RequireAuth>
         }
       />
@@ -58,7 +56,7 @@ export const AppRoutes = ({ allTrips, userTrips, addTrip }) => {
         path="/new-trip"
         element={
           <RequireAuth>
-            <NewTrip addTrip={addTrip} />
+            <NewTrip addTrip={addTrip} myTrips={myTrips} />
           </RequireAuth>
         }
       />
@@ -66,7 +64,7 @@ export const AppRoutes = ({ allTrips, userTrips, addTrip }) => {
         path="/trips/:tripId"
         element={
           <RequireAuth>
-            <TripDetails />
+            <TripDetails setMyTrips={setMyTrips} myTrips={myTrips} />
           </RequireAuth>
         }
       />

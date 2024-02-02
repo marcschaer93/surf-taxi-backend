@@ -28,7 +28,7 @@ exports.createNewTrip = asyncHandler(async (req, res, next) => {
   res.status(201).json({ success: true, data: newTrip });
 });
 
-// Handle trip delete on POST.
+// Handle trip delete on DELETE.
 exports.deleteOneTrip = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.tripId);
   await TripApi.deleteOneTrip(tripId);

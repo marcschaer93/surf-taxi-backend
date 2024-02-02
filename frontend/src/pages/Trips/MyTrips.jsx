@@ -9,36 +9,17 @@ import { useNavigate } from "react-router-dom";
 import * as UserApi from "../../api/services/UserApi";
 import { useTripData } from "../../hooks/useTripData";
 
-export const MyTrips = () => {
+export const MyTrips = ({ myTrips }) => {
   const { user } = useAuthContext();
   const { showBoundary } = useErrorBoundary();
   const navigate = useNavigate();
-  const { myTrips, setMyTrips } = useTripData();
-  const [myTripsLoading, setMyTripsLoading] = useState(true);
+  console.log("MYTRIPS", myTrips);
 
-  useEffect(() => {
-    const getAllMyTrips = async () => {
-      try {
-        const myTripsData = await UserApi.getAllUserTrips(user.username);
-        setMyTrips(myTripsData);
-        setMyTripsLoading(false);
-      } catch (error) {
-        // Show error boundary
-        showBoundary(error);
-        console.error("Error fetching trips:", error);
-        setMyTrips([]);
-        setMyTripsLoading(false);
-      }
-    };
-    if (user) {
-      getAllMyTrips();
-    }
-  }, []);
+  if (!myTrips) return <Box>No Trips available</Box>;
 
   return (
     <>
       {myTrips.length === 0 && <Box>No trips in Mytrips availabe...</Box>}
-      {myTripsLoading && <Box>Loading...</Box>}
       {""}
       <Box>
         {myTrips.map((trip) => (

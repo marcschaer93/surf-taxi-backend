@@ -12,44 +12,45 @@ import {
 } from "@mui/material";
 import { theme } from "../../utils/theme";
 import { StatusChip } from "../../components/ui/StatusChip";
+import { useNavigate } from "react-router-dom";
+import { CancelRequestConfirmationCard } from "../../components/confirmationCards/CancelRequestConfirmationCard";
+import { JoinRequestConfirmationCard } from "../../components/confirmationCards/JoinRequestConfirmationCard";
+import { DeleteOwnTripConfirmationCard } from "../../components/confirmationCards/DeleteOwnTripConfirmationCard";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   position: "relative",
-  borderWidth: "0.5px",
+  borderWidth: "1px", // Increase border width for a more prominent look
+  borderRadius: theme.shape.borderRadius, // Use the theme's border radius for consistency
+  overflow: "hidden", // Hide overflow for better aesthetics
   cursor: "pointer",
-  transition: "background 0.3s ease",
+  transition: "background 0.3s ease, transform 0.3s ease",
   margin: "20px 0", // Add margin to create space between cards
   width: "100%",
-
   "&:hover": {
     background: theme.palette.action.hover,
+    transform: "scale(1.02)", // Scale the card slightly on hover for a subtle effect
+    boxShadow: `0 5px 15px rgba(0, 0, 0, 0.2)`, // Add a shadow on hover
+  },
+  "&:active": {
+    transform: "scale(0.98)", // Shrink the card slightly on click
   },
 }));
 
 export const OwnerTripDetailsCard = ({
   tripDetails,
   passengers,
-  isTripOwner,
   handleGoBack,
-  handleConfirmCancel,
-  handleBack,
-  handleConfirmJoin,
-  userStatus,
-  handleJoinTrip,
+  handleConfirmDelete,
   showConfirmation,
+  openConfirmation,
+  closeConfirmation,
 }) => {
-  console.log("PASSENGERS", passengers);
+  const navigate = useNavigate();
+
   return (
     <>
-      <StyledCard
-        variant="outlined"
-        sx={{
-          borderColor: isTripOwner
-            ? theme.palette.contrast.main
-            : theme.palette.grey[800],
-        }}
-      >
-        <StatusChip isTripOwner={isTripOwner} />;
+      <StyledCard variant="outlined">
+        <StatusChip isTripOwner={true} />
         <CardContent>
           <Typography variant="h4">Trip Details</Typography>
           <Typography variant="body1" gutterBottom>
@@ -82,30 +83,20 @@ export const OwnerTripDetailsCard = ({
           </Box>
         </CardContent>
         <CardActions>
-          {!isTripOwner && (
-            <>
-              {userStatus ? (
-                <Button onClick={handleJoinTrip}>Cancel Trip</Button>
-              ) : (
-                <Button onClick={handleJoinTrip}>Join Trip</Button>
-              )}
-
-              {showConfirmation && (
-                <Confirmation
-                  tripDetails={tripDetails}
-                  onConfirm={handleConfirmJoin}
-                  onCancel={handleConfirmCancel}
-                  onGoBack={handleGoBack}
-                  userStatus={userStatus}
-                />
-              )}
-            </>
-          )}
-
-          <Button size="small" onClick={handleBack} variant="outlined">
+          <Button onClick={openConfirmation}>Delete Trip</Button>
+          <Button size="small" onClick={() => navigate(-1)} variant="outlined">
             Go Back
           </Button>
         </CardActions>
+        <Box>
+          <DeleteOwnTripConfirmationCard
+            tripDetails={tripDetails}
+            handleConfirmDelete={handleConfirmDelete}
+            handleGoBack={handleGoBack}
+            open={showConfirmation}
+            onClose={closeConfirmation}
+          />
+        </Box>
       </StyledCard>
     </>
   );
