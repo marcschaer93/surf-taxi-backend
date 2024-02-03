@@ -16,25 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { CancelRequestConfirmationCard } from "../../components/confirmationCards/CancelRequestConfirmationCard";
 import { JoinRequestConfirmationCard } from "../../components/confirmationCards/JoinRequestConfirmationCard";
 import { DeleteOwnTripConfirmationCard } from "../../components/confirmationCards/DeleteOwnTripConfirmationCard";
-
-const StyledCard = styled(Card)(({ theme }) => ({
-  position: "relative",
-  borderWidth: "1px", // Increase border width for a more prominent look
-  borderRadius: theme.shape.borderRadius, // Use the theme's border radius for consistency
-  overflow: "hidden", // Hide overflow for better aesthetics
-  cursor: "pointer",
-  transition: "background 0.3s ease, transform 0.3s ease",
-  margin: "20px 0", // Add margin to create space between cards
-  width: "100%",
-  "&:hover": {
-    background: theme.palette.action.hover,
-    transform: "scale(1.02)", // Scale the card slightly on hover for a subtle effect
-    boxShadow: `0 5px 15px rgba(0, 0, 0, 0.2)`, // Add a shadow on hover
-  },
-  "&:active": {
-    transform: "scale(0.98)", // Shrink the card slightly on click
-  },
-}));
+import { StyledDetailsCard } from "../../styles/cardStyles";
 
 export const OwnerTripDetailsCard = ({
   tripDetails,
@@ -49,7 +31,7 @@ export const OwnerTripDetailsCard = ({
 
   return (
     <>
-      <StyledCard variant="outlined">
+      <StyledDetailsCard variant="outlined">
         <StatusChip isTripOwner={true} />
         <CardContent>
           <Typography variant="h4">Trip Details</Typography>
@@ -97,7 +79,7 @@ export const OwnerTripDetailsCard = ({
             onClose={closeConfirmation}
           />
         </Box>
-      </StyledCard>
+      </StyledDetailsCard>
     </>
   );
 };

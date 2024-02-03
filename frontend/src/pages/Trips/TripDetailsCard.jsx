@@ -1,4 +1,3 @@
-import { Confirmation } from "./Confirmation";
 import {
   Box,
   Card,
@@ -11,37 +10,14 @@ import {
 } from "@mui/material";
 import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
 import { useLocation, useNavigate } from "react-router-dom";
+
+import { Confirmation } from "./Confirmation";
 import { theme } from "../../utils/theme";
 import { StatusChip } from "../../components/ui/StatusChip";
 import { CancelRequestConfirmationCard } from "../../components/confirmationCards/CancelRequestConfirmationCard";
 import { JoinRequestConfirmationCard } from "../../components/confirmationCards/JoinRequestConfirmationCard";
-
-const StyledCard = styled(Card)(({ theme }) => ({
-  position: "relative",
-  borderWidth: "1px", // Increase border width for a more prominent look
-  borderRadius: theme.shape.borderRadius, // Use the theme's border radius for consistency
-  overflow: "hidden", // Hide overflow for better aesthetics
-  cursor: "pointer",
-  transition: "background 0.3s ease, transform 0.3s ease",
-  margin: "20px 0", // Add margin to create space between cards
-  width: "100%",
-  "&:hover": {
-    background: theme.palette.action.hover,
-    transform: "scale(1.02)", // Scale the card slightly on hover for a subtle effect
-    boxShadow: `0 5px 15px rgba(0, 0, 0, 0.2)`, // Add a shadow on hover
-  },
-  "&:active": {
-    transform: "scale(0.98)", // Shrink the card slightly on click
-  },
-}));
-
-const FavoriteButton = styled(Box)({
-  position: "absolute",
-  top: 18,
-  right: 18,
-  fontSize: "8px",
-  fontWeight: "bold",
-});
+import { FavoriteButton } from "../../styles/buttonStyles";
+import { StyledDetailsCard } from "../../styles/cardStyles";
 
 export const TripDetailsCard = ({
   tripDetails,
@@ -63,11 +39,9 @@ export const TripDetailsCard = ({
     console.log(`added trip with id: ${tripId} to favorites. NOT IMPLEMENTED`);
   };
 
-  console.log("USERSTATUS", userStatus);
-
   return (
     <>
-      <StyledCard variant="outlined">
+      <StyledDetailsCard variant="outlined">
         {isInMyTrips && <StatusChip isTripOwner={false} />}
 
         {!isInMyTrips && (
@@ -139,7 +113,7 @@ export const TripDetailsCard = ({
             Go Back
           </Button>
         </CardActions>
-      </StyledCard>
+      </StyledDetailsCard>
     </>
   );
 };

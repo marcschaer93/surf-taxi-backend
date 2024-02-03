@@ -1,71 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Box } from "@mui/material";
 
 import { useAuthContext } from "../../context/authProvider";
 import * as PassengerApi from "../../api/services/PassengerApi";
 import * as TripApi from "../../api/services/TripApi";
 import * as UserApi from "../../api/services/UserApi";
-import { useTripData } from "../../hooks/useTripData";
-import {
-  Box,
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-  Typography,
-  styled,
-} from "@mui/material";
-import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
-
 import { TripDetailsCard } from "./TripDetailsCard";
 import { OwnerTripDetailsCard } from "./OwnerTripDetailsCard";
+import { useTripPassengers } from "../../hooks/useTripPassengers";
+import { useTripDetails } from "../../hooks/useTripDetails";
 
 export const TripDetails = ({ myTrips, setMyTrips }) => {
   const { tripId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  const [tripDetails, setTripDetails] = useState(null);
-  const [passengers, setPassengers] = useState([]);
   const [userStatus, setUserStatus] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  useEffect(() => {
-    const fetchTripDetails = async () => {
-      try {
-        const tripDetailsData = await TripApi.getOneTrip(tripId);
-        setTripDetails(tripDetailsData);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // trip passenger custom hook
+  const { passengers, setPassengers, loadingPassengers } = useTripPassengers(
+    tripId,
+    user.username
+  );
 
-    fetchTripDetails();
-  }, [tripId]);
+  // trip details custom hook
+  const { tripDetails, loadingDetails } = useTripDetails(tripId);
 
   useEffect(() => {
-    const fetchTripPassengers = async () => {
-      try {
-        const tripPassengersData = await PassengerApi.getTripPassengers(tripId);
-        setPassengers(tripPassengersData);
+    const currentUserAsPassenger = passengers?.find(
+      (p) => p.username === user.username
+    );
 
-        const currentUserAsPassenger = tripPassengersData.find(
-          (p) => p.username === user.username
-        );
-
-        if (currentUserAsPassenger) {
-          setUserStatus(currentUserAsPassenger.reservationStatus);
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTripPassengers();
-  }, [tripId, user.username]);
+    if (currentUserAsPassenger) {
+      setUserStatus(currentUserAsPassenger.reservationStatus);
+    }
+  }, [passengers]);
 
   const handleConfirmJoin = async () => {
     try {
@@ -131,7 +101,7 @@ export const TripDetails = ({ myTrips, setMyTrips }) => {
 
   return (
     <>
-      {loading && <Box>Loading...</Box>}
+      {loadingDetails || (loadingPassengers && <Box>Loading...</Box>)}
 
       {tripDetails && isTripOwner && (
         <OwnerTripDetailsCard

@@ -18,9 +18,6 @@ export const AllTrips = ({ allTrips, myTrips }) => {
 
   const trips = user ? filteredTrips : allTrips;
 
-  console.log("MYTRIPS", myTrips);
-  console.log("TRIPS", trips);
-
   return (
     <>
       <Box>

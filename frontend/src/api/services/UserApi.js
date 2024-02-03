@@ -13,7 +13,6 @@ export const getOneUser = async () => {
 export const updateUserProfile = async (username, updateData) => {
   try {
     const response = await ApiService.patch(`/users/${username}`, updateData);
-    console.log("response", response);
     return response.data.data;
   } catch (error) {
     handleApiError(error);
@@ -23,7 +22,7 @@ export const updateUserProfile = async (username, updateData) => {
 export const getAllUserTrips = async (username) => {
   try {
     const response = await ApiService.get(`/users/${username}/trips`);
-    console.log("AllUserTrips", response.data.data);
+    // console.log("AllUserTrips", response.data.data);
     return response.data.data;
   } catch (error) {
     handleApiError(error);

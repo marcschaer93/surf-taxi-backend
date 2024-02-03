@@ -4,7 +4,6 @@ import { Route, Routes } from "react-router-dom";
 import { AllTrips } from "./pages/Trips/AllTrips";
 import { Home } from "./pages/Home";
 import { RequireAuth } from "./components/RequireAuth";
-import { useTripData } from "./hooks/useTripData";
 import { TripDetails } from "./pages/Trips/TripDetails";
 import { Navbar } from "./components/Navbar";
 import { Login } from "./pages/Login";
@@ -19,6 +18,8 @@ import { Rightbar } from "./components/Rightbar";
 import { AppRoutes } from "./components/AppRoutes";
 
 import { BottomNavBar } from "./components/BottomNavBar";
+import { useAllTrips } from "./hooks/useAllTrips";
+import { useMyTrips } from "./hooks/useMyTrips";
 
 const MainContent = styled(Box)(({ theme }) => ({
   flex: 4,
@@ -27,7 +28,8 @@ const MainContent = styled(Box)(({ theme }) => ({
 }));
 
 export default function App() {
-  const { allTrips, myTrips, setMyTrips, addTrip } = useTripData();
+  const { allTrips, loadingAllTrips } = useAllTrips();
+  const { myTrips, setMyTrips, addTrip, loadingMyTrips } = useMyTrips();
 
   return (
     <>

@@ -10,43 +10,19 @@ import {
   Chip,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "../../context/authProvider";
 import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
+
+import { useAuthContext } from "../../context/authProvider";
 import { theme } from "../../utils/theme";
 import { StatusChip } from "../../components/ui/StatusChip";
+import { StyledPreviewCard } from "../../styles/cardStyles";
+import { FavoriteButton } from "../../styles/buttonStyles";
 
 export const TripPreviewCard = ({ trip, isInMyTrips }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const tripId = trip.id;
   const isTripOwner = user && trip.owner === user.username;
-
-  const StyledCard = styled(Card)(({ theme }) => ({
-    position: "relative",
-    borderWidth: "1px", // Increase border width for a more prominent look
-    borderRadius: theme.shape.borderRadius, // Use the theme's border radius for consistency
-    overflow: "hidden", // Hide overflow for better aesthetics
-    cursor: "pointer",
-    transition: "background 0.3s ease, transform 0.3s ease",
-    margin: "20px 0", // Add margin to create space between cards
-    width: "100%",
-    "&:hover": {
-      background: theme.palette.action.hover,
-      transform: "scale(1.02)", // Scale the card slightly on hover for a subtle effect
-      boxShadow: `0 5px 15px rgba(0, 0, 0, 0.2)`, // Add a shadow on hover
-    },
-    "&:active": {
-      transform: "scale(0.98)", // Shrink the card slightly on click
-    },
-  }));
-
-  const FavoriteButton = styled(Box)({
-    position: "absolute",
-    top: 18,
-    right: 18,
-    fontSize: "8px",
-    fontWeight: "bold",
-  });
 
   const handleFavorite = (e, tripId) => {
     e.stopPropagation();
@@ -58,7 +34,7 @@ export const TripPreviewCard = ({ trip, isInMyTrips }) => {
   };
 
   return (
-    <StyledCard
+    <StyledPreviewCard
       variant="outlined"
       onClick={handleCardClick}
       sx={{
@@ -92,6 +68,6 @@ export const TripPreviewCard = ({ trip, isInMyTrips }) => {
       </CardContent>
 
       <CardActions></CardActions>
-    </StyledCard>
+    </StyledPreviewCard>
   );
 };

@@ -1,4 +1,5 @@
 import { Typography, Box } from "@mui/material";
+
 import { useAuthContext } from "../../context/authProvider";
 import { TripForm } from "./TripForm";
 
