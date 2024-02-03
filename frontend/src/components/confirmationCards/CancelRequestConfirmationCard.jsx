@@ -13,16 +13,14 @@ export const CancelRequestConfirmationCard = ({
   const title = "Confirm Cancel Request";
 
   return (
-    <Box>
-      <Confirmation
-        open={open}
-        onClose={onClose}
-        tripDetails={tripDetails}
-        onConfirm={handleConfirmCancel}
-        onCancel={handleGoBack}
-        message={message}
-        title={title}
-      />
-    </Box>
+    <Confirmation
+      open={open}
+      onClose={onClose}
+      tripDetails={tripDetails}
+      onConfirm={handleConfirmCancel}
+      onCancel={handleGoBack}
+      message={message}
+      title={title}
+    />
   );
 };

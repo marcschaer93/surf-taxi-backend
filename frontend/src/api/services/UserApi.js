@@ -49,3 +49,24 @@ export const deleteMyTrip = async (tripId, username) => {
     throw error;
   }
 };
+
+export const updateUserFavoriteIds = async (favoriteIds, username) => {
+  try {
+    console.log("FAVIDS", favoriteIds);
+    // const response = await ApiService.post(
+    //   `/users/${username}/favorites`,
+    //   favoriteIds
+    // );
+
+    const response = await ApiService.patch(
+      `/users/${username}/favorites`,
+      favoriteIds
+    );
+
+    console.log("RESPONSE", response);
+    return response.data.data;
+  } catch (error) {
+    handleApiError(error);
+    throw error;
+  }
+};

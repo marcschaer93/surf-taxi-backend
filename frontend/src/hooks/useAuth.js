@@ -11,20 +11,12 @@ export const useAuth = () => {
   const [user, setUser] = useLocalStorage("user", null);
   const navigate = useNavigate();
 
-  // const [loggedInUser, setLoggedInUser] = useLocalStorage("loggedInUser", null);
-  // const getUserData = async (username) => {
-  //   try {
-  //     const userData = await UserApi.
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (loggedInUser) {
-  //     getUserData(username);
-  //   }
-  // }, [loggedInUser]);
+  const updateUser = (newUserData) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      ...newUserData,
+    }));
+  };
 
   const handleLogin = async (credentials) => {
     try {
@@ -112,5 +104,5 @@ export const useAuth = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  return { user, handleLogin, handleRegister, handleLogout };
+  return { user, handleLogin, handleRegister, handleLogout, updateUser };
 };

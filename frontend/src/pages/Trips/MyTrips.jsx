@@ -20,7 +20,7 @@ export const MyTrips = ({ myTrips }) => {
       {""}
       <Box>
         {myTrips.map((trip) => (
-          <TripPreviewCard key={trip.id} trip={trip} isInMyTrips={true} />
+          <TripPreviewCard key={trip.id} tripId={trip.id} isInMyTrips={true} />
         ))}
       </Box>
     </>

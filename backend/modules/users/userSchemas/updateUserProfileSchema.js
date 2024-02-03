@@ -118,6 +118,10 @@ const updateUserProfileSchema = {
     },
     optional: true,
   },
+  favoriteIds: {
+    in: ["body"],
+    optional: true,
+  },
 
   // Additional check to disallow unexpected properties
   unexpectedProperties: {

@@ -17,57 +17,68 @@ import { theme } from "../../utils/theme";
 import { StatusChip } from "../../components/ui/StatusChip";
 import { StyledPreviewCard } from "../../styles/cardStyles";
 import { FavoriteButton } from "../../styles/buttonStyles";
+import { useTripDetails } from "../../hooks/useTripDetails";
+import { useFavorite } from "../../hooks/useFavorite";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
-export const TripPreviewCard = ({ trip, isInMyTrips }) => {
+export const TripPreviewCard = ({ tripId, isInMyTrips }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  const tripId = trip.id;
-  const isTripOwner = user && trip.owner === user.username;
+
+  // trip details custom hook
+  const { tripDetails, loadingDetails } = useTripDetails(tripId);
+  const isTripOwner = user && tripDetails?.owner === user.username;
+
+  const { isFavorited, toggleFavorite, loading } = useFavorite(tripId);
 
   const handleFavorite = (e, tripId) => {
     e.stopPropagation();
-    console.log(`added trip with id: ${tripId} to favorites. NOT IMPLEMENTED`);
+    toggleFavorite();
   };
 
   const handleCardClick = () => {
-    navigate(`/trips/${tripId}`, { state: { isInMyTrips } });
+    navigate(`/trips/${tripId}`, { state: { tripDetails, isInMyTrips } });
   };
 
+  if (loadingDetails) return <Box>Loading...</Box>;
+
   return (
-    <StyledPreviewCard
-      variant="outlined"
-      onClick={handleCardClick}
-      sx={{
-        borderColor: isTripOwner
-          ? theme.palette.contrast.main
-          : theme.palette.grey[800],
-      }}
-    >
-      {!isInMyTrips && (
-        <FavoriteButton>
-          <FavoriteBorderSharpIcon
-            color="secondary"
-            onClick={(e) => handleFavorite(e)}
-            style={{ cursor: "pointer" }}
-          />
-        </FavoriteButton>
-      )}
+    <>
+      <StyledPreviewCard
+        variant="outlined"
+        onClick={handleCardClick}
+        sx={{
+          borderColor: isTripOwner
+            ? theme.palette.contrast.main
+            : theme.palette.grey[800],
+        }}
+      >
+        {!isInMyTrips && (
+          <FavoriteButton onClick={handleFavorite} color="secondary">
+            {isFavorited ? (
+              <FavoriteIcon style={{ cursor: "pointer" }} />
+            ) : (
+              <FavoriteBorderSharpIcon style={{ cursor: "pointer" }} />
+            )}
+          </FavoriteButton>
+        )}
 
-      {isInMyTrips && <StatusChip isTripOwner={isTripOwner} />}
+        {isInMyTrips && <StatusChip isTripOwner={isTripOwner} />}
 
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          {trip.startLocation} - {trip.destination}
-        </Typography>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            {tripDetails.startLocation} - {tripDetails.destination}
+          </Typography>
 
-        <Typography color="text.secondary">
-          <Box component="span">Stops: {trip.stops}</Box>
-        </Typography>
+          <Typography color="text.secondary">
+            <Box component="span">Stops: {tripDetails.stops}</Box>
+          </Typography>
 
-        {/* Add other trip details here */}
-      </CardContent>
+          {/* Add other trip details here */}
+        </CardContent>
 
-      <CardActions></CardActions>
-    </StyledPreviewCard>
+        <CardActions></CardActions>
+      </StyledPreviewCard>
+    </>
   );
 };

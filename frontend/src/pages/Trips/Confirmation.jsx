@@ -13,12 +13,6 @@ import {
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckIcon from "@mui/icons-material/Check";
 
-const StyledDialog = styled(Dialog)({
-  "& .MuiDialog-paper": {
-    // Apply custom styles to the dialog content if needed
-  },
-});
-
 export const Confirmation = ({
   open,
   onClose,
@@ -28,7 +22,7 @@ export const Confirmation = ({
   title,
 }) => {
   return (
-    <StyledDialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose}>
       <DialogTitle>
         <Typography variant="h6">{title || "Confirm Action"}</Typography>
       </DialogTitle>
@@ -45,6 +39,6 @@ export const Confirmation = ({
           Confirm
         </Button>
       </DialogActions>
-    </StyledDialog>
+    </Dialog>
   );
 };

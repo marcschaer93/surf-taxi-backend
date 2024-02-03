@@ -58,3 +58,11 @@ router.delete(
   ensureCorrectUser,
   userController.deleteMyTrip
 );
+
+// POST request to update favorite IDs of a user
+router.patch(
+  "/:username/favorites",
+  authenticate,
+  ensureCorrectUser,
+  userController.updateUserFavoriteIds
+);

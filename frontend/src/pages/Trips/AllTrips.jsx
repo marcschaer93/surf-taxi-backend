@@ -26,7 +26,7 @@ export const AllTrips = ({ allTrips, myTrips }) => {
         </Typography>
 
         {trips.map((trip) => (
-          <TripPreviewCard key={trip.id} trip={trip} isInMyTrips={false} />
+          <TripPreviewCard key={trip.id} tripId={trip.id} isInMyTrips={false} />
         ))}
       </Box>
     </>

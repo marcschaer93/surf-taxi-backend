@@ -80,3 +80,15 @@ exports.deleteMyTrip = asyncHandler(async (req, res, next) => {
     .status(204)
     .json({ success: true, data: { message: "Trip deleted successfully" } });
 });
+
+// Handle update user favorites
+exports.updateUserFavoriteIds = asyncHandler(async (req, res, next) => {
+  const { favoriteIds } = req.body;
+
+  const updatedUser = await UserApi.updateUserFavoriteIds(
+    req.params.username,
+    favoriteIds
+  );
+
+  res.status(200).json({ success: true, data: updatedUser });
+});

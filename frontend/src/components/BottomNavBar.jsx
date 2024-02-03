@@ -45,7 +45,9 @@ export const BottomNavBar = () => {
               icon={<SearchIcon />}
             />
             <BottomNavigationAction
-              label="Saved"
+              component={NavLink}
+              to="/favorites"
+              label="Favorites"
               icon={<FavoriteBorderSharpIcon />}
             />
             <BottomNavigationAction

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 import { useAuthContext } from "../../context/authProvider";
 import * as PassengerApi from "../../api/services/PassengerApi";
@@ -18,14 +19,15 @@ export const TripDetails = ({ myTrips, setMyTrips }) => {
   const [userStatus, setUserStatus] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
+  const location = useLocation();
+  const { state } = location;
+  const tripDetails = state?.tripDetails;
+
   // trip passenger custom hook
   const { passengers, setPassengers, loadingPassengers } = useTripPassengers(
     tripId,
     user.username
   );
-
-  // trip details custom hook
-  const { tripDetails, loadingDetails } = useTripDetails(tripId);
 
   useEffect(() => {
     const currentUserAsPassenger = passengers?.find(
@@ -59,6 +61,7 @@ export const TripDetails = ({ myTrips, setMyTrips }) => {
           (passenger) => passenger.username !== user.username
         )
       );
+
       const myTripsData = await UserApi.getAllUserTrips(user.username);
       setMyTrips(myTripsData);
       setPassengers([]);
@@ -101,7 +104,7 @@ export const TripDetails = ({ myTrips, setMyTrips }) => {
 
   return (
     <>
-      {loadingDetails || (loadingPassengers && <Box>Loading...</Box>)}
+      {loadingPassengers && <Box>Loading...</Box>}
 
       {tripDetails && isTripOwner && (
         <OwnerTripDetailsCard

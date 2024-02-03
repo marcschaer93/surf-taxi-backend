@@ -40,7 +40,6 @@ import { theme } from "../utils/theme";
 export const Navbar = () => {
   //   const theme = useTheme();
   const { handleLogin, handleLogout, user } = useAuthContext();
-
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenUserMenu = (event) => {
@@ -57,13 +56,6 @@ export const Navbar = () => {
     gap: "20px",
     [theme.breakpoints.up("sm")]: { display: "flex" },
   }));
-
-  // const UserBox = styled(Box)(({ theme }) => ({
-  //   display: "flex",
-  //   alignItems: "center",
-  //   gap: "10px",
-  //   [theme.breakpoints.up("sm")]: { display: "none" },
-  // }));
 
   const logout = () => {
     handleLogout();
@@ -82,12 +74,6 @@ export const Navbar = () => {
               size="large"
               color="inherit"
             >
-              {/* <Typography
-                variant="h6"
-                // component="div"
-                sx={{ flexGrow: 1, display: "block" }}
-              >
-              </Typography> */}
               <SurfingIcon />
               Surf taxi
             </Button>
@@ -97,15 +83,26 @@ export const Navbar = () => {
 
           <Box sx={{ display: { xs: "none", sm: "flex" }, gap: "20px" }}>
             {user && (
-              <Button
-                component={NavLink}
-                to="/my-trips"
-                size="large"
-                color="inherit"
-                sx={navLinkStyle}
-              >
-                MyTrips
-              </Button>
+              <>
+                <Button
+                  component={NavLink}
+                  to="/my-trips"
+                  size="large"
+                  color="inherit"
+                  sx={navLinkStyle}
+                >
+                  MyTrips
+                </Button>
+                <Button
+                  component={NavLink}
+                  to="/favorites"
+                  size="large"
+                  color="inherit"
+                  sx={navLinkStyle}
+                >
+                  Favorites
+                </Button>
+              </>
             )}
           </Box>
           <Box>

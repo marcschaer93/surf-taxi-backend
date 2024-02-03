@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
 import { useLocation, useNavigate } from "react-router-dom";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import { Confirmation } from "./Confirmation";
 import { theme } from "../../utils/theme";
@@ -18,6 +19,8 @@ import { CancelRequestConfirmationCard } from "../../components/confirmationCard
 import { JoinRequestConfirmationCard } from "../../components/confirmationCards/JoinRequestConfirmationCard";
 import { FavoriteButton } from "../../styles/buttonStyles";
 import { StyledDetailsCard } from "../../styles/cardStyles";
+import { useFavorite } from "../../hooks/useFavorite";
+import { useParams } from "react-router-dom";
 
 export const TripDetailsCard = ({
   tripDetails,
@@ -31,12 +34,16 @@ export const TripDetailsCard = ({
   closeConfirmation,
 }) => {
   const location = useLocation();
+  const { tripId } = useParams();
+
   const navigate = useNavigate();
   const isInMyTrips = location.state?.isInMyTrips;
 
+  const { isFavorited, toggleFavorite, loading } = useFavorite(tripId);
+
   const handleFavorite = (e, tripId) => {
     e.stopPropagation();
-    console.log(`added trip with id: ${tripId} to favorites. NOT IMPLEMENTED`);
+    toggleFavorite(tripId);
   };
 
   return (
@@ -45,12 +52,12 @@ export const TripDetailsCard = ({
         {isInMyTrips && <StatusChip isTripOwner={false} />}
 
         {!isInMyTrips && (
-          <FavoriteButton>
-            <FavoriteBorderSharpIcon
-              color="secondary"
-              onClick={(e) => handleFavorite(e)}
-              style={{ cursor: "pointer" }}
-            />
+          <FavoriteButton onClick={handleFavorite} color="secondary">
+            {isFavorited ? (
+              <FavoriteIcon style={{ cursor: "pointer" }} />
+            ) : (
+              <FavoriteBorderSharpIcon style={{ cursor: "pointer" }} />
+            )}
           </FavoriteButton>
         )}
 

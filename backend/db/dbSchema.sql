@@ -13,7 +13,9 @@ CREATE TABLE users (
   languages TEXT,
   profile_img_url TEXT,
   bio TEXT,
-  role TEXT NOT NULL DEFAULT 'user'
+  role TEXT NOT NULL DEFAULT 'user',
+  favorite_ids INTEGER[] DEFAULT NULL
+
 );
 
 CREATE TABLE trips (

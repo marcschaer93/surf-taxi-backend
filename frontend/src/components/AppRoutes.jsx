@@ -11,6 +11,7 @@ import { MyTrips } from "../pages/Trips/MyTrips";
 import { TripDetails } from "../pages/Trips/TripDetails";
 import { RequireAuth } from "../components/RequireAuth";
 import { NewTrip } from "../pages/Trips/NewTrip";
+import { Favorites } from "../pages/Favorites";
 
 export const AppRoutes = ({ allTrips, myTrips, addTrip, setMyTrips }) => {
   return (
@@ -65,6 +66,14 @@ export const AppRoutes = ({ allTrips, myTrips, addTrip, setMyTrips }) => {
         element={
           <RequireAuth>
             <TripDetails setMyTrips={setMyTrips} myTrips={myTrips} />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/favorites"
+        element={
+          <RequireAuth>
+            <Favorites myTrips={myTrips} />
           </RequireAuth>
         }
       />

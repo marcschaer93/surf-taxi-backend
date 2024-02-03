@@ -235,6 +235,29 @@ class UserApi {
 
     return;
   }
+
+  static async updateUserFavoriteIds(username, favoriteIds) {
+    const updateUserFavoritesResult = await db.query(
+      `
+      UPDATE users 
+      SET favorite_ids = $1
+      WHERE username = $2
+      RETURNING *
+      `,
+      [favoriteIds, username]
+    );
+
+    const updatedUser = jsReady.convertKeysToCamelCase(
+      updateUserFavoritesResult.rows[0]
+    );
+
+    if (!updatedUser) {
+      throw new Error(
+        `User with username ${username} not found or favorites not updated.`
+      );
+    }
+    return updatedUser;
+  }
 }
 
 module.exports = UserApi;
