@@ -77,7 +77,7 @@ class AuthApi {
           languages, 
           profile_img_url, 
           bio,
-          favoriteIds
+          favorite_ids
       `,
       [
         username,

@@ -58,10 +58,9 @@ export const updateUserFavoriteIds = async (favoriteIds, username) => {
     //   favoriteIds
     // );
 
-    const response = await ApiService.patch(
-      `/users/${username}/favorites`,
-      favoriteIds
-    );
+    const response = await ApiService.patch(`/users/${username}/favorites`, {
+      favoriteIds,
+    });
 
     console.log("RESPONSE", response);
     return response.data.data;

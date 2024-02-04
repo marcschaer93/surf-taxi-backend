@@ -9,7 +9,6 @@ export const useFavorite = (tripId) => {
     user.favoriteIds?.includes(tripId) || false
   );
 
-  console.log("IS FAV", isFavorited);
   const [loading, setLoading] = useState(false);
 
   const toggleFavorite = async () => {

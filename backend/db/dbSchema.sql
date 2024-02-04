@@ -15,7 +15,6 @@ CREATE TABLE users (
   bio TEXT,
   role TEXT NOT NULL DEFAULT 'user',
   favorite_ids INTEGER[] DEFAULT NULL
-
 );
 
 CREATE TABLE trips (

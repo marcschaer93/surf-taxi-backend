@@ -84,6 +84,7 @@ exports.deleteMyTrip = asyncHandler(async (req, res, next) => {
 // Handle update user favorites
 exports.updateUserFavoriteIds = asyncHandler(async (req, res, next) => {
   const { favoriteIds } = req.body;
+  console.log("FAVORITE IDS", favoriteIds);
 
   const updatedUser = await UserApi.updateUserFavoriteIds(
     req.params.username,
