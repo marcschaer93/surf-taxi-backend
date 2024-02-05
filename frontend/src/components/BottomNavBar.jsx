@@ -14,9 +14,13 @@ import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
 import SurfingSharpIcon from "@mui/icons-material/SurfingSharp";
 import { NavLink } from "react-router-dom";
 
-export const BottomNavBar = () => {
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Badge from "@mui/material/Badge";
+
+export const BottomNavBar = ({ notifications }) => {
   const { user } = useAuthContext();
   const [value, setValue] = useState(0);
+  console.log("NOTIFICATIONS BOTTOM NAVBAR", notifications);
 
   return (
     <Box
@@ -58,7 +62,16 @@ export const BottomNavBar = () => {
             />
             <BottomNavigationAction
               label="My Trips"
-              icon={<SurfingSharpIcon />}
+              icon={
+                <>
+                  {" "}
+                  {notifications && (
+                    <Badge badgeContent={notifications.length} color="error">
+                      <SurfingSharpIcon />
+                    </Badge>
+                  )}
+                </>
+              }
               component={NavLink}
               to="/my-trips"
             />
@@ -83,12 +96,7 @@ export const BottomNavBar = () => {
               label="Explore"
               icon={<RestoreIcon />}
             />
-            <BottomNavigationAction
-              component={NavLink}
-              to="/saved"
-              label="Wishlists"
-              icon={<FavoriteBorderSharpIcon />}
-            />
+
             <BottomNavigationAction
               component={NavLink}
               to="/login"

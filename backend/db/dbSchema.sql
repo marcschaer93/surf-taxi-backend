@@ -40,6 +40,51 @@ CREATE TABLE passengers (
   PRIMARY KEY (username, trip_id)
 );
 
+CREATE TABLE notifications (
+  id SERIAL PRIMARY KEY,
+  sender_username VARCHAR(25),  -- Represents the user who sends the notification (e.g., sends a join request)
+  recipient_username VARCHAR(25),  -- Represents the user who receives the notification (e.g., owner of the trip)
+  message TEXT,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  is_read BOOLEAN DEFAULT FALSE,
+  trip_id INTEGER
+    REFERENCES trips(id) ON DELETE CASCADE,
+  is_join_request BOOLEAN DEFAULT FALSE,
+  is_approval BOOLEAN DEFAULT FALSE,
+  email_contact BOOLEAN DEFAULT FALSE
+);
+
+
+-- Add the trigger and function
+CREATE OR REPLACE FUNCTION notify_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    notification_message TEXT;
+BEGIN
+    -- Check if the reservation_status is switched to 'requested'
+    IF NEW.reservation_status = 'requested' THEN
+        -- Create a notification message (customize this based on your needs)
+        notification_message := 'You have a new join request for your trip.';
+
+        -- Insert a new row into the notifications table
+        INSERT INTO notifications (sender_username, recipient_username, message, timestamp, is_read, trip_id, is_join_request, is_approval, email_contact)
+        VALUES (NEW.username, (SELECT owner FROM trips WHERE id = NEW.trip_id), notification_message, CURRENT_TIMESTAMP, FALSE, NEW.trip_id, TRUE, FALSE, FALSE);
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create the trigger that calls the function
+CREATE TRIGGER passenger_trigger
+AFTER INSERT ON passengers
+FOR EACH ROW
+EXECUTE FUNCTION notify_user();
+
+
+
+
+
 
 -- reservation status: 
 -- confirmed: The user's seat reservation has been confirmed.

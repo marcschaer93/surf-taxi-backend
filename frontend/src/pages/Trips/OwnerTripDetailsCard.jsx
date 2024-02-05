@@ -17,6 +17,7 @@ import { CancelRequestConfirmationCard } from "../../components/confirmationCard
 import { JoinRequestConfirmationCard } from "../../components/confirmationCards/JoinRequestConfirmationCard";
 import { DeleteOwnTripConfirmationCard } from "../../components/confirmationCards/DeleteOwnTripConfirmationCard";
 import { StyledDetailsCard } from "../../styles/cardStyles";
+import { PassengerCard } from "./PassengerCard";
 
 export const OwnerTripDetailsCard = ({
   tripDetails,
@@ -26,15 +27,18 @@ export const OwnerTripDetailsCard = ({
   showConfirmation,
   openConfirmation,
   closeConfirmation,
+  tripNotifications,
 }) => {
   const navigate = useNavigate();
 
   return (
     <>
+      <Typography variant="h4">My Organized Trip</Typography>
+
       <StyledDetailsCard variant="outlined">
         <StatusChip isTripOwner={true} />
         <CardContent>
-          <Typography variant="h4">Trip Details</Typography>
+          <Typography variant="h6">Trip Details</Typography>
           <Typography variant="body1" gutterBottom>
             Start Location: {tripDetails.startLocation}
           </Typography>
@@ -46,23 +50,7 @@ export const OwnerTripDetailsCard = ({
             Stops: {tripDetails.stops}
           </Typography>
 
-          <Typography variant="h5">Passengers</Typography>
-
-          <Box>
-            {passengers && passengers.length > 0 ? (
-              passengers.map((p) => (
-                <Box
-                  key={p.username + p.trip_id}
-                  sx={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <Typography>{p.username}</Typography>
-                  <Typography>Status: {p.reservationStatus}</Typography>
-                </Box>
-              ))
-            ) : (
-              <Typography>No Passengers</Typography>
-            )}
-          </Box>
+          <Typography variant="h6">Passengers</Typography>
         </CardContent>
         <CardActions>
           <Button onClick={openConfirmation}>Delete Trip</Button>
@@ -80,6 +68,26 @@ export const OwnerTripDetailsCard = ({
           />
         </Box>
       </StyledDetailsCard>
+      <Box>
+        <Typography variant="h5">My Passengers</Typography>
+
+        {passengers && passengers.length > 0 ? (
+          passengers.map((p) => (
+            <PassengerCard
+              tripDetails={tripDetails}
+              openConfirmation={openConfirmation}
+              showConfirmation={showConfirmation}
+              closeConfirmation={closeConfirmation}
+              passenger={p}
+              passengerNotification={tripNotifications.filter(
+                (n) => p.username === n.senderUsername
+              )}
+            />
+          ))
+        ) : (
+          <Typography>No Passengers</Typography>
+        )}
+      </Box>
     </>
   );
 };

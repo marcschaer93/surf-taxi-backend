@@ -66,3 +66,10 @@ router.patch(
   ensureCorrectUser,
   userController.updateUserFavoriteIds
 );
+
+router.get(
+  "/:username/check-notifications",
+  authenticate,
+  ensureCorrectUser,
+  userController.checkNotifications
+);

@@ -20,6 +20,8 @@ import { AppRoutes } from "./components/AppRoutes";
 import { BottomNavBar } from "./components/BottomNavBar";
 import { useAllTrips } from "./hooks/useAllTrips";
 import { useMyTrips } from "./hooks/useMyTrips";
+import { useNotifications } from "./hooks/useNotifications";
+import { useAuthContext } from "./context/authProvider";
 
 const MainContent = styled(Box)(({ theme }) => ({
   flex: 4,
@@ -28,8 +30,11 @@ const MainContent = styled(Box)(({ theme }) => ({
 }));
 
 export default function App() {
+  const { user } = useAuthContext();
   const { allTrips, loadingAllTrips } = useAllTrips();
   const { myTrips, setMyTrips, addTrip, loadingMyTrips } = useMyTrips();
+
+  const { notifications } = user ? useNotifications() : [];
 
   return (
     <>
@@ -43,12 +48,16 @@ export default function App() {
             addTrip={addTrip}
             myTrips={myTrips}
             setMyTrips={setMyTrips}
+            notifications={notifications}
           />
         </MainContent>
         <Rightbar />
       </Stack>
 
-      <BottomNavBar sx={{ display: { sm: "none" } }} />
+      <BottomNavBar
+        notifications={notifications}
+        sx={{ display: { sm: "none" } }}
+      />
     </>
   );
 }

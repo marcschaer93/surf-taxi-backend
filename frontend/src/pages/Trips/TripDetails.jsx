@@ -22,6 +22,7 @@ export const TripDetails = ({ myTrips, setMyTrips }) => {
   const location = useLocation();
   const { state } = location;
   const tripDetails = state?.tripDetails;
+  const tripNotifications = state?.tripNotifications;
 
   // trip passenger custom hook
   const { passengers, setPassengers, loadingPassengers } = useTripPassengers(
@@ -116,6 +117,7 @@ export const TripDetails = ({ myTrips, setMyTrips }) => {
           openConfirmation={openConfirmation}
           closeConfirmation={closeConfirmation}
           showConfirmation={showConfirmation}
+          tripNotifications={tripNotifications}
         />
       )}
 

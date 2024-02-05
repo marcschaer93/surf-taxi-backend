@@ -93,3 +93,10 @@ exports.updateUserFavoriteIds = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: updatedUser });
 });
+
+// Handle check notifications
+exports.checkNotifications = asyncHandler(async (req, res, next) => {
+  const username = req.params.username;
+  const notifications = await UserApi.checkNotifications(username);
+  res.status(200).json({ success: true, data: notifications });
+});

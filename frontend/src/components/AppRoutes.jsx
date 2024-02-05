@@ -13,7 +13,13 @@ import { RequireAuth } from "../components/RequireAuth";
 import { NewTrip } from "../pages/Trips/NewTrip";
 import { Favorites } from "../pages/Favorites";
 
-export const AppRoutes = ({ allTrips, myTrips, addTrip, setMyTrips }) => {
+export const AppRoutes = ({
+  allTrips,
+  myTrips,
+  addTrip,
+  setMyTrips,
+  notifications,
+}) => {
   return (
     <Routes>
       // HOME
@@ -49,7 +55,7 @@ export const AppRoutes = ({ allTrips, myTrips, addTrip, setMyTrips }) => {
         path="/my-trips"
         element={
           <RequireAuth>
-            <MyTrips myTrips={myTrips} />
+            <MyTrips myTrips={myTrips} notifications={notifications} />
           </RequireAuth>
         }
       />

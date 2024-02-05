@@ -21,15 +21,23 @@ import { useTripDetails } from "../../hooks/useTripDetails";
 import { useFavorite } from "../../hooks/useFavorite";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
-export const TripPreviewCard = ({ tripId, isInMyTrips }) => {
+export const TripPreviewCard = ({ tripId, isInMyTrips, tripNotifications }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
+
+  console.log("notifications preview card", tripNotifications);
 
   // trip details custom hook
   const { tripDetails, loadingDetails } = useTripDetails(tripId);
   const isTripOwner = user && tripDetails?.owner === user.username;
+  const tripNotificationCount = tripNotifications
+    ? tripNotifications.length
+    : 0;
 
-  const { isFavorited, toggleFavorite, loading } = useFavorite(tripId);
+  // favorite trips hook (only for logged in users)
+  const { isFavorited, toggleFavorite, loading } = user
+    ? useFavorite(tripId)
+    : {};
 
   const handleFavorite = (e, tripId) => {
     e.stopPropagation();
@@ -37,7 +45,9 @@ export const TripPreviewCard = ({ tripId, isInMyTrips }) => {
   };
 
   const handleCardClick = () => {
-    navigate(`/trips/${tripId}`, { state: { tripDetails, isInMyTrips } });
+    navigate(`/trips/${tripId}`, {
+      state: { tripDetails, isInMyTrips, tripNotifications },
+    });
   };
 
   if (loadingDetails) return <Box>Loading...</Box>;
@@ -53,7 +63,7 @@ export const TripPreviewCard = ({ tripId, isInMyTrips }) => {
             : theme.palette.grey[800],
         }}
       >
-        {!isInMyTrips && (
+        {!isInMyTrips && user && (
           <FavoriteButton onClick={handleFavorite} color="secondary">
             {isFavorited ? (
               <FavoriteIcon style={{ cursor: "pointer" }} />
@@ -63,6 +73,13 @@ export const TripPreviewCard = ({ tripId, isInMyTrips }) => {
           </FavoriteButton>
         )}
 
+        {tripNotificationCount > 0 && (
+          <Chip
+            label={tripNotificationCount}
+            color="primary"
+            sx={{ position: "absolute", top: 0, right: 0 }}
+          />
+        )}
         {isInMyTrips && <StatusChip isTripOwner={isTripOwner} />}
 
         <CardContent>

@@ -258,6 +258,23 @@ class UserApi {
     }
     return updatedUser;
   }
+
+  static async checkNotifications(username) {
+    const notificationCheckResult = await db.query(
+      `
+      SELECT *
+      FROM notifications
+      WHERE recipient_username = $1 AND is_read = FALSE
+      `,
+      [username]
+    );
+
+    const notifications = notificationCheckResult.rows.map((row) =>
+      jsReady.convertKeysToCamelCase(row)
+    );
+
+    return notifications;
+  }
 }
 
 module.exports = UserApi;

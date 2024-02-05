@@ -7,10 +7,13 @@
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS trips CASCADE;
 DROP TABLE IF EXISTS passengers CASCADE;
+DROP TABLE IF EXISTS notifications CASCADE;
 
 -- Recreate tables
 \i db/dbSchema.sql
 
 -- Seed the tables
 \i db/dbSeed.sql
+
+
 

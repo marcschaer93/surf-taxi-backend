@@ -48,6 +48,8 @@ export const TripDetailsCard = ({
 
   return (
     <>
+      <Typography variant="h4">Trip I'm Joining</Typography>
+
       <StyledDetailsCard variant="outlined">
         {isInMyTrips && <StatusChip isTripOwner={false} />}
 
@@ -62,7 +64,7 @@ export const TripDetailsCard = ({
         )}
 
         <CardContent>
-          <Typography variant="h4">Trip Details</Typography>
+          <Typography variant="h5">Trip Details</Typography>
           <Typography variant="body1" gutterBottom>
             Start Location: {tripDetails.startLocation}
           </Typography>
@@ -74,7 +76,7 @@ export const TripDetailsCard = ({
             Stops: {tripDetails.stops}
           </Typography>
 
-          <Typography variant="h5">Passengers</Typography>
+          <Typography variant="h6">Passengers</Typography>
 
           {passengers && passengers.length > 0 && (
             <Box>
@@ -121,6 +123,11 @@ export const TripDetailsCard = ({
           </Button>
         </CardActions>
       </StyledDetailsCard>
+      {userStatus && (
+        <Box>
+          <Typography variant="h5">My Status</Typography>
+        </Box>
+      )}
     </>
   );
 };

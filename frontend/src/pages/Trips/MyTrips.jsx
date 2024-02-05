@@ -6,8 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { TripPreviewCard } from "./TripPreviewCard";
 import { useAuthContext } from "../../context/authProvider";
 import * as UserApi from "../../api/services/UserApi";
+import { useNotifications } from "../../hooks/useNotifications";
 
-export const MyTrips = ({ myTrips }) => {
+export const MyTrips = ({ myTrips, notifications }) => {
   const { user } = useAuthContext();
   const { showBoundary } = useErrorBoundary();
   const navigate = useNavigate();
@@ -20,7 +21,14 @@ export const MyTrips = ({ myTrips }) => {
       {""}
       <Box>
         {myTrips.map((trip) => (
-          <TripPreviewCard key={trip.id} tripId={trip.id} isInMyTrips={true} />
+          <TripPreviewCard
+            key={trip.id}
+            tripId={trip.id}
+            isInMyTrips={true}
+            tripNotifications={notifications.filter(
+              (n) => n.tripId === trip.id
+            )}
+          />
         ))}
       </Box>
     </>
