@@ -20,7 +20,6 @@ import Badge from "@mui/material/Badge";
 export const BottomNavBar = ({ notifications }) => {
   const { user } = useAuthContext();
   const [value, setValue] = useState(0);
-  console.log("NOTIFICATIONS BOTTOM NAVBAR", notifications);
 
   return (
     <Box
@@ -62,24 +61,24 @@ export const BottomNavBar = ({ notifications }) => {
             />
             <BottomNavigationAction
               label="My Trips"
-              icon={
-                <>
-                  {" "}
-                  {notifications && (
-                    <Badge badgeContent={notifications.length} color="error">
-                      <SurfingSharpIcon />
-                    </Badge>
-                  )}
-                </>
-              }
               component={NavLink}
               to="/my-trips"
+              icon={<SurfingSharpIcon />}
             />
             <BottomNavigationAction
               component={NavLink}
               to="/profile"
               label="Profile"
-              icon={<AccountCircleOutlinedIcon />}
+              icon={
+                <>
+                  {" "}
+                  {notifications && (
+                    <Badge badgeContent={notifications.length} color="error">
+                      <AccountCircleOutlinedIcon />
+                    </Badge>
+                  )}
+                </>
+              }
             />
           </BottomNavigation>
         ) : (

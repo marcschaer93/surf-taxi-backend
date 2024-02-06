@@ -27,7 +27,7 @@ export const OwnerTripDetailsCard = ({
   showConfirmation,
   openConfirmation,
   closeConfirmation,
-  tripNotifications,
+  // tripNotifications,
 }) => {
   const navigate = useNavigate();
 
@@ -79,9 +79,9 @@ export const OwnerTripDetailsCard = ({
               showConfirmation={showConfirmation}
               closeConfirmation={closeConfirmation}
               passenger={p}
-              passengerNotification={tripNotifications.filter(
-                (n) => p.username === n.senderUsername
-              )}
+              // passengerNotification={tripNotifications.filter(
+              //   (n) => p.username === n.senderUsername
+              // )}
             />
           ))
         ) : (

@@ -33,8 +33,7 @@ export default function App() {
   const { user } = useAuthContext();
   const { allTrips, loadingAllTrips } = useAllTrips();
   const { myTrips, setMyTrips, addTrip, loadingMyTrips } = useMyTrips();
-
-  const { notifications } = user ? useNotifications() : [];
+  const { notifications } = useNotifications(user);
 
   return (
     <>

@@ -20,6 +20,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import TuneSharpIcon from "@mui/icons-material/TuneSharp";
 
 import { useAuthContext } from "../context/authProvider";
 import { navLinkStyle } from "../styles/navbarStyles";
@@ -38,7 +39,6 @@ import { theme } from "../utils/theme";
  */
 
 export const Navbar = () => {
-  //   const theme = useTheme();
   const { handleLogin, handleLogout, user } = useAuthContext();
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -131,11 +131,23 @@ export const Navbar = () => {
           )}
 
           {user && (
+            <Box sx={{ display: { xs: "flex", sm: "none" } }}>
+              <IconButton
+                onClick={() => console.log("SETTINGS, NOT IMPLEMENTED")}
+                color="inherit"
+              >
+                <TuneSharpIcon />
+              </IconButton>
+            </Box>
+          )}
+
+          {user && (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     sx={{
+                      display: { xs: "none", sm: "flex" },
                       width: { xs: 24, sm: 32 },
                       height: { xs: 24, sm: 32 },
                     }}
@@ -145,6 +157,7 @@ export const Navbar = () => {
                   />
                 </IconButton>
               </Tooltip>
+
               <Menu
                 sx={{ mt: "45px" }}
                 id="menu-appbar"

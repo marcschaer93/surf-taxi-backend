@@ -20,19 +20,25 @@ import { FavoriteButton } from "../../styles/buttonStyles";
 import { useTripDetails } from "../../hooks/useTripDetails";
 import { useFavorite } from "../../hooks/useFavorite";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { TripDetails } from "./TripDetails";
+import { useState } from "react";
 
-export const TripPreviewCard = ({ tripId, isInMyTrips, tripNotifications }) => {
+export const TripPreviewCard = ({ tripData, isInMyTrips }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
+  console.log("TRIP DATA", tripData);
 
-  console.log("notifications preview card", tripNotifications);
+  const tripId = tripData.id;
 
   // trip details custom hook
-  const { tripDetails, loadingDetails } = useTripDetails(tripId);
-  const isTripOwner = user && tripDetails?.owner === user.username;
-  const tripNotificationCount = tripNotifications
-    ? tripNotifications.length
-    : 0;
+  // const { tripDetails, loadingDetails } = useTripDetails(tripId);
+
+  console.log("TRIP DETAILS", tripData);
+
+  const isTripOwner = user && tripData?.owner === user.username;
+  // const tripNotificationCount = tripNotifications
+  //   ? tripNotifications.length
+  //   : 0;
 
   // favorite trips hook (only for logged in users)
   const { isFavorited, toggleFavorite, loading } = user
@@ -45,12 +51,16 @@ export const TripPreviewCard = ({ tripId, isInMyTrips, tripNotifications }) => {
   };
 
   const handleCardClick = () => {
-    navigate(`/trips/${tripId}`, {
-      state: { tripDetails, isInMyTrips, tripNotifications },
-    });
+    // navigate(`/trips/${tripId}`, {
+    //   state: { tripDetails, isInMyTrips, tripNotifications },
+    // });
+    // navigate(`/trips/${tripId}`, {
+    //   state: { tripNotifications },
+    // });
+    navigate(`/trips/${tripId}`);
   };
 
-  if (loadingDetails) return <Box>Loading...</Box>;
+  // if (loadingTripDetails) return <Box>Loading...</Box>;
 
   return (
     <>
@@ -73,22 +83,23 @@ export const TripPreviewCard = ({ tripId, isInMyTrips, tripNotifications }) => {
           </FavoriteButton>
         )}
 
-        {tripNotificationCount > 0 && (
+        {/* {tripNotificationCount > 0 && (
           <Chip
             label={tripNotificationCount}
             color="primary"
             sx={{ position: "absolute", top: 0, right: 0 }}
           />
-        )}
+        )} */}
+
         {isInMyTrips && <StatusChip isTripOwner={isTripOwner} />}
 
         <CardContent>
           <Typography variant="h6" gutterBottom>
-            {tripDetails.startLocation} - {tripDetails.destination}
+            {tripData.startLocation} - {tripData.destination}
           </Typography>
 
           <Typography color="text.secondary">
-            <Box component="span">Stops: {tripDetails.stops}</Box>
+            <Box component="span">Stops: {tripData.stops}</Box>
           </Typography>
 
           {/* Add other trip details here */}

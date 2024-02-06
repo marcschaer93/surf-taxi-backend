@@ -12,17 +12,22 @@ import { OwnerTripDetailsCard } from "./OwnerTripDetailsCard";
 import { useTripPassengers } from "../../hooks/useTripPassengers";
 import { useTripDetails } from "../../hooks/useTripDetails";
 
-export const TripDetails = ({ myTrips, setMyTrips }) => {
+export const TripDetails = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
   const { tripId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const [userStatus, setUserStatus] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const location = useLocation();
-  const { state } = location;
-  const tripDetails = state?.tripDetails;
-  const tripNotifications = state?.tripNotifications;
+  const { tripDetails, loadingDetails } = useTripDetails(parseInt(tripId));
+
+  // const location = useLocation();
+  // const { state } = location;
+  // $$$$$$$
+  // const tripDetails = state?.tripDetails;
+  // const tripDetails = myTrips.find((t) => t.id === parseInt(tripId));
+
+  // const tripNotifications = state?.tripNotifications;
 
   // trip passenger custom hook
   const { passengers, setPassengers, loadingPassengers } = useTripPassengers(
@@ -117,7 +122,7 @@ export const TripDetails = ({ myTrips, setMyTrips }) => {
           openConfirmation={openConfirmation}
           closeConfirmation={closeConfirmation}
           showConfirmation={showConfirmation}
-          tripNotifications={tripNotifications}
+          // tripNotifications={tripNotifications}
         />
       )}
 

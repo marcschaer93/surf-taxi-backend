@@ -3,16 +3,17 @@ import * as UserApi from "../api/services/UserApi";
 import { useAuthContext } from "../context/authProvider";
 import { Box, Typography } from "@mui/material";
 
-export const useNotifications = () => {
-  const { user } = useAuthContext();
+export const useNotifications = (user) => {
   const [notifications, setNotifications] = useState([]);
 
   const checkNotifications = async () => {
     try {
-      const unreadNotifications = await UserApi.checkNotifications(
-        user.username
-      );
-      setNotifications(unreadNotifications);
+      if (user) {
+        const unreadNotifications = await UserApi.checkNotifications(
+          user.username
+        );
+        setNotifications(unreadNotifications);
+      }
     } catch (error) {
       console.error("Error checking notifications:", error);
     }
@@ -23,11 +24,11 @@ export const useNotifications = () => {
     checkNotifications();
 
     // Set up periodic checks (adjust interval based on your needs)
-    const intervalId = setInterval(checkNotifications, 1 * 60 * 1000); // 4 times a day
+    const intervalId = setInterval(checkNotifications, 1 * 60 * 60 * 1000); // 4 times a day
 
     // Cleanup on component unmount
     return () => clearInterval(intervalId);
-  }, [user.username]);
+  }, [user]);
 
   return { notifications, checkNotifications };
 };

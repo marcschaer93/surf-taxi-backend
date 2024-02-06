@@ -19,7 +19,7 @@ export const useTripPassengers = (tripId, username) => {
     };
 
     fetchData();
-  }, [tripId, username]);
+  }, [tripId]);
 
   return {
     passengers,
