@@ -19,6 +19,20 @@ export const useNotifications = (user) => {
     }
   };
 
+  const markNotificationAsRead = async (notificationId) => {
+    try {
+      await UserApi.markNotificationAsRead(user.username, notificationId);
+      // Update notifications state after marking notification as read
+      setNotifications((prevNotifications) =>
+        prevNotifications.filter(
+          (notification) => notification.id !== notificationId
+        )
+      );
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+    }
+  };
+
   useEffect(() => {
     // Initial check when component mounts
     checkNotifications();
@@ -30,7 +44,7 @@ export const useNotifications = (user) => {
     return () => clearInterval(intervalId);
   }, [user]);
 
-  return { notifications, checkNotifications };
+  return { notifications, checkNotifications, markNotificationAsRead };
 };
 
 //   if (!notifications)

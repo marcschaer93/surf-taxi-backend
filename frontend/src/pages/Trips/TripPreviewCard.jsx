@@ -26,15 +26,7 @@ import { useState } from "react";
 export const TripPreviewCard = ({ tripData, isInMyTrips }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  console.log("TRIP DATA", tripData);
-
   const tripId = tripData.id;
-
-  // trip details custom hook
-  // const { tripDetails, loadingDetails } = useTripDetails(tripId);
-
-  console.log("TRIP DETAILS", tripData);
-
   const isTripOwner = user && tripData?.owner === user.username;
   // const tripNotificationCount = tripNotifications
   //   ? tripNotifications.length
@@ -54,13 +46,8 @@ export const TripPreviewCard = ({ tripData, isInMyTrips }) => {
     // navigate(`/trips/${tripId}`, {
     //   state: { tripDetails, isInMyTrips, tripNotifications },
     // });
-    // navigate(`/trips/${tripId}`, {
-    //   state: { tripNotifications },
-    // });
     navigate(`/trips/${tripId}`);
   };
-
-  // if (loadingTripDetails) return <Box>Loading...</Box>;
 
   return (
     <>

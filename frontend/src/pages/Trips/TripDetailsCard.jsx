@@ -71,6 +71,9 @@ export const TripDetailsCard = ({
           <Typography variant="body1" gutterBottom>
             Destination: {tripDetails.destination}
           </Typography>
+          <Typography variant="body1" gutterBottom>
+            Trip Owner: {tripDetails.owner}
+          </Typography>
 
           <Typography color="text.secondary">
             Stops: {tripDetails.stops}

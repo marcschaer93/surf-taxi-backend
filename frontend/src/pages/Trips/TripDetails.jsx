@@ -94,6 +94,42 @@ export const TripDetails = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
     }
   };
 
+  const handleConfirmConnect = async (passengerUsername) => {
+    console.log("P NAME", passengerUsername);
+    try {
+      // Update user status to indicate pending connection
+      // setUserStatus("connecting");
+      setUserStatus("pending");
+
+      // Send request to join the trip
+      const updatedPassenger = await PassengerApi.updatePassengerStatus(
+        tripId,
+        passengerUsername,
+        "pending"
+      );
+
+      // Add new join request to the list of passengers
+      setPassengers((prevPassengers) =>
+        prevPassengers.map((passenger) =>
+          passenger.username === passengerUsername
+            ? {
+                ...passenger,
+                reservationStatus: updatedPassenger.reservationStatus,
+              }
+            : passenger
+        )
+      );
+
+      // Add trip to user's list of trips (if needed)
+      // setMyTrips((prevTrips) => [tripDetails, ...prevTrips]);
+    } catch (error) {
+      console.error("Error confirming connection:", error);
+    } finally {
+      // Hide the confirmation dialog regardless of success or failure
+      setShowConfirmation(false);
+    }
+  };
+
   const handleGoBack = () => {
     setShowConfirmation(false);
   };
@@ -122,6 +158,7 @@ export const TripDetails = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
           openConfirmation={openConfirmation}
           closeConfirmation={closeConfirmation}
           showConfirmation={showConfirmation}
+          handleConfirmConnect={handleConfirmConnect}
           // tripNotifications={tripNotifications}
         />
       )}

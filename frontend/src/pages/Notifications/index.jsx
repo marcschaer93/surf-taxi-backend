@@ -1,8 +1,17 @@
 import React from "react";
 import { Typography, Box } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-export const Notifications = ({ notifications }) => {
+export const Notifications = ({ notifications, markNotificationAsRead }) => {
+  const navigate = useNavigate();
+
+  const handleOnLinkClick = (e, notification) => {
+    e.preventDefault();
+    console.log(notification);
+    markNotificationAsRead(notification.id);
+    navigate(`/trips/${notification.tripId}`);
+  };
+
   return (
     <>
       <Typography variant="h5">Notifications</Typography>
@@ -10,7 +19,10 @@ export const Notifications = ({ notifications }) => {
         {notifications.length > 0 && (
           <Box>
             {notifications.map((notification) => (
-              <Link to={`/trips/${notification.tripId}`} key={notification.id}>
+              <Link
+                onClick={(e) => handleOnLinkClick(e, notification)}
+                key={notification.id}
+              >
                 <Box>
                   {/* Render notification content here */}
                   <Typography>{notification.message}</Typography>

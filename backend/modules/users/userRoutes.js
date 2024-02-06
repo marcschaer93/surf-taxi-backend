@@ -73,3 +73,10 @@ router.get(
   ensureCorrectUser,
   userController.checkNotifications
 );
+
+router.patch(
+  "/:username/notifications/:notificationId",
+  authenticate,
+  ensureCorrectUser,
+  userController.markNotificationAsRead
+);

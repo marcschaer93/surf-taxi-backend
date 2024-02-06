@@ -61,10 +61,13 @@ RETURNS TRIGGER AS $$
 DECLARE
     notification_message TEXT;
 BEGIN
-    -- Check if the reservation_status is switched to 'requested'
-    IF NEW.reservation_status = 'requested' THEN
+    -- Check if the reservation_status is switched to 'requested' or 'pending'
+    IF NEW.reservation_status = 'requested' OR NEW.reservation_status = 'pending' THEN
         -- Create a notification message (customize this based on your needs)
-        notification_message := 'You have a new join request for your trip.';
+        notification_message := CASE NEW.reservation_status
+                                WHEN 'requested' THEN 'You have a new join request for your trip.'
+                                WHEN 'pending' THEN 'Your trip join request is pending approval.'
+                               END;
 
         -- Insert a new row into the notifications table
         INSERT INTO notifications (sender_username, recipient_username, message, timestamp, is_read, trip_id, is_join_request, is_approval, email_contact)
@@ -75,9 +78,16 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
 -- Create the trigger that calls the function
 CREATE TRIGGER passenger_trigger
 AFTER INSERT ON passengers
+FOR EACH ROW
+EXECUTE FUNCTION notify_user();
+
+-- Create the trigger that calls the function after update
+CREATE TRIGGER passenger_update_trigger
+AFTER UPDATE ON passengers
 FOR EACH ROW
 EXECUTE FUNCTION notify_user();
 

@@ -30,9 +30,16 @@ router.delete(
 );
 
 /* PATCH request to RESPOND a passenger's request to join a trip */
-router.patch(
-  "/:tripId/join/:passengerUsername/respond",
+// router.patch(
+//   "/:tripId/join/:passengerUsername/respond",
+//   authenticate,
+//   ensureNotTripOwner,
+//   passengerController.respondToJoinRequest
+// );
+
+/* PUT request to update passenger status */
+router.put(
+  "/:tripId/:passengerUsername/status",
   authenticate,
-  ensureNotTripOwner,
-  passengerController.respondToJoinRequest
+  passengerController.updatePassengerStatus
 );

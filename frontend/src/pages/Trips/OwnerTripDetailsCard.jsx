@@ -27,6 +27,7 @@ export const OwnerTripDetailsCard = ({
   showConfirmation,
   openConfirmation,
   closeConfirmation,
+  handleConfirmConnect,
   // tripNotifications,
 }) => {
   const navigate = useNavigate();
@@ -74,11 +75,14 @@ export const OwnerTripDetailsCard = ({
         {passengers && passengers.length > 0 ? (
           passengers.map((p) => (
             <PassengerCard
+              key={`${p.username} + ${p.trip_id}`}
               tripDetails={tripDetails}
               openConfirmation={openConfirmation}
               showConfirmation={showConfirmation}
               closeConfirmation={closeConfirmation}
               passenger={p}
+              handleGoBack={handleGoBack}
+              handleConfirmConnect={handleConfirmConnect}
               // passengerNotification={tripNotifications.filter(
               //   (n) => p.username === n.senderUsername
               // )}

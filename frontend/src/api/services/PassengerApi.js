@@ -25,6 +25,24 @@ export const cancelJoinRequest = async (tripId) => {
   }
 };
 
+export const updatePassengerStatus = async (
+  tripId,
+  passengerUsername,
+  newStatus
+) => {
+  try {
+    const response = await ApiService.put(
+      `/passengers/trips/${tripId}/${passengerUsername}/status`,
+      { newStatus }
+    );
+    console.log("RESPONSE", response.data.data);
+    return response.data.data;
+  } catch (error) {
+    handleApiError();
+    throw error;
+  }
+};
+
 export const getTripPassengers = async (tripId) => {
   try {
     const response = await ApiService.get(`/passengers/trips/${tripId}`);

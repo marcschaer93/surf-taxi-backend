@@ -100,3 +100,13 @@ exports.checkNotifications = asyncHandler(async (req, res, next) => {
   const notifications = await UserApi.checkNotifications(username);
   res.status(200).json({ success: true, data: notifications });
 });
+
+// Handle mark notifications as read
+exports.markNotificationAsRead = asyncHandler(async (req, res, next) => {
+  const username = req.params.username;
+  const notificationId = parseInt(req.params.notificationId);
+
+  await UserApi.markNotificationAsRead(username, notificationId);
+
+  res.status(200).json({ success: true });
+});

@@ -275,6 +275,25 @@ class UserApi {
 
     return notifications;
   }
+
+  static async markNotificationAsRead(username, notificationId) {
+    const notificationMarkResult = await db.query(
+      `
+      UPDATE notifications
+      SET is_read  = $1
+      WHERE recipient_username = $2
+      AND id = $3
+      RETURNING *
+      `,
+      [true, username, notificationId]
+    );
+
+    const isReadNotification = notificationMarkResult.rows.map((row) =>
+      jsReady.convertKeysToCamelCase(row)
+    );
+
+    return isReadNotification;
+  }
 }
 
 module.exports = UserApi;

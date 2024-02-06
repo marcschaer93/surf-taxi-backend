@@ -33,7 +33,7 @@ export default function App() {
   const { user } = useAuthContext();
   const { allTrips, loadingAllTrips } = useAllTrips();
   const { myTrips, setMyTrips, addTrip, loadingMyTrips } = useMyTrips();
-  const { notifications } = useNotifications(user);
+  const { notifications, markNotificationAsRead } = useNotifications(user);
 
   return (
     <>
@@ -48,6 +48,7 @@ export default function App() {
             myTrips={myTrips}
             setMyTrips={setMyTrips}
             notifications={notifications}
+            markNotificationAsRead={markNotificationAsRead}
           />
         </MainContent>
         <Rightbar />

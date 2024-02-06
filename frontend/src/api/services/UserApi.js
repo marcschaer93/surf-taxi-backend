@@ -75,3 +75,15 @@ export const checkNotifications = async (username) => {
     throw error;
   }
 };
+
+export const markNotificationAsRead = async (username, notificationId) => {
+  try {
+    const response = await ApiService.patch(
+      `/users/${username}/notifications/${notificationId}`
+    );
+    return response.data.data;
+  } catch (error) {
+    handleApiError(error);
+    throw error;
+  }
+};

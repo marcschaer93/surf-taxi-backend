@@ -72,3 +72,17 @@ exports.getTripPassengers = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: tripPassengers });
 });
+
+exports.updatePassengerStatus = asyncHandler(async (req, res, next) => {
+  const tripId = parseInt(req.params.tripId);
+  const passengerUsername = req.params.passengerUsername;
+  const { newStatus } = req.body;
+
+  const updatedPassenger = await PassengerApi.updatePassengerStatus(
+    tripId,
+    passengerUsername,
+    newStatus
+  );
+
+  res.status(200).json({ success: true, data: updatedPassenger });
+});

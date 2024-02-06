@@ -192,6 +192,35 @@ class PassengerApi {
 
     return tripPassengers; // even if empty
   }
+
+  static async updatePassengerStatus(tripId, passengerUsername, newStatus) {
+    const updatePassengerStatusResult = await db.query(
+      `
+        UPDATE 
+          passengers
+        SET 
+          reservation_status = $1, 
+          reservation_timestamp = CURRENT_TIMESTAMP
+        WHERE 
+          trip_id = $2
+        AND 
+          username = $3
+        RETURNING 
+          *
+      `,
+      [newStatus, tripId, passengerUsername]
+    );
+
+    if (updatePassengerStatusResult.rows.length === 0) {
+      throw new Error("Passenger not found or no rows updated");
+    }
+
+    const updatedPassenger = jsReady.convertKeysToCamelCase(
+      updatePassengerStatusResult.rows[0]
+    );
+
+    return updatedPassenger;
+  }
 }
 
 module.exports = PassengerApi;

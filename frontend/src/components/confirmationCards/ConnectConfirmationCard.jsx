@@ -9,17 +9,17 @@ import {
   Typography,
 } from "@mui/material";
 
-export const ResponseConfirmationCard = ({
-  handleConfirmRequest,
-  handleRejectRequest,
-  handleReject,
+export const ConnectConfirmationCard = ({
+  handleConfirmConnect,
+  passenger,
   open,
   onClose,
   tripDetails,
+  handleGoBack,
 }) => {
-  const message = `You have a new join request for your trip from ${tripDetails.startLocation} to ${tripDetails.destination}. Do you want to confirm or reject this request?`;
+  const message = `You have a new join request for your trip from ${tripDetails.startLocation} to ${tripDetails.destination}. Do you want to confirm and get in touch with user ?`;
 
-  const title = "Respond to Join Request";
+  const title = "Respond to Join Request.";
 
   return (
     <Box>
@@ -27,8 +27,8 @@ export const ResponseConfirmationCard = ({
         open={open}
         onClose={onClose}
         tripDetails={tripDetails}
-        onConfirm={handleConfirmRequest}
-        onCancel={handleRejectRequest}
+        onConfirm={() => handleConfirmConnect(passenger.username)}
+        onCancel={handleGoBack}
         message={message}
         title={title}
       />

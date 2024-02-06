@@ -20,7 +20,7 @@ import { FavoriteButton } from "../../styles/buttonStyles";
 import { useTripDetails } from "../../hooks/useTripDetails";
 import { useFavorite } from "../../hooks/useFavorite";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { ResponseConfirmationCard } from "../../components/confirmationCards/ResponseConfirmationCard";
+import { ConnectConfirmationCard } from "../../components/confirmationCards/ConnectConfirmationCard";
 
 export const PassengerCard = ({
   tripDetails,
@@ -29,20 +29,15 @@ export const PassengerCard = ({
   openConfirmation,
   showConfirmation,
   closeConfirmation,
+  handleGoBack,
+  handleConfirmConnect,
 }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
 
-  const handleConfirmRequest = () => {
-    console.log("Confirm Request. NOT IMPLEMENTED");
-  };
-
-  const handleRejectRequest = () => {
-    console.log("Reject Request. NOT IMPLEMENTED");
-  };
-
-  console.log("passengerNotify", passengerNotification);
-  console.log("passenger", passenger);
+  //   const handleConfirmConnect = () => {
+  //     console.log("Confirm Request. NOT IMPLEMENTED");
+  //   };
 
   // trip details custom hook
   const isTripOwner = user && tripDetails?.owner === user.username;
@@ -72,32 +67,36 @@ export const PassengerCard = ({
             sx={{ display: "flex", justifyContent: "space-between" }}
           >
             <Typography>{passenger.username}</Typography>
+
             <Chip
               label={passenger.reservationStatus}
               color={
                 passenger.reservationStatus === "confirmed"
-                  ? "success"
+                  ? "success" // Green for confirmed
                   : passenger.reservationStatus === "pending"
-                  ? "warning"
+                  ? "info" // Blue or another soft color for pending
                   : passenger.reservationStatus === "rejected"
-                  ? "error"
-                  : "default"
+                  ? "error" // Red for rejected
+                  : passenger.reservationStatus === "requested"
+                  ? "warning" // Yellow or orange for requested
+                  : "default" // Use default color for other cases
               }
             />
           </Box>
         </CardContent>
 
         <CardActions>
-          <Button variant="outlined" size="small" onClick={openConfirmation}>
-            Response
-          </Button>
+          {passenger.reservationStatus === "requested" && (
+            <Button variant="outlined" size="small" onClick={openConfirmation}>
+              Connect
+            </Button>
+          )}
         </CardActions>
-        <ResponseConfirmationCard
+        <ConnectConfirmationCard
           tripDetails={tripDetails}
-          //   handleConfirmResponse={handleConfirmResponse}
-          //   handleGoBack={handleGoBack}
-          handleConfirmRequest={handleConfirmRequest}
-          handleRejectRequest={handleRejectRequest}
+          passenger={passenger}
+          handleGoBack={handleGoBack}
+          handleConfirmConnect={handleConfirmConnect}
           open={showConfirmation}
           onClose={closeConfirmation}
         />

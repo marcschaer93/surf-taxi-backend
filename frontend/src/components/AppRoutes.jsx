@@ -20,6 +20,7 @@ export const AppRoutes = ({
   addTrip,
   setMyTrips,
   notifications,
+  markNotificationAsRead,
 }) => {
   return (
     <Routes>
@@ -35,7 +36,7 @@ export const AppRoutes = ({
         path="/profile"
         element={
           <RequireAuth>
-            <Profile />
+            <Profile notifications={notifications} />
           </RequireAuth>
         }
       />
@@ -51,7 +52,10 @@ export const AppRoutes = ({
         path="/notifications"
         element={
           <RequireAuth>
-            <Notifications notifications={notifications} />
+            <Notifications
+              notifications={notifications}
+              markNotificationAsRead={markNotificationAsRead}
+            />
           </RequireAuth>
         }
       />
