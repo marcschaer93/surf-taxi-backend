@@ -15,5 +15,8 @@ DROP TABLE IF EXISTS notifications CASCADE;
 -- Seed the tables
 \i db/dbSeed.sql
 
+-- Add Triggers
+\i db/dbTrigger.sql
+
 
 
