@@ -5,6 +5,8 @@ import { Box, Typography, styled } from "@mui/material";
 import { TripPreviewCard } from "./TripPreviewCard";
 import { useAuthContext } from "../../context/authProvider";
 import { Title, TitleDivider } from "../../styles/fontStyles";
+import SurfingSharpIcon from "@mui/icons-material/SurfingSharp";
+import { theme } from "../../utils/theme";
 
 export const AllTrips = ({ allTrips, myTrips }) => {
   const navigate = useNavigate();
@@ -22,11 +24,20 @@ export const AllTrips = ({ allTrips, myTrips }) => {
   return (
     <>
       <Box>
-        <Title variant="h3">All Trips</Title>
-        <TitleDivider />
+        <Box>
+          <Title variant="h3">All Trips</Title>
+          <TitleDivider />
+        </Box>
+
         {trips.length === 0 && (
-          <Box sx={{ textAlign: "left", ml: "30px" }}>
-            <Typography variant="h5">No trips available...</Typography>
+          <Box sx={{ textAlign: "center", mt: "80px", p: "25px" }}>
+            <SurfingSharpIcon
+              sx={{ fontSize: "3rem", color: theme.palette.text.secondary }}
+            />
+            <Typography variant="h6">No trips available now</Typography>
+            <Typography color="text.secondary">
+              We will let you know when new trips are here!
+            </Typography>
           </Box>
         )}
 

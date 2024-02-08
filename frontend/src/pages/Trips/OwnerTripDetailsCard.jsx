@@ -19,6 +19,8 @@ import { DeleteOwnTripConfirmationCard } from "../../components/confirmationCard
 import { StyledDetailsCard } from "../../styles/cardStyles";
 import { PassengerCard } from "./PassengerCard";
 import { Title, TitleDivider } from "../../styles/fontStyles";
+import { GoBackButton } from "../../components/ui/GoBackButton";
+import { useState } from "react";
 
 export const OwnerTripDetailsCard = ({
   tripDetails,
@@ -32,11 +34,28 @@ export const OwnerTripDetailsCard = ({
   // tripNotifications,
 }) => {
   const navigate = useNavigate();
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
+  const openDeleteConfirmation = () => {
+    setShowDeleteConfirmation(true);
+  };
+
+  const closeDeleteConfirmation = () => {
+    setShowDeleteConfirmation(false);
+  };
+
+  const handleGoBackButton = (e, tripId) => {
+    e.stopPropagation();
+    navigate(-1);
+  };
 
   return (
     <>
-      <Title variant="h3">My Organized Trip</Title>
-      <TitleDivider />
+      <Box>
+        <GoBackButton handleGoBack={handleGoBackButton} />
+        <Title variant="h3">My Organized Trip</Title>
+        <TitleDivider />
+      </Box>
 
       <StyledDetailsCard variant="outlined">
         <StatusChip isTripOwner={true} />
@@ -55,18 +74,13 @@ export const OwnerTripDetailsCard = ({
 
           <Typography variant="h6">Passengers</Typography>
         </CardContent>
-        <CardActions>
-          <Button onClick={openConfirmation}>Delete Trip</Button>
-          <Button size="small" onClick={() => navigate(-1)} variant="outlined">
-            Go Back
-          </Button>
-        </CardActions>
+        <CardActions></CardActions>
         <Box>
           <DeleteOwnTripConfirmationCard
             tripDetails={tripDetails}
             handleConfirmDelete={handleConfirmDelete}
             handleGoBack={handleGoBack}
-            open={showConfirmation}
+            open={showDeleteConfirmation}
             onClose={closeConfirmation}
           />
         </Box>
@@ -85,14 +99,23 @@ export const OwnerTripDetailsCard = ({
               passenger={p}
               handleGoBack={handleGoBack}
               handleConfirmConnect={handleConfirmConnect}
-              // passengerNotification={tripNotifications.filter(
-              //   (n) => p.username === n.senderUsername
-              // )}
             />
           ))
         ) : (
           <Typography>No Passengers</Typography>
         )}
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        {/* Other content */}
+        <Button
+          sx={{ marginLeft: "auto" }}
+          size="small"
+          color="error"
+          variant="contained"
+          onClick={openDeleteConfirmation}
+        >
+          Delete trip
+        </Button>
       </Box>
     </>
   );

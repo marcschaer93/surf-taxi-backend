@@ -110,7 +110,7 @@ export const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8, // Set your desired border radius
+          borderRadius: 4, // Set your desired border radius
           padding: "5px 20px", // Set your desired padding
           fontWeight: "bold", // Set your desired font weight
         },
@@ -119,7 +119,13 @@ export const theme = createTheme({
         {
           props: { variant: "contained", color: "primary" },
           style: {
-            // backgroundColor: orange[500], // Set your desired background color
+            backgroundColor: "#252530", // Set your desired background color
+          },
+        },
+        {
+          props: { variant: "contained", color: "secondary" },
+          style: {
+            backgroundColor: "#d41b64", // Set your desired background color
           },
         },
         {

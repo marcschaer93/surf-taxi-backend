@@ -65,7 +65,9 @@ export const Navbar = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Toolbar
+          sx={{ display: "flex", justifyContent: "space-between", py: 2.5 }}
+        >
           <Box>
             <Button
               sx={{ display: { xs: "none", sm: "block" } }}

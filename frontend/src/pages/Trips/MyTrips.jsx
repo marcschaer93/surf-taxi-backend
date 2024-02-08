@@ -8,6 +8,8 @@ import { useAuthContext } from "../../context/authProvider";
 import * as UserApi from "../../api/services/UserApi";
 import { useNotifications } from "../../hooks/useNotifications";
 import { Title, TitleDivider } from "../../styles/fontStyles";
+import { theme } from "../../utils/theme";
+import SurfingSharpIcon from "@mui/icons-material/SurfingSharp";
 
 export const MyTrips = ({ myTrips, allTrips, notifications }) => {
   const { user } = useAuthContext();
@@ -18,14 +20,20 @@ export const MyTrips = ({ myTrips, allTrips, notifications }) => {
 
   return (
     <>
-      <Title variant="h3">My Trips</Title>
-      <TitleDivider />
+      <Box>
+        <Title variant="h3">My Trips</Title>
+        <TitleDivider />
+      </Box>
+
       {myTrips.length === 0 && (
-        <Box sx={{ textAlign: "left", ml: "30px" }}>
-          <Typography variant="h5">
-            No trips available in My Trips...
+        <Box sx={{ textAlign: "center", mt: "80px", p: "25px" }}>
+          <SurfingSharpIcon
+            sx={{ fontSize: "3rem", color: theme.palette.text.secondary }}
+          />
+          <Typography variant="h6">No trips available now</Typography>
+          <Typography color="text.secondary">
+            We will let you know when new trips are here!
           </Typography>
-          <Typography color="text.secondary">Join or Create a trip</Typography>
         </Box>
       )}
       {""}

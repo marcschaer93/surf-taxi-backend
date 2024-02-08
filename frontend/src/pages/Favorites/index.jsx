@@ -5,6 +5,8 @@ import { useMyTrips } from "../../hooks/useMyTrips";
 import { TripPreviewCard } from "../Trips/TripPreviewCard";
 import { useFavoriteTrips } from "../../hooks/useFavoriteTrips";
 import { Title, TitleDivider } from "../../styles/fontStyles";
+import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
+import { theme } from "../../utils/theme";
 
 export const Favorites = () => {
   const { user } = useAuthContext();
@@ -30,8 +32,11 @@ export const Favorites = () => {
               />
             ))
           ) : (
-            <Box sx={{ textAlign: "left", ml: "30px" }}>
-              <Typography variant="h5">No favorites yet...</Typography>
+            <Box sx={{ textAlign: "center", mt: "80px", p: "25px" }}>
+              <FavoriteBorderSharpIcon
+                sx={{ fontSize: "3rem", color: theme.palette.text.secondary }}
+              />
+              <Typography variant="h5">No favorites yet</Typography>
               <Typography color="text.secondary">
                 Click the heart button to save trips as favorites.
               </Typography>

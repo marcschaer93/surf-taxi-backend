@@ -10,18 +10,16 @@ import {
   Chip,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
 
 import { useAuthContext } from "../../context/authProvider";
 import { theme } from "../../utils/theme";
 import { StatusChip } from "../../components/ui/StatusChip";
 import { StyledPreviewCard } from "../../styles/cardStyles";
-import { FavoriteButton } from "../../styles/buttonStyles";
 import { useTripDetails } from "../../hooks/useTripDetails";
 import { useFavorite } from "../../hooks/useFavorite";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import { TripDetails } from "./TripDetails";
 import { useState } from "react";
+import { FavoriteButton } from "../../components/ui/FavoriteButton";
 
 export const TripPreviewCard = ({ tripData, isInMyTrips }) => {
   const navigate = useNavigate();
@@ -61,23 +59,10 @@ export const TripPreviewCard = ({ tripData, isInMyTrips }) => {
         }}
       >
         {!isInMyTrips && user && (
-          <FavoriteButton onClick={handleFavorite} color="secondary">
-            {isFavorited ? (
-              <FavoriteIcon
-                style={{
-                  cursor: "pointer",
-                  color: theme.palette.contrast.main,
-                }}
-              />
-            ) : (
-              <FavoriteBorderSharpIcon
-                style={{
-                  cursor: "pointer",
-                  color: theme.palette.text.secondary,
-                }}
-              />
-            )}
-          </FavoriteButton>
+          <FavoriteButton
+            handleFavorite={handleFavorite}
+            isFavorited={isFavorited}
+          ></FavoriteButton>
         )}
 
         {/* {tripNotificationCount > 0 && (

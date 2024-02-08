@@ -29,6 +29,10 @@ export const BottomNavBar = ({ notifications }) => {
         bottom: 0,
         left: 0,
         right: 0,
+        zIndex: 100,
+        // minHeight: "64px", // Adjust as needed to accommodate bottom navbar
+        // overflowX: "hidden",
+        // overflowY: "auto",
         // zIndex: 100,
       }}
     >

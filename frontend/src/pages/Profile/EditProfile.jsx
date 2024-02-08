@@ -8,6 +8,7 @@ import { FormInputMultiline } from "../../components/form/FormInputMultiline";
 import { useAuthContext } from "../../context/authProvider";
 import * as UserApi from "../../api/services/UserApi";
 import { GenderRadioButtons } from "../../components/form/GenderRadioButtons";
+import { Title, TitleDivider } from "../../styles/fontStyles";
 
 import {
   FormContainer,
@@ -64,95 +65,101 @@ export const EditProfile = () => {
   };
 
   return (
-    <FormContainer>
-      <TitleContainer>
-        <FormTitle variant="h1">Profile</FormTitle>
-        <Underline></Underline>
-      </TitleContainer>
+    <>
+      <Box>
+        <Title variant="h3">{`${user.firstName} ${user.lastName}`}</Title>
+        <TitleDivider />
+      </Box>
+      <FormContainer>
+        {/* <TitleContainer>
+          <FormTitle variant="h1">Profile</FormTitle>
+          <Underline></Underline>
+        </TitleContainer> */}
 
-      <form autoComplete="off" onSubmit={handleSubmit(onFormSubmit)}>
-        <InputsContainer>
-          <Input>
-            <FormInputText
-              name="username"
-              control={control}
-              label="Username"
-              errors={errors}
-              disabled={true}
-            />
-          </Input>
-
-          <HalfInputContainer>
-            <HalfInput>
+        <form autoComplete="off" onSubmit={handleSubmit(onFormSubmit)}>
+          <InputsContainer>
+            <Input>
               <FormInputText
-                name="firstName"
+                name="username"
                 control={control}
-                label="First name"
+                label="Username"
+                errors={errors}
+                disabled={true}
+              />
+            </Input>
+
+            <HalfInputContainer>
+              <HalfInput>
+                <FormInputText
+                  name="firstName"
+                  control={control}
+                  label="First name"
+                  errors={errors}
+                />
+              </HalfInput>
+              <HalfInput>
+                <FormInputText
+                  name="lastName"
+                  control={control}
+                  label="Last Name"
+                  errors={errors}
+                />
+              </HalfInput>
+            </HalfInputContainer>
+
+            <Input className="input">
+              <FormInputText
+                name="email"
+                control={control}
+                label="Email"
                 errors={errors}
               />
-            </HalfInput>
-            <HalfInput>
+            </Input>
+            <Input>
               <FormInputText
-                name="lastName"
+                name="avatar"
                 control={control}
-                label="Last Name"
+                label="Avatar URL"
                 errors={errors}
               />
-            </HalfInput>
-          </HalfInputContainer>
-
-          <Input className="input">
+            </Input>
+            <Input>
+              <FormInputText
+                name="facebook"
+                control={control}
+                label="Facebook URL"
+                errors={errors}
+              />
+            </Input>
             <FormInputText
-              name="email"
+              name="instagram"
               control={control}
-              label="Email"
+              label="Instagram,"
               errors={errors}
             />
-          </Input>
-          <Input>
-            <FormInputText
-              name="avatar"
+            <FormInputMultiline
+              name="bio"
               control={control}
-              label="Avatar URL"
+              label="Bio"
               errors={errors}
+              rows={3}
             />
-          </Input>
-          <Input>
-            <FormInputText
-              name="facebook"
-              control={control}
-              label="Facebook URL"
-              errors={errors}
-            />
-          </Input>
-          <FormInputText
-            name="instagram"
-            control={control}
-            label="Instagram,"
-            errors={errors}
-          />
-          <FormInputMultiline
-            name="bio"
-            control={control}
-            label="Bio"
-            errors={errors}
-            rows={3}
-          />
 
-          <GenderRadioButtons control={control} />
-        </InputsContainer>
+            <GenderRadioButtons control={control} />
+          </InputsContainer>
 
-        <SubmitContainer>
-          <SubmitButton
-            variant="contained"
-            color="primary"
-            type="submit"
-            size="medium"
-          >
-            Save Changes
-          </SubmitButton>
-        </SubmitContainer>
-      </form>
-    </FormContainer>
+          <SubmitContainer>
+            <SubmitButton
+              variant="contained"
+              color="primary"
+              type="submit"
+              size="medium"
+            >
+              Save Changes
+            </SubmitButton>
+          </SubmitContainer>
+        </form>
+      </FormContainer>
+    </>
   );
 };

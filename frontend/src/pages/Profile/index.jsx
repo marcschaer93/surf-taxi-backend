@@ -7,6 +7,7 @@ import { useNotifications } from "../../hooks/useNotifications";
 import { useAuthContext } from "../../context/authProvider";
 import { Title, TitleDivider } from "../../styles/fontStyles";
 import { theme } from "../../utils/theme";
+import { NotificationButton } from "../../components/ui/NotificationButton";
 
 export const Profile = ({ notifications }) => {
   // const { user } = useAuthContext();
@@ -15,22 +16,13 @@ export const Profile = ({ notifications }) => {
   const { handleLogout } = useAuthContext();
   return (
     <>
-      <Box sx={{ display: "flex" }}>
+      <Box>
+        <NotificationButton notifications={notifications} />
         <Title variant="h3">Profile</Title>
-        <Box
-          component={Link}
-          to="/notifications"
-          sx={{ marginLeft: "auto", mt: "20px" }}
-        >
-          <IconButton color="primary">
-            <Badge badgeContent={notifications.length} color="error">
-              <NotificationsOutlinedIcon />
-            </Badge>
-          </IconButton>
-        </Box>
+        <TitleDivider />
       </Box>
-      <TitleDivider />
-      <Box sx={{ position: "relative" }}>
+
+      <Box>
         <Link to="/profile-edit">
           <Button size="small" variant="outlined">
             Edit Profile

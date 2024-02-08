@@ -4,17 +4,17 @@ import { Box, Button, Typography } from "@mui/material";
 import { theme } from "../utils/theme";
 
 export const FormContainer = styled(Box)(({ theme }) => ({
-  margin: "auto",
   width: "100%",
-  padding: "20px",
-  paddingBottom: "50px",
-  marginTop: "30px",
-  borderRadius: "16px",
-  backgroundColor: "#FFFFFF",
-  border: "solid #CCCCCC 1px",
-  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
 
   [theme.breakpoints.up("sm")]: {
+    paddingBottom: "50px",
+    padding: "20px",
+    marginTop: "30px",
+    margin: "auto",
+    borderRadius: "16px",
+    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+    backgroundColor: "#FFFFFF",
+    border: "solid #CCCCCC 1px",
     width: "35vw",
     marginTop: "60px",
   },

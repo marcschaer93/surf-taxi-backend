@@ -9,19 +9,21 @@ import {
   Chip,
 } from "@mui/material";
 import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
+
 import { useLocation, useNavigate } from "react-router-dom";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import { Confirmation } from "./Confirmation";
 import { theme } from "../../utils/theme";
 import { StatusChip } from "../../components/ui/StatusChip";
 import { CancelRequestConfirmationCard } from "../../components/confirmationCards/CancelRequestConfirmationCard";
 import { JoinRequestConfirmationCard } from "../../components/confirmationCards/JoinRequestConfirmationCard";
-import { FavoriteButton } from "../../styles/buttonStyles";
 import { StyledDetailsCard } from "../../styles/cardStyles";
 import { useFavorite } from "../../hooks/useFavorite";
 import { useParams } from "react-router-dom";
 import { Title, TitleDivider } from "../../styles/fontStyles";
+
+import { FavoriteButton } from "../../components/ui/FavoriteButton";
+import { GoBackButton } from "../../components/ui/GoBackButton";
 
 export const TripDetailsCard = ({
   tripDetails,
@@ -47,36 +49,34 @@ export const TripDetailsCard = ({
     toggleFavorite(tripId);
   };
 
+  const handleGoBackButton = (e, tripId) => {
+    e.stopPropagation();
+    navigate(-1);
+  };
+
   return (
     <>
-      <Title variant="h3">Trip I'm Joining</Title>
-      <TitleDivider />
+      <Box>
+        <GoBackButton handleGoBack={handleGoBackButton} />
+        <Title variant="h3">Trip Details</Title>
+        <TitleDivider />
+      </Box>
+
+      {/* 
+      <GoBackButton handleGoBack={handleGoBackButton} />
+      <TitleDivider /> */}
 
       <StyledDetailsCard variant="outlined">
         {isInMyTrips && <StatusChip isTripOwner={false} />}
 
         {!isInMyTrips && (
-          <FavoriteButton onClick={handleFavorite} color="secondary">
-            {isFavorited ? (
-              <FavoriteIcon
-                style={{
-                  cursor: "pointer",
-                  color: theme.palette.contrast.main,
-                }}
-              />
-            ) : (
-              <FavoriteBorderSharpIcon
-                style={{
-                  cursor: "pointer",
-                  color: theme.palette.text.secondary,
-                }}
-              />
-            )}
-          </FavoriteButton>
+          <FavoriteButton
+            handleFavorite={handleFavorite}
+            isFavorited={isFavorited}
+          ></FavoriteButton>
         )}
 
         <CardContent>
-          <Typography variant="h5">Trip Details</Typography>
           <Typography variant="body1" gutterBottom>
             Start Location: {tripDetails.startLocation}
           </Typography>
@@ -109,9 +109,9 @@ export const TripDetailsCard = ({
         </CardContent>
 
         <CardActions>
-          <Button onClick={openConfirmation}>
+          {/* <Button size="small" variant="contained" onClick={openConfirmation}>
             {userStatus ? "Cancel Trip" : "Join Trip"}
-          </Button>
+          </Button> */}
 
           <Box>
             {userStatus ? (
@@ -132,10 +132,6 @@ export const TripDetailsCard = ({
               />
             )}
           </Box>
-
-          <Button size="small" onClick={() => navigate(-1)} variant="outlined">
-            Go Back
-          </Button>
         </CardActions>
       </StyledDetailsCard>
       {userStatus && (
@@ -143,6 +139,19 @@ export const TripDetailsCard = ({
           <Typography variant="h5">My Status</Typography>
         </Box>
       )}
+
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        {/* Other content */}
+        <Button
+          sx={{ marginLeft: "auto" }}
+          size="small"
+          variant={userStatus ? "outlined" : "contained"}
+          color={userStatus ? "error" : "primary"}
+          onClick={openConfirmation}
+        >
+          {userStatus ? "Cancel Trip" : "Join Trip"}
+        </Button>
+      </Box>
     </>
   );
 };

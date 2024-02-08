@@ -83,6 +83,7 @@ export const TripDetails = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
     try {
       await UserApi.deleteMyTrip(tripId, user.username);
       const myTripsData = await UserApi.getAllUserTrips(user.username);
+      console.log("myTripsData", myTripsData);
       setMyTrips(myTripsData);
 
       setPassengers([]);
@@ -95,7 +96,6 @@ export const TripDetails = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
   };
 
   const handleConfirmConnect = async (passengerUsername) => {
-    console.log("P NAME", passengerUsername);
     try {
       // Update user status to indicate pending connection
       // setUserStatus("connecting");
