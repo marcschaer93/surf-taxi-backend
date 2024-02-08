@@ -48,7 +48,7 @@ export const LoginForm = () => {
   const onFormSubmit = async (credentials) => {
     try {
       await handleLogin(credentials);
-      navigate("/");
+      navigate("/trips");
       reset();
     } catch (error) {
       // setError (react-hook-form)
@@ -62,34 +62,6 @@ export const LoginForm = () => {
     }
   };
 
-  // const FormContainer = styled(Box)(({ theme }) => ({
-  //   margin: "auto",
-  //   width: "90%", // Adjust the width for smaller screens
-  //   maxWidth: "400px", // Set a maximum width to avoid stretching on very large screens
-  //   padding: "20px",
-  //   paddingBottom: "50px",
-  //   marginTop: "30px",
-  //   borderRadius: "16px",
-  //   backgroundColor: "#FFFFFF",
-  //   border: "solid #CCCCCC 1px",
-  //   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-
-  //   [theme.breakpoints.up("sm")]: {
-  //     width: "600px", // Adjust width for screens larger than or equal to sm
-  //     marginTop: "60px",
-  //   },
-  // }));
-
-  // const Input = styled(Box)(({ theme }) => ({
-  //   display: "flex",
-  //   alignItems: "center",
-  //   width: "100%",
-
-  //   [theme.breakpoints.up("sm")]: {
-  //     width: "480px",
-  //   },
-  // }));
-
   return (
     <FormContainer>
       <TitleContainer>
@@ -97,7 +69,11 @@ export const LoginForm = () => {
         <Underline></Underline>
       </TitleContainer>
 
-      <form autoComplete="off" onSubmit={handleSubmit(onFormSubmit)}>
+      <Box
+        component="Form"
+        autoComplete="off"
+        onSubmit={handleSubmit(onFormSubmit)}
+      >
         <InputsContainer>
           <Input>
             <FormInputUsername
@@ -140,7 +116,7 @@ export const LoginForm = () => {
             Sign Up.
           </SignupLink>
         </SwitchContainer>
-      </form>
+      </Box>
     </FormContainer>
   );
 };

@@ -4,6 +4,7 @@ import { Box, Typography, styled } from "@mui/material";
 
 import { TripPreviewCard } from "./TripPreviewCard";
 import { useAuthContext } from "../../context/authProvider";
+import { Title, TitleDivider } from "../../styles/fontStyles";
 
 export const AllTrips = ({ allTrips, myTrips }) => {
   const navigate = useNavigate();
@@ -21,9 +22,13 @@ export const AllTrips = ({ allTrips, myTrips }) => {
   return (
     <>
       <Box>
-        <Typography sx={{ textAlign: "center" }} variant="h5">
-          All Trips
-        </Typography>
+        <Title variant="h3">All Trips</Title>
+        <TitleDivider />
+        {trips.length === 0 && (
+          <Box sx={{ textAlign: "left", ml: "30px" }}>
+            <Typography variant="h5">No trips available...</Typography>
+          </Box>
+        )}
 
         {trips.map((trip) => (
           <TripPreviewCard key={trip.id} tripData={trip} isInMyTrips={false} />

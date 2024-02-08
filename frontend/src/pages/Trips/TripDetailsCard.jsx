@@ -21,6 +21,7 @@ import { FavoriteButton } from "../../styles/buttonStyles";
 import { StyledDetailsCard } from "../../styles/cardStyles";
 import { useFavorite } from "../../hooks/useFavorite";
 import { useParams } from "react-router-dom";
+import { Title, TitleDivider } from "../../styles/fontStyles";
 
 export const TripDetailsCard = ({
   tripDetails,
@@ -48,7 +49,8 @@ export const TripDetailsCard = ({
 
   return (
     <>
-      <Typography variant="h4">Trip I'm Joining</Typography>
+      <Title variant="h3">Trip I'm Joining</Title>
+      <TitleDivider />
 
       <StyledDetailsCard variant="outlined">
         {isInMyTrips && <StatusChip isTripOwner={false} />}
@@ -56,9 +58,19 @@ export const TripDetailsCard = ({
         {!isInMyTrips && (
           <FavoriteButton onClick={handleFavorite} color="secondary">
             {isFavorited ? (
-              <FavoriteIcon style={{ cursor: "pointer" }} />
+              <FavoriteIcon
+                style={{
+                  cursor: "pointer",
+                  color: theme.palette.contrast.main,
+                }}
+              />
             ) : (
-              <FavoriteBorderSharpIcon style={{ cursor: "pointer" }} />
+              <FavoriteBorderSharpIcon
+                style={{
+                  cursor: "pointer",
+                  color: theme.palette.text.secondary,
+                }}
+              />
             )}
           </FavoriteButton>
         )}

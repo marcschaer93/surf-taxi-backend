@@ -74,7 +74,7 @@ export const useAuth = () => {
   };
 
   useEffect(() => {
-    console.log("Logged in User:", user);
+    // console.log("Logged in User:", user);
     // checkTokenExpiration(); // Ensure it runs when the user state changes
   }, [user]);
 

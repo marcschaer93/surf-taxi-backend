@@ -18,6 +18,7 @@ import { JoinRequestConfirmationCard } from "../../components/confirmationCards/
 import { DeleteOwnTripConfirmationCard } from "../../components/confirmationCards/DeleteOwnTripConfirmationCard";
 import { StyledDetailsCard } from "../../styles/cardStyles";
 import { PassengerCard } from "./PassengerCard";
+import { Title, TitleDivider } from "../../styles/fontStyles";
 
 export const OwnerTripDetailsCard = ({
   tripDetails,
@@ -34,7 +35,8 @@ export const OwnerTripDetailsCard = ({
 
   return (
     <>
-      <Typography variant="h4">My Organized Trip</Typography>
+      <Title variant="h3">My Organized Trip</Title>
+      <TitleDivider />
 
       <StyledDetailsCard variant="outlined">
         <StatusChip isTripOwner={true} />

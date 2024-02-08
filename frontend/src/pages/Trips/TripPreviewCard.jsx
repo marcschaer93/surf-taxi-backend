@@ -63,9 +63,19 @@ export const TripPreviewCard = ({ tripData, isInMyTrips }) => {
         {!isInMyTrips && user && (
           <FavoriteButton onClick={handleFavorite} color="secondary">
             {isFavorited ? (
-              <FavoriteIcon style={{ cursor: "pointer" }} />
+              <FavoriteIcon
+                style={{
+                  cursor: "pointer",
+                  color: theme.palette.contrast.main,
+                }}
+              />
             ) : (
-              <FavoriteBorderSharpIcon style={{ cursor: "pointer" }} />
+              <FavoriteBorderSharpIcon
+                style={{
+                  cursor: "pointer",
+                  color: theme.palette.text.secondary,
+                }}
+              />
             )}
           </FavoriteButton>
         )}
@@ -81,15 +91,25 @@ export const TripPreviewCard = ({ tripData, isInMyTrips }) => {
         {isInMyTrips && <StatusChip isTripOwner={isTripOwner} />}
 
         <CardContent>
-          <Typography variant="h6" gutterBottom>
-            {tripData.startLocation} - {tripData.destination}
+          <Typography variant="h5" gutterBottom>
+            {`${tripData.startLocation} 🇪🇸`} - {`${tripData.destination} 🇲🇦`}
           </Typography>
 
           <Typography color="text.secondary">
             <Box component="span">Stops: {tripData.stops}</Box>
           </Typography>
 
-          {/* Add other trip details here */}
+          <Typography color="text.secondary">
+            <Box component="span">Date: {tripData.date}</Box>
+          </Typography>
+
+          <Typography color="text.secondary">
+            <Box component="span">Available Seats: {tripData.seats}</Box>
+          </Typography>
+
+          <Typography color="text.secondary">
+            <Box component="span">Travel Info: {tripData.travelInfo}</Box>
+          </Typography>
         </CardContent>
 
         <CardActions></CardActions>

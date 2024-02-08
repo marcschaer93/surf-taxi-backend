@@ -1,9 +1,10 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Divider } from "@mui/material";
 
 import { useAuthContext } from "../../context/authProvider";
 import { useMyTrips } from "../../hooks/useMyTrips";
 import { TripPreviewCard } from "../Trips/TripPreviewCard";
 import { useFavoriteTrips } from "../../hooks/useFavoriteTrips";
+import { Title, TitleDivider } from "../../styles/fontStyles";
 
 export const Favorites = () => {
   const { user } = useAuthContext();
@@ -12,20 +13,32 @@ export const Favorites = () => {
   const { favoriteTrips, loading } = useFavoriteTrips(favoriteIds);
 
   return (
-    <Box>
-      <Typography sx={{ textAlign: "center" }} variant="h5">
-        Favorites
-      </Typography>
-
+    <>
       {loading ? (
-        <Box>Loading...</Box>
-      ) : favoriteTrips.length > 0 ? (
-        favoriteTrips.map((trip) => (
-          <TripPreviewCard key={trip.id} tripData={trip} isInMyTrips={false} />
-        ))
+        <Box sx={{ textAlign: "center", marginTop: "30px" }}>Loading...</Box>
       ) : (
-        <Typography>No favorite trips found</Typography>
+        <Box>
+          <Title variant="h3">Favorites</Title>
+          <TitleDivider />
+
+          {favoriteTrips.length > 0 ? (
+            favoriteTrips.map((trip) => (
+              <TripPreviewCard
+                key={trip.id}
+                tripData={trip}
+                isInMyTrips={false}
+              />
+            ))
+          ) : (
+            <Box sx={{ textAlign: "left", ml: "30px" }}>
+              <Typography variant="h5">No favorites yet...</Typography>
+              <Typography color="text.secondary">
+                Click the heart button to save trips as favorites.
+              </Typography>
+            </Box>
+          )}
+        </Box>
       )}
-    </Box>
+    </>
   );
 };

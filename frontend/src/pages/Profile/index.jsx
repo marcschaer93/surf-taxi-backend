@@ -5,6 +5,8 @@ import { IconButton, Badge, Box, Typography, Button } from "@mui/material";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import { useNotifications } from "../../hooks/useNotifications";
 import { useAuthContext } from "../../context/authProvider";
+import { Title, TitleDivider } from "../../styles/fontStyles";
+import { theme } from "../../utils/theme";
 
 export const Profile = ({ notifications }) => {
   // const { user } = useAuthContext();
@@ -13,7 +15,21 @@ export const Profile = ({ notifications }) => {
   const { handleLogout } = useAuthContext();
   return (
     <>
-      <Typography variant="h5">Profile</Typography>
+      <Box sx={{ display: "flex" }}>
+        <Title variant="h3">Profile</Title>
+        <Box
+          component={Link}
+          to="/notifications"
+          sx={{ marginLeft: "auto", mt: "20px" }}
+        >
+          <IconButton color="primary">
+            <Badge badgeContent={notifications.length} color="error">
+              <NotificationsOutlinedIcon />
+            </Badge>
+          </IconButton>
+        </Box>
+      </Box>
+      <TitleDivider />
       <Box sx={{ position: "relative" }}>
         <Link to="/profile-edit">
           <Button size="small" variant="outlined">
@@ -25,14 +41,6 @@ export const Profile = ({ notifications }) => {
         </Link>
         <Link to="/notifications">
           {/* Replace the following onClick handler with your actual logic */}
-          <IconButton
-            color="inherit"
-            sx={{ position: "absolute", top: 0, right: 0 }}
-          >
-            <Badge badgeContent={notifications.length} color="error">
-              <NotificationsOutlinedIcon />
-            </Badge>
-          </IconButton>
         </Link>
       </Box>
     </>

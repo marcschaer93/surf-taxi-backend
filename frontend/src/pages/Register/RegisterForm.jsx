@@ -58,7 +58,7 @@ export const RegisterForm = () => {
   const onFormSubmit = async (formData) => {
     try {
       await handleRegister(formData);
-      navigate("/");
+      navigate("/trips");
       reset();
     } catch (error) {
       // setError (react-hook-form)

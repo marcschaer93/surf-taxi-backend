@@ -105,7 +105,7 @@ export const Navbar = () => {
               </>
             )}
           </Box>
-          <Box>
+          <Box sx={{ display: { xs: "none" } }}>
             {!user && (
               <Button
                 component={NavLink}
