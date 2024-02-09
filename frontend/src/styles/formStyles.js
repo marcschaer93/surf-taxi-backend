@@ -8,8 +8,8 @@ export const FormContainer = styled(Box)(({ theme }) => ({
 
   [theme.breakpoints.up("sm")]: {
     paddingBottom: "50px",
-    padding: "20px",
     marginTop: "30px",
+    padding: "20px",
     margin: "auto",
     borderRadius: "16px",
     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",

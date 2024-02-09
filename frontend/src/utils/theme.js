@@ -3,6 +3,8 @@ import { orange, green } from "@mui/material/colors";
 import { Button } from "@mui/material";
 
 export const theme = createTheme({
+  // general App spaciing
+  spacing: 6,
   palette: {
     mode: "light",
     primary: {

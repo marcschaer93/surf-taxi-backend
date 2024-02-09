@@ -40,10 +40,15 @@ export const AllTrips = ({ allTrips, myTrips }) => {
             </Typography>
           </Box>
         )}
-
-        {trips.map((trip) => (
-          <TripPreviewCard key={trip.id} tripData={trip} isInMyTrips={false} />
-        ))}
+        <Box sx={{ marginBottom: "80px" }}>
+          {trips.map((trip) => (
+            <TripPreviewCard
+              key={trip.id}
+              tripData={trip}
+              isInMyTrips={false}
+            />
+          ))}
+        </Box>
       </Box>
     </>
   );

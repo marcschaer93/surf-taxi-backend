@@ -20,6 +20,9 @@ import { useFavorite } from "../../hooks/useFavorite";
 import { TripDetails } from "./TripDetails";
 import { useState } from "react";
 import { FavoriteButton } from "../../components/ui/FavoriteButton";
+import { format } from "date-fns";
+
+import { TripCardContent } from "./TripCardContent";
 
 export const TripPreviewCard = ({ tripData, isInMyTrips }) => {
   const navigate = useNavigate();
@@ -47,6 +50,9 @@ export const TripPreviewCard = ({ tripData, isInMyTrips }) => {
     navigate(`/trips/${tripId}`);
   };
 
+  const { startLocation, destination, stops, seats, date, travelInfo } =
+    tripData;
+
   return (
     <>
       <StyledPreviewCard
@@ -65,37 +71,9 @@ export const TripPreviewCard = ({ tripData, isInMyTrips }) => {
           ></FavoriteButton>
         )}
 
-        {/* {tripNotificationCount > 0 && (
-          <Chip
-            label={tripNotificationCount}
-            color="primary"
-            sx={{ position: "absolute", top: 0, right: 0 }}
-          />
-        )} */}
-
         {isInMyTrips && <StatusChip isTripOwner={isTripOwner} />}
 
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            {`${tripData.startLocation} 🇪🇸`} - {`${tripData.destination} 🇲🇦`}
-          </Typography>
-
-          <Typography color="text.secondary">
-            <Box component="span">Stops: {tripData.stops}</Box>
-          </Typography>
-
-          <Typography color="text.secondary">
-            <Box component="span">Date: {tripData.date}</Box>
-          </Typography>
-
-          <Typography color="text.secondary">
-            <Box component="span">Available Seats: {tripData.seats}</Box>
-          </Typography>
-
-          <Typography color="text.secondary">
-            <Box component="span">Travel Info: {tripData.travelInfo}</Box>
-          </Typography>
-        </CardContent>
+        <TripCardContent tripData={tripData} />
 
         <CardActions></CardActions>
       </StyledPreviewCard>

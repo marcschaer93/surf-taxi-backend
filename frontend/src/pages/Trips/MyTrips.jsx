@@ -37,7 +37,7 @@ export const MyTrips = ({ myTrips, allTrips, notifications }) => {
         </Box>
       )}
       {""}
-      <Box>
+      <Box sx={{ marginBottom: "80px" }}>
         {myTrips.map((trip) => (
           <TripPreviewCard
             key={trip.id}

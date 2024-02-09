@@ -21,6 +21,7 @@ import { PassengerCard } from "./PassengerCard";
 import { Title, TitleDivider } from "../../styles/fontStyles";
 import { GoBackButton } from "../../components/ui/GoBackButton";
 import { useState } from "react";
+import { TripCardContent } from "./TripCardContent";
 
 export const OwnerTripDetailsCard = ({
   tripDetails,
@@ -59,21 +60,9 @@ export const OwnerTripDetailsCard = ({
 
       <StyledDetailsCard variant="outlined">
         <StatusChip isTripOwner={true} />
-        <CardContent>
-          <Typography variant="h6">Trip Details</Typography>
-          <Typography variant="body1" gutterBottom>
-            Start Location: {tripDetails.startLocation}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Destination: {tripDetails.destination}
-          </Typography>
 
-          <Typography color="text.secondary">
-            Stops: {tripDetails.stops}
-          </Typography>
+        <TripCardContent tripData={tripDetails} />
 
-          <Typography variant="h6">Passengers</Typography>
-        </CardContent>
         <CardActions></CardActions>
         <Box>
           <DeleteOwnTripConfirmationCard
@@ -102,9 +91,10 @@ export const OwnerTripDetailsCard = ({
             />
           ))
         ) : (
-          <Typography>No Passengers</Typography>
+          <Typography variant="body1">No passengers</Typography>
         )}
       </Box>
+
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         {/* Other content */}
         <Button

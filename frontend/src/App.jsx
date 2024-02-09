@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import { AllTrips } from "./pages/Trips/AllTrips";
 import { Home } from "./pages/Home";
@@ -12,7 +12,7 @@ import { EditProfile } from "./pages/Profile/EditProfile";
 import { Profile } from "./pages/Profile";
 import { MyTrips } from "./pages/Trips/MyTrips";
 import { styled, useTheme } from "@mui/material/styles";
-import { Stack, Box } from "@mui/material";
+import { Stack, Box, Toolbar } from "@mui/material";
 import { Sidebar } from "./components/Sidebar";
 import { Rightbar } from "./components/Rightbar";
 import { AppRoutes } from "./components/AppRoutes";
@@ -27,13 +27,31 @@ const MainContent = styled(Box)(({ theme }) => ({
   flex: 4,
   padding: theme.spacing(3),
   width: "100%",
+  marginBottom: "100px",
 }));
 
 export default function App() {
   const { user } = useAuthContext();
+  const location = useLocation();
   const { allTrips, loadingAllTrips } = useAllTrips();
   const { myTrips, setMyTrips, addTrip, loadingMyTrips } = useMyTrips();
   const { notifications, markNotificationAsRead } = useNotifications(user);
+
+  // Paths where the bottom navbar should be displayed
+  const pathsWithBottomNavbar = [
+    "/my-trips",
+    "/",
+    "/trips",
+    "/favorites",
+    "/profile",
+    "/login",
+    "/register",
+    "/trips/:tripId",
+    "/notifications",
+  ];
+  const shouldDisplayBottomNavbar = pathsWithBottomNavbar.includes(
+    location.pathname
+  );
 
   return (
     <>
@@ -54,10 +72,14 @@ export default function App() {
         <Rightbar />
       </Stack>
 
-      <BottomNavBar
-        notifications={notifications}
-        sx={{ display: { sm: "none" } }}
-      />
+      {shouldDisplayBottomNavbar && (
+        <BottomNavBar
+          notifications={notifications}
+          sx={{
+            display: { sm: "none" },
+          }}
+        />
+      )}
     </>
   );
 }

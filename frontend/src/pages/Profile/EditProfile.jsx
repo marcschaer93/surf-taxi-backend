@@ -26,6 +26,8 @@ import {
   HalfInputContainer,
 } from "../../styles/formStyles";
 
+import { GoBackButton } from "../../components/ui/GoBackButton";
+
 /**
  * EditForm Component
  *
@@ -67,16 +69,16 @@ export const EditProfile = () => {
   return (
     <>
       <Box>
-        <Title variant="h3">{`${user.firstName} ${user.lastName}`}</Title>
+        <GoBackButton handleGoBack={() => navigate(-1)} />
+        <Title variant="h3">Edit personal info</Title>
         <TitleDivider />
       </Box>
       <FormContainer>
-        {/* <TitleContainer>
-          <FormTitle variant="h1">Profile</FormTitle>
-          <Underline></Underline>
-        </TitleContainer> */}
-
-        <form autoComplete="off" onSubmit={handleSubmit(onFormSubmit)}>
+        <Box
+          component="form"
+          autoComplete="off"
+          onSubmit={handleSubmit(onFormSubmit)}
+        >
           <InputsContainer>
             <Input>
               <FormInputText
@@ -158,7 +160,7 @@ export const EditProfile = () => {
               Save Changes
             </SubmitButton>
           </SubmitContainer>
-        </form>
+        </Box>
       </FormContainer>
     </>
   );

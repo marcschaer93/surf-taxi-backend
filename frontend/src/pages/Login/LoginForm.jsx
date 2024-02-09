@@ -70,7 +70,7 @@ export const LoginForm = () => {
       </TitleContainer>
 
       <Box
-        component="Form"
+        component="form"
         autoComplete="off"
         onSubmit={handleSubmit(onFormSubmit)}
       >

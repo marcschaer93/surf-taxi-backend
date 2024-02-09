@@ -5,7 +5,7 @@ import { theme } from "../utils/theme";
 export const Title = styled(Typography)(({ theme }) => ({
   textAlign: "left",
   marginBottom: "20px",
-  marginTop: "55px",
+  marginTop: "35px",
 
   [theme.breakpoints.up("sm")]: {},
 }));

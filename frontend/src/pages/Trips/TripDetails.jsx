@@ -159,7 +159,6 @@ export const TripDetails = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
           closeConfirmation={closeConfirmation}
           showConfirmation={showConfirmation}
           handleConfirmConnect={handleConfirmConnect}
-          // tripNotifications={tripNotifications}
         />
       )}
 

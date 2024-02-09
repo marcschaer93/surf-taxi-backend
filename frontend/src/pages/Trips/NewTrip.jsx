@@ -18,6 +18,7 @@ export const NewTrip = ({ addTrip }) => {
   return (
     <Box>
       <Box>
+        <GoBackButton handleGoBack={() => navigate(-1)} />
         <Title variant="h3">New Trip</Title>
         <TitleDivider />
       </Box>

@@ -10,7 +10,7 @@ import { theme } from "../../utils/theme";
 export const GoBackButton = ({ handleGoBack }) => {
   const GoBackButton = styled(IconButton)({
     borderRadius: "50%",
-    border: `0.1px solid ${theme.palette.text.secondary}`,
+    // border: `0.1px solid ${theme.palette.text.secondary}`,
     padding: "5px", // Adjust padding as needed
     backgroundColor: "white",
     "&:hover": {
@@ -18,12 +18,12 @@ export const GoBackButton = ({ handleGoBack }) => {
       color: theme.palette.primary.contrastText,
     },
     "& .MuiSvgIcon-root": {
-      fontSize: "1rem", // Adjust the size as needed
+      fontSize: "1.2rem", // Adjust the size as needed
     },
 
     // position: "absolute",
     top: 10,
-    left: 5,
+    left: 0,
     fontSize: "8px",
     fontWeight: "bold",
   });

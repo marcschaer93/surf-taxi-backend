@@ -24,7 +24,7 @@ export const Notifications = ({ notifications, markNotificationAsRead }) => {
       </Box>
 
       {notifications.length > 0 ? (
-        <Box>
+        <Box sx={{ marginBottom: "80px" }}>
           {notifications.map((notification) => (
             <Link
               onClick={(e) => handleOnLinkClick(e, notification)}

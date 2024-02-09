@@ -23,25 +23,27 @@ export const Favorites = () => {
           <Title variant="h3">Favorites</Title>
           <TitleDivider />
 
-          {favoriteTrips.length > 0 ? (
-            favoriteTrips.map((trip) => (
-              <TripPreviewCard
-                key={trip.id}
-                tripData={trip}
-                isInMyTrips={false}
-              />
-            ))
-          ) : (
-            <Box sx={{ textAlign: "center", mt: "80px", p: "25px" }}>
-              <FavoriteBorderSharpIcon
-                sx={{ fontSize: "3rem", color: theme.palette.text.secondary }}
-              />
-              <Typography variant="h5">No favorites yet</Typography>
-              <Typography color="text.secondary">
-                Click the heart button to save trips as favorites.
-              </Typography>
-            </Box>
-          )}
+          <Box sx={{ marginBottom: "80px" }}>
+            {favoriteTrips.length > 0 ? (
+              favoriteTrips.map((trip) => (
+                <TripPreviewCard
+                  key={trip.id}
+                  tripData={trip}
+                  isInMyTrips={false}
+                />
+              ))
+            ) : (
+              <Box sx={{ textAlign: "center", mt: "80px", p: "25px" }}>
+                <FavoriteBorderSharpIcon
+                  sx={{ fontSize: "3rem", color: theme.palette.text.secondary }}
+                />
+                <Typography variant="h5">No favorites yet</Typography>
+                <Typography color="text.secondary">
+                  Click the heart button to save trips as favorites.
+                </Typography>
+              </Box>
+            )}
+          </Box>
         </Box>
       )}
     </>

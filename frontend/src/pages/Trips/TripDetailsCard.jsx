@@ -7,6 +7,8 @@ import {
   Typography,
   styled,
   Chip,
+  Avatar,
+  IconButton,
 } from "@mui/material";
 import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
 
@@ -24,6 +26,9 @@ import { Title, TitleDivider } from "../../styles/fontStyles";
 
 import { FavoriteButton } from "../../components/ui/FavoriteButton";
 import { GoBackButton } from "../../components/ui/GoBackButton";
+import { TripCardContent } from "./TripCardContent";
+import { PassengerCard } from "./PassengerCard";
+import { PassengerAvatars } from "../../components/ui/PassengerAvatars";
 
 export const TripDetailsCard = ({
   tripDetails,
@@ -54,6 +59,9 @@ export const TripDetailsCard = ({
     navigate(-1);
   };
 
+  const { startLocation, destination, stops, seats, date, travelInfo } =
+    tripDetails;
+
   return (
     <>
       <Box>
@@ -61,10 +69,6 @@ export const TripDetailsCard = ({
         <Title variant="h3">Trip Details</Title>
         <TitleDivider />
       </Box>
-
-      {/* 
-      <GoBackButton handleGoBack={handleGoBackButton} />
-      <TitleDivider /> */}
 
       <StyledDetailsCard variant="outlined">
         {isInMyTrips && <StatusChip isTripOwner={false} />}
@@ -76,43 +80,9 @@ export const TripDetailsCard = ({
           ></FavoriteButton>
         )}
 
-        <CardContent>
-          <Typography variant="body1" gutterBottom>
-            Start Location: {tripDetails.startLocation}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Destination: {tripDetails.destination}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Trip Owner: {tripDetails.owner}
-          </Typography>
-
-          <Typography color="text.secondary">
-            Stops: {tripDetails.stops}
-          </Typography>
-
-          <Typography variant="h6">Passengers</Typography>
-
-          {passengers && passengers.length > 0 && (
-            <Box>
-              {passengers.map((p) => (
-                <Box
-                  key={p.username + p.trip_id}
-                  sx={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <Typography>{p.username}</Typography>
-                  <Typography>Status: {p.reservationStatus}</Typography>
-                </Box>
-              ))}
-            </Box>
-          )}
-        </CardContent>
+        <TripCardContent tripData={tripDetails} />
 
         <CardActions>
-          {/* <Button size="small" variant="contained" onClick={openConfirmation}>
-            {userStatus ? "Cancel Trip" : "Join Trip"}
-          </Button> */}
-
           <Box>
             {userStatus ? (
               <CancelRequestConfirmationCard
@@ -134,11 +104,23 @@ export const TripDetailsCard = ({
           </Box>
         </CardActions>
       </StyledDetailsCard>
+
       {userStatus && (
         <Box>
-          <Typography variant="h5">My Status</Typography>
+          <TitleDivider />
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="h5">My Status</Typography>
+            <Typography variant="h5">{userStatus}</Typography>
+          </Box>
         </Box>
       )}
+
+      <TitleDivider />
+
+      <Box>
+        <Typography variant="h5">Passengers</Typography>
+        <PassengerAvatars passengers={passengers} />
+      </Box>
 
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         {/* Other content */}

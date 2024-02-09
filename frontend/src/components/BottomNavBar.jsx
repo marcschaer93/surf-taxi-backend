@@ -22,93 +22,86 @@ export const BottomNavBar = ({ notifications }) => {
   const [value, setValue] = useState(0);
 
   return (
-    <Box
+    <Paper
       sx={{
-        display: { sm: "none" },
         position: "fixed",
         bottom: 0,
         left: 0,
         right: 0,
-        zIndex: 100,
-        // minHeight: "64px", // Adjust as needed to accommodate bottom navbar
-        // overflowX: "hidden",
-        // overflowY: "auto",
-        // zIndex: 100,
+        zIndex: 1000, // Adjust z-index as neededs
       }}
     >
-      <Paper>
-        {user ? (
-          <BottomNavigation
-            showLabels
-            value={value}
-            onChange={(event, newValue) => {
-              setValue(newValue);
-            }}
-          >
-            <BottomNavigationAction
-              component={NavLink}
-              to="/trips"
-              label="Explore"
-              icon={<SearchIcon />}
-            />
-            <BottomNavigationAction
-              component={NavLink}
-              to="/favorites"
-              label="Favorites"
-              icon={<FavoriteBorderSharpIcon />}
-            />
-            <BottomNavigationAction
-              component={NavLink}
-              to="/new-trip"
-              label="Add Trip"
-              icon={<AddCircleOutlineSharpIcon />}
-            />
-            <BottomNavigationAction
-              label="My Trips"
-              component={NavLink}
-              to="/my-trips"
-              icon={<SurfingSharpIcon />}
-            />
-            <BottomNavigationAction
-              component={NavLink}
-              to="/profile"
-              label="Profile"
-              icon={
-                <>
-                  {" "}
-                  {notifications && (
-                    <Badge badgeContent={notifications.length} color="error">
-                      <AccountCircleOutlinedIcon />
-                    </Badge>
-                  )}
-                </>
-              }
-            />
-          </BottomNavigation>
-        ) : (
-          <BottomNavigation
-            showLabels
-            value={value}
-            onChange={(event, newValue) => {
-              setValue(newValue);
-            }}
-          >
-            <BottomNavigationAction
-              component={NavLink}
-              to="/trips"
-              label="Explore"
-              icon={<RestoreIcon />}
-            />
+      {user ? (
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+        >
+          <BottomNavigationAction
+            component={NavLink}
+            to="/trips"
+            label="Explore"
+            icon={<SearchIcon />}
+          />
+          <BottomNavigationAction
+            component={NavLink}
+            to="/favorites"
+            label="Favorites"
+            icon={<FavoriteBorderSharpIcon />}
+          />
+          <BottomNavigationAction
+            component={NavLink}
+            to="/new-trip"
+            label="Add Trip"
+            icon={<AddCircleOutlineSharpIcon />}
+          />
+          <BottomNavigationAction
+            label="My Trips"
+            component={NavLink}
+            to="/my-trips"
+            icon={<SurfingSharpIcon />}
+          />
+          <BottomNavigationAction
+            component={NavLink}
+            to="/profile"
+            label="Profile"
+            icon={
+              <>
+                {" "}
+                {notifications && (
+                  <Badge badgeContent={notifications.length} color="error">
+                    <AccountCircleOutlinedIcon />
+                  </Badge>
+                )}
+              </>
+            }
+          />
+        </BottomNavigation>
+      ) : (
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+        >
+          <BottomNavigationAction
+            component={NavLink}
+            to="/trips"
+            label="Explore"
+            icon={<RestoreIcon />}
+          />
 
-            <BottomNavigationAction
-              component={NavLink}
-              to="/login"
-              label="Login"
-              icon={<AccountCircleOutlinedIcon />}
-            />
-          </BottomNavigation>
-        )}
-      </Paper>
-    </Box>
+          <BottomNavigationAction
+            component={NavLink}
+            to="/login"
+            label="Login"
+            icon={<AccountCircleOutlinedIcon />}
+          />
+        </BottomNavigation>
+      )}
+    </Paper>
   );
 };
