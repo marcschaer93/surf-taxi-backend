@@ -21,13 +21,9 @@ export const TripDetails = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
 
   const { tripDetails, loadingDetails } = useTripDetails(parseInt(tripId));
 
-  // const location = useLocation();
-  // const { state } = location;
-  // $$$$$$$
-  // const tripDetails = state?.tripDetails;
-  // const tripDetails = myTrips.find((t) => t.id === parseInt(tripId));
-
-  // const tripNotifications = state?.tripNotifications;
+  const location = useLocation();
+  const { state } = location;
+  const isTripOwner = state?.isTripOwner || false;
 
   // trip passenger custom hook
   const { passengers, setPassengers, loadingPassengers } = useTripPassengers(
@@ -141,8 +137,6 @@ export const TripDetails = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
   const closeConfirmation = () => {
     setShowConfirmation(false);
   };
-
-  const isTripOwner = user.username === tripDetails?.owner;
 
   return (
     <>

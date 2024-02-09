@@ -115,5 +115,6 @@ CREATE TABLE notifications (
 -- Requested: "You've requested to join this trip."
 -- Pending: "You're in touch! Waiting for organizer approval."
 -- Confirmed: "Seat secured! Your spot on this trip is confirmed."
+
 -- Declined: "Request declined. Your spot on this trip is not confirmed."
 

@@ -53,15 +53,6 @@ export default function App() {
     location.pathname
   );
 
-  // const shouldDisplayBottomActionBar = checkBottomActionBarConditions();
-  // function checkBottomActionBarConditions() {
-  //   // Add your conditions here
-  //   const condition1 = location.pathname.startsWith("/trips/");
-  //   // Return true if any condition is met
-  //   // return condition1 || condition2 || condition3;
-  //   return condition1;
-  // }
-
   return (
     <>
       {/* Navbar */}

@@ -198,8 +198,8 @@ class UserApi {
       `
       SELECT *
       FROM passengers
-      WHERE passengers.username = $1 
-      AND passengers.trip_id = $2
+      WHERE username = $1 
+      AND trip_id = $2
       `,
       [username, tripId]
     );

@@ -16,8 +16,6 @@ export const MyTrips = ({ myTrips, allTrips, notifications }) => {
   const { showBoundary } = useErrorBoundary();
   const navigate = useNavigate();
 
-  if (!myTrips) return <Box>No Trips available</Box>;
-
   return (
     <>
       <Box>
@@ -30,9 +28,11 @@ export const MyTrips = ({ myTrips, allTrips, notifications }) => {
           <SurfingSharpIcon
             sx={{ fontSize: "3rem", color: theme.palette.text.secondary }}
           />
-          <Typography variant="h6">No trips available now</Typography>
+          <Typography variant="h6">
+            No trips in myTrips available now
+          </Typography>
           <Typography color="text.secondary">
-            We will let you know when new trips are here!
+            Add a new Trip or join another!
           </Typography>
         </Box>
       )}
@@ -43,9 +43,10 @@ export const MyTrips = ({ myTrips, allTrips, notifications }) => {
             key={trip.id}
             tripData={trip}
             isInMyTrips={true}
-            tripNotifications={notifications.filter(
-              (n) => n.tripId === trip.id
-            )}
+            isTripOwner={trip.owner === user?.username}
+            // tripNotifications={notifications.filter(
+            //   (n) => n.tripId === trip.id
+            // )}
           />
         ))}
       </Box>

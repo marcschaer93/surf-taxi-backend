@@ -47,6 +47,7 @@ export const AllTrips = ({ allTrips, myTrips }) => {
               key={trip.id}
               tripData={trip}
               isInMyTrips={false}
+              isTripOwner={trip.owner === user?.username}
             />
           ))}
         </Box>

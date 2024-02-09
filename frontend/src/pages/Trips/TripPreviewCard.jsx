@@ -10,6 +10,7 @@ import {
   Chip,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 import { useAuthContext } from "../../context/authProvider";
 import { theme } from "../../utils/theme";
@@ -21,17 +22,38 @@ import { TripDetails } from "./TripDetails";
 import { useState } from "react";
 import { FavoriteButton } from "../../components/ui/FavoriteButton";
 import { format } from "date-fns";
+import * as UserApi from "../../api/services/UserApi";
 
 import { TripCardContent } from "./TripCardContent";
 
-export const TripPreviewCard = ({ tripData, isInMyTrips }) => {
+export const TripPreviewCard = ({ tripData, isInMyTrips, isTripOwner }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const tripId = tripData.id;
-  const isTripOwner = user && tripData?.owner === user.username;
-  // const tripNotificationCount = tripNotifications
-  //   ? tripNotifications.length
-  //   : 0;
+  const { startLocation, destination, stops, seats, date, travelInfo } =
+    tripData;
+  const [userStatus, setUserStatus] = useState(null);
+
+  // Check user status if not trip owner
+  // $$ Move to PASSENGER API ? CHANGE NAME getOneUserReservation ?
+  useEffect(() => {
+    const fetchUserReservation = async () => {
+      try {
+        const userPassenger = await UserApi.getOneUserReservation(
+          user.username,
+          tripId
+        );
+        setUserStatus(userPassenger.reservationStatus);
+      } catch (error) {
+        console.error(error);
+        // Handle error here, e.g., set a default status or show an error message
+      }
+    };
+
+    if (!isTripOwner && isInMyTrips) {
+      fetchUserReservation();
+    }
+  }, [isTripOwner, tripId, user]);
 
   // favorite trips hook (only for logged in users)
   const { isFavorited, toggleFavorite, loading } = user
@@ -44,14 +66,10 @@ export const TripPreviewCard = ({ tripData, isInMyTrips }) => {
   };
 
   const handleCardClick = () => {
-    // navigate(`/trips/${tripId}`, {
-    //   state: { tripDetails, isInMyTrips, tripNotifications },
-    // });
-    navigate(`/trips/${tripId}`);
+    navigate(`/trips/${tripId}`, {
+      state: { isTripOwner },
+    });
   };
-
-  const { startLocation, destination, stops, seats, date, travelInfo } =
-    tripData;
 
   return (
     <>
@@ -71,9 +89,11 @@ export const TripPreviewCard = ({ tripData, isInMyTrips }) => {
           ></FavoriteButton>
         )}
 
-        {isInMyTrips && <StatusChip isTripOwner={isTripOwner} />}
+        {isInMyTrips && (
+          <StatusChip isTripOwner={isTripOwner} status={userStatus} />
+        )}
 
-        <TripCardContent tripData={tripData} />
+        <TripCardContent preview={true} tripData={tripData} />
 
         <CardActions></CardActions>
       </StyledPreviewCard>

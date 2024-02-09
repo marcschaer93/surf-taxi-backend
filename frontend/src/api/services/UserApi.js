@@ -30,6 +30,8 @@ export const getAllUserTrips = async (username) => {
 };
 
 export const getOneUserReservation = async (username, tripId) => {
+  console.log("NAME$$", username);
+  console.log("ID$$", tripId);
   try {
     const response = await ApiService.get(`/users/${username}/trips/${tripId}`);
     console.log("userReservation", response.data.data);

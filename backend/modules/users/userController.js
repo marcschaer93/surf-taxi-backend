@@ -62,7 +62,7 @@ exports.getAllUserTrips = asyncHandler(async (req, res, next) => {
 exports.getOneUserReservation = asyncHandler(async (req, res, next) => {
   // const loggedInUser = req.username;
   const username = req.params.username;
-  const tripId = req.params.tripId;
+  const tripId = parseInt(req.params.tripId);
 
   const userReservation = await UserApi.getOneUserReservation(username, tripId);
 

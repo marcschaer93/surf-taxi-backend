@@ -30,6 +30,7 @@ import { TripCardContent } from "./TripCardContent";
 import { PassengerCard } from "./PassengerCard";
 import { PassengerAvatars } from "../../components/ui/PassengerAvatars";
 import { BottomActionBar } from "../../components/BottomActionBar";
+import { ColorAvatar } from "../../components/ui/ColorAvatar";
 
 export const TripDetailsCard = ({
   tripDetails,
@@ -60,7 +61,7 @@ export const TripDetailsCard = ({
     navigate(-1);
   };
 
-  const { startLocation, destination, stops, seats, date, travelInfo } =
+  const { startLocation, destination, stops, seats, date, travelInfo, owner } =
     tripDetails;
 
   return (
@@ -106,11 +107,22 @@ export const TripDetailsCard = ({
         </CardActions>
       </StyledDetailsCard>
 
+      {/* Trip Owner */}
+      <Box>
+        <TitleDivider />
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h5">Owner</Typography>
+          <ColorAvatar username={owner} />
+        </Box>
+      </Box>
+
+      {/* User Trip Status */}
       {userStatus && (
         <Box>
           <TitleDivider />
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography variant="h5">My Status</Typography>
+            <StatusChip isTripOwner={false} status={userStatus} />
             <Typography variant="h5">{userStatus}</Typography>
           </Box>
         </Box>

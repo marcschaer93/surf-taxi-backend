@@ -21,7 +21,7 @@ import ArrowRightAltSharpIcon from "@mui/icons-material/ArrowRightAltSharp";
 import CalendarMonthSharpIcon from "@mui/icons-material/CalendarMonthSharp";
 import { theme } from "../../utils/theme";
 
-export const TripCardContent = ({ tripData }) => {
+export const TripCardContent = ({ tripData, preview }) => {
   const { startLocation, destination, stops, seats, date, travelInfo } =
     tripData;
 
@@ -60,7 +60,7 @@ export const TripCardContent = ({ tripData }) => {
           </Typography>
 
           {/* Travel Info */}
-          {travelInfo && (
+          {travelInfo && !preview && (
             <Typography color="text.secondary">
               <InfoIcon sx={{ marginRight: 1 }} />
               {travelInfo}
