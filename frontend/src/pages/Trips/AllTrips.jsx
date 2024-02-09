@@ -40,6 +40,7 @@ export const AllTrips = ({ allTrips, myTrips }) => {
             </Typography>
           </Box>
         )}
+
         <Box sx={{ marginBottom: "80px" }}>
           {trips.map((trip) => (
             <TripPreviewCard

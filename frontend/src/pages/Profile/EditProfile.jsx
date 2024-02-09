@@ -9,6 +9,7 @@ import { useAuthContext } from "../../context/authProvider";
 import * as UserApi from "../../api/services/UserApi";
 import { GenderRadioButtons } from "../../components/form/GenderRadioButtons";
 import { Title, TitleDivider } from "../../styles/fontStyles";
+import { BottomActionBar } from "../../components/BottomActionBar";
 
 import {
   FormContainer,
@@ -63,21 +64,22 @@ export const EditProfile = () => {
 
     UserApi.updateUserProfile(user.username, formData);
     // setCurrentUser(() => data);
-    navigate("/");
+    navigate("/profile");
   };
 
   return (
     <>
       <Box>
         <GoBackButton handleGoBack={() => navigate(-1)} />
-        <Title variant="h3">Edit personal info</Title>
+        <Title variant="h3">Personal details</Title>
         <TitleDivider />
       </Box>
       <FormContainer>
         <Box
           component="form"
           autoComplete="off"
-          onSubmit={handleSubmit(onFormSubmit)}
+          // onSubmit={handleSubmit(onFormSubmit)}
+          sx={{ marginBottom: "80px" }}
         >
           <InputsContainer>
             <Input>
@@ -150,7 +152,7 @@ export const EditProfile = () => {
             <GenderRadioButtons control={control} />
           </InputsContainer>
 
-          <SubmitContainer>
+          {/* <SubmitContainer>
             <SubmitButton
               variant="contained"
               color="primary"
@@ -159,9 +161,17 @@ export const EditProfile = () => {
             >
               Save Changes
             </SubmitButton>
-          </SubmitContainer>
+          </SubmitContainer> */}
         </Box>
       </FormContainer>
+
+      {/* Bottom action bar */}
+      <BottomActionBar
+        variant={"contained"}
+        color={"primary"}
+        onClick={handleSubmit(onFormSubmit)}
+        buttonText={"Save"}
+      />
     </>
   );
 };

@@ -12,6 +12,14 @@ import {
   Chip,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import EventIcon from "@mui/icons-material/Event";
+import StopIcon from "@mui/icons-material/Stop";
+import EventSeatIcon from "@mui/icons-material/EventSeat";
+import InfoIcon from "@mui/icons-material/Info";
+import ArrowRightAltSharpIcon from "@mui/icons-material/ArrowRightAltSharp";
+import CalendarMonthSharpIcon from "@mui/icons-material/CalendarMonthSharp";
+import { theme } from "../../utils/theme";
 
 export const TripCardContent = ({ tripData }) => {
   const { startLocation, destination, stops, seats, date, travelInfo } =
@@ -19,28 +27,47 @@ export const TripCardContent = ({ tripData }) => {
 
   return (
     <>
-      <CardContent>
-        <Typography variant="h5" gutterBottom>
-          {`${startLocation} 🇪🇸`} - {`${destination} 🇲🇦`}
-        </Typography>
+      <>
+        <CardContent>
+          {/* Trip Route */}
+          <Typography variant="h5" gutterBottom>
+            <Box display="flex" alignItems="center">
+              {/* <LocationOnIcon sx={{ marginRight: 1 }} /> */}
+              {startLocation} 🇪🇸{" "}
+              <ArrowRightAltSharpIcon
+                sx={{ color: theme.palette.text.secondary }}
+              />{" "}
+              {destination} 🇲🇦
+            </Box>
+          </Typography>
 
-        <Typography color="text">
-          <Box component="span">{format(new Date(date), "MMMM dd, yyyy")}</Box>
-        </Typography>
+          {/* Date */}
+          <Typography color="text">
+            <CalendarMonthSharpIcon sx={{ marginRight: 1 }} />
+            {format(new Date(date), "MMMM dd, yyyy")}
+          </Typography>
 
-        <Typography color="text.secondary">
-          <Box component="span">Stops: {stops}</Box>
-        </Typography>
+          {/* Stops */}
+          <Typography color="text.secondary">
+            <StopIcon sx={{ marginRight: 1 }} />
+            Stops: {stops}
+          </Typography>
 
-        <Typography color="text.secondary">
-          <Box component="span">Available Seats: {seats}</Box>
-        </Typography>
+          {/* Available Seats */}
+          <Typography color="text.secondary">
+            <EventSeatIcon sx={{ marginRight: 1 }} />
+            Available Seats: {seats}
+          </Typography>
 
-        <Typography color="text.secondary">
-          <Box component="span">Travel Info:</Box>
-          <Typography>{travelInfo}</Typography>
-        </Typography>
-      </CardContent>
+          {/* Travel Info */}
+          {travelInfo && (
+            <Typography color="text.secondary">
+              <InfoIcon sx={{ marginRight: 1 }} />
+              {travelInfo}
+            </Typography>
+          )}
+        </CardContent>
+      </>
     </>
   );
 };

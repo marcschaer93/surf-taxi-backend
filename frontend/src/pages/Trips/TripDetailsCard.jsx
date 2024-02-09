@@ -29,6 +29,7 @@ import { GoBackButton } from "../../components/ui/GoBackButton";
 import { TripCardContent } from "./TripCardContent";
 import { PassengerCard } from "./PassengerCard";
 import { PassengerAvatars } from "../../components/ui/PassengerAvatars";
+import { BottomActionBar } from "../../components/BottomActionBar";
 
 export const TripDetailsCard = ({
   tripDetails,
@@ -122,18 +123,13 @@ export const TripDetailsCard = ({
         <PassengerAvatars passengers={passengers} />
       </Box>
 
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        {/* Other content */}
-        <Button
-          sx={{ marginLeft: "auto" }}
-          size="small"
-          variant={userStatus ? "outlined" : "contained"}
-          color={userStatus ? "error" : "primary"}
-          onClick={openConfirmation}
-        >
-          {userStatus ? "Cancel Trip" : "Join Trip"}
-        </Button>
-      </Box>
+      {/* Bottom action bar */}
+      <BottomActionBar
+        variant={userStatus ? "contained" : "contained"}
+        color={userStatus ? "error" : "primary"}
+        onClick={openConfirmation}
+        buttonText={userStatus ? "Cancel Trip" : "Join Trip"}
+      />
     </>
   );
 };

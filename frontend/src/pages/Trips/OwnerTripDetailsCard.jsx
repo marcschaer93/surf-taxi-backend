@@ -22,6 +22,7 @@ import { Title, TitleDivider } from "../../styles/fontStyles";
 import { GoBackButton } from "../../components/ui/GoBackButton";
 import { useState } from "react";
 import { TripCardContent } from "./TripCardContent";
+import { BottomActionBar } from "../../components/BottomActionBar";
 
 export const OwnerTripDetailsCard = ({
   tripDetails,
@@ -95,18 +96,13 @@ export const OwnerTripDetailsCard = ({
         )}
       </Box>
 
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        {/* Other content */}
-        <Button
-          sx={{ marginLeft: "auto" }}
-          size="small"
-          color="error"
-          variant="contained"
-          onClick={openDeleteConfirmation}
-        >
-          Delete trip
-        </Button>
-      </Box>
+      {/* Bottom action bar */}
+      <BottomActionBar
+        variant={"contained"}
+        color={"error"}
+        onClick={openDeleteConfirmation}
+        buttonText={"Delete Trip"}
+      />
     </>
   );
 };

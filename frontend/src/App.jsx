@@ -16,6 +16,7 @@ import { Stack, Box, Toolbar } from "@mui/material";
 import { Sidebar } from "./components/Sidebar";
 import { Rightbar } from "./components/Rightbar";
 import { AppRoutes } from "./components/AppRoutes";
+import { BottomActionBar } from "./components/BottomActionBar";
 
 import { BottomNavBar } from "./components/BottomNavBar";
 import { useAllTrips } from "./hooks/useAllTrips";
@@ -46,17 +47,27 @@ export default function App() {
     "/profile",
     "/login",
     "/register",
-    "/trips/:tripId",
     "/notifications",
   ];
   const shouldDisplayBottomNavbar = pathsWithBottomNavbar.includes(
     location.pathname
   );
 
+  // const shouldDisplayBottomActionBar = checkBottomActionBarConditions();
+  // function checkBottomActionBarConditions() {
+  //   // Add your conditions here
+  //   const condition1 = location.pathname.startsWith("/trips/");
+  //   // Return true if any condition is met
+  //   // return condition1 || condition2 || condition3;
+  //   return condition1;
+  // }
+
   return (
     <>
+      {/* Navbar */}
       <Navbar />
 
+      {/* Main Content */}
       <Stack direction="row" spacing={2} justifyContent="space-between">
         <Sidebar />
         <MainContent>
@@ -72,6 +83,7 @@ export default function App() {
         <Rightbar />
       </Stack>
 
+      {/* BottomNavBar */}
       {shouldDisplayBottomNavbar && (
         <BottomNavBar
           notifications={notifications}
@@ -80,6 +92,9 @@ export default function App() {
           }}
         />
       )}
+
+      {/* BottomActionBar
+      {shouldDisplayBottomActionBar && <BottomActionBar />} */}
     </>
   );
 }
