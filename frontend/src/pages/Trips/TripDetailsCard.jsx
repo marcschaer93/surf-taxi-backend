@@ -13,10 +13,11 @@ import {
 import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
 
 import { useLocation, useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 
 import { Confirmation } from "./Confirmation";
 import { theme } from "../../utils/theme";
-import { StatusChip } from "../../components/ui/StatusChip";
+import { CardStatusChip } from "../../components/ui/CardStatusChip";
 import { CancelRequestConfirmationCard } from "../../components/confirmationCards/CancelRequestConfirmationCard";
 import { JoinRequestConfirmationCard } from "../../components/confirmationCards/JoinRequestConfirmationCard";
 import { StyledDetailsCard } from "../../styles/cardStyles";
@@ -31,6 +32,8 @@ import { PassengerCard } from "./PassengerCard";
 import { PassengerAvatars } from "../../components/ui/PassengerAvatars";
 import { BottomActionBar } from "../../components/BottomActionBar";
 import { ColorAvatar } from "../../components/ui/ColorAvatar";
+import { StatusChip } from "../../components/ui/StatusChip";
+import InfoSharpIcon from "@mui/icons-material/InfoSharp";
 
 export const TripDetailsCard = ({
   tripDetails,
@@ -38,10 +41,10 @@ export const TripDetailsCard = ({
   handleGoBack,
   handleConfirmCancel,
   handleConfirmJoin,
-  userStatus,
   showConfirmation,
   openConfirmation,
   closeConfirmation,
+  userPassenger,
 }) => {
   const location = useLocation();
   const { tripId } = useParams();
@@ -61,6 +64,11 @@ export const TripDetailsCard = ({
     navigate(-1);
   };
 
+  const handleAvatarClick = (username) => {
+    console.log("username", username);
+    // navigate(`users/${owner}`);
+  };
+
   const { startLocation, destination, stops, seats, date, travelInfo, owner } =
     tripDetails;
 
@@ -73,7 +81,7 @@ export const TripDetailsCard = ({
       </Box>
 
       <StyledDetailsCard variant="outlined">
-        {isInMyTrips && <StatusChip isTripOwner={false} />}
+        {isInMyTrips && <CardStatusChip isTripOwner={false} />}
 
         {!isInMyTrips && (
           <FavoriteButton
@@ -82,11 +90,11 @@ export const TripDetailsCard = ({
           ></FavoriteButton>
         )}
 
-        <TripCardContent tripData={tripDetails} />
+        <TripCardContent tripDetails={tripDetails} />
 
         <CardActions>
           <Box>
-            {userStatus ? (
+            {userPassenger ? (
               <CancelRequestConfirmationCard
                 open={showConfirmation}
                 onClose={closeConfirmation}
@@ -107,40 +115,54 @@ export const TripDetailsCard = ({
         </CardActions>
       </StyledDetailsCard>
 
-      {/* Trip Owner */}
-      <Box>
-        <TitleDivider />
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h5">Owner</Typography>
-          <ColorAvatar username={owner} />
-        </Box>
-      </Box>
-
       {/* User Trip Status */}
-      {userStatus && (
+      {userPassenger && (
         <Box>
           <TitleDivider />
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="h5">My Status</Typography>
-            <StatusChip isTripOwner={false} status={userStatus} />
-            <Typography variant="h5">{userStatus}</Typography>
+            <Box>
+              <Box sx={{ display: "flex", gap: "10px" }}>
+                <Typography variant="h5">My Status</Typography>
+                <InfoSharpIcon />
+              </Box>
+              <Typography variant="body2">
+                {`Last modified: ${format(
+                  userPassenger.reservationTimestamp,
+                  "yyyy-MM-dd "
+                )}`}
+              </Typography>
+            </Box>
+            <StatusChip
+              sx={{}}
+              isTripOwner={false}
+              status={userPassenger.reservationStatus}
+            />
           </Box>
         </Box>
       )}
 
-      <TitleDivider />
-
+      {/* Trip Organizer */}
       <Box>
-        <Typography variant="h5">Passengers</Typography>
+        <TitleDivider />
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h5">Trip Organizer</Typography>
+          <ColorAvatar username={owner} handleAvatarClick={handleAvatarClick} />
+        </Box>
+      </Box>
+
+      {/* Passengers */}
+      <Box>
+        <TitleDivider />
+        <Typography variant="h5">Reserved Seats</Typography>
         <PassengerAvatars passengers={passengers} />
       </Box>
 
       {/* Bottom action bar */}
       <BottomActionBar
-        variant={userStatus ? "contained" : "contained"}
-        color={userStatus ? "error" : "primary"}
+        variant={userPassenger ? "contained" : "contained"}
+        color={userPassenger ? "error" : "primary"}
         onClick={openConfirmation}
-        buttonText={userStatus ? "Cancel Trip" : "Join Trip"}
+        buttonText={userPassenger ? "Cancel Trip" : "Join Trip"}
       />
     </>
   );

@@ -23,13 +23,9 @@ export const Confirmation = ({
 }) => {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>
-        <Typography variant="h6">{title || "Confirm Action"}</Typography>
-      </DialogTitle>
+      <DialogTitle>{title || "Confirm Action"}</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          <Typography variant="body1">{message}</Typography>
-        </DialogContentText>
+        <DialogContentText>{message}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button startIcon={<CancelIcon />} onClick={onCancel} color="secondary">

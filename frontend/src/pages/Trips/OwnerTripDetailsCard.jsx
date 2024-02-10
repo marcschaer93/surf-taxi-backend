@@ -11,7 +11,7 @@ import {
   Chip,
 } from "@mui/material";
 import { theme } from "../../utils/theme";
-import { StatusChip } from "../../components/ui/StatusChip";
+import { CardStatusChip } from "../../components/ui/CardStatusChip";
 import { useNavigate } from "react-router-dom";
 import { CancelRequestConfirmationCard } from "../../components/confirmationCards/CancelRequestConfirmationCard";
 import { JoinRequestConfirmationCard } from "../../components/confirmationCards/JoinRequestConfirmationCard";
@@ -23,6 +23,7 @@ import { GoBackButton } from "../../components/ui/GoBackButton";
 import { useState } from "react";
 import { TripCardContent } from "./TripCardContent";
 import { BottomActionBar } from "../../components/BottomActionBar";
+import { PassengerAvatars } from "../../components/ui/PassengerAvatars";
 
 export const OwnerTripDetailsCard = ({
   tripDetails,
@@ -33,7 +34,6 @@ export const OwnerTripDetailsCard = ({
   openConfirmation,
   closeConfirmation,
   handleConfirmConnect,
-  // tripNotifications,
 }) => {
   const navigate = useNavigate();
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -53,56 +53,75 @@ export const OwnerTripDetailsCard = ({
 
   return (
     <>
-      <Box>
-        <GoBackButton handleGoBack={handleGoBackButton} />
-        <Title variant="h3">My Organized Trip</Title>
-        <TitleDivider />
-      </Box>
-
-      <StyledDetailsCard variant="outlined">
-        <StatusChip isTripOwner={true} />
-
-        <TripCardContent tripData={tripDetails} />
-
-        <CardActions></CardActions>
+      <Box sx={{ marginBottom: "80px" }}>
         <Box>
-          <DeleteOwnTripConfirmationCard
-            tripDetails={tripDetails}
-            handleConfirmDelete={handleConfirmDelete}
-            handleGoBack={handleGoBack}
-            open={showDeleteConfirmation}
-            onClose={closeConfirmation}
-          />
+          <GoBackButton handleGoBack={handleGoBackButton} />
+          <Title variant="h3">My Organized Trip</Title>
+          <TitleDivider />
         </Box>
-      </StyledDetailsCard>
-      <Box>
-        <Typography variant="h5">My Passengers</Typography>
 
-        {passengers && passengers.length > 0 ? (
-          passengers.map((p) => (
-            <PassengerCard
-              key={`${p.username} + ${p.trip_id}`}
+        <StyledDetailsCard variant="outlined">
+          <CardStatusChip isTripOwner={true} />
+
+          <TripCardContent tripDetails={tripDetails} />
+
+          <CardActions></CardActions>
+          <Box>
+            <DeleteOwnTripConfirmationCard
               tripDetails={tripDetails}
-              openConfirmation={openConfirmation}
-              showConfirmation={showConfirmation}
-              closeConfirmation={closeConfirmation}
-              passenger={p}
+              handleConfirmDelete={handleConfirmDelete}
               handleGoBack={handleGoBack}
-              handleConfirmConnect={handleConfirmConnect}
+              open={showDeleteConfirmation}
+              onClose={closeConfirmation}
             />
-          ))
-        ) : (
-          <Typography variant="body1">No passengers</Typography>
-        )}
-      </Box>
+          </Box>
+        </StyledDetailsCard>
+        <Box>
+          <Typography variant="h5">My Requests</Typography>
 
-      {/* Bottom action bar */}
-      <BottomActionBar
-        variant={"contained"}
-        color={"error"}
-        onClick={openDeleteConfirmation}
-        buttonText={"Delete Trip"}
-      />
+          {passengers && passengers.length > 0 ? (
+            passengers.map((p) => (
+              <PassengerCard
+                key={`${p.username} + ${p.trip_id}`}
+                tripDetails={tripDetails}
+                openConfirmation={openConfirmation}
+                showConfirmation={showConfirmation}
+                closeConfirmation={closeConfirmation}
+                passenger={p}
+                handleGoBack={handleGoBack}
+                handleConfirmConnect={handleConfirmConnect}
+              />
+            ))
+          ) : (
+            <Typography variant="body1">No passengers</Typography>
+          )}
+        </Box>
+
+        {/* Passengers */}
+        <Box>
+          <TitleDivider />
+          <Typography variant="h5">Reserved Seats</Typography>
+          <PassengerAvatars passengers={passengers} />
+        </Box>
+
+        <TitleDivider />
+        <Button
+          variant={"outlined"}
+          size="small"
+          onClick={openDeleteConfirmation}
+          color="error"
+        >
+          Delete Trip
+        </Button>
+
+        {/* Bottom action bar */}
+        {/* <BottomActionBar
+          variant={"contained"}
+          color={"error"}
+          onClick={openDeleteConfirmation}
+          buttonText={"Delete Trip"}
+        /> */}
+      </Box>
     </>
   );
 };

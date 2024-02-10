@@ -6,7 +6,7 @@ import { useAuthContext } from "../context/authProvider";
 export const useTripDetails = (tripId) => {
   const { user } = useAuthContext();
   const [tripDetails, setTripDetails] = useState(null);
-  const [loadingDetails, setLoadingDetails] = useState(true);
+  const [loadingTripDetails, setLoadingTripDetails] = useState(true);
 
   console.log("USES TRIP DETAILS TO FETCH TRIPDETAILS");
 
@@ -18,12 +18,12 @@ export const useTripDetails = (tripId) => {
       } catch (error) {
         console.error(error);
       } finally {
-        setLoadingDetails(false);
+        setLoadingTripDetails(false);
       }
     };
 
     fetchData();
   }, [tripId, user]);
 
-  return { tripDetails, loadingDetails };
+  return { tripDetails, loadingTripDetails };
 };

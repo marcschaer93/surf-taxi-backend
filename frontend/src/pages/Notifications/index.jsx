@@ -12,6 +12,12 @@ export const Notifications = ({ notifications, markNotificationAsRead }) => {
     e.preventDefault();
     console.log(notification);
     markNotificationAsRead(notification.id);
+
+    // $$
+    // Update myTrips state if necessary
+    // updateMyTrips(); // This function should update the myTrips state
+    // $$
+
     navigate(`/trips/${notification.tripId}`);
   };
 

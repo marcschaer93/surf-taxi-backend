@@ -28,7 +28,7 @@ export const Favorites = () => {
               favoriteTrips.map((trip) => (
                 <TripPreviewCard
                   key={trip.id}
-                  tripData={trip}
+                  tripDetails={trip}
                   isInMyTrips={false}
                 />
               ))

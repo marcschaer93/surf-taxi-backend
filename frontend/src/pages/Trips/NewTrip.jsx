@@ -5,6 +5,7 @@ import { useAuthContext } from "../../context/authProvider";
 import { TripForm } from "./TripForm";
 import { Title, TitleDivider } from "../../styles/fontStyles";
 import { GoBackButton } from "../../components/ui/GoBackButton";
+import { BottomActionBar } from "../../components/BottomActionBar";
 
 export const NewTrip = ({ addTrip }) => {
   const auth = useAuthContext();
@@ -24,6 +25,15 @@ export const NewTrip = ({ addTrip }) => {
       </Box>
 
       <TripForm addTrip={addTrip} />
+
+      {/* Bottom action bar */}
+      <BottomActionBar
+        variant={"contained"}
+        color={"primary"}
+        // onClick={handleSubmit(onFormSubmit)}
+        onClick={console.log("NOT IMPL!")}
+        buttonText={"Add Trip"}
+      />
     </Box>
   );
 };

@@ -45,9 +45,8 @@ export const AllTrips = ({ allTrips, myTrips }) => {
           {trips.map((trip) => (
             <TripPreviewCard
               key={trip.id}
-              tripData={trip}
+              tripDetails={trip}
               isInMyTrips={false}
-              isTripOwner={trip.owner === user?.username}
             />
           ))}
         </Box>

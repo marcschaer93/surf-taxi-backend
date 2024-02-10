@@ -14,7 +14,7 @@ import { useEffect } from "react";
 
 import { useAuthContext } from "../../context/authProvider";
 import { theme } from "../../utils/theme";
-import { StatusChip } from "../../components/ui/StatusChip";
+import { CardStatusChip } from "../../components/ui/CardStatusChip";
 import { StyledPreviewCard } from "../../styles/cardStyles";
 import { useTripDetails } from "../../hooks/useTripDetails";
 import { useFavorite } from "../../hooks/useFavorite";
@@ -23,30 +23,35 @@ import { useState } from "react";
 import { FavoriteButton } from "../../components/ui/FavoriteButton";
 import { format } from "date-fns";
 import * as UserApi from "../../api/services/UserApi";
+import { MyTripCard } from "./MyTripCard";
 
 import { TripCardContent } from "./TripCardContent";
 
-export const TripPreviewCard = ({ tripData, isInMyTrips, isTripOwner }) => {
+export const TripPreviewCard = ({ tripDetails, isInMyTrips }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  const tripId = tripData.id;
+  const tripId = tripDetails?.id;
   const { startLocation, destination, stops, seats, date, travelInfo } =
-    tripData;
-  const [userStatus, setUserStatus] = useState(null);
+    tripDetails;
+  const [userPassenger, setUserPassenger] = useState(null);
+  const [isTripOwner, setIsTripOwner] = useState(false);
+
+  useEffect(() => {
+    setIsTripOwner(user.username === tripDetails.owner);
+  }, [tripDetails]);
 
   // Check user status if not trip owner
   // $$ Move to PASSENGER API ? CHANGE NAME getOneUserReservation ?
   useEffect(() => {
     const fetchUserReservation = async () => {
       try {
-        const userPassenger = await UserApi.getOneUserReservation(
+        const userPassengerData = await UserApi.getOneUserReservation(
           user.username,
           tripId
         );
-        setUserStatus(userPassenger.reservationStatus);
+        setUserPassenger(userPassengerData);
       } catch (error) {
         console.error(error);
-        // Handle error here, e.g., set a default status or show an error message
       }
     };
 
@@ -66,9 +71,14 @@ export const TripPreviewCard = ({ tripData, isInMyTrips, isTripOwner }) => {
   };
 
   const handleCardClick = () => {
-    navigate(`/trips/${tripId}`, {
-      state: { isTripOwner },
-    });
+    // navigate(`/trips/${tripId}`, {
+    //   state: { isTripOwner },
+    // });
+    if (isInMyTrips) {
+      navigate(`/my-trips/${tripId}`);
+    } else {
+      navigate(`/trips/${tripId}`);
+    }
   };
 
   return (
@@ -90,10 +100,13 @@ export const TripPreviewCard = ({ tripData, isInMyTrips, isTripOwner }) => {
         )}
 
         {isInMyTrips && (
-          <StatusChip isTripOwner={isTripOwner} status={userStatus} />
+          <CardStatusChip
+            isTripOwner={isTripOwner}
+            status={userPassenger?.reservationStatus}
+          />
         )}
 
-        <TripCardContent preview={true} tripData={tripData} />
+        <TripCardContent preview={true} tripDetails={tripDetails} />
 
         <CardActions></CardActions>
       </StyledPreviewCard>

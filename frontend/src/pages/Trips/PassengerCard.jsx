@@ -14,7 +14,6 @@ import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
 
 import { useAuthContext } from "../../context/authProvider";
 import { theme } from "../../utils/theme";
-import { StatusChip } from "../../components/ui/StatusChip";
 import { StyledPreviewCard } from "../../styles/cardStyles";
 import { FavoriteButton } from "../../styles/buttonStyles";
 import { useTripDetails } from "../../hooks/useTripDetails";

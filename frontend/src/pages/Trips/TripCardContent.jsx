@@ -19,11 +19,12 @@ import EventSeatIcon from "@mui/icons-material/EventSeat";
 import InfoIcon from "@mui/icons-material/Info";
 import ArrowRightAltSharpIcon from "@mui/icons-material/ArrowRightAltSharp";
 import CalendarMonthSharpIcon from "@mui/icons-material/CalendarMonthSharp";
+import PaidSharpIcon from "@mui/icons-material/PaidSharp";
 import { theme } from "../../utils/theme";
 
-export const TripCardContent = ({ tripData, preview }) => {
-  const { startLocation, destination, stops, seats, date, travelInfo } =
-    tripData;
+export const TripCardContent = ({ tripDetails, preview }) => {
+  const { startLocation, destination, stops, seats, date, travelInfo, costs } =
+    tripDetails;
 
   return (
     <>
@@ -57,6 +58,18 @@ export const TripCardContent = ({ tripData, preview }) => {
           <Typography color="text.secondary">
             <EventSeatIcon sx={{ marginRight: 1 }} />
             Available Seats: {seats}
+          </Typography>
+
+          {/* Trip costs */}
+          <Typography color="text.secondary">
+            <PaidSharpIcon sx={{ marginRight: 1 }} />
+            Costs: {costs}
+          </Typography>
+
+          {/* Car */}
+          <Typography color="text.secondary">
+            <PaidSharpIcon sx={{ marginRight: 1 }} />
+            Mercedes Sprinter
           </Typography>
 
           {/* Travel Info */}

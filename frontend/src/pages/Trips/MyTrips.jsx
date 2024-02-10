@@ -11,7 +11,7 @@ import { Title, TitleDivider } from "../../styles/fontStyles";
 import { theme } from "../../utils/theme";
 import SurfingSharpIcon from "@mui/icons-material/SurfingSharp";
 
-export const MyTrips = ({ myTrips, allTrips, notifications }) => {
+export const MyTrips = ({ myTrips, passengers }) => {
   const { user } = useAuthContext();
   const { showBoundary } = useErrorBoundary();
   const navigate = useNavigate();
@@ -41,12 +41,8 @@ export const MyTrips = ({ myTrips, allTrips, notifications }) => {
         {myTrips.map((trip) => (
           <TripPreviewCard
             key={trip.id}
-            tripData={trip}
+            tripDetails={trip}
             isInMyTrips={true}
-            isTripOwner={trip.owner === user?.username}
-            // tripNotifications={notifications.filter(
-            //   (n) => n.tripId === trip.id
-            // )}
           />
         ))}
       </Box>

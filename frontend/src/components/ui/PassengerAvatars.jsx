@@ -1,7 +1,7 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
-import { Typography } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 
 function stringToColor(string) {
   let hash = 0;
@@ -44,11 +44,23 @@ export const PassengerAvatars = ({ passengers }) => {
       {filteredPassengers.length > 0 ? (
         <Stack direction="row" spacing={2}>
           {filteredPassengers.map((p, index) => (
-            <Avatar key={index} {...stringAvatar(p.username)} />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <IconButton onClick={() => handleAvatarClick(p.username)}>
+                <Avatar key={index} {...stringAvatar(p.username)} />
+              </IconButton>
+              <Typography variant="body2">{username}</Typography>
+            </Box>
           ))}
         </Stack>
       ) : (
-        <Typography variant="body1">No confirmed passengers</Typography>
+        <Typography variant="body2">No confirmed passengers</Typography>
       )}
     </>
   );
