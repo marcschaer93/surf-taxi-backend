@@ -44,7 +44,7 @@ export const TripDetailsCard = ({
   showConfirmation,
   openConfirmation,
   closeConfirmation,
-  userPassenger,
+  userReservation,
 }) => {
   const location = useLocation();
   const { tripId } = useParams();
@@ -94,7 +94,7 @@ export const TripDetailsCard = ({
 
         <CardActions>
           <Box>
-            {userPassenger ? (
+            {userReservation ? (
               <CancelRequestConfirmationCard
                 open={showConfirmation}
                 onClose={closeConfirmation}
@@ -116,7 +116,7 @@ export const TripDetailsCard = ({
       </StyledDetailsCard>
 
       {/* User Trip Status */}
-      {userPassenger && (
+      {userReservation && (
         <Box>
           <TitleDivider />
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -127,7 +127,7 @@ export const TripDetailsCard = ({
               </Box>
               <Typography variant="body2">
                 {`Last modified: ${format(
-                  userPassenger.reservationTimestamp,
+                  userReservation.reservationTimestamp,
                   "yyyy-MM-dd "
                 )}`}
               </Typography>
@@ -135,7 +135,7 @@ export const TripDetailsCard = ({
             <StatusChip
               sx={{}}
               isTripOwner={false}
-              status={userPassenger.reservationStatus}
+              status={userReservation.reservationStatus}
             />
           </Box>
         </Box>
@@ -159,10 +159,10 @@ export const TripDetailsCard = ({
 
       {/* Bottom action bar */}
       <BottomActionBar
-        variant={userPassenger ? "contained" : "contained"}
-        color={userPassenger ? "error" : "primary"}
+        variant={userReservation ? "contained" : "contained"}
+        color={userReservation ? "error" : "primary"}
         onClick={openConfirmation}
-        buttonText={userPassenger ? "Cancel Trip" : "Join Trip"}
+        buttonText={userReservation ? "Cancel Trip" : "Join Trip"}
       />
     </>
   );

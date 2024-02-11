@@ -8,6 +8,10 @@ import { Title, TitleDivider } from "../../styles/fontStyles";
 import SurfingSharpIcon from "@mui/icons-material/SurfingSharp";
 import { theme } from "../../utils/theme";
 
+// DATA FLOW
+// allTrips         ===>     API Call, init data
+// myTrips          ===>     API Call, init data
+
 export const AllTrips = ({ allTrips, myTrips }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
@@ -46,7 +50,9 @@ export const AllTrips = ({ allTrips, myTrips }) => {
             <TripPreviewCard
               key={trip.id}
               tripDetails={trip}
+              // isInMyTrips={!!myTrips.find((myTrip) => myTrip.id === trip.id)}
               isInMyTrips={false}
+              isTripOrganizer={trip.owner === user.username}
             />
           ))}
         </Box>

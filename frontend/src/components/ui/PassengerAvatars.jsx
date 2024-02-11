@@ -1,7 +1,7 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
-import { IconButton, Typography } from "@mui/material";
+import { IconButton, Typography, Box } from "@mui/material";
 
 function stringToColor(string) {
   let hash = 0;
@@ -36,7 +36,7 @@ function stringAvatar(username) {
 export const PassengerAvatars = ({ passengers }) => {
   // Filter passengers based on reservationStatus
   const filteredPassengers = passengers.filter(
-    (p) => p.reservationStatus === "Confirmed"
+    (p) => p.reservationStatus === "confirmed"
   );
 
   return (
@@ -55,7 +55,7 @@ export const PassengerAvatars = ({ passengers }) => {
               <IconButton onClick={() => handleAvatarClick(p.username)}>
                 <Avatar key={index} {...stringAvatar(p.username)} />
               </IconButton>
-              <Typography variant="body2">{username}</Typography>
+              <Typography variant="body2">{p.username}</Typography>
             </Box>
           ))}
         </Stack>

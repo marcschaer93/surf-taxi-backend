@@ -11,66 +11,82 @@ import { TripDetailsCard } from "./TripDetailsCard";
 import { OwnerTripDetailsCard } from "./OwnerTripDetailsCard";
 import { useTripPassengers } from "../../hooks/useTripPassengers";
 import { useTripDetails } from "../../hooks/useTripDetails";
+import { useUserReservation } from "../../hooks/useUserReservation";
+
+// DATA FLOW
+// tripDetails      ===>     state ? tripDetails : API Call
+// tripPassengers   ===>     API Call
+// userReservation  ===>     dependend on tripPassengers
 
 export const TripDetails = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
   const { tripId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  const [userPassenger, setUserPassenger] = useState(null);
-
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const { tripDetails, loadingTripDetails } = useTripDetails(parseInt(tripId));
-  const [isTripOwner, setIsTripOwner] = useState(false);
-
-  console.log("LOADING TRIP", loadingTripDetails);
-
-  useEffect(() => {
-    setIsTripOwner(user.username === tripDetails?.owner);
-  }, [tripDetails]);
-
-  // $$$
-  // const location = useLocation();
-  // const { state } = location;
-  // const isTripOwner = state?.isTripOwner || false;
-  // $$$
-
-  // trip passenger custom hook
-  const { passengers, setPassengers, loadingPassengers } = useTripPassengers(
-    tripId,
-    user.username
+  const location = useLocation();
+  const { state } = location;
+  const tripDetailsFromState = state?.tripDetails;
+  const [tripDetails, setTripDetails] = useState(tripDetailsFromState);
+  const [loadingTripDetails, setLoadingTripDetails] = useState(
+    !tripDetailsFromState
   );
 
+  const [userReservation, setUserReservation] = useState(null);
+
   useEffect(() => {
-    const currentUserAsPassenger = passengers?.find(
-      (p) => p.username === user.username
-    );
-
-    if (currentUserAsPassenger) {
-      setUserPassenger(currentUserAsPassenger);
+    if (!tripDetailsFromState) {
+      const fetchTripDetails = async () => {
+        try {
+          const tripDetailsData = await TripApi.getOneTrip(tripId);
+          setTripDetails(tripDetailsData);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoadingTripDetails(false);
+        }
+      };
+      fetchTripDetails();
     }
-  }, [passengers]);
+  }, [tripId, tripDetailsFromState]);
 
+  // Check if user is trip Organizer
+  const isTripOrganizer = user.username === tripDetails?.owner;
+
+  // Get all Passengers for trip
+  const {
+    passengers,
+    setPassengers,
+    loading: loadingPassengers,
+  } = useTripPassengers(tripId, user.username);
+
+  useEffect(() => {
+    if (!isTripOrganizer) {
+      const currentUserAsPassenger = passengers?.find(
+        (p) => p.username === user.username
+      );
+
+      if (currentUserAsPassenger) {
+        setUserReservation(currentUserAsPassenger);
+      }
+    }
+  }, [passengers, user]);
+
+  // handle join request
   const handleConfirmJoin = async () => {
     try {
-      setUserPassenger((prev) => ({
-        ...prev,
-        reservationStatus: "requested",
-        reservationTimestamp: new Date().toISOString(),
-      }));
-
       const newJoinRequest = await PassengerApi.requestToJoin(tripId);
       setPassengers((prevPassengers) => [...prevPassengers, newJoinRequest]);
       setMyTrips((prevTrips) => [tripDetails, ...prevTrips]);
     } catch (error) {
-      console.error();
+      console.error("Error confirming join:", error);
     } finally {
       setShowConfirmation(false);
     }
   };
 
+  // handle join cancel
   const handleConfirmCancel = async () => {
     try {
-      setUserPassenger(null);
       await PassengerApi.cancelJoinRequest(tripId);
       setPassengers((prevPassengers) =>
         prevPassengers.filter(
@@ -80,7 +96,6 @@ export const TripDetails = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
 
       const myTripsData = await UserApi.getAllUserTrips(user.username);
       setMyTrips(myTripsData);
-      setPassengers([]);
       navigate("/my-trips");
     } catch (error) {
       console.error(error);
@@ -107,11 +122,11 @@ export const TripDetails = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
   const handleConfirmConnect = async (passengerUsername) => {
     try {
       // Update user status to indicate pending connection
-      setUserPassenger((prev) => ({
-        ...prev,
-        reservationStatus: "pending",
-        reservationTimestamp: new Date().toISOString(),
-      }));
+      // setUserPassenger((prev) => ({
+      //   ...prev,
+      //   reservationStatus: "pending",
+      //   reservationTimestamp: new Date().toISOString(),
+      // }));
 
       // Send request to join the trip
       const updatedPassenger = await PassengerApi.updatePassengerStatus(
@@ -151,17 +166,16 @@ export const TripDetails = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
     setShowConfirmation(false);
   };
 
-  if (loadingPassengers || loadingTripDetails) return <Box>Loading...</Box>;
+  if (loadingPassengers || !tripDetails) return <Box>Loading...</Box>;
 
   return (
     <>
-      {isTripOwner && (
+      {isTripOrganizer && (
         <OwnerTripDetailsCard
           tripDetails={tripDetails}
           passengers={passengers}
           handleGoBack={handleGoBack}
           handleConfirmDelete={handleConfirmDelete}
-          // userPassenger={userPassenger}
           openConfirmation={openConfirmation}
           closeConfirmation={closeConfirmation}
           showConfirmation={showConfirmation}
@@ -169,14 +183,14 @@ export const TripDetails = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
         />
       )}
 
-      {!isTripOwner && (
+      {!isTripOrganizer && (
         <TripDetailsCard
           tripDetails={tripDetails}
           passengers={passengers}
           handleGoBack={handleGoBack}
           handleConfirmCancel={handleConfirmCancel}
           handleConfirmJoin={handleConfirmJoin}
-          userPassenger={userPassenger}
+          userReservation={userReservation}
           showConfirmation={showConfirmation}
           openConfirmation={openConfirmation}
         />

@@ -11,7 +11,10 @@ import { Title, TitleDivider } from "../../styles/fontStyles";
 import { theme } from "../../utils/theme";
 import SurfingSharpIcon from "@mui/icons-material/SurfingSharp";
 
-export const MyTrips = ({ myTrips, passengers }) => {
+// DATA FLOW
+// myTrips          ===>     API Call, init data
+
+export const MyTrips = ({ myTrips }) => {
   const { user } = useAuthContext();
   const { showBoundary } = useErrorBoundary();
   const navigate = useNavigate();
@@ -43,6 +46,7 @@ export const MyTrips = ({ myTrips, passengers }) => {
             key={trip.id}
             tripDetails={trip}
             isInMyTrips={true}
+            isTripOrganizer={trip.owner === user.username}
           />
         ))}
       </Box>

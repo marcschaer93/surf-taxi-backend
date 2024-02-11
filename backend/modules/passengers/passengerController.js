@@ -18,10 +18,7 @@ exports.requestToJoin = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    data: {
-      newJoinRequest,
-      // passenger: currentUser,
-    },
+    data: newJoinRequest,
   });
 });
 
