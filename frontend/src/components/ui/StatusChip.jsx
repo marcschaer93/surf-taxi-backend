@@ -10,6 +10,8 @@ export const StatusChip = ({ isTripOwner, status }) => {
     fontWeight: "bold",
   });
 
+  console.log("STATUS", status);
+
   return (
     <StyledChip
       sx={{

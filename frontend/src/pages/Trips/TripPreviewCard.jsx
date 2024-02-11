@@ -23,42 +23,62 @@ import { useState } from "react";
 import { FavoriteButton } from "../../components/ui/FavoriteButton";
 import { format } from "date-fns";
 import * as UserApi from "../../api/services/UserApi";
-import { MyTripCard } from "./MyTripCard";
 
 import { TripCardContent } from "./TripCardContent";
 
-export const TripPreviewCard = ({ tripDetails, isInMyTrips }) => {
+export const TripPreviewCard = ({
+  tripDetails,
+  isInMyTrips,
+  isTripOwner,
+  myReservation,
+  handleCardClick,
+}) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const tripId = tripDetails?.id;
   const { startLocation, destination, stops, seats, date, travelInfo } =
     tripDetails;
-  const [userPassenger, setUserPassenger] = useState(null);
-  const [isTripOwner, setIsTripOwner] = useState(false);
 
-  useEffect(() => {
-    setIsTripOwner(user.username === tripDetails.owner);
-  }, [tripDetails]);
+  // const myReservation = myReservations?.find(
+  //   (reservation) => reservation.tripId === tripId
+  // );
+  // const [userReservation, setUserReservations] = useState(null);
+
+  // useEffect(() => {
+  //   const filteredReservation = userReservations?.find(
+  //     (reservation) => reservation.tripId === tripId
+  //   );
+  //   setUserReservations(filteredReservation ? [filteredReservation] : []);
+  // }, [userReservations, tripId]);
+
+  // console.log("FILTERED RESERVATION", userReservation);
+
+  // const [isTripOwner, setIsTripOwner] = useState(false);
+
+  // useEffect(() => {
+  //   setIsTripOwner(user.username === tripDetails.owner);
+  // }, [tripDetails]);
 
   // Check user status if not trip owner
   // $$ Move to PASSENGER API ? CHANGE NAME getOneUserReservation ?
-  useEffect(() => {
-    const fetchUserReservation = async () => {
-      try {
-        const userPassengerData = await UserApi.getOneUserReservation(
-          user.username,
-          tripId
-        );
-        setUserPassenger(userPassengerData);
-      } catch (error) {
-        console.error(error);
-      }
-    };
 
-    if (!isTripOwner && isInMyTrips) {
-      fetchUserReservation();
-    }
-  }, [isTripOwner, tripId, user]);
+  // useEffect(() => {
+  //   const fetchUserReservation = async () => {
+  //     try {
+  //       const userPassengerData = await UserApi.getOneUserReservation(
+  //         user.username,
+  //         tripId
+  //       );
+  //       setUserPassenger(userPassengerData);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   if (!isTripOwner && isInMyTrips) {
+  //     fetchUserReservation();
+  //   }
+  // }, [isTripOwner, tripId, user]);
 
   // favorite trips hook (only for logged in users)
   const { isFavorited, toggleFavorite, loading } = user
@@ -70,22 +90,18 @@ export const TripPreviewCard = ({ tripDetails, isInMyTrips }) => {
     toggleFavorite();
   };
 
-  const handleCardClick = () => {
-    // navigate(`/trips/${tripId}`, {
-    //   state: { isTripOwner },
-    // });
-    if (isInMyTrips) {
-      navigate(`/my-trips/${tripId}`);
-    } else {
-      navigate(`/trips/${tripId}`);
-    }
-  };
+  // const handleCardClick = () => {
+  //   navigate(`/trips/${tripId}`, {
+  //     state: { myReservation },
+  //   });
+  //   // navigate(`/trips/${tripId}`, );
+  // };
 
   return (
     <>
       <StyledPreviewCard
         variant="outlined"
-        onClick={handleCardClick}
+        onClick={() => handleCardClick(tripId)}
         sx={{
           borderColor: isTripOwner
             ? theme.palette.contrast.main
@@ -102,7 +118,7 @@ export const TripPreviewCard = ({ tripDetails, isInMyTrips }) => {
         {isInMyTrips && (
           <CardStatusChip
             isTripOwner={isTripOwner}
-            status={userPassenger?.reservationStatus}
+            status={myReservation?.reservationStatus}
           />
         )}
 

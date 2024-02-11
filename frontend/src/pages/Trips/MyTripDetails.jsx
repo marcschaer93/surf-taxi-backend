@@ -12,7 +12,12 @@ import { OwnerTripDetailsCard } from "./OwnerTripDetailsCard";
 import { useTripPassengers } from "../../hooks/useTripPassengers";
 import { useTripDetails } from "../../hooks/useTripDetails";
 
-export const TripDetails = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
+export const MyTripDetails = ({
+  myTrips,
+  allTrips,
+  setMyTrips,
+  isInMyTrips,
+}) => {
   const { tripId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuthContext();

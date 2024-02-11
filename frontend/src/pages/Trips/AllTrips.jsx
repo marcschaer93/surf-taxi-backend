@@ -1,25 +1,36 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Box, Typography, styled } from "@mui/material";
+import SurfingSharpIcon from "@mui/icons-material/SurfingSharp";
 
-import { TripPreviewCard } from "./TripPreviewCard";
 import { useAuthContext } from "../../context/authProvider";
 import { Title, TitleDivider } from "../../styles/fontStyles";
-import SurfingSharpIcon from "@mui/icons-material/SurfingSharp";
 import { theme } from "../../utils/theme";
+import { TripPreviewCard } from "./TripPreviewCard";
 
-export const AllTrips = ({ allTrips, myTrips }) => {
+export const AllTrips = ({ allTrips = [], myTrips = [] }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
 
-  if (!allTrips) return <Box>No Trips available</Box>;
+  const [tripsToShow, setTripsToShow] = useState([]);
 
-  // trips without trips which are already in myTrips
-  const filteredTrips = allTrips.filter(
-    (trip) => !myTrips?.some((myTrip) => myTrip.id === trip.id)
-  );
+  useEffect(() => {
+    // trips without trips which are already in myTrips
+    const updatedTripsToShow = user
+      ? allTrips.filter(
+          (trip) => !myTrips.some((myTrip) => myTrip.id === trip.id)
+        )
+      : allTrips;
 
-  const trips = user ? filteredTrips : allTrips;
+    setTripsToShow(updatedTripsToShow);
+  }, [myTrips]);
+
+  const handleCardClick = (tripId) => {
+    // navigate(`/my-trips/${tripId}`, {
+    //   state: { myReservation },
+    // });
+    navigate(`/trips/${tripId}`);
+  };
 
   return (
     <>
@@ -29,7 +40,7 @@ export const AllTrips = ({ allTrips, myTrips }) => {
           <TitleDivider />
         </Box>
 
-        {trips.length === 0 && (
+        {tripsToShow.length === 0 && (
           <Box sx={{ textAlign: "center", mt: "80px", p: "25px" }}>
             <SurfingSharpIcon
               sx={{ fontSize: "3rem", color: theme.palette.text.secondary }}
@@ -42,11 +53,13 @@ export const AllTrips = ({ allTrips, myTrips }) => {
         )}
 
         <Box sx={{ marginBottom: "80px" }}>
-          {trips.map((trip) => (
+          {tripsToShow.map((trip) => (
             <TripPreviewCard
               key={trip.id}
               tripDetails={trip}
               isInMyTrips={false}
+              isTripOwner={trip.owner === user.username}
+              handleCardClick={handleCardClick}
             />
           ))}
         </Box>

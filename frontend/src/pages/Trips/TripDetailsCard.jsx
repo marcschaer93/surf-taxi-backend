@@ -44,13 +44,19 @@ export const TripDetailsCard = ({
   showConfirmation,
   openConfirmation,
   closeConfirmation,
-  userPassenger,
+  //   userPassenger,
+  //   myReservation,
 }) => {
-  const location = useLocation();
+  //   console.log("MY RESERVATIN$$$", myReservation);
+  //   const location = useLocation();
   const { tripId } = useParams();
 
   const navigate = useNavigate();
-  const isInMyTrips = location.state?.isInMyTrips;
+  //   const isInMyTrips = location.state?.isInMyTrips;
+
+  //   const userReservation = userReservations?.find(
+  //     (reservation) => reservation.tripId === parseInt(tripId)
+  //   );
 
   const { isFavorited, toggleFavorite, loading } = useFavorite(tripId);
 
@@ -81,42 +87,30 @@ export const TripDetailsCard = ({
       </Box>
 
       <StyledDetailsCard variant="outlined">
-        {isInMyTrips && <CardStatusChip isTripOwner={false} />}
+        {/* {isInMyTrips && <CardStatusChip isTripOwner={false} />} */}
 
-        {!isInMyTrips && (
-          <FavoriteButton
-            handleFavorite={handleFavorite}
-            isFavorited={isFavorited}
-          ></FavoriteButton>
-        )}
+        <FavoriteButton
+          handleFavorite={handleFavorite}
+          isFavorited={isFavorited}
+        ></FavoriteButton>
 
         <TripCardContent tripDetails={tripDetails} />
 
         <CardActions>
           <Box>
-            {userPassenger ? (
-              <CancelRequestConfirmationCard
-                open={showConfirmation}
-                onClose={closeConfirmation}
-                tripDetails={tripDetails}
-                handleConfirmCancel={handleConfirmCancel}
-                handleGoBack={handleGoBack}
-              />
-            ) : (
-              <JoinRequestConfirmationCard
-                open={showConfirmation}
-                onClose={closeConfirmation}
-                tripDetails={tripDetails}
-                handleConfirmJoin={handleConfirmJoin}
-                handleGoBack={handleGoBack}
-              />
-            )}
+            <JoinRequestConfirmationCard
+              open={showConfirmation}
+              onClose={closeConfirmation}
+              tripDetails={tripDetails}
+              handleConfirmJoin={handleConfirmJoin}
+              handleGoBack={handleGoBack}
+            />
           </Box>
         </CardActions>
       </StyledDetailsCard>
 
-      {/* User Trip Status */}
-      {userPassenger && (
+      {/* User Trip Status
+      {myReservation && (
         <Box>
           <TitleDivider />
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -127,7 +121,7 @@ export const TripDetailsCard = ({
               </Box>
               <Typography variant="body2">
                 {`Last modified: ${format(
-                  userPassenger.reservationTimestamp,
+                  myReservation?.reservationTimestamp,
                   "yyyy-MM-dd "
                 )}`}
               </Typography>
@@ -135,11 +129,11 @@ export const TripDetailsCard = ({
             <StatusChip
               sx={{}}
               isTripOwner={false}
-              status={userPassenger.reservationStatus}
+              status={myReservation.reservationStatus}
             />
           </Box>
         </Box>
-      )}
+      )} */}
 
       {/* Trip Organizer */}
       <Box>
@@ -154,15 +148,15 @@ export const TripDetailsCard = ({
       <Box>
         <TitleDivider />
         <Typography variant="h5">Reserved Seats</Typography>
-        <PassengerAvatars passengers={passengers} />
+        {/* <PassengerAvatars passengers={userReservations} /> */}
       </Box>
 
       {/* Bottom action bar */}
       <BottomActionBar
-        variant={userPassenger ? "contained" : "contained"}
-        color={userPassenger ? "error" : "primary"}
+        variant={"contained"}
+        color={"primary"}
         onClick={openConfirmation}
-        buttonText={userPassenger ? "Cancel Trip" : "Join Trip"}
+        buttonText={"Join Trip"}
       />
     </>
   );

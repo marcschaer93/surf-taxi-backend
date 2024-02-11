@@ -294,6 +294,24 @@ class UserApi {
 
     return isReadNotification;
   }
+
+  static async getAllUserReservations(username) {
+    const allUserReservationsResult = await db.query(
+      `
+      SELECT * 
+      FROM passengers 
+      WHERE username =$1
+  
+      `,
+      [username]
+    );
+
+    const userReservations = allUserReservationsResult.rows.map((row) =>
+      jsReady.convertKeysToCamelCase(row)
+    );
+
+    return userReservations;
+  }
 }
 
 module.exports = UserApi;
