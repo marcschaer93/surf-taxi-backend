@@ -23,7 +23,6 @@ import { useAllTrips } from "./hooks/useAllTrips";
 import { useMyTrips } from "./hooks/useMyTrips";
 import { useNotifications } from "./hooks/useNotifications";
 import { useAuthContext } from "./context/authProvider";
-import { useMyReservations } from "./hooks/useMyReservations";
 
 const MainContent = styled(Box)(({ theme }) => ({
   flex: 4,
@@ -38,8 +37,6 @@ export default function App() {
   const { allTrips, loadingAllTrips } = useAllTrips();
   const { myTrips, setMyTrips, addTrip, loadingMyTrips } = useMyTrips();
   const { notifications, markNotificationAsRead } = useNotifications(user);
-  const { userReservations, setUserReservations, loadingUserReservations } =
-    useMyReservations();
 
   // Paths where the bottom navbar should be displayed
   const pathsWithBottomNavbar = [
@@ -72,7 +69,6 @@ export default function App() {
             setMyTrips={setMyTrips}
             notifications={notifications}
             markNotificationAsRead={markNotificationAsRead}
-            // userReservations={userReservations}
           />
         </MainContent>
         <Rightbar />

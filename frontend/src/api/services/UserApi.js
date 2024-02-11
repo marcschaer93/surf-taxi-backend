@@ -37,15 +37,6 @@ export const getOneUserReservation = async (username, tripId) => {
   }
 };
 
-export const getAllUserReservations = async (username) => {
-  try {
-    const response = await ApiService.get(`/users/${username}/reservations`);
-    return response.data.data;
-  } catch (error) {
-    handleApiError(error);
-  }
-};
-
 export const deleteMyTrip = async (tripId, username) => {
   try {
     const response = await ApiService.delete(

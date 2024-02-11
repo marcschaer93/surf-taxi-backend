@@ -51,14 +51,6 @@ router.get(
   userController.getOneUserReservation
 );
 
-// GET request for all related user reservations
-router.get(
-  "/:username/reservations",
-  authenticate,
-  // ensureCorrectUser,
-  userController.getAllUserReservations
-);
-
 // Delete request to delete Trip as trip owner (NOT IMPLEMENTED: Can't delete if already requests).
 router.delete(
   "/:username/trips/:tripId",
