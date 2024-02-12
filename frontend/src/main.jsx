@@ -6,11 +6,17 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./utils/theme.js";
 import { AuthProvider } from "./context/authProvider.jsx";
 import { ReactErrorBoundary } from "./pages/Error/ReactErrorBoundary.jsx";
+
+// For Deployment
+if (process.env.NODE_ENV === "production") {
+  disableReactDevTools();
+}
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

@@ -55,8 +55,26 @@ export const useHandleAction = (
             navigate("/my-trips");
             // Redirect or update state as needed
             break;
+          case "confirm":
+            const confirmedPassenger = await PassengerApi.updatePassengerStatus(
+              data.tripDetails.id,
+              data.passengerUsername,
+              "confirmed"
+            );
+            setPassengers((prev) =>
+              prev.map((p) =>
+                p.username === data.passengerUsername
+                  ? {
+                      ...p,
+                      reservationStatus: confirmedPassenger.reservationStatus,
+                    }
+                  : p
+              )
+            );
+
+            break;
           case "connect":
-            const updatedPassenger = await PassengerApi.updatePassengerStatus(
+            const connectedPassenger = await PassengerApi.updatePassengerStatus(
               data.tripDetails.id,
               data.passengerUsername,
               "pending"
@@ -66,7 +84,7 @@ export const useHandleAction = (
                 p.username === data.passengerUsername
                   ? {
                       ...p,
-                      reservationStatus: updatedPassenger.reservationStatus,
+                      reservationStatus: connected.reservationStatus,
                     }
                   : p
               )

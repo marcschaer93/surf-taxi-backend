@@ -1,13 +1,6 @@
 import React from "react";
 import { Confirmation } from "../../pages/Trips/Confirmation";
-import {
-  Box,
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export const ConnectConfirmationCard = ({
   passenger,
@@ -16,14 +9,23 @@ export const ConnectConfirmationCard = ({
   tripDetails,
   handleAction,
 }) => {
-  const message = `You have a new join request for your trip from ${tripDetails.startLocation} to ${tripDetails.destination}. Do you want to confirm and get in touch with user ?`;
+  // Directly assign message and title based on the passenger reservation status
+  const isRequested = passenger.reservationStatus === "requested";
+  const journeyDetails = `${tripDetails.startLocation} to ${tripDetails.destination}`;
 
-  const title = "Respond to Join Request.";
+  let message, title;
 
-  console.log("PASSENGER CONNECT CARD $", passenger);
+  if (isRequested) {
+    message = `🚀 ${passenger.username} is interested in joining your trip from ${journeyDetails}. Would you like to connect and discuss further details?`;
+    title = "New Join Request!";
+  } else {
+    message = `🎉 Ready to confirm ${passenger.username}'s seat for the trip from ${journeyDetails}? This will secure their spot and notify them of the update.`;
+    title = `Confirm Seat for ${passenger.username}`;
+  }
 
   const handleConfirm = async () => {
-    await handleAction("connect", {
+    const actionType = isRequested ? "connect" : "confirm";
+    await handleAction(actionType, {
       passengerUsername: passenger.username,
       tripDetails,
     });
@@ -35,7 +37,6 @@ export const ConnectConfirmationCard = ({
       <Confirmation
         open={open}
         onClose={onClose}
-        tripDetails={tripDetails}
         onConfirm={handleConfirm}
         message={message}
         title={title}

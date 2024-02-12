@@ -7,6 +7,8 @@ import axios from "axios";
 const BASE_URL =
   import.meta.env.VITE_REACT_APP_BASE_URL || "http://localhost:3000";
 
+console.log("BASE_URL", BASE_URL);
+
 // Create an instance of axios with custom configurations (ApiService)
 export const ApiService = axios.create({
   baseURL: `${BASE_URL}/api`,
@@ -42,6 +44,10 @@ ApiService.interceptors.request.use(
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
+
+    // Log the full URL being requested
+    console.log(`Request URL: ${config.baseURL}${config.url}`);
+
     return config;
   },
   (error) => Promise.reject(error)

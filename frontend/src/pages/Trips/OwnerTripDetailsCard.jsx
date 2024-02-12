@@ -32,17 +32,16 @@ export const OwnerTripDetailsCard = ({
 }) => {
   const navigate = useNavigate();
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const openConfirmation = () => {
-    setShowConfirmation(true);
-  };
-  const closeConfirmation = () => {
-    setShowConfirmation(false);
-  };
-
+  const openConfirmation = () => setShowConfirmation(true);
+  const closeConfirmation = () => setShowConfirmation(false);
   const handleGoBackButton = (e, tripId) => {
     e.stopPropagation();
     navigate(-1);
   };
+
+  const notConfirmedPassengers = passengers.filter(
+    (p) => p.reservationStatus !== "confirmed"
+  );
 
   return (
     <>
@@ -74,8 +73,8 @@ export const OwnerTripDetailsCard = ({
         {/* Requests */}
         <Box>
           <Typography variant="h5">My Requests</Typography>
-          {passengers && passengers.length > 0 ? (
-            passengers.map((p) => (
+          {notConfirmedPassengers && notConfirmedPassengers.length > 0 ? (
+            notConfirmedPassengers.map((p) => (
               <PassengerCard
                 key={`${p.username} + ${p.trip_id}`}
                 tripDetails={tripDetails}
@@ -84,7 +83,7 @@ export const OwnerTripDetailsCard = ({
               />
             ))
           ) : (
-            <Typography variant="body1">No passengers</Typography>
+            <Typography variant="body2">No further requests </Typography>
           )}
         </Box>
 
@@ -96,14 +95,16 @@ export const OwnerTripDetailsCard = ({
         </Box>
 
         <TitleDivider />
-        <Button
-          variant={"outlined"}
-          size="small"
-          onClick={openConfirmation}
-          color="error"
-        >
-          Delete Trip
-        </Button>
+        <Box>
+          <Button
+            variant={"text"}
+            size="small"
+            onClick={openConfirmation}
+            color="error"
+          >
+            Delete Trip
+          </Button>
+        </Box>
 
         {/* Bottom action bar */}
         {/* <BottomActionBar

@@ -162,14 +162,20 @@ export const TripDetailsCard = ({
       {/* Trip Organizer */}
       <Box>
         <TitleDivider />
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-start",
+            flexDirection: "column",
+          }}
+        >
           <Typography variant="h5">Trip Organizer</Typography>
           <ColorAvatar username={owner} handleAvatarClick={handleAvatarClick} />
         </Box>
       </Box>
 
       {/* Passengers */}
-      <Box>
+      <Box sx={{ marginBottom: "80px" }}>
         <TitleDivider />
         <Typography variant="h5">Reserved Seats</Typography>
         <PassengerAvatars passengers={passengers} />
