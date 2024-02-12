@@ -6,6 +6,9 @@ const { getDatabaseUri } = require("../config");
 const pool = new Pool({
   // only one needed:
   connectionString: getDatabaseUri(),
+  ssl: {
+    rejectUnauthorized: false, // This bypasses strict SSL validation - be cautious in production environments
+  },
 
   //more config options below:
   user: "marcschaer",
