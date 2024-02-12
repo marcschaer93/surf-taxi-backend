@@ -1,23 +1,14 @@
-import { Box, Typography, styled, Paper } from "@mui/material";
-import { useState, useEffect } from "react";
-import { useErrorBoundary } from "react-error-boundary";
-import { useNavigate } from "react-router-dom";
-
-import { TripPreviewCard } from "./TripPreviewCard";
+import React from "react"; // Ensure React import for JSX if using React 17 or earlier
+import { Box, Typography } from "@mui/material";
+import SurfingSharpIcon from "@mui/icons-material/SurfingSharp";
 import { useAuthContext } from "../../context/authProvider";
-import * as UserApi from "../../api/services/UserApi";
-import { useNotifications } from "../../hooks/useNotifications";
+import TripPreviewCard from "./TripPreviewCard";
 import { Title, TitleDivider } from "../../styles/fontStyles";
 import { theme } from "../../utils/theme";
-import SurfingSharpIcon from "@mui/icons-material/SurfingSharp";
 
-// DATA FLOW
-// myTrips          ===>     API Call, init data
-
-export const MyTrips = ({ myTrips }) => {
+const MyTrips = ({ myTrips = [] }) => {
   const { user } = useAuthContext();
-  const { showBoundary } = useErrorBoundary();
-  const navigate = useNavigate();
+  const isEmpty = myTrips.length === 0;
 
   return (
     <>
@@ -26,7 +17,7 @@ export const MyTrips = ({ myTrips }) => {
         <TitleDivider />
       </Box>
 
-      {myTrips.length === 0 && (
+      {isEmpty ? (
         <Box sx={{ textAlign: "center", mt: "80px", p: "25px" }}>
           <SurfingSharpIcon
             sx={{ fontSize: "3rem", color: theme.palette.text.secondary }}
@@ -38,18 +29,20 @@ export const MyTrips = ({ myTrips }) => {
             Add a new Trip or join another!
           </Typography>
         </Box>
+      ) : (
+        <Box sx={{ marginBottom: "80px" }}>
+          {myTrips.map((trip) => (
+            <TripPreviewCard
+              key={trip.id}
+              tripDetails={trip}
+              isInMyTrips={true}
+              isTripOrganizer={trip.owner === user.username}
+            />
+          ))}
+        </Box>
       )}
-      {""}
-      <Box sx={{ marginBottom: "80px" }}>
-        {myTrips.map((trip) => (
-          <TripPreviewCard
-            key={trip.id}
-            tripDetails={trip}
-            isInMyTrips={true}
-            isTripOrganizer={trip.owner === user.username}
-          />
-        ))}
-      </Box>
     </>
   );
 };
+
+export default MyTrips;

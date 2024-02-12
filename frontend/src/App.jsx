@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
-import { AllTrips } from "./pages/Trips/AllTrips";
+import AllTrips from "./pages/Trips/AllTrips";
 import { Home } from "./pages/Home";
 import { RequireAuth } from "./components/RequireAuth";
-import { TripDetails } from "./pages/Trips/TripDetails";
 import { Navbar } from "./components/Navbar";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { EditProfile } from "./pages/Profile/EditProfile";
 import { Profile } from "./pages/Profile";
-import { MyTrips } from "./pages/Trips/MyTrips";
+import MyTrips from "./pages/Trips/MyTrips";
 import { styled, useTheme } from "@mui/material/styles";
 import { Stack, Box, Toolbar } from "@mui/material";
 import { Sidebar } from "./components/Sidebar";

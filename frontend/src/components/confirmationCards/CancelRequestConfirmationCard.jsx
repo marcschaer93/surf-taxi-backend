@@ -3,22 +3,26 @@ import { Box, CardActions, Button } from "@mui/material";
 
 export const CancelRequestConfirmationCard = ({
   tripDetails,
-  handleConfirmCancel,
-  handleGoBack,
+  // handleConfirmCancel,
   open,
   onClose,
+  handleAction,
 }) => {
   const message = `Are you sure you want to cancel your request for the trip from ${tripDetails.startLocation} to ${tripDetails.destination}?`;
 
   const title = "Confirm Cancel Request";
+
+  const handleConfirm = async () => {
+    await handleAction("cancel", { tripDetails });
+    onClose();
+  };
 
   return (
     <Confirmation
       open={open}
       onClose={onClose}
       tripDetails={tripDetails}
-      onConfirm={handleConfirmCancel}
-      onCancel={handleGoBack}
+      onConfirm={handleConfirm}
       message={message}
       title={title}
     />

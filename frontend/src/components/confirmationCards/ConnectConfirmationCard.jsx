@@ -10,16 +10,25 @@ import {
 } from "@mui/material";
 
 export const ConnectConfirmationCard = ({
-  handleConfirmConnect,
   passenger,
   open,
   onClose,
   tripDetails,
-  handleGoBack,
+  handleAction,
 }) => {
   const message = `You have a new join request for your trip from ${tripDetails.startLocation} to ${tripDetails.destination}. Do you want to confirm and get in touch with user ?`;
 
   const title = "Respond to Join Request.";
+
+  console.log("PASSENGER CONNECT CARD $", passenger);
+
+  const handleConfirm = async () => {
+    await handleAction("connect", {
+      passengerUsername: passenger.username,
+      tripDetails,
+    });
+    onClose();
+  };
 
   return (
     <Box>
@@ -27,8 +36,7 @@ export const ConnectConfirmationCard = ({
         open={open}
         onClose={onClose}
         tripDetails={tripDetails}
-        onConfirm={() => handleConfirmConnect(passenger.username)}
-        onCancel={handleGoBack}
+        onConfirm={handleConfirm}
         message={message}
         title={title}
       />

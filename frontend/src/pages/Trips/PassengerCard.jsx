@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
+import { useState } from "react";
 
 import { useAuthContext } from "../../context/authProvider";
 import { theme } from "../../utils/theme";
@@ -20,23 +21,29 @@ import { useTripDetails } from "../../hooks/useTripDetails";
 import { useFavorite } from "../../hooks/useFavorite";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { ConnectConfirmationCard } from "../../components/confirmationCards/ConnectConfirmationCard";
+import { ColorAvatar } from "../../components/ui/ColorAvatar";
 
 export const PassengerCard = ({
   tripDetails,
   passengerNotification,
   passenger,
-  openConfirmation,
-  showConfirmation,
-  closeConfirmation,
+
   handleGoBack,
   handleConfirmConnect,
+  handleAction,
 }) => {
+  console.log("passenegercard name", passenger.username);
   const navigate = useNavigate();
   const { user } = useAuthContext();
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
-  //   const handleConfirmConnect = () => {
-  //     console.log("Confirm Request. NOT IMPLEMENTED");
-  //   };
+  const openConfirmation = () => {
+    setShowConfirmation(true);
+  };
+
+  const closeConfirmation = () => {
+    setShowConfirmation(false);
+  };
 
   // trip details custom hook
   const isTripOwner = user && tripDetails?.owner === user.username;
@@ -65,7 +72,7 @@ export const PassengerCard = ({
             key={passenger.username + passenger.trip_id}
             sx={{ display: "flex", justifyContent: "space-between" }}
           >
-            <Typography>{passenger.username}</Typography>
+            <ColorAvatar username={passenger.username} />
 
             <Chip
               label={passenger.reservationStatus}
@@ -85,20 +92,28 @@ export const PassengerCard = ({
         </CardContent>
 
         <CardActions>
+          {/* Connect Button */}
           {passenger.reservationStatus === "requested" && (
             <Button variant="outlined" size="small" onClick={openConfirmation}>
               Connect
             </Button>
           )}
+          {/* Confirm Button */}
+          {passenger.reservationStatus === "pending" && (
+            <Button variant="outlined" size="small" onClick={openConfirmation}>
+              Confirm Seat
+            </Button>
+          )}
         </CardActions>
-        <ConnectConfirmationCard
-          tripDetails={tripDetails}
-          passenger={passenger}
-          handleGoBack={handleGoBack}
-          handleConfirmConnect={handleConfirmConnect}
-          open={showConfirmation}
-          onClose={closeConfirmation}
-        />
+        {showConfirmation && (
+          <ConnectConfirmationCard
+            tripDetails={tripDetails}
+            passenger={passenger}
+            open={showConfirmation}
+            onClose={closeConfirmation}
+            handleAction={handleAction}
+          />
+        )}
       </StyledPreviewCard>
     </>
   );

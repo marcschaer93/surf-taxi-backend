@@ -12,15 +12,9 @@ import {
 
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckIcon from "@mui/icons-material/Check";
+import { useNavigate } from "react-router-dom";
 
-export const Confirmation = ({
-  open,
-  onClose,
-  onConfirm,
-  onCancel,
-  message,
-  title,
-}) => {
+export const Confirmation = ({ open, onClose, onConfirm, message, title }) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title || "Confirm Action"}</DialogTitle>
@@ -28,7 +22,7 @@ export const Confirmation = ({
         <DialogContentText>{message}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button startIcon={<CancelIcon />} onClick={onCancel} color="secondary">
+        <Button startIcon={<CancelIcon />} onClick={onClose} color="secondary">
           Cancel
         </Button>
         <Button startIcon={<CheckIcon />} onClick={onConfirm} color="primary">

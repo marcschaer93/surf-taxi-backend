@@ -9,11 +9,13 @@ import {
   Chip,
   Avatar,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import { useState } from "react";
 
 import { Confirmation } from "./Confirmation";
 import { theme } from "../../utils/theme";
@@ -38,13 +40,8 @@ import InfoSharpIcon from "@mui/icons-material/InfoSharp";
 export const TripDetailsCard = ({
   tripDetails,
   passengers,
-  handleGoBack,
-  handleConfirmCancel,
-  handleConfirmJoin,
-  showConfirmation,
-  openConfirmation,
-  closeConfirmation,
   userReservation,
+  handleAction,
 }) => {
   const location = useLocation();
   const { tripId } = useParams();
@@ -53,6 +50,25 @@ export const TripDetailsCard = ({
   const isInMyTrips = location.state?.isInMyTrips;
 
   const { isFavorited, toggleFavorite, loading } = useFavorite(tripId);
+
+  const [showJoinConfirmation, setShowJoinConfirmation] = useState(false);
+  const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
+
+  const openJoinConfirmation = () => {
+    setShowJoinConfirmation(true);
+  };
+
+  const openCancelConfirmation = () => {
+    setShowCancelConfirmation(true);
+  };
+
+  const closeJoinConfirmation = () => {
+    setShowJoinConfirmation(false);
+  };
+
+  const closeCancelConfirmation = () => {
+    setShowCancelConfirmation(false);
+  };
 
   const handleFavorite = (e, tripId) => {
     e.stopPropagation();
@@ -71,6 +87,8 @@ export const TripDetailsCard = ({
 
   const { startLocation, destination, stops, seats, date, travelInfo, owner } =
     tripDetails;
+
+  if (loading) return <CircularProgress />;
 
   return (
     <>
@@ -94,21 +112,21 @@ export const TripDetailsCard = ({
 
         <CardActions>
           <Box>
-            {userReservation ? (
-              <CancelRequestConfirmationCard
-                open={showConfirmation}
-                onClose={closeConfirmation}
-                tripDetails={tripDetails}
-                handleConfirmCancel={handleConfirmCancel}
-                handleGoBack={handleGoBack}
-              />
-            ) : (
+            {!userReservation && showJoinConfirmation && (
               <JoinRequestConfirmationCard
-                open={showConfirmation}
-                onClose={closeConfirmation}
+                open={showJoinConfirmation}
+                onClose={closeJoinConfirmation}
                 tripDetails={tripDetails}
-                handleConfirmJoin={handleConfirmJoin}
-                handleGoBack={handleGoBack}
+                handleAction={handleAction}
+              />
+            )}
+
+            {userReservation && showCancelConfirmation && (
+              <CancelRequestConfirmationCard
+                open={showCancelConfirmation}
+                onClose={closeCancelConfirmation}
+                tripDetails={tripDetails}
+                handleAction={handleAction}
               />
             )}
           </Box>
@@ -161,7 +179,9 @@ export const TripDetailsCard = ({
       <BottomActionBar
         variant={userReservation ? "contained" : "contained"}
         color={userReservation ? "error" : "primary"}
-        onClick={openConfirmation}
+        onClick={
+          userReservation ? openCancelConfirmation : openJoinConfirmation
+        }
         buttonText={userReservation ? "Cancel Trip" : "Join Trip"}
       />
     </>

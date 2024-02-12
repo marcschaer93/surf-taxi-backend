@@ -28,22 +28,15 @@ import { PassengerAvatars } from "../../components/ui/PassengerAvatars";
 export const OwnerTripDetailsCard = ({
   tripDetails,
   passengers,
-  handleGoBack,
-  handleConfirmDelete,
-  showConfirmation,
-  openConfirmation,
-  closeConfirmation,
-  handleConfirmConnect,
+  handleAction,
 }) => {
   const navigate = useNavigate();
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-
-  const openDeleteConfirmation = () => {
-    setShowDeleteConfirmation(true);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const openConfirmation = () => {
+    setShowConfirmation(true);
   };
-
-  const closeDeleteConfirmation = () => {
-    setShowDeleteConfirmation(false);
+  const closeConfirmation = () => {
+    setShowConfirmation(false);
   };
 
   const handleGoBackButton = (e, tripId) => {
@@ -65,31 +58,29 @@ export const OwnerTripDetailsCard = ({
 
           <TripCardContent tripDetails={tripDetails} />
 
-          <CardActions></CardActions>
           <Box>
-            <DeleteOwnTripConfirmationCard
-              tripDetails={tripDetails}
-              handleConfirmDelete={handleConfirmDelete}
-              handleGoBack={handleGoBack}
-              open={showDeleteConfirmation}
-              onClose={closeConfirmation}
-            />
+            {showConfirmation && (
+              <DeleteOwnTripConfirmationCard
+                tripDetails={tripDetails}
+                handleConfirmDelete={handleConfirmDelete}
+                open={showConfirmation}
+                onClose={closeConfirmation}
+                handleAction={handleAction}
+              />
+            )}
           </Box>
         </StyledDetailsCard>
+
+        {/* Requests */}
         <Box>
           <Typography variant="h5">My Requests</Typography>
-
           {passengers && passengers.length > 0 ? (
             passengers.map((p) => (
               <PassengerCard
                 key={`${p.username} + ${p.trip_id}`}
                 tripDetails={tripDetails}
-                openConfirmation={openConfirmation}
-                showConfirmation={showConfirmation}
-                closeConfirmation={closeConfirmation}
                 passenger={p}
-                handleGoBack={handleGoBack}
-                handleConfirmConnect={handleConfirmConnect}
+                handleAction={handleAction}
               />
             ))
           ) : (
@@ -108,7 +99,7 @@ export const OwnerTripDetailsCard = ({
         <Button
           variant={"outlined"}
           size="small"
-          onClick={openDeleteConfirmation}
+          onClick={openConfirmation}
           color="error"
         >
           Delete Trip

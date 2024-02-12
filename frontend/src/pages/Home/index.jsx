@@ -3,7 +3,7 @@ import { NewTrip } from "../Trips/NewTrip";
 import { RequireAuth } from "../../components/RequireAuth";
 import { useAuthContext } from "../../context/authProvider";
 import { Box } from "@mui/material";
-import { AllTrips } from "../Trips/AllTrips";
+import AllTrips from "../Trips/AllTrips";
 import { Link } from "react-router-dom";
 
 export const Home = ({ allTrips, myTrips, addTrip }) => {

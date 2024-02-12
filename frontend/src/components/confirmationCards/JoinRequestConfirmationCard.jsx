@@ -3,14 +3,18 @@ import { Box, CardActions, Button } from "@mui/material";
 
 export const JoinRequestConfirmationCard = ({
   tripDetails,
-  handleConfirmJoin,
-  handleGoBack,
   open,
   onClose,
+  handleAction,
 }) => {
   const message = `Are you sure you want to send a join request for the trip from ${tripDetails.startLocation} to ${tripDetails.destination}?`;
 
   const title = "Confirm Join Request";
+
+  const handleConfirm = async () => {
+    await handleAction("join", { tripDetails });
+    onClose();
+  };
 
   return (
     <Box>
@@ -18,8 +22,7 @@ export const JoinRequestConfirmationCard = ({
         open={open}
         onClose={onClose}
         tripDetails={tripDetails}
-        onConfirm={handleConfirmJoin}
-        onCancel={handleGoBack}
+        onConfirm={handleConfirm}
         message={message}
         title={title}
       />

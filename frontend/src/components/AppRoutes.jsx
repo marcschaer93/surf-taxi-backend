@@ -6,9 +6,9 @@ import { Login } from "../pages/Login";
 import { Register } from "../pages/Register";
 import { Profile } from "../pages/Profile";
 import { EditProfile } from "../pages/Profile/EditProfile";
-import { AllTrips } from "../pages/Trips/AllTrips";
-import { MyTrips } from "../pages/Trips/MyTrips";
-import { TripDetails } from "../pages/Trips/TripDetails";
+import AllTrips from "../pages/Trips/AllTrips";
+import MyTrips from "../pages/Trips/MyTrips";
+import TripDetailsPage from "../pages/Trips/TripDetailsPage";
 import { RequireAuth } from "../components/RequireAuth";
 import { NewTrip } from "../pages/Trips/NewTrip";
 import { Favorites } from "../pages/Favorites";
@@ -88,7 +88,7 @@ export const AppRoutes = ({
         path="/trips/:tripId"
         element={
           <RequireAuth>
-            <TripDetails
+            <TripDetailsPage
               setMyTrips={setMyTrips}
               myTrips={myTrips}
               allTrips={allTrips}

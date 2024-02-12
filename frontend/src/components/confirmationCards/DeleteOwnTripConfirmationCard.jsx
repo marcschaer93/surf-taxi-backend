@@ -4,7 +4,6 @@ import { Box, CardActions, Button } from "@mui/material";
 export const DeleteOwnTripConfirmationCard = ({
   tripDetails,
   handleConfirmDelete,
-  handleGoBack,
   open,
   onClose,
 }) => {
@@ -19,7 +18,6 @@ export const DeleteOwnTripConfirmationCard = ({
         onClose={onClose}
         tripDetails={tripDetails}
         onConfirm={handleConfirmDelete}
-        onCancel={handleGoBack}
         message={message}
         title={title}
       />

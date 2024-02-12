@@ -25,17 +25,13 @@ import { theme } from "../../utils/theme";
 // isInMyTrips       ===>     from parent
 //userReservation    ===>     API Call ALWAYS
 
-export const TripPreviewCard = ({
-  tripDetails,
-  isInMyTrips,
-  isTripOrganizer,
-}) => {
+const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const tripId = tripDetails?.id;
 
   // Use custom hook to fetch user reservation data
-  const { userReservation, loading } = useUserReservation(
+  const { userReservation, loading: loadingReservation } = useUserReservation(
     user,
     tripId,
     isTripOrganizer,
@@ -71,19 +67,12 @@ export const TripPreviewCard = ({
         ></FavoriteButton>
       )}
 
-      {isInMyTrips && (
+      {isInMyTrips || isTripOrganizer ? (
         <CardStatusChip
           isTripOwner={isTripOrganizer}
           status={userReservation?.reservationStatus}
         />
-      )}
-
-      {isTripOrganizer && (
-        <CardStatusChip
-          isTripOwner={isTripOrganizer}
-          status={userReservation?.reservationStatus}
-        />
-      )}
+      ) : null}
 
       <TripCardContent preview={true} tripDetails={tripDetails} />
 
@@ -91,3 +80,5 @@ export const TripPreviewCard = ({
     </StyledPreviewCard>
   );
 };
+
+export default TripPreviewCard;
