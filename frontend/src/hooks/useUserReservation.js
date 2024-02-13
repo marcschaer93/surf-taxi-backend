@@ -9,7 +9,7 @@ export const useUserReservation = (
   isInMyTrips
 ) => {
   const [userReservation, setUserReservation] = useState(null);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Define the asynchronous function to fetch user reservation data
@@ -23,7 +23,7 @@ export const useUserReservation = (
       } catch (error) {
         console.error(error);
       } finally {
-        setLoading(false); // Set loading to false after fetching data
+        setLoading(false);
       }
     };
 

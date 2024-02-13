@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Card,
@@ -18,6 +18,7 @@ import { StyledPreviewCard } from "../../styles/cardStyles";
 import { TripCardContent } from "./TripCardContent";
 import { useFavorite } from "../../hooks/useFavorite";
 import { theme } from "../../utils/theme";
+import { useMyTrips } from "../../context/MyTripsProvider";
 
 // DATA FLOW
 // tripDetails       ===>     from parent
@@ -28,15 +29,24 @@ import { theme } from "../../utils/theme";
 const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
+  const { myReservations, loadingMyReservations } = useMyTrips();
   const tripId = tripDetails?.id;
+  // const [tripReservation, setTripReservation] = useState(null);
 
-  // Use custom hook to fetch user reservation data
-  const { userReservation, loading: loadingReservation } = useUserReservation(
-    user,
-    tripId,
-    isTripOrganizer,
-    isInMyTrips
-  );
+  // useEffect(() => {
+  //   setTripReservation(myReservations.find((r) => r.tripId === tripId));
+  // }, [myReservations, tripId]);
+
+  const tripReservation = myReservations?.find((r) => r.tripId === tripId);
+  console.log("MY RESERVATION", tripReservation);
+
+  // // Use custom hook to fetch user reservation data
+  // const { userReservation, loading: loadingReservation } = useUserReservation(
+  //   user,
+  //   tripId,
+  //   isTripOrganizer,
+  //   isInMyTrips
+  // );
 
   // Favorite trips hook (only for logged in users)
   const { isFavorited, toggleFavorite } = useFavorite(tripId);
@@ -70,7 +80,7 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
       {isInMyTrips || isTripOrganizer ? (
         <CardStatusChip
           isTripOwner={isTripOrganizer}
-          status={userReservation?.reservationStatus}
+          status={tripReservation?.reservationStatus}
         />
       ) : null}
 

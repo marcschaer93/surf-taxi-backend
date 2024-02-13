@@ -69,6 +69,14 @@ exports.getOneUserReservation = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: userReservation });
 });
 
+// Displays list of all reservations for user (userAsPassenger and myTripPassengers)
+exports.getAllUserReservations = asyncHandler(async (req, res, next) => {
+  const loggedInUser = req.username;
+  const userReservations = await UserApi.getAllUserReservations(loggedInUser);
+
+  res.status(200).json({ success: true, data: userReservations });
+});
+
 // Handle delete trip as trip owner
 exports.deleteMyTrip = asyncHandler(async (req, res, next) => {
   const username = req.params.username;

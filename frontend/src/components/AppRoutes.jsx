@@ -16,8 +16,8 @@ import { Notifications } from "../pages/Notifications";
 
 export const AppRoutes = ({
   allTrips,
-  myTrips,
-  addTrip,
+  // myTrips,
+  // addTrip,
   setMyTrips,
   notifications,
   markNotificationAsRead,
@@ -25,10 +25,7 @@ export const AppRoutes = ({
   return (
     <Routes>
       // HOME
-      <Route
-        path="/"
-        element={<Home allTrips={allTrips} addTrip={addTrip} />}
-      />
+      <Route path="/" element={<Home allTrips={allTrips} />} />
       // USER ROUTES
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
@@ -62,14 +59,15 @@ export const AppRoutes = ({
       // TRIP ROUTES
       <Route
         path="/trips"
-        element={<AllTrips allTrips={allTrips} myTrips={myTrips} />}
+        // element={<AllTrips allTrips={allTrips} myTrips={myTrips} />}
+        element={<AllTrips allTrips={allTrips} />}
       />
       <Route
         path="/my-trips"
         element={
           <RequireAuth>
             <MyTrips
-              myTrips={myTrips}
+              // myTrips={myTrips}
               allTrips={allTrips}
               notifications={notifications}
             />
@@ -80,7 +78,10 @@ export const AppRoutes = ({
         path="/new-trip"
         element={
           <RequireAuth>
-            <NewTrip addTrip={addTrip} myTrips={myTrips} />
+            <NewTrip
+            // addTrip={addTrip}
+            // myTrips={myTrips}
+            />
           </RequireAuth>
         }
       />
@@ -89,8 +90,8 @@ export const AppRoutes = ({
         element={
           <RequireAuth>
             <TripDetailsPage
-              setMyTrips={setMyTrips}
-              myTrips={myTrips}
+              // setMyTrips={setMyTrips}
+              // myTrips={myTrips}
               allTrips={allTrips}
             />
           </RequireAuth>
@@ -100,7 +101,9 @@ export const AppRoutes = ({
         path="/favorites"
         element={
           <RequireAuth>
-            <Favorites myTrips={myTrips} />
+            <Favorites
+            // myTrips={myTrips}
+            />
           </RequireAuth>
         }
       />

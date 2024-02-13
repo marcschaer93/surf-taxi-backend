@@ -217,6 +217,24 @@ class UserApi {
     return userReservation;
   }
 
+  static async getAllUserReservations(username) {
+    const allUserReservationsResult = await db.query(
+      `
+      SELECT * 
+      FROM passengers 
+      WHERE username =$1
+  
+      `,
+      [username]
+    );
+
+    const userReservations = allUserReservationsResult.rows.map((row) =>
+      jsReady.convertKeysToCamelCase(row)
+    );
+
+    return userReservations;
+  }
+
   static async deleteMyTrip(tripId, username) {
     const result = await db.query(
       `DELETE

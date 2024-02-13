@@ -24,6 +24,8 @@ import { useMyTrips } from "./hooks/useMyTrips";
 import { useNotifications } from "./hooks/useNotifications";
 import { useAuthContext } from "./context/authProvider";
 
+import { MyTripsProvider } from "./context/MyTripsProvider";
+
 const MainContent = styled(Box)(({ theme }) => ({
   flex: 4,
   padding: theme.spacing(3),
@@ -35,7 +37,7 @@ export default function App() {
   const { user } = useAuthContext();
   const location = useLocation();
   const { allTrips, loadingAllTrips } = useAllTrips();
-  const { myTrips, setMyTrips, addTrip, loadingMyTrips } = useMyTrips();
+  // const { myTrips, setMyTrips, addTrip, loadingMyTrips } = useMyTrips();
   const { notifications, markNotificationAsRead } = useNotifications(user);
 
   // Paths where the bottom navbar should be displayed
@@ -69,7 +71,8 @@ export default function App() {
   }
 
   // Global loading state
-  const isLoading = loadingAllTrips || loadingMyTrips;
+  // const isLoading = loadingAllTrips || loadingMyTrips;
+  const isLoading = loadingAllTrips;
 
   return (
     <>
@@ -78,33 +81,35 @@ export default function App() {
         <LoadingIndicator />
       ) : (
         <>
-          {/* Navbar */}
-          <Navbar />
+          <MyTripsProvider>
+            {/* Navbar */}
+            <Navbar />
 
-          {/* Main Content */}
-          <Stack direction="row" spacing={2} justifyContent="space-between">
-            <Sidebar />
-            <MainContent>
-              <AppRoutes
-                allTrips={allTrips}
-                myTrips={myTrips}
+            {/* Main Content */}
+            <Stack direction="row" spacing={2} justifyContent="space-between">
+              <Sidebar />
+              <MainContent>
+                <AppRoutes
+                  allTrips={allTrips}
+                  // myTrips={myTrips}
+                  notifications={notifications}
+                  markNotificationAsRead={markNotificationAsRead}
+                  // Other props
+                />
+              </MainContent>
+              <Rightbar />
+            </Stack>
+
+            {/* BottomNavBar */}
+            {shouldDisplayBottomNavbar && (
+              <BottomNavBar
+                sx={{
+                  display: { sm: "none" },
+                }}
                 notifications={notifications}
-                markNotificationAsRead={markNotificationAsRead}
-                // Other props
               />
-            </MainContent>
-            <Rightbar />
-          </Stack>
-
-          {/* BottomNavBar */}
-          {shouldDisplayBottomNavbar && (
-            <BottomNavBar
-              sx={{
-                display: { sm: "none" },
-              }}
-              notifications={notifications}
-            />
-          )}
+            )}
+          </MyTripsProvider>
         </>
       )}
     </>

@@ -5,9 +5,11 @@ import { useAuthContext } from "../../context/authProvider";
 import TripPreviewCard from "./TripPreviewCard";
 import { Title, TitleDivider } from "../../styles/fontStyles";
 import { theme } from "../../utils/theme";
+import { useMyTrips } from "../../context/MyTripsProvider";
 
-const MyTrips = ({ myTrips = [] }) => {
+const MyTrips = () => {
   const { user } = useAuthContext();
+  const { myTrips } = useMyTrips(); // Use the custom hook to access myTrips from the context
   const isEmpty = myTrips.length === 0;
 
   return (

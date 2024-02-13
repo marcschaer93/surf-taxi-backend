@@ -12,14 +12,14 @@ import { OwnerTripDetailsCard } from "./OwnerTripDetailsCard";
 import { useTripPassengers } from "../../hooks/useTripPassengers";
 import { useTripDetails } from "../../hooks/useTripDetails";
 import { useUserReservation } from "../../hooks/useUserReservation";
-import { useHandleAction } from "../../hooks/useHandleAction";
+import { useMyTrips } from "../../context/MyTripsProvider";
 
 // DATA FLOW
 // tripDetails      ===>     state ? tripDetails : API Call
 // tripPassengers   ===>     API Call
 // userReservation  ===>     dependend on tripPassengers
 
-const TripDetailsPage = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
+const TripDetailsPage = ({ allTrips, isInMyTrips }) => {
   const { tripId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuthContext();
@@ -32,6 +32,15 @@ const TripDetailsPage = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
   );
   const [userReservation, setUserReservation] = useState(null);
   const [loadingAction, setLoadingAction] = useState(false);
+
+  const {
+    fetchPassengersForTrip,
+    myTrips,
+    setMyTrips,
+    passengers,
+    handleAction,
+    loadingPassengers,
+  } = useMyTrips();
 
   useEffect(() => {
     if (!tripDetailsFromState) {
@@ -53,11 +62,16 @@ const TripDetailsPage = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
   const isTripOrganizer = user.username === tripDetails?.owner;
 
   // Get all Passengers for trip
-  const {
-    passengers,
-    setPassengers,
-    loading: loadingPassengers,
-  } = useTripPassengers(tripId, user.username);
+  // const {
+  //   passengers,
+  //   setPassengers,
+  //   loading: loadingPassengers,
+  // } = useTripPassengers(tripId, user.username);
+
+  useEffect(() => {
+    // Fetch passengers when the component mounts or tripId changes
+    fetchPassengersForTrip(tripId);
+  }, [fetchPassengersForTrip, tripId]);
 
   useEffect(() => {
     if (!isTripOrganizer) {
@@ -71,12 +85,12 @@ const TripDetailsPage = ({ myTrips, allTrips, setMyTrips, isInMyTrips }) => {
     }
   }, [passengers, user]);
 
-  const handleAction = useHandleAction(
-    tripId,
-    setPassengers,
-    setLoadingAction,
-    setMyTrips
-  );
+  // const handleAction = useHandleAction(
+  //   tripId,
+  //   setPassengers,
+  //   setLoadingAction,
+  //   setMyTrips
+  // );
 
   if (loadingTripDetails || loadingPassengers || loadingAction)
     return <CircularProgress />;

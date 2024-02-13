@@ -1,18 +1,20 @@
 import { Box, Typography, Divider } from "@mui/material";
 
 import { useAuthContext } from "../../context/authProvider";
-import { useMyTrips } from "../../hooks/useMyTrips";
+// import { useMyTrips } from "../../hooks/useMyTrips";
 import TripPreviewCard from "../Trips/TripPreviewCard";
 import { useFavoriteTrips } from "../../hooks/useFavoriteTrips";
 import { Title, TitleDivider } from "../../styles/fontStyles";
 import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
 import { theme } from "../../utils/theme";
+import { useMyTrips } from "../../context/MyTripsProvider";
 
 export const Favorites = () => {
   const { user } = useAuthContext();
-  const { myTrips } = useMyTrips();
+  // const { myTrips } = useMyTrips();
   const favoriteIds = user.favoriteIds || [];
   const { favoriteTrips, loading } = useFavoriteTrips(favoriteIds);
+  const { myTrips } = useMyTrips();
 
   return (
     <>
