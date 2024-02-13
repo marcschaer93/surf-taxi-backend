@@ -28,6 +28,8 @@ export const useMyTrips = () => {
     };
     if (user) {
       getAllMyTrips();
+    } else {
+      setLoadingMyTrips(false); // Ensure loading is stopped if there's no user
     }
   }, [user]);
 
