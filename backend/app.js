@@ -14,9 +14,6 @@ const {
 
 const app = express();
 
-// Use cookie-parser middleware
-// app.use(cookieParser());
-
 // Parse JSON-encoded bodies
 app.use(express.json());
 

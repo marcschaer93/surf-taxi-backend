@@ -3,12 +3,16 @@
 const { Pool } = require("pg");
 const { getDatabaseUri } = require("../config");
 
+const isProduction = process.env.NODE_ENV === "production";
+
 const pool = new Pool({
   // only one needed:
   connectionString: getDatabaseUri(),
-  ssl: {
-    rejectUnauthorized: false, // This bypasses strict SSL validation - be cautious in production environments
-  },
+  ssl: isProduction
+    ? {
+        rejectUnauthorized: true,
+      }
+    : false,
 
   //more config options below:
   user: "marcschaer",
