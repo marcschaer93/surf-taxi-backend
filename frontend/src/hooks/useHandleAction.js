@@ -35,6 +35,7 @@ export const useHandleAction = (
             setPassengers((prev) =>
               prev.filter((p) => p.username !== user.username)
             );
+
             setMyTrips((prevTrips) =>
               prevTrips.filter((trip) => trip.id !== data.tripDetails.id)
             );
@@ -84,7 +85,7 @@ export const useHandleAction = (
                 p.username === data.passengerUsername
                   ? {
                       ...p,
-                      reservationStatus: connected.reservationStatus,
+                      reservationStatus: connectedPassenger.reservationStatus,
                     }
                   : p
               )

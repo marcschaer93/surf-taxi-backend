@@ -21,6 +21,15 @@ export const BottomNavBar = ({ notifications }) => {
   const { user } = useAuthContext();
   const [value, setValue] = useState(0);
 
+  const profileIcon =
+    notifications.length > 0 ? (
+      <Badge badgeContent={notifications.length} color="error">
+        <AccountCircleOutlinedIcon />
+      </Badge>
+    ) : (
+      <AccountCircleOutlinedIcon />
+    );
+
   return (
     <Paper
       sx={{
@@ -67,16 +76,7 @@ export const BottomNavBar = ({ notifications }) => {
             component={NavLink}
             to="/profile"
             label="Profile"
-            icon={
-              <>
-                {" "}
-                {notifications && (
-                  <Badge badgeContent={notifications.length} color="error">
-                    <AccountCircleOutlinedIcon />
-                  </Badge>
-                )}
-              </>
-            }
+            icon={profileIcon}
           />
         </BottomNavigation>
       ) : (

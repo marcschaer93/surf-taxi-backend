@@ -97,7 +97,14 @@ export default function App() {
           </Stack>
 
           {/* BottomNavBar */}
-          {shouldDisplayBottomNavbar && <BottomNavBar />}
+          {shouldDisplayBottomNavbar && (
+            <BottomNavBar
+              sx={{
+                display: { sm: "none" },
+              }}
+              notifications={notifications}
+            />
+          )}
         </>
       )}
     </>
