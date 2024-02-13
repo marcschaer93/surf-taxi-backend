@@ -16,6 +16,7 @@ import { Sidebar } from "./components/Sidebar";
 import { Rightbar } from "./components/Rightbar";
 import { AppRoutes } from "./components/AppRoutes";
 import { BottomActionBar } from "./components/BottomActionBar";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { BottomNavBar } from "./components/BottomNavBar";
 import { useAllTrips } from "./hooks/useAllTrips";
@@ -52,39 +53,53 @@ export default function App() {
     location.pathname
   );
 
+  function LoadingIndicator() {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  // Global loading state
+  const isLoading = loadingAllTrips || loadingMyTrips;
+
   return (
     <>
-      {/* Navbar */}
-      <Navbar />
+      {/* Show loading indicator if any loading state is true */}
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          {/* Navbar */}
+          <Navbar />
 
-      {/* Main Content */}
-      <Stack direction="row" spacing={2} justifyContent="space-between">
-        <Sidebar />
-        <MainContent>
-          <AppRoutes
-            allTrips={allTrips}
-            addTrip={addTrip}
-            myTrips={myTrips}
-            setMyTrips={setMyTrips}
-            notifications={notifications}
-            markNotificationAsRead={markNotificationAsRead}
-          />
-        </MainContent>
-        <Rightbar />
-      </Stack>
+          {/* Main Content */}
+          <Stack direction="row" spacing={2} justifyContent="space-between">
+            <Sidebar />
+            <MainContent>
+              <AppRoutes
+                allTrips={allTrips}
+                myTrips={myTrips}
+                notifications={notifications}
+                markNotificationAsRead={markNotificationAsRead}
+                // Other props
+              />
+            </MainContent>
+            <Rightbar />
+          </Stack>
 
-      {/* BottomNavBar */}
-      {shouldDisplayBottomNavbar && (
-        <BottomNavBar
-          notifications={notifications}
-          sx={{
-            display: { sm: "none" },
-          }}
-        />
+          {/* BottomNavBar */}
+          {shouldDisplayBottomNavbar && <BottomNavBar />}
+        </>
       )}
-
-      {/* BottomActionBar
-      {shouldDisplayBottomActionBar && <BottomActionBar />} */}
     </>
   );
 }
