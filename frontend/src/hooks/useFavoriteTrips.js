@@ -10,7 +10,7 @@ export const useFavoriteTrips = (favoriteIds) => {
   useEffect(() => {
     const fetchFavoriteTrips = async () => {
       try {
-        if (favoriteIds.length === 0) {
+        if (!favoriteIds || favoriteIds.length === 0) {
           setFavoriteTrips([]);
           setLoading(false);
           return;

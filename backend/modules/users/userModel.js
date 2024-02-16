@@ -141,17 +141,16 @@ class UserApi {
         T.travel_info,
         T.seats,
         T.costs,
-        json_agg(jsonb_build_object('username', P.username, 'reservationStatus', P.reservation_status, 'reservationTimestamp', P.reservation_timestamp ) ORDER BY P.username) AS passengers
+        CASE
+      WHEN T.owner = $1 THEN 'Organizer'
+      ELSE P.reservation_status
+      END AS user_reservation_status
       FROM
-        trips AS T
+        trips T
       LEFT JOIN
-        passengers AS P ON T.id = P.trip_id
+        passengers P ON T.id = P.trip_id AND P.username = $1
       WHERE
-        T.owner = $1 OR P.username = $1
-      GROUP BY
-        T.id, T.date, T.owner, T.start_location, T.destination, T.stops, T.travel_info, T.seats, T.costs;
-    
-  
+        T.owner = $1 OR P.username = $1;
     `,
 
       [loggedInUser]
@@ -163,6 +162,40 @@ class UserApi {
 
     return allUserTrips;
   }
+  // static async getAllUserTrips(loggedInUser) {
+  //   const allUserTripsResult = await db.query(
+  //     `
+  //     SELECT
+  //       T.id,
+  //       T.date,
+  //       T.owner,
+  //       T.start_location,
+  //       T.destination,
+  //       T.stops,
+  //       T.travel_info,
+  //       T.seats,
+  //       T.costs,
+  //       json_agg(jsonb_build_object('username', P.username, 'reservationStatus', P.reservation_status, 'reservationTimestamp', P.reservation_timestamp ) ORDER BY P.username) AS passengers
+  //     FROM
+  //       trips AS T
+  //     LEFT JOIN
+  //       passengers AS P ON T.id = P.trip_id
+  //     WHERE
+  //       T.owner = $1 OR P.username = $1
+  //     GROUP BY
+  //       T.id, T.date, T.owner, T.start_location, T.destination, T.stops, T.travel_info, T.seats, T.costs;
+
+  //   `,
+
+  //     [loggedInUser]
+  //   );
+
+  //   const allUserTrips = allUserTripsResult.rows.map((row) =>
+  //     jsReady.convertKeysToCamelCase(row)
+  //   );
+
+  //   return allUserTrips;
+  // }
   // static async getAllUserTrips(loggedInUser) {
   //   const allUserTripsResult = await db.query(
   //     `

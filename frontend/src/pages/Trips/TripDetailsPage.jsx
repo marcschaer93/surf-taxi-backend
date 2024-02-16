@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, CircularProgress } from "@mui/material";
+import { Box } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 import { useAuthContext } from "../../context/authProvider";
@@ -11,8 +11,8 @@ import { TripDetailsCard } from "./TripDetailsCard";
 import { OwnerTripDetailsCard } from "./OwnerTripDetailsCard";
 import { useTripPassengers } from "../../hooks/useTripPassengers";
 import { useTripDetails } from "../../hooks/useTripDetails";
-import { useUserReservation } from "../../hooks/useUserReservation";
 import { useMyTrips } from "../../context/MyTripsProvider";
+import { Loading } from "../../components/ui/Loading";
 
 // DATA FLOW
 // tripDetails      ===>     state ? tripDetails : API Call
@@ -59,13 +59,6 @@ const TripDetailsPage = ({ allTrips, isInMyTrips }) => {
   // Check if user is trip Organizer
   const isTripOrganizer = user.username === tripDetails?.owner;
 
-  // Get all Passengers for trip
-  // const {
-  //   passengers,
-  //   setPassengers,
-  //   loading: loadingPassengers,
-  // } = useTripPassengers(tripId, user.username);
-
   useEffect(() => {
     // Fetch passengers when the component mounts or tripId changes
     fetchPassengersForTrip(tripId);
@@ -83,15 +76,8 @@ const TripDetailsPage = ({ allTrips, isInMyTrips }) => {
     }
   }, [passengers, user]);
 
-  // const handleAction = useHandleAction(
-  //   tripId,
-  //   setPassengers,
-  //   setLoadingAction,
-  //   setMyTrips
-  // );
-
   if (loadingTripDetails || loadingPassengers || loadingAction)
-    return <CircularProgress />;
+    return <Loading />;
 
   return (
     <>

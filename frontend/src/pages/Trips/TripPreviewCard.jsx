@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/authProvider";
 import { CardStatusChip } from "../../components/ui/CardStatusChip";
 import { FavoriteButton } from "../../components/ui/FavoriteButton";
-import { useUserReservation } from "../../hooks/useUserReservation";
 import { StyledPreviewCard } from "../../styles/cardStyles";
 import { TripCardContent } from "./TripCardContent";
 import { useFavorite } from "../../hooks/useFavorite";
@@ -29,24 +28,7 @@ import { useMyTrips } from "../../context/MyTripsProvider";
 const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  const { myReservations, loadingMyReservations } = useMyTrips();
   const tripId = tripDetails?.id;
-  // const [tripReservation, setTripReservation] = useState(null);
-
-  // useEffect(() => {
-  //   setTripReservation(myReservations.find((r) => r.tripId === tripId));
-  // }, [myReservations, tripId]);
-
-  const tripReservation = myReservations?.find((r) => r.tripId === tripId);
-  console.log("MY RESERVATION", tripReservation);
-
-  // // Use custom hook to fetch user reservation data
-  // const { userReservation, loading: loadingReservation } = useUserReservation(
-  //   user,
-  //   tripId,
-  //   isTripOrganizer,
-  //   isInMyTrips
-  // );
 
   // Favorite trips hook (only for logged in users)
   const { isFavorited, toggleFavorite } = useFavorite(tripId);
@@ -77,11 +59,16 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
         ></FavoriteButton>
       )}
 
-      {isInMyTrips || isTripOrganizer ? (
+      {/* {isInMyTrips || isTripOrganizer ? (
         <CardStatusChip
-          isTripOwner={isTripOrganizer}
-          status={tripReservation?.reservationStatus}
+          // isTripOwner={isTripOrganizer}
+          // status={tripReservation?.reservationStatus}
+          status={tripDetails.userReservationStatus}
         />
+      ) : null} */}
+
+      {isInMyTrips ? (
+        <CardStatusChip status={tripDetails.userReservationStatus} />
       ) : null}
 
       <TripCardContent preview={true} tripDetails={tripDetails} />

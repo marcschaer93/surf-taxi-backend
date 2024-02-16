@@ -6,7 +6,6 @@ import React, {
   useContext,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMemo } from "react";
 
 import * as PassengerApi from "../api/services/PassengerApi";
 import * as TripApi from "../api/services/TripApi";
@@ -26,8 +25,6 @@ export const MyTripsProvider = ({ children }) => {
   const [passengers, setPassengers] = useState([]);
   const [loadingPassengers, setLoadingPassengers] = useState(false); // false!
   const [passengerError, setPassengerError] = useState(null);
-  const [myReservations, setMyReservations] = useState([]);
-  const [loadingMyReservations, setLoadingMyReservations] = useState(true);
 
   // Get user trips
   useEffect(() => {
@@ -52,22 +49,22 @@ export const MyTripsProvider = ({ children }) => {
   }, [user]);
 
   // Get user reservations (need this for PREVIEW CARD, on details Card everything is based on passengers)
-  useEffect(() => {
-    const getAllMyReservations = async () => {
-      try {
-        const myReservationsData = await UserApi.getAllUserReservations(
-          user.username
-        );
-        setMyReservations(myReservationsData);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoadingMyReservations(false);
-      }
-    };
+  // useEffect(() => {
+  //   const getAllMyReservations = async () => {
+  //     try {
+  //       const myReservationsData = await UserApi.getAllUserReservations(
+  //         user.username
+  //       );
+  //       setMyReservations(myReservationsData);
+  //     } catch (error) {
+  //       console.error(error);
+  //     } finally {
+  //       setLoadingMyReservations(false);
+  //     }
+  //   };
 
-    getAllMyReservations();
-  }, [user, myTrips]);
+  //   getAllMyReservations();
+  // }, [user, myTrips]);
 
   // get all trip passengers
   const fetchPassengersForTrip = useCallback(async (tripId) => {
@@ -132,30 +129,33 @@ export const MyTripsProvider = ({ children }) => {
             const newJoinRequest = await PassengerApi.requestToJoin(
               data.tripDetails.id
             );
-            // ??
-            // setPassengers((prev) => [...prev, newJoinRequest]);
-            setMyTrips((prevTrips) => {
-              return [data.tripDetails, ...(prevTrips || [])];
-            });
-            setMyReservations((prev) => [...prev, newJoinRequest]);
+            // IMPORTANT
+            setPassengers((prev) => [...prev, newJoinRequest]);
+
+            let updatedTrip = {
+              ...data.tripDetails,
+              userReservationStatus: newJoinRequest.reservationStatus,
+            };
+            setMyTrips((prevTrips) => [
+              updatedTrip,
+              ...prevTrips.filter((trip) => trip.id !== updatedTrip.id),
+            ]);
+
             navigate("/my-trips");
 
             break;
 
           case "cancel":
             await PassengerApi.cancelJoinRequest(data.tripDetails.id);
-            // ??
-            // setPassengers((prev) =>
-            //   prev.filter((p) => p.username !== user.username)
-            // );
-
-            setMyReservations((prev) =>
-              prev.filter((r) => r.tripId !== data.tripDetails.id)
+            // IMPORTANT
+            setPassengers((prev) =>
+              prev.filter((p) => p.username !== user.username)
             );
 
             setMyTrips((prevTrips) =>
               prevTrips.filter((trip) => trip.id !== data.tripDetails.id)
             );
+
             navigate("/my-trips");
             break;
 
@@ -239,8 +239,6 @@ export const MyTripsProvider = ({ children }) => {
     fetchPassengersForTrip,
     passengers,
     loadingPassengers,
-    myReservations,
-    loadingMyReservations,
   };
 
   return (

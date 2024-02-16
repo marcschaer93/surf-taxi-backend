@@ -16,8 +16,6 @@ import { Notifications } from "../pages/Notifications";
 
 export const AppRoutes = ({
   allTrips,
-  // myTrips,
-  // addTrip,
   setMyTrips,
   notifications,
   markNotificationAsRead,
@@ -57,20 +55,12 @@ export const AppRoutes = ({
         }
       />
       // TRIP ROUTES
-      <Route
-        path="/trips"
-        // element={<AllTrips allTrips={allTrips} myTrips={myTrips} />}
-        element={<AllTrips allTrips={allTrips} />}
-      />
+      <Route path="/trips" element={<AllTrips allTrips={allTrips} />} />
       <Route
         path="/my-trips"
         element={
           <RequireAuth>
-            <MyTrips
-              // myTrips={myTrips}
-              allTrips={allTrips}
-              notifications={notifications}
-            />
+            <MyTrips allTrips={allTrips} notifications={notifications} />
           </RequireAuth>
         }
       />
@@ -78,10 +68,7 @@ export const AppRoutes = ({
         path="/new-trip"
         element={
           <RequireAuth>
-            <NewTrip
-            // addTrip={addTrip}
-            // myTrips={myTrips}
-            />
+            <NewTrip />
           </RequireAuth>
         }
       />
@@ -89,11 +76,7 @@ export const AppRoutes = ({
         path="/trips/:tripId"
         element={
           <RequireAuth>
-            <TripDetailsPage
-              // setMyTrips={setMyTrips}
-              // myTrips={myTrips}
-              allTrips={allTrips}
-            />
+            <TripDetailsPage allTrips={allTrips} />
           </RequireAuth>
         }
       />
@@ -101,9 +84,7 @@ export const AppRoutes = ({
         path="/favorites"
         element={
           <RequireAuth>
-            <Favorites
-            // myTrips={myTrips}
-            />
+            <Favorites />
           </RequireAuth>
         }
       />

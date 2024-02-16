@@ -20,9 +20,21 @@ const AllTrips = ({ allTrips }) => {
   const { myTrips } = useMyTrips();
 
   // Filter out trips already in user's list
+  // useEffect(() => {
+  //   const filteredTrips = allTrips.filter(
+  //     (trip) => !myTrips?.some((myTrip) => myTrip.id === trip.id)
+  //   );
+
+  //   setVisibleTrips(filteredTrips);
+  // }, [myTrips, allTrips]);
+
   useEffect(() => {
+    // Extract trip IDs from myTrips for comparison
+    const myTripsIds = myTrips.map((trip) => trip.id);
+
+    // Filter allTrips based on whether their ID appears in myTripsIds
     const filteredTrips = allTrips.filter(
-      (trip) => !myTrips?.some((myTrip) => myTrip.id === trip.id)
+      (trip) => !myTripsIds.includes(trip.id)
     );
 
     setVisibleTrips(filteredTrips);
@@ -34,7 +46,7 @@ const AllTrips = ({ allTrips }) => {
     <>
       <Box>
         <Box>
-          <Title variant="h3">All Trips</Title>
+          <Title variant="h3">Explore Trips</Title>
           <TitleDivider />
         </Box>
 

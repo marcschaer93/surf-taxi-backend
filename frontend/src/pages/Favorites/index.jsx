@@ -1,7 +1,7 @@
 import { Box, Typography, Divider } from "@mui/material";
+import React, { useMemo } from "react";
 
 import { useAuthContext } from "../../context/authProvider";
-// import { useMyTrips } from "../../hooks/useMyTrips";
 import TripPreviewCard from "../Trips/TripPreviewCard";
 import { useFavoriteTrips } from "../../hooks/useFavoriteTrips";
 import { Title, TitleDivider } from "../../styles/fontStyles";
@@ -11,7 +11,9 @@ import { useMyTrips } from "../../context/MyTripsProvider";
 
 export const Favorites = () => {
   const { user } = useAuthContext();
-  const favoriteIds = user.favoriteIds || [];
+
+  // memoize favoriteIds to ensure that it only updates when user.favoriteIds actually changes, not when the user object itself might be recreated without meaningful changes to favoriteIds.
+  const favoriteIds = useMemo(() => user.favoriteIds || [], [user.favoriteIds]);
   const { favoriteTrips, loading } = useFavoriteTrips(favoriteIds);
   const { myTrips } = useMyTrips();
 

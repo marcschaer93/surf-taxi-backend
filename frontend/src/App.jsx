@@ -16,7 +16,6 @@ import { Sidebar } from "./components/Sidebar";
 import { Rightbar } from "./components/Rightbar";
 import { AppRoutes } from "./components/AppRoutes";
 import { BottomActionBar } from "./components/BottomActionBar";
-import CircularProgress from "@mui/material/CircularProgress";
 
 import { BottomNavBar } from "./components/BottomNavBar";
 import { useAllTrips } from "./hooks/useAllTrips";
@@ -25,6 +24,7 @@ import { useNotifications } from "./hooks/useNotifications";
 import { useAuthContext } from "./context/authProvider";
 
 import { MyTripsProvider } from "./context/MyTripsProvider";
+import { Loading } from "./components/ui/Loading";
 
 const MainContent = styled(Box)(({ theme }) => ({
   flex: 4,
@@ -38,17 +38,6 @@ export default function App() {
   const location = useLocation();
   const { allTrips, loadingAllTrips } = useAllTrips();
   const { notifications, markNotificationAsRead } = useNotifications(user);
-  // const { myTrips } = useMyTrips();
-  // const [visibleTrips, setVisibleTrips] = useState(allTrips);
-
-  // // Filter out trips already in user's list (MyTrips)
-  // useEffect(() => {
-  //   const filteredTrips = allTrips.filter(
-  //     (trip) => !myTrips?.some((myTrip) => myTrip.id === trip.id)
-  //   );
-
-  //   setVisibleTrips(filteredTrips);
-  // }, [myTrips, allTrips]);
 
   // Paths where the bottom navbar should be displayed
   const pathsWithBottomNavbar = [
@@ -65,21 +54,6 @@ export default function App() {
     location.pathname
   );
 
-  function LoadingIndicator() {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
-
   // Global loading state
   // const isLoading = loadingAllTrips || loadingMyTrips;
   const isLoading = loadingAllTrips;
@@ -88,7 +62,7 @@ export default function App() {
     <>
       {/* Show loading indicator if any loading state is true */}
       {isLoading ? (
-        <LoadingIndicator />
+        <Loading />
       ) : (
         <>
           <MyTripsProvider>
@@ -101,10 +75,8 @@ export default function App() {
               <MainContent>
                 <AppRoutes
                   allTrips={allTrips}
-                  // myTrips={myTrips}
                   notifications={notifications}
                   markNotificationAsRead={markNotificationAsRead}
-                  // Other props
                 />
               </MainContent>
               <Rightbar />

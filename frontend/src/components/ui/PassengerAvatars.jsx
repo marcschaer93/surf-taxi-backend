@@ -43,8 +43,9 @@ export const PassengerAvatars = ({ passengers }) => {
     <>
       {filteredPassengers.length > 0 ? (
         <Stack direction="row" spacing={2}>
-          {filteredPassengers.map((p, index) => (
+          {filteredPassengers.map((p) => (
             <Box
+              key={p.username}
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -53,7 +54,7 @@ export const PassengerAvatars = ({ passengers }) => {
               }}
             >
               <IconButton onClick={() => handleAvatarClick(p.username)}>
-                <Avatar key={index} {...stringAvatar(p.username)} />
+                <Avatar {...stringAvatar(p.username)} />
               </IconButton>
               <Typography variant="body2">{p.username}</Typography>
             </Box>
