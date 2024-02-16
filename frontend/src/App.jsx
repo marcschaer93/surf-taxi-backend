@@ -37,8 +37,18 @@ export default function App() {
   const { user } = useAuthContext();
   const location = useLocation();
   const { allTrips, loadingAllTrips } = useAllTrips();
-  // const { myTrips, setMyTrips, addTrip, loadingMyTrips } = useMyTrips();
   const { notifications, markNotificationAsRead } = useNotifications(user);
+  // const { myTrips } = useMyTrips();
+  // const [visibleTrips, setVisibleTrips] = useState(allTrips);
+
+  // // Filter out trips already in user's list (MyTrips)
+  // useEffect(() => {
+  //   const filteredTrips = allTrips.filter(
+  //     (trip) => !myTrips?.some((myTrip) => myTrip.id === trip.id)
+  //   );
+
+  //   setVisibleTrips(filteredTrips);
+  // }, [myTrips, allTrips]);
 
   // Paths where the bottom navbar should be displayed
   const pathsWithBottomNavbar = [

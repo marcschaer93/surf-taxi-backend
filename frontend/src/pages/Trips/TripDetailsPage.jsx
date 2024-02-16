@@ -35,8 +35,6 @@ const TripDetailsPage = ({ allTrips, isInMyTrips }) => {
 
   const {
     fetchPassengersForTrip,
-    myTrips,
-    setMyTrips,
     passengers,
     handleAction,
     loadingPassengers,

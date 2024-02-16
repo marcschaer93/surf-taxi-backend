@@ -11,7 +11,6 @@ import { useMyTrips } from "../../context/MyTripsProvider";
 
 export const Favorites = () => {
   const { user } = useAuthContext();
-  // const { myTrips } = useMyTrips();
   const favoriteIds = user.favoriteIds || [];
   const { favoriteTrips, loading } = useFavoriteTrips(favoriteIds);
   const { myTrips } = useMyTrips();

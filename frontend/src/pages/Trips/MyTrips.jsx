@@ -12,6 +12,8 @@ const MyTrips = () => {
   const { myTrips } = useMyTrips(); // Use the custom hook to access myTrips from the context
   const isEmpty = myTrips.length === 0;
 
+  console.log("MYTRIPS", myTrips);
+
   return (
     <>
       <Box>

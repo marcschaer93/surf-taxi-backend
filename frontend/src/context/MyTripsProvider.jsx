@@ -29,7 +29,7 @@ export const MyTripsProvider = ({ children }) => {
   const [myReservations, setMyReservations] = useState([]);
   const [loadingMyReservations, setLoadingMyReservations] = useState(true);
 
-  // Get MyTrips
+  // Get user trips
   useEffect(() => {
     const getAllMyTrips = async () => {
       try {
@@ -51,7 +51,7 @@ export const MyTripsProvider = ({ children }) => {
     }
   }, [user]);
 
-  // Get Myreservations
+  // Get user reservations (need this for PREVIEW CARD, on details Card everything is based on passengers)
   useEffect(() => {
     const getAllMyReservations = async () => {
       try {
@@ -68,7 +68,8 @@ export const MyTripsProvider = ({ children }) => {
 
     getAllMyReservations();
   }, [user, myTrips]);
-  // Example of a function to fetch passengers for a specific trip
+
+  // get all trip passengers
   const fetchPassengersForTrip = useCallback(async (tripId) => {
     setLoadingPassengers(true);
     try {
@@ -82,6 +83,7 @@ export const MyTripsProvider = ({ children }) => {
     }
   }, []);
 
+  // add a trip
   const addTrip = useCallback(
     async (tripData) => {
       try {
@@ -120,6 +122,7 @@ export const MyTripsProvider = ({ children }) => {
     [user, myTrips]
   );
 
+  // handle actions for trip reservations
   const handleAction = useCallback(
     async (actionType, data) => {
       setLoadingAction(true);
@@ -129,32 +132,33 @@ export const MyTripsProvider = ({ children }) => {
             const newJoinRequest = await PassengerApi.requestToJoin(
               data.tripDetails.id
             );
-            setPassengers((prev) => [...prev, newJoinRequest]);
+            // ??
+            // setPassengers((prev) => [...prev, newJoinRequest]);
             setMyTrips((prevTrips) => {
               return [data.tripDetails, ...(prevTrips || [])];
             });
             setMyReservations((prev) => [...prev, newJoinRequest]);
-
             navigate("/my-trips");
 
             break;
+
           case "cancel":
             await PassengerApi.cancelJoinRequest(data.tripDetails.id);
-            setPassengers((prev) =>
-              prev.filter((p) => p.username !== user.username)
+            // ??
+            // setPassengers((prev) =>
+            //   prev.filter((p) => p.username !== user.username)
+            // );
+
+            setMyReservations((prev) =>
+              prev.filter((r) => r.tripId !== data.tripDetails.id)
             );
 
             setMyTrips((prevTrips) =>
               prevTrips.filter((trip) => trip.id !== data.tripDetails.id)
             );
-
-            setMyReservations((prev) =>
-              prev.filter((r) => r.username !== user.username)
-            );
-
             navigate("/my-trips");
-            // Optionally, update `myTrips` state if needed
             break;
+
           case "delete":
             await UserApi.deleteMyTrip(tripId, user.username);
 
@@ -165,6 +169,7 @@ export const MyTripsProvider = ({ children }) => {
             navigate("/my-trips");
             // Redirect or update state as needed
             break;
+
           case "confirm":
             const confirmedPassenger = await PassengerApi.updatePassengerStatus(
               data.tripDetails.id,
@@ -183,18 +188,31 @@ export const MyTripsProvider = ({ children }) => {
             );
 
             break;
+
           case "connect":
-            const connectedPassenger = await PassengerApi.updatePassengerStatus(
+            const pendingPassenger = await PassengerApi.updatePassengerStatus(
               data.tripDetails.id,
               data.passengerUsername,
               "pending"
             );
-            setPassengers((prev) =>
+            // ??
+
+            // setPassengers((prev) =>
+            //   prev.map((p) =>
+            //     p.username === data.passengerUsername
+            //       ? {
+            //           ...p,
+            //           reservationStatus: pendingPassenger.reservationStatus,
+            //         }
+            //       : p
+            //   )
+            // );
+            setMyReservations((prev) =>
               prev.map((p) =>
                 p.username === data.passengerUsername
                   ? {
                       ...p,
-                      reservationStatus: connectedPassenger.reservationStatus,
+                      reservationStatus: pendingPassenger.reservationStatus,
                     }
                   : p
               )
@@ -224,20 +242,6 @@ export const MyTripsProvider = ({ children }) => {
     myReservations,
     loadingMyReservations,
   };
-
-  //   const value = useMemo(
-  //     () => ({
-  //       myTrips,
-  //       loadingMyTrips,
-  //       addTrip,
-  //       deleteMyTrip,
-  //       handleAction,
-  //       fetchPassengersForTrip,
-  //       passengers,
-  //       loadingPassengers,
-  //     }),
-  //     [myTrips, loadingMyTrips, passengers, loadingPassengers]
-  //   );
 
   return (
     <MyTripsContext.Provider value={value}>{children}</MyTripsContext.Provider>

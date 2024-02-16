@@ -4,13 +4,16 @@ import { useErrorBoundary } from "react-error-boundary";
 import * as TripApi from "../api/services/TripApi";
 import * as UserApi from "../api/services/UserApi";
 import { useAuthContext } from "../context/authProvider";
+import { useMyTrips } from "../context/MyTripsProvider";
 
 export const useAllTrips = () => {
   const { user } = useAuthContext();
   const { showBoundary } = useErrorBoundary();
-
   const [allTrips, setAllTrips] = useState([]);
   const [loadingAllTrips, setLoadingAllTrips] = useState(true);
+
+  // const { myTrips } = useMyTrips();
+  // const [visibleTrips, setVisibleTrips] = useState(allTrips);
 
   useEffect(() => {
     const getAllTripsData = async () => {

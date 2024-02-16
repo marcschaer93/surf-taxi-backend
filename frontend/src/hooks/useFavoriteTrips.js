@@ -30,5 +30,5 @@ export const useFavoriteTrips = (favoriteIds) => {
     fetchFavoriteTrips();
   }, [favoriteIds]);
 
-  return { favoriteTrips, loading, error };
+  return { favoriteTrips, setFavoriteTrips, loading, setLoading, error };
 };
