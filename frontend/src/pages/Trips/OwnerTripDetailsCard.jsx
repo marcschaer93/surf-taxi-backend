@@ -11,7 +11,7 @@ import {
   Chip,
 } from "@mui/material";
 import { theme } from "../../utils/theme";
-import { CardStatusChip } from "../../components/ui/CardStatusChip";
+// import { CardStatusChip } from "../../components/ui/CardStatusChip";
 import { useNavigate } from "react-router-dom";
 import { CancelRequestConfirmationCard } from "../../components/confirmationCards/CancelRequestConfirmationCard";
 import { JoinRequestConfirmationCard } from "../../components/confirmationCards/JoinRequestConfirmationCard";
@@ -24,6 +24,7 @@ import { useState } from "react";
 import { TripCardContent } from "./TripCardContent";
 import { BottomActionBar } from "../../components/BottomActionBar";
 import { PassengerAvatars } from "../../components/ui/PassengerAvatars";
+import { StatusChip } from "../../components/ui/StatusChip";
 
 export const OwnerTripDetailsCard = ({
   tripDetails,
@@ -53,7 +54,9 @@ export const OwnerTripDetailsCard = ({
         </Box>
 
         <StyledDetailsCard variant="outlined">
-          <CardStatusChip isTripOwner={true} />
+          <Box sx={{ position: "absolute", top: 18, right: 18 }}>
+            <StatusChip status={"organizer"} />
+          </Box>
 
           <TripCardContent tripDetails={tripDetails} />
 
@@ -61,7 +64,6 @@ export const OwnerTripDetailsCard = ({
             {showConfirmation && (
               <DeleteOwnTripConfirmationCard
                 tripDetails={tripDetails}
-                handleConfirmDelete={handleConfirmDelete}
                 open={showConfirmation}
                 onClose={closeConfirmation}
                 handleAction={handleAction}

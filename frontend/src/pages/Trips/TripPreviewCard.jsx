@@ -11,13 +11,14 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/authProvider";
-import { CardStatusChip } from "../../components/ui/CardStatusChip";
+// import { CardStatusChip } from "../../components/ui/CardStatusChip";
 import { FavoriteButton } from "../../components/ui/FavoriteButton";
 import { StyledPreviewCard } from "../../styles/cardStyles";
 import { TripCardContent } from "./TripCardContent";
 import { useFavorite } from "../../hooks/useFavorite";
 import { theme } from "../../utils/theme";
 import { useMyTrips } from "../../context/MyTripsProvider";
+import { StatusChip } from "../../components/ui/StatusChip";
 
 // DATA FLOW
 // tripDetails       ===>     from parent
@@ -67,8 +68,20 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
         />
       ) : null} */}
 
+      {/* {isInMyTrips ? (
+        <StatusChip
+          status={tripDetails.userReservationStatus}
+          isTripOrganizer={isTripOrganizer}
+        />
+      ) : null} */}
+
       {isInMyTrips ? (
-        <CardStatusChip status={tripDetails.userReservationStatus} />
+        <Box sx={{ position: "absolute", top: 18, right: 18 }}>
+          <StatusChip
+            status={tripDetails.userReservationStatus}
+            isTripOrganizer={isTripOrganizer}
+          />
+        </Box>
       ) : null}
 
       <TripCardContent preview={true} tripDetails={tripDetails} />

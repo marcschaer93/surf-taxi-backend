@@ -19,7 +19,7 @@ import { Loading } from "../../components/ui/Loading";
 // tripPassengers   ===>     API Call
 // userReservation  ===>     dependend on tripPassengers
 
-const TripDetailsPage = ({ allTrips, isInMyTrips }) => {
+const TripDetailsPage = ({ allTrips }) => {
   const { tripId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuthContext();
@@ -30,7 +30,7 @@ const TripDetailsPage = ({ allTrips, isInMyTrips }) => {
   const [loadingTripDetails, setLoadingTripDetails] = useState(
     !tripDetailsFromState
   );
-  const [userReservation, setUserReservation] = useState(null);
+  // const [userReservation, setUserReservation] = useState(null);
   const [loadingAction, setLoadingAction] = useState(false);
 
   const {
@@ -64,17 +64,19 @@ const TripDetailsPage = ({ allTrips, isInMyTrips }) => {
     fetchPassengersForTrip(tripId);
   }, [fetchPassengersForTrip, tripId]);
 
-  useEffect(() => {
-    if (!isTripOrganizer) {
-      const currentUserAsPassenger = passengers?.find(
-        (p) => p.username === user.username
-      );
+  // const [userReservation, setUserReservation] = useState(null);
 
-      if (currentUserAsPassenger) {
-        setUserReservation(currentUserAsPassenger);
-      }
-    }
-  }, [passengers, user]);
+  // useEffect(() => {
+  //   if (!isTripOrganizer) {
+  //     const currentUserAsPassenger = passengers?.find(
+  //       (p) => p.username === user.username
+  //     );
+
+  //     if (currentUserAsPassenger) {
+  //       setUserReservation(currentUserAsPassenger);
+  //     }
+  //   }
+  // }, [passengers, user]);
 
   if (loadingTripDetails || loadingPassengers || loadingAction)
     return <Loading />;
@@ -92,7 +94,6 @@ const TripDetailsPage = ({ allTrips, isInMyTrips }) => {
           tripDetails={tripDetails}
           passengers={passengers}
           handleAction={handleAction}
-          userReservation={userReservation}
         />
       )}
     </>

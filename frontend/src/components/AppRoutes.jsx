@@ -16,7 +16,6 @@ import { Notifications } from "../pages/Notifications";
 
 export const AppRoutes = ({
   allTrips,
-  setMyTrips,
   notifications,
   markNotificationAsRead,
 }) => {

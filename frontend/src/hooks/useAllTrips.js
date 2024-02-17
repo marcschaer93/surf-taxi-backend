@@ -27,7 +27,7 @@ export const useAllTrips = () => {
       }
     };
     getAllTripsData();
-  }, []);
+  }, [user]);
 
   return { allTrips, setAllTrips, loadingAllTrips };
 };

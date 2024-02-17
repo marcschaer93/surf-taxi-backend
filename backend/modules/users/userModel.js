@@ -142,7 +142,7 @@ class UserApi {
         T.seats,
         T.costs,
         CASE
-      WHEN T.owner = $1 THEN 'Organizer'
+      WHEN T.owner = $1 THEN 'organizer'
       ELSE P.reservation_status
       END AS user_reservation_status
       FROM

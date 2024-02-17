@@ -19,7 +19,6 @@ import { BottomActionBar } from "./components/BottomActionBar";
 
 import { BottomNavBar } from "./components/BottomNavBar";
 import { useAllTrips } from "./hooks/useAllTrips";
-import { useMyTrips } from "./hooks/useMyTrips";
 import { useNotifications } from "./hooks/useNotifications";
 import { useAuthContext } from "./context/authProvider";
 

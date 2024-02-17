@@ -22,6 +22,7 @@ import { useFavorite } from "../../hooks/useFavorite";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { ConnectConfirmationCard } from "../../components/confirmationCards/ConnectConfirmationCard";
 import { ColorAvatar } from "../../components/ui/ColorAvatar";
+import { StatusChip } from "../../components/ui/StatusChip";
 
 export const PassengerCard = ({
   tripDetails,
@@ -74,37 +75,30 @@ export const PassengerCard = ({
           >
             <ColorAvatar username={passenger.username} />
 
-            <Chip
-              label={passenger.reservationStatus}
-              color={
-                passenger.reservationStatus === "confirmed"
-                  ? "success" // Green for confirmed
-                  : passenger.reservationStatus === "pending"
-                  ? "info" // Blue or another soft color for pending
-                  : passenger.reservationStatus === "rejected"
-                  ? "error" // Red for rejected
-                  : passenger.reservationStatus === "requested"
-                  ? "warning" // Yellow or orange for requested
-                  : "default" // Use default color for other cases
-              }
-            />
+            <StatusChip status={passenger.reservationStatus} />
           </Box>
         </CardContent>
 
-        <CardActions>
+        <CardActions sx={{ display: "flex", justifyContent: "left" }}>
           {/* Connect Button */}
           {passenger.reservationStatus === "requested" && (
-            <Button variant="outlined" size="small" onClick={openConfirmation}>
-              Connect
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              onClick={openConfirmation}
+            >
+              CONNECT
             </Button>
           )}
           {/* Confirm Button */}
           {passenger.reservationStatus === "pending" && (
-            <Button variant="outlined" size="small" onClick={openConfirmation}>
+            <Button variant="contained" size="small" onClick={openConfirmation}>
               Confirm Seat
             </Button>
           )}
         </CardActions>
+
         {showConfirmation && (
           <ConnectConfirmationCard
             tripDetails={tripDetails}

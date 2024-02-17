@@ -15,11 +15,11 @@ import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Confirmation } from "./Confirmation";
 import { theme } from "../../utils/theme";
-import { CardStatusChip } from "../../components/ui/CardStatusChip";
+// import { CardStatusChip } from "../../components/ui/CardStatusChip";
 import { CancelRequestConfirmationCard } from "../../components/confirmationCards/CancelRequestConfirmationCard";
 import { JoinRequestConfirmationCard } from "../../components/confirmationCards/JoinRequestConfirmationCard";
 import { StyledDetailsCard } from "../../styles/cardStyles";
@@ -36,23 +36,30 @@ import { BottomActionBar } from "../../components/BottomActionBar";
 import { ColorAvatar } from "../../components/ui/ColorAvatar";
 import { StatusChip } from "../../components/ui/StatusChip";
 import InfoSharpIcon from "@mui/icons-material/InfoSharp";
+import { useMyTrips } from "../../context/MyTripsProvider";
+import { useAuthContext } from "../../context/authProvider";
 
-export const TripDetailsCard = ({
-  tripDetails,
-  passengers,
-  userReservation,
-  handleAction,
-}) => {
+export const TripDetailsCard = ({ tripDetails, passengers, handleAction }) => {
+  const { user } = useAuthContext();
+  const { myTrips } = useMyTrips();
   const location = useLocation();
   const { tripId } = useParams();
-
   const navigate = useNavigate();
-  const isInMyTrips = location.state?.isInMyTrips;
-
   const { isFavorited, toggleFavorite, loading } = useFavorite(tripId);
-
   const [showJoinConfirmation, setShowJoinConfirmation] = useState(false);
   const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
+  const [userReservation, setUserReservation] = useState(null);
+
+  useEffect(() => {
+    const currentUserAsPassenger = passengers?.find(
+      (p) => p.username === user.username
+    );
+    if (currentUserAsPassenger) {
+      setUserReservation(currentUserAsPassenger);
+    }
+  }, [passengers, user]);
+
+  const isInMyTrips = myTrips.some((t) => t.id === parseInt(tripId));
 
   const openJoinConfirmation = () => {
     setShowJoinConfirmation(true);
@@ -94,25 +101,29 @@ export const TripDetailsCard = ({
     <>
       <Box>
         <GoBackButton handleGoBack={handleGoBackButton} />
-        <Title variant="h3">Trip Details</Title>
+        {isInMyTrips ? (
+          <Title variant="h3">Trip I'm Joining</Title>
+        ) : (
+          <Title variant="h3">Trip Details</Title>
+        )}
         <TitleDivider />
       </Box>
 
       <StyledDetailsCard variant="outlined">
-        {isInMyTrips && <CardStatusChip isTripOwner={false} />}
+        {/* {userReservation && <CardStatusChip isTripOwner={false} />} */}
 
-        {!isInMyTrips && (
-          <FavoriteButton
-            handleFavorite={handleFavorite}
-            isFavorited={isFavorited}
-          ></FavoriteButton>
-        )}
+        {/* {!userReservation && ( */}
+        <FavoriteButton
+          handleFavorite={handleFavorite}
+          isFavorited={isFavorited}
+        ></FavoriteButton>
+        {/* )} */}
 
         <TripCardContent tripDetails={tripDetails} />
 
         <CardActions>
           <Box>
-            {!userReservation && showJoinConfirmation && (
+            {!isInMyTrips && showJoinConfirmation && (
               <JoinRequestConfirmationCard
                 open={showJoinConfirmation}
                 onClose={closeJoinConfirmation}
@@ -121,7 +132,7 @@ export const TripDetailsCard = ({
               />
             )}
 
-            {userReservation && showCancelConfirmation && (
+            {isInMyTrips && showCancelConfirmation && (
               <CancelRequestConfirmationCard
                 open={showCancelConfirmation}
                 onClose={closeCancelConfirmation}
@@ -183,12 +194,10 @@ export const TripDetailsCard = ({
 
       {/* Bottom action bar */}
       <BottomActionBar
-        variant={userReservation ? "contained" : "contained"}
-        color={userReservation ? "error" : "primary"}
-        onClick={
-          userReservation ? openCancelConfirmation : openJoinConfirmation
-        }
-        buttonText={userReservation ? "Cancel Trip" : "Join Trip"}
+        variant={isInMyTrips ? "contained" : "contained"}
+        color={isInMyTrips ? "error" : "primary"}
+        onClick={isInMyTrips ? openCancelConfirmation : openJoinConfirmation}
+        buttonText={isInMyTrips ? "Cancel Trip" : "Join Trip"}
       />
     </>
   );

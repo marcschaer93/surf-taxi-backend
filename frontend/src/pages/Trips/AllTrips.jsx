@@ -42,6 +42,8 @@ const AllTrips = ({ allTrips }) => {
 
   const isEmpty = visibleTrips.length === 0;
 
+  console.log("VISIBLETREIPS", visibleTrips);
+
   return (
     <>
       <Box>
