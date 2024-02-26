@@ -10,12 +10,26 @@ Furthermore, many surfers are landlocked and are looking for a ride to the coast
 
 This basically means that the modern surfer drives a lot from A to B and back and forth. So there are many potential ride opportunities.
 
-## Technologies
+## Technology Stack
 
-- **Frontend**: React, Material UI for styling
-- **Backend**: Node.js, Express.js for creating the API
-- **Database**: PostgreSQL for data storage
-- **Testing**: Jest and Supertest for backend & vite-test for frontend
+### Frontend:
+
+- **React**: Powers the interactive and user-friendly interface.
+- **Material UI**: Provides ready-to-use design components for a stylish look.
+
+### Backend:
+
+- **Node.js**: Runs the server, handling requests and responses.
+- **Express.js**: Makes it easier to build and manage the server API.
+
+### Database:
+
+- **PostgreSQL**: Stores all the app's data safely and efficiently.
+
+### Testing:
+
+- **Jest and Supertest**: Test the backend to make sure everything works as expected.
+- **Vite-test**: Helps ensure the frontend runs smoothly and correctly.
 
 ## Project Structure
 
