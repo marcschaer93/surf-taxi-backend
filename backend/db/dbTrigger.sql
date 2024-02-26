@@ -64,27 +64,27 @@ $$ LANGUAGE plpgsql;
 
 -- Create triggers for handling join requests, approvals, and rejections
 CREATE TRIGGER notify_join_request_trigger
-AFTER INSERT ON passengers
+AFTER INSERT ON reservations
 FOR EACH ROW
-WHEN (NEW.reservation_status = 'requested')
+WHEN (NEW.status = 'requested')
 EXECUTE FUNCTION notify_join_request();
 
 CREATE TRIGGER notify_pending_trigger
-AFTER UPDATE ON passengers
+AFTER UPDATE ON reservations
 FOR EACH ROW
-WHEN (NEW.reservation_status = 'pending')
+WHEN (NEW.status = 'pending')
 EXECUTE FUNCTION notify_pending();
 
 CREATE TRIGGER notify_approval_trigger
-AFTER UPDATE ON passengers
+AFTER UPDATE ON reservations
 FOR EACH ROW
-WHEN (NEW.reservation_status = 'confirmed')
+WHEN (NEW.status = 'confirmed')
 EXECUTE FUNCTION notify_approval();
 
 CREATE TRIGGER notify_rejection_trigger
-AFTER UPDATE ON passengers
+AFTER UPDATE ON reservations
 FOR EACH ROW
-WHEN (NEW.reservation_status = 'rejected')
+WHEN (NEW.status = 'rejected')
 EXECUTE FUNCTION notify_rejection();
 
 

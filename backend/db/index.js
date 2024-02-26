@@ -14,7 +14,7 @@ const pool = new Pool({
       }
     : false,
 
-  //more config options below:
+  //more config options below (not important):
   user: "marcschaer",
   password: process.env.PSQL_PASSWORD,
   host: "localhost",

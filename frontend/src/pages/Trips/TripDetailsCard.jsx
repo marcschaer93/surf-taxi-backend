@@ -39,7 +39,11 @@ import InfoSharpIcon from "@mui/icons-material/InfoSharp";
 import { useMyTrips } from "../../context/MyTripsProvider";
 import { useAuthContext } from "../../context/authProvider";
 
-export const TripDetailsCard = ({ tripDetails, passengers, handleAction }) => {
+export const TripDetailsCard = ({
+  tripDetails,
+  reservations,
+  handleAction,
+}) => {
   const { user } = useAuthContext();
   const { myTrips } = useMyTrips();
   const location = useLocation();
@@ -51,13 +55,13 @@ export const TripDetailsCard = ({ tripDetails, passengers, handleAction }) => {
   const [userReservation, setUserReservation] = useState(null);
 
   useEffect(() => {
-    const currentUserAsPassenger = passengers?.find(
-      (p) => p.username === user.username
+    const currentUserAsReservation = reservations?.find(
+      (r) => r.username === user.username
     );
-    if (currentUserAsPassenger) {
-      setUserReservation(currentUserAsPassenger);
+    if (currentUserAsReservation) {
+      setUserReservation(currentUserAsReservation);
     }
-  }, [passengers, user]);
+  }, [reservations, user]);
 
   const isInMyTrips = myTrips.some((t) => t.id === parseInt(tripId));
 
@@ -164,7 +168,7 @@ export const TripDetailsCard = ({ tripDetails, passengers, handleAction }) => {
             <StatusChip
               sx={{}}
               isTripOwner={false}
-              status={userReservation.reservationStatus}
+              status={userReservation.status}
             />
           </Box>
         </Box>
@@ -189,7 +193,7 @@ export const TripDetailsCard = ({ tripDetails, passengers, handleAction }) => {
       <Box sx={{ marginBottom: "80px" }}>
         <TitleDivider />
         <Typography variant="h5">Reserved Seats</Typography>
-        <PassengerAvatars passengers={passengers} />
+        <PassengerAvatars reservations={reservations} />
       </Box>
 
       {/* Bottom action bar */}

@@ -4,12 +4,12 @@ import { Box } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 import { useAuthContext } from "../../context/authProvider";
-import * as PassengerApi from "../../api/services/PassengerApi";
+import * as PassengerApi from "../../api/services/ReservationApi";
 import * as TripApi from "../../api/services/TripApi";
 import * as UserApi from "../../api/services/UserApi";
 import { TripDetailsCard } from "./TripDetailsCard";
 import { OwnerTripDetailsCard } from "./OwnerTripDetailsCard";
-import { useTripPassengers } from "../../hooks/useTripPassengers";
+import { useTripReservations } from "../../hooks/useTripReservations";
 import { useTripDetails } from "../../hooks/useTripDetails";
 import { useMyTrips } from "../../context/MyTripsProvider";
 import { Loading } from "../../components/ui/Loading";
@@ -34,10 +34,10 @@ const TripDetailsPage = ({ allTrips }) => {
   const [loadingAction, setLoadingAction] = useState(false);
 
   const {
-    fetchPassengersForTrip,
-    passengers,
+    fetchReservationsForTrip,
+    reservations,
     handleAction,
-    loadingPassengers,
+    loadingReservations,
   } = useMyTrips();
 
   useEffect(() => {
@@ -61,8 +61,8 @@ const TripDetailsPage = ({ allTrips }) => {
 
   useEffect(() => {
     // Fetch passengers when the component mounts or tripId changes
-    fetchPassengersForTrip(tripId);
-  }, [fetchPassengersForTrip, tripId]);
+    fetchReservationsForTrip(tripId);
+  }, [fetchReservationsForTrip, tripId]);
 
   // const [userReservation, setUserReservation] = useState(null);
 
@@ -78,7 +78,7 @@ const TripDetailsPage = ({ allTrips }) => {
   //   }
   // }, [passengers, user]);
 
-  if (loadingTripDetails || loadingPassengers || loadingAction)
+  if (loadingTripDetails || loadingReservations || loadingAction)
     return <Loading />;
 
   return (
@@ -86,13 +86,13 @@ const TripDetailsPage = ({ allTrips }) => {
       {isTripOrganizer ? (
         <OwnerTripDetailsCard
           tripDetails={tripDetails}
-          passengers={passengers}
+          reservations={reservations}
           handleAction={handleAction}
         />
       ) : (
         <TripDetailsCard
           tripDetails={tripDetails}
-          passengers={passengers}
+          reservations={reservations}
           handleAction={handleAction}
         />
       )}

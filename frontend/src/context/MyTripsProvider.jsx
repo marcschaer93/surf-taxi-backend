@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useNavigate } from "react-router-dom";
 
-import * as PassengerApi from "../api/services/PassengerApi";
+import * as ReservationApi from "../api/services/ReservationApi";
 import * as TripApi from "../api/services/TripApi";
 import * as UserApi from "../api/services/UserApi";
 import { useAuthContext } from "../context/authProvider";
@@ -21,9 +21,9 @@ export const MyTripsProvider = ({ children }) => {
   const navigate = useNavigate();
   const [loadingAction, setLoadingAction] = useState(false);
   const { showBoundary } = useErrorBoundary();
-  const [passengers, setPassengers] = useState([]);
-  const [loadingPassengers, setLoadingPassengers] = useState(false); // false!
-  const [passengerError, setPassengerError] = useState(null);
+  const [reservations, setReservations] = useState([]);
+  const [loadingReservations, setLoadingReservations] = useState(false); // false!
+  const [reservationError, setReservationError] = useState(null);
 
   // const { myTrips, setMyTrips, loadingMyTrips, setLoadingMyTrips } =
   //   useFetchMyTrips();
@@ -52,17 +52,19 @@ export const MyTripsProvider = ({ children }) => {
     }
   }, [user]);
 
-  // get all trip passengers
-  const fetchPassengersForTrip = useCallback(async (tripId) => {
-    setLoadingPassengers(true);
+  // get all trip reservations
+  const fetchReservationsForTrip = useCallback(async (tripId) => {
+    setLoadingReservations(true);
     try {
-      const fetchedPassengers = await PassengerApi.getTripPassengers(tripId);
-      setPassengers(fetchedPassengers);
+      const fetchedReservations = await ReservationApi.getAllTripReservations(
+        tripId
+      );
+      setReservations(fetchedReservations);
     } catch (error) {
-      console.error("Failed to fetch passengers", error);
-      setPassengerError(error);
+      console.error("Failed to fetch reservations", error);
+      setReservationError(error);
     } finally {
-      setLoadingPassengers(false);
+      setLoadingReservations(false);
     }
   }, []);
 
@@ -77,7 +79,7 @@ export const MyTripsProvider = ({ children }) => {
           seats: parsedSeats,
         });
 
-        const newTrip = { ...newTripData, userReservationStatus: "Organizer" };
+        const newTrip = { ...newTripData, userReservationStatus: "organizer" };
         setMyTrips((prevTrips) => [...prevTrips, newTrip]);
         console.log("Trip created successfully:", newTrip);
       } catch (error) {
@@ -115,14 +117,14 @@ export const MyTripsProvider = ({ children }) => {
       try {
         switch (actionType) {
           case "join":
-            const newJoinRequest = await PassengerApi.requestToJoin(
+            const newReservation = await ReservationApi.createNewReservation(
               data.tripDetails.id
             );
             // IMPORTANT
-            setPassengers((prev) => [...prev, newJoinRequest]);
+            setReservations((prev) => [...prev, newReservation]);
             const joinedTrip = {
               ...data.tripDetails,
-              userReservationStatus: newJoinRequest.reservationStatus,
+              userReservationStatus: newReservation.status,
             };
             setMyTrips((prevTrips) => [
               joinedTrip,
@@ -132,9 +134,9 @@ export const MyTripsProvider = ({ children }) => {
             break;
 
           case "cancel":
-            await PassengerApi.cancelJoinRequest(data.tripDetails.id);
+            await ReservationApi.deleteOneReservation(data.tripDetails.id);
             // IMPORTANT
-            setPassengers((prev) =>
+            setReservations((prev) =>
               prev.filter((p) => p.username !== user.username)
             );
             setMyTrips((prevTrips) =>
@@ -148,24 +150,25 @@ export const MyTripsProvider = ({ children }) => {
             setMyTrips((prevTrips) =>
               prevTrips.filter((trip) => trip.id !== data.tripDetails.id)
             );
-            setPassengers((prev) =>
+            setReservations((prev) =>
               prev.filter((p) => p.tripId !== data.tripDetails.id)
             );
             navigate("/my-trips");
             break;
 
           case "confirm":
-            const confirmedPassenger = await PassengerApi.updatePassengerStatus(
-              data.tripDetails.id,
-              data.passengerUsername,
-              "confirmed"
-            );
-            setPassengers((prev) =>
+            const confirmedReservation =
+              await ReservationApi.updateOneReservation(
+                data.tripDetails.id,
+                data.reservationUsername,
+                "confirmed"
+              );
+            setReservations((prev) =>
               prev.map((p) =>
-                p.username === data.passengerUsername
+                p.username === data.reservationUsername
                   ? {
                       ...p,
-                      reservationStatus: confirmedPassenger.reservationStatus,
+                      status: confirmedReservation.status,
                     }
                   : p
               )
@@ -174,18 +177,19 @@ export const MyTripsProvider = ({ children }) => {
             break;
 
           case "connect":
-            const pendingPassenger = await PassengerApi.updatePassengerStatus(
-              data.tripDetails.id,
-              data.passengerUsername,
-              "pending"
-            );
+            const pendingReservation =
+              await ReservationApi.updateOneReservation(
+                data.tripDetails.id,
+                data.reservationUsername,
+                "pending"
+              );
             // ??
-            setPassengers((prev) =>
+            setReservations((prev) =>
               prev.map((p) =>
-                p.username === data.passengerUsername
+                p.username === data.reservationUsername
                   ? {
                       ...p,
-                      reservationStatus: pendingPassenger.reservationStatus,
+                      status: pendingReservation.status,
                     }
                   : p
               )
@@ -208,9 +212,9 @@ export const MyTripsProvider = ({ children }) => {
     loadingMyTrips,
     addTrip,
     handleAction,
-    fetchPassengersForTrip,
-    passengers,
-    loadingPassengers,
+    fetchReservationsForTrip,
+    reservations,
+    loadingReservations,
   };
 
   return (

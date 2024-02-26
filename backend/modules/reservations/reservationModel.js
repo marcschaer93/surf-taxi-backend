@@ -1,0 +1,186 @@
+const bcrypt = require("bcrypt");
+
+const db = require("../../db");
+const sqlReady = require("../../helpers/sqlReady");
+const jsReady = require("../../helpers/jsReady");
+
+const {
+  NotFoundError,
+  BadRequestError,
+  UnauthorizedError,
+  ExpressError,
+} = require("../../helpers/expressError");
+const { BCRYPT_WORK_FACTOR } = require("../../config");
+
+/** RESERVATION API
+ *
+ * Related functions for reservations.
+ **/
+class ReservationApi {
+  static async getAllTripReservations(tripId) {
+    const allTripReservationsResult = await db.query(
+      `
+      SELECT * 
+      FROM reservations
+      WHERE trip_id =$1
+  
+      `,
+      [tripId]
+    );
+
+    const tripReservations = allTripReservationsResult.rows.map((row) =>
+      jsReady.convertKeysToCamelCase(row)
+    );
+
+    return tripReservations;
+  }
+
+  static async createNewReservation(tripId, currentUser) {
+    const tripCheckResult = await db.query(
+      `SELECT * FROM trips WHERE id = $1`,
+      [tripId]
+    );
+
+    const trip = tripCheckResult.rows[0];
+    const tripOwner = trip.owner;
+    if (!trip) throw new NotFoundError(`No trip found with id: ${tripId}`);
+    if (tripOwner === currentUser)
+      throw new BadRequestError(
+        `Can't Request. You are the owner of the trip with ID: ${tripId}.`
+      );
+
+    const reservationCheckResult = await db.query(
+      `
+      SELECT * FROM reservations
+      WHERE username = $1
+      AND trip_id = $2
+      `,
+      [currentUser, tripId]
+    );
+
+    const reservation = reservationCheckResult.rows[0];
+
+    if (reservation) {
+      if (reservation.status === "rejected") {
+        throw new BadRequestError(
+          `You got already rejected to join the trip with ID: ${tripId}.`
+        );
+      }
+
+      throw new BadRequestError(
+        `You have already requested to join trip with ID: ${tripId}`
+      );
+    }
+
+    const insertReservationResult = await db.query(
+      `
+      INSERT INTO reservations
+      (username, trip_id, status, reservation_timestamp)
+      VALUES ($1, $2, $3, CURRENT_TIMESTAMP )
+      RETURNING *
+      `,
+      [currentUser, tripId, "requested"]
+    );
+
+    const newReservation = jsReady.convertKeysToCamelCase(
+      insertReservationResult.rows[0]
+    );
+
+    if (!newReservation)
+      throw new ExpressError(
+        `Failed to insert request status for trip with ID ${tripId}`
+      );
+
+    return newReservation;
+  }
+
+  static async deleteOneReservation(tripId, currentUser) {
+    const validReservationResult = await db.query(
+      `
+      SELECT *
+      FROM reservations
+      WHERE trip_id = $1
+      AND username = $2
+      `,
+      [tripId, currentUser]
+    );
+
+    const reservation = validReservationResult.rows[0];
+    if (!reservation)
+      throw new NotFoundError(
+        `No reservation found with id: ${tripId} and username ${currentUser}`
+      );
+
+    if (reservation.status === "confirmed") {
+      throw new BadRequestError(
+        `The trip membership status for trip with id ${tripId} and username ${currentUser} is already 'approved', make a 'Cancel-Approved-Trip-Request'`
+      );
+    }
+
+    const deletedResult = await db.query(
+      `
+      DELETE
+      FROM reservations
+      WHERE trip_id = $1
+      AND username = $2
+      RETURNING *
+      `,
+      [tripId, currentUser]
+    );
+    const removedReservation = jsReady.convertKeysToCamelCase(
+      deletedResult.rows[0]
+    );
+    if (!removedReservation)
+      throw new NotFoundError(`Could not remove reservation!`);
+
+    return removedReservation;
+  }
+
+  static async getTripPassengers(tripId) {
+    const tripPassengersResult = await db.query(
+      `
+        SELECT * 
+        FROM passengers
+        WHERE trip_id = $1
+      `,
+      [tripId]
+    );
+
+    const tripPassengers = tripPassengersResult.rows.map((row) =>
+      jsReady.convertKeysToCamelCase(row)
+    );
+
+    return tripPassengers; // even if empty
+  }
+
+  static async updateOneReservation(tripId, reservationUsername, newStatus) {
+    const updateReservationResult = await db.query(
+      `
+        UPDATE 
+          reservations
+        SET 
+          status = $1, 
+          reservation_timestamp = CURRENT_TIMESTAMP
+        WHERE 
+          trip_id = $2
+        AND 
+          username = $3
+        RETURNING 
+          *
+      `,
+      [newStatus, tripId, reservationUsername]
+    );
+
+    if (updateReservationResult.rows.length === 0) {
+      throw new Error("Reservation not found or no rows updated");
+    }
+
+    const updatedReservation = jsReady.convertKeysToCamelCase(
+      updateReservationResult.rows[0]
+    );
+
+    return updatedReservation;
+  }
+}
+
+module.exports = ReservationApi;

@@ -6,7 +6,7 @@
 \prompt 'Return for yes or control-C to cancel > ' foo
 
 -- Delete and recreate tables for surf_taxi_test db
-DROP TABLE IF EXISTS passengers CASCADE;
+DROP TABLE IF EXISTS reservations CASCADE;
 DROP TABLE IF EXISTS trips CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 

@@ -6,7 +6,7 @@
 -- Delete and recreate tables for surf_taxi db
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS trips CASCADE;
-DROP TABLE IF EXISTS passengers CASCADE;
+DROP TABLE IF EXISTS reservations CASCADE;
 DROP TABLE IF EXISTS notifications CASCADE;
 
 -- Recreate tables

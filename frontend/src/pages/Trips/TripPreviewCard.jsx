@@ -31,6 +31,8 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
   const { user } = useAuthContext();
   const tripId = tripDetails?.id;
 
+  console.log("TRIP DETAIULS", tripDetails);
+
   // Favorite trips hook (only for logged in users)
   const { isFavorited, toggleFavorite } = useFavorite(tripId);
 

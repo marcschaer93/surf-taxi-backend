@@ -33,17 +33,17 @@ function stringAvatar(username) {
   };
 }
 
-export const PassengerAvatars = ({ passengers }) => {
+export const PassengerAvatars = ({ reservations }) => {
   // Filter passengers based on reservationStatus
-  const filteredPassengers = passengers.filter(
-    (p) => p.reservationStatus === "confirmed"
+  const filteredReservations = reservations.filter(
+    (r) => r.status === "confirmed"
   );
 
   return (
     <>
-      {filteredPassengers.length > 0 ? (
+      {filteredReservations.length > 0 ? (
         <Stack direction="row" spacing={2}>
-          {filteredPassengers.map((p) => (
+          {filteredReservations.map((p) => (
             <Box
               key={p.username}
               sx={{

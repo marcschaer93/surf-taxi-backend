@@ -64,11 +64,11 @@ class TripApi {
           T.travel_info,
           T.seats,
           T.costs,
-          json_agg(jsonb_build_object('username', P.username, 'reservationStatus', P.reservation_status, 'reservationTimestamp', P.reservation_timestamp) ORDER BY P.username) AS passengers
+          json_agg(jsonb_build_object('username', R.username, 'status', R.status, 'reservationTimestamp', R.reservation_timestamp) ORDER BY R.username) AS reservations
         FROM
           trips AS T
         LEFT JOIN
-          passengers AS P ON T.id = P.trip_id
+          reservations AS R ON T.id = R.trip_id
         WHERE
           T.id = $1
         GROUP BY

@@ -24,9 +24,9 @@ VALUES
   ('2024-01-25', 'testadmin', 'City C', 'City D', 'City E', 'Trip from C to D with a stop at E', 3, '25 USD');
 
 
--- Seed data for Passengers table
+-- Seed data for Reservations table
 
-INSERT INTO passengers (username, trip_id, reservation_status, reservation_timestamp)
+INSERT INTO reservations (username, trip_id, status, reservation_timestamp)
 VALUES
   ('testuser', 3, 'pending', '2024-01-01 12:00:00.000000' ),
   ('testadmin', 1,  'requested', '2024-01-01 12:00:00.000000'),

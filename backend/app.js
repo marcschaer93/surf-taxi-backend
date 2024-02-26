@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const authRoutes = require("./modules/authentication/authRoutes");
 const userRoutes = require("./modules/users/userRoutes");
 const tripRoutes = require("./modules/trips/tripRoutes");
-const passengerRoutes = require("./modules/passengers/passengerRoutes");
+const reservationRoutes = require("./modules/reservations/reservationRoutes");
 const { authenticateJWT } = require("./middleware/authenticate");
 const {
   handle404Error,
@@ -33,7 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/trips", tripRoutes);
-app.use("/api/passengers/trips", passengerRoutes);
+app.use("/api/reservations", reservationRoutes);
 
 // /** Handle 404 errors -- this matches everything */
 app.use(handle404Error);

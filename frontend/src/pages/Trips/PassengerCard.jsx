@@ -27,13 +27,13 @@ import { StatusChip } from "../../components/ui/StatusChip";
 export const PassengerCard = ({
   tripDetails,
   passengerNotification,
-  passenger,
+  reservation,
 
   handleGoBack,
   handleConfirmConnect,
   handleAction,
 }) => {
-  console.log("passenegercard name", passenger.username);
+  console.log("passenegercard name", reservation.username);
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -70,18 +70,18 @@ export const PassengerCard = ({
 
         <CardContent>
           <Box
-            key={passenger.username + passenger.trip_id}
+            key={reservation.username + reservation.trip_id}
             sx={{ display: "flex", justifyContent: "space-between" }}
           >
-            <ColorAvatar username={passenger.username} />
+            <ColorAvatar username={reservation.username} />
 
-            <StatusChip status={passenger.reservationStatus} />
+            <StatusChip status={reservation.status} />
           </Box>
         </CardContent>
 
         <CardActions sx={{ display: "flex", justifyContent: "left" }}>
           {/* Connect Button */}
-          {passenger.reservationStatus === "requested" && (
+          {reservation.status === "requested" && (
             <Button
               variant="outlined"
               color="primary"
@@ -92,7 +92,7 @@ export const PassengerCard = ({
             </Button>
           )}
           {/* Confirm Button */}
-          {passenger.reservationStatus === "pending" && (
+          {reservation.status === "pending" && (
             <Button variant="contained" size="small" onClick={openConfirmation}>
               Confirm Seat
             </Button>
@@ -102,7 +102,7 @@ export const PassengerCard = ({
         {showConfirmation && (
           <ConnectConfirmationCard
             tripDetails={tripDetails}
-            passenger={passenger}
+            reservation={reservation}
             open={showConfirmation}
             onClose={closeConfirmation}
             handleAction={handleAction}

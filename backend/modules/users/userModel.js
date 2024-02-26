@@ -143,14 +143,14 @@ class UserApi {
         T.costs,
         CASE
       WHEN T.owner = $1 THEN 'organizer'
-      ELSE P.reservation_status
+      ELSE R.status
       END AS user_reservation_status
       FROM
         trips T
       LEFT JOIN
-        passengers P ON T.id = P.trip_id AND P.username = $1
+        reservations R ON T.id = R.trip_id AND R.username = $1
       WHERE
-        T.owner = $1 OR P.username = $1;
+        T.owner = $1 OR R.username = $1;
     `,
 
       [loggedInUser]
@@ -175,11 +175,11 @@ class UserApi {
   //       T.travel_info,
   //       T.seats,
   //       T.costs,
-  //       json_agg(jsonb_build_object('username', P.username, 'reservationStatus', P.reservation_status, 'reservationTimestamp', P.reservation_timestamp ) ORDER BY P.username) AS passengers
+  //       json_agg(jsonb_build_object('username', P.username, 'reservationStatus', P.reservation_status, 'reservationTimestamp', P.reservation_timestamp ) ORDER BY P.username) AS reservations
   //     FROM
   //       trips AS T
   //     LEFT JOIN
-  //       passengers AS P ON T.id = P.trip_id
+  //       reservations AS P ON T.id = P.trip_id
   //     WHERE
   //       T.owner = $1 OR P.username = $1
   //     GROUP BY
@@ -209,11 +209,11 @@ class UserApi {
   //       trips.travel_info,
   //       trips.seats,
   //       trips.costs,
-  //       passengers.username AS passenger_username,
-  //       passengers.reservation_status
+  //       reservations.username AS passenger_username,
+  //       reservations.reservation_status
   //     FROM trips
-  //     LEFT JOIN passengers ON trips.id = passengers.trip_id
-  //     WHERE trips.owner = $1 OR passengers.username = $1
+  //     LEFT JOIN reservations ON trips.id = reservations.trip_id
+  //     WHERE trips.owner = $1 OR reservations.username = $1
   //     `,
 
   //     [loggedInUser]
@@ -230,7 +230,7 @@ class UserApi {
     const oneUserReservationResult = await db.query(
       `
       SELECT *
-      FROM passengers
+      FROM reservations
       WHERE username = $1 
       AND trip_id = $2
       `,
@@ -254,7 +254,7 @@ class UserApi {
     const allUserReservationsResult = await db.query(
       `
       SELECT * 
-      FROM passengers 
+      FROM reservations 
       WHERE username =$1
   
       `,

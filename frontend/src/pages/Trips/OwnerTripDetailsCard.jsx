@@ -28,7 +28,7 @@ import { StatusChip } from "../../components/ui/StatusChip";
 
 export const OwnerTripDetailsCard = ({
   tripDetails,
-  passengers,
+  reservations,
   handleAction,
 }) => {
   const navigate = useNavigate();
@@ -40,8 +40,8 @@ export const OwnerTripDetailsCard = ({
     navigate(-1);
   };
 
-  const notConfirmedPassengers = passengers.filter(
-    (p) => p.reservationStatus !== "confirmed"
+  const notConfirmedReservations = reservations.filter(
+    (r) => r.status !== "confirmed"
   );
 
   return (
@@ -55,7 +55,7 @@ export const OwnerTripDetailsCard = ({
 
         <StyledDetailsCard variant="outlined">
           <Box sx={{ position: "absolute", top: 18, right: 18 }}>
-            <StatusChip status={"organizer"} />
+            <StatusChip isTripOwner={true} status={"organizer"} />
           </Box>
 
           <TripCardContent tripDetails={tripDetails} />
@@ -75,12 +75,12 @@ export const OwnerTripDetailsCard = ({
         {/* Requests */}
         <Box>
           <Typography variant="h5">My Requests</Typography>
-          {notConfirmedPassengers && notConfirmedPassengers.length > 0 ? (
-            notConfirmedPassengers.map((p) => (
+          {notConfirmedReservations && notConfirmedReservations.length > 0 ? (
+            notConfirmedReservations.map((r) => (
               <PassengerCard
-                key={`${p.username} + ${p.trip_id}`}
+                key={`${r.username} + ${r.trip_id}`}
                 tripDetails={tripDetails}
-                passenger={p}
+                reservation={r}
                 handleAction={handleAction}
               />
             ))
@@ -89,11 +89,11 @@ export const OwnerTripDetailsCard = ({
           )}
         </Box>
 
-        {/* Passengers */}
+        {/* Reservations */}
         <Box>
           <TitleDivider />
           <Typography variant="h5">Reserved Seats</Typography>
-          <PassengerAvatars passengers={passengers} />
+          <PassengerAvatars reservations={reservations} />
         </Box>
 
         <TitleDivider />
