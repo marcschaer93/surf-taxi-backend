@@ -1,6 +1,4 @@
-# Surf Taxi
-
-## Full Stack Application
+# Surf Taxi: A Full Stack Single Page Application for Surfing Enthusiasts
 
 ## Overview
 
@@ -33,7 +31,7 @@ This basically means that the modern surfer drives a lot from A to B and back an
 1. Create the Surf Taxi database: `createdb surf_taxi`
 2. Initialize the database: `psql -U [psql username] -d surf_taxi -f dbSetup.sql`
 
-For more detailed information on the database schema, including tables, relationships, and indices, please refer to the documentation provided in the `docs/` directory under [databaseSchema](docs/databaseSchema).
+For more detailed information on the database schema, including tables, relationships, and indices, please refer to the documentation provided in the `docs/` directory under [databaseSchema](backend/docs/databaseSchema).
 
 #### Starting the Backend:
 
