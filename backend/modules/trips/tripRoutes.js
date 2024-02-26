@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const asyncHandler = require("express-async-handler");
 
 const tripController = require("./tripController");
 const { authenticate } = require("../../middleware/authenticate");
@@ -9,28 +8,23 @@ const { validateInputs } = require("../../middleware/validateInputs");
 const { createTripSchema } = require("./tripSchemas/createTripSchema");
 const { updateTripSchema } = require("./tripSchemas/updateTripSchema");
 
-module.exports = router;
-
 /// TRIP ROUTES ///
 
-// POST request for creating Trip.
+// List all trips
+router.get("/", tripController.getAllTrips);
+
+// Get a single trip
+router.get("/:tripId", tripController.getOneTrip);
+
+// Create a new trip
 router.post(
   "/",
   authenticate,
-  // ensureCorrectUser,
   validateInputs(createTripSchema),
   tripController.createNewTrip
 );
 
-// POST request to delete Trip as ADMIN.
-router.delete(
-  "/:tripId",
-  authenticate,
-  authorize("admin"),
-  tripController.deleteOneTrip
-);
-
-// PATCH request to update Trip.
+// Update a trip
 router.patch(
   "/:tripId",
   authenticate,
@@ -38,9 +32,12 @@ router.patch(
   tripController.updateOneTrip
 );
 
-// GET request for one Trip.
-router.get("/:tripId", tripController.getOneTrip);
-// router.get("/:tripId", asyncHandler(tripController.getOneTrip));
+// Delete a trip (Admin only)
+router.delete(
+  "/:tripId",
+  authenticate,
+  authorize("admin"),
+  tripController.deleteOneTrip
+);
 
-// GET request for list of all Trips.
-router.get("/", tripController.getAllTrips);
+module.exports = router;

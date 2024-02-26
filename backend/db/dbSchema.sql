@@ -40,6 +40,21 @@ CREATE TABLE passengers (
   PRIMARY KEY (username, trip_id)
 );
 
+-- CREATE TABLE reservations (
+--   id SERIAL PRIMARY KEY,
+--   username VARCHAR(25) 
+--     REFERENCES users(username) ON DELETE CASCADE,
+--   trip_id INTEGER 
+--     REFERENCES trips(id) ON DELETE CASCADE,
+--   status VARCHAR(20),  -- e.g., 'requested', 'confirmed', 'canceled'
+--   reservation_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   -- Additional fields to consider adding:
+--   -- number_of_passengers INTEGER DEFAULT 1,  -- Represents the number of people included in this reservation
+--   -- notes TEXT  -- Any special requests or notes related to this reservation
+-- );
+
+
+
 CREATE TABLE notifications (
   id SERIAL PRIMARY KEY,
   sender_username VARCHAR(25),  -- Represents the user who sends the notification (e.g., sends a join request)

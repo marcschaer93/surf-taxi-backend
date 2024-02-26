@@ -40,29 +40,6 @@ exports.cancelJoinRequest = asyncHandler(async (req, res, next) => {
   });
 });
 
-/** RESPOND TO JOIN REQUEST
- *
- * Handle respond to trip membership on PATCH as TRIP OWNER
- **/
-exports.respondToJoinRequest = asyncHandler(async (req, res, next) => {
-  const tripId = parseInt(req.params.tripId);
-  const currentUser = req.username;
-  const passenger = req.params.passengerUsername;
-  const response = req.body.response;
-
-  const tripJoinResponse = await PassengerApi.respondToJoinRequest(
-    tripId,
-    currentUser,
-    passenger,
-    response
-  );
-
-  res.status(200).json({
-    success: true,
-    data: { tripJoinResponse, tripOwner: currentUser, passenger: passenger },
-  });
-});
-
 exports.getTripPassengers = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.tripId);
   const tripPassengers = await PassengerApi.getTripPassengers(tripId);
@@ -83,3 +60,31 @@ exports.updatePassengerStatus = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: updatedPassenger });
 });
+
+//
+//
+//
+//
+//
+/** RESPOND TO JOIN REQUEST
+ *
+ * Handle respond to trip membership on PATCH as TRIP OWNER
+ **/
+// exports.respondToJoinRequest = asyncHandler(async (req, res, next) => {
+//   const tripId = parseInt(req.params.tripId);
+//   const currentUser = req.username;
+//   const passenger = req.params.passengerUsername;
+//   const response = req.body.response;
+
+//   const tripJoinResponse = await PassengerApi.respondToJoinRequest(
+//     tripId,
+//     currentUser,
+//     passenger,
+//     response
+//   );
+
+//   res.status(200).json({
+//     success: true,
+//     data: { tripJoinResponse, tripOwner: currentUser, passenger: passenger },
+//   });
+// });

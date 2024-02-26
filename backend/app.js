@@ -23,10 +23,11 @@ app.use(cors());
 // Parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
-  console.log(`Incoming request: ${req.method} ${req.path}`);
-  next();
-});
+/**  see/test incoming request */
+// app.use((req, res, next) => {
+//   console.log(`Incoming request: ${req.method} ${req.path}`);
+//   next();
+// });
 
 // Mounting the API routes
 app.use("/api/auth", authRoutes);

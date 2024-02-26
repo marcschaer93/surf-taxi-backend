@@ -12,21 +12,21 @@ This basically means that the modern surfer drives a lot from A to B and back an
 
 ## Technology Stack
 
-### Frontend:
+#### Frontend:
 
 - **React**: Powers the interactive and user-friendly interface.
 - **Material UI**: Provides ready-to-use design components for a stylish look.
 
-### Backend:
+#### Backend:
 
 - **Node.js**: Runs the server, handling requests and responses.
 - **Express.js**: Makes it easier to build and manage the server API.
 
-### Database:
+#### Database:
 
 - **PostgreSQL**: Stores all the app's data safely and efficiently.
 
-### Testing:
+#### Testing:
 
 - **Jest and Supertest**: Test the backend to make sure everything works as expected.
 - **Vite-test**: Helps ensure the frontend runs smoothly and correctly.
@@ -68,7 +68,7 @@ For more detailed information on the database schema, including tables, relation
 ### Testing the Backend
 
 1. Create the Surf Taxi Test database: `createdb surf_taxi_test`
-2. Initialize the database: `psql -U [psql username] -d surf_taxi_test -f dbSetupTests.sql`
+2. Initialize the database: `psql -U [psql username] -d surf_taxi_test -f db/dbSetupTests.sql`
 3. Ensure Jest and Supertest are installed: `npm install --save-dev jest supertest`
 4. Run tests: `npm test`
 
@@ -91,6 +91,8 @@ The backend API supports various endpoints for trips, passengers, notifications,
 
 ## Deployment
 
+The application is optimized for mobile use and is best experienced on mobile devices or through device emulation tools like Chrome DevTools set to iPhone 7.
+
 The application is deployed on Render:
 
 - **Backend**: [https://surf-taxi-api.onrender.com](https://surf-taxi-api.onrender.com)
@@ -98,4 +100,9 @@ The application is deployed on Render:
 
 ## Author
 
-Marc Schaer - Feel free to reach out for any questions or feedback.
+**Marc Schaer**
+
+Feel free to reach out for any questions or feedback:
+
+- Email: marc.schaer93@gmail.com
+- LinkedIn: [https://www.linkedin.com/in/marc-sch%C3%A4r-216283262/](https://www.linkedin.com/in/marc-sch%C3%A4r-216283262/)

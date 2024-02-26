@@ -129,52 +129,52 @@ class PassengerApi {
     return removedJoinRequest;
   }
 
-  /** RESPOND TO A JOIN REQUEST
-   *
-   * Updates the status of a trip request.
-   * @param {string} id - ID of the trip request.
-   * @param {string} request_status - New request status.
-   * @returns {object} - Updated trip request object.
-   **/
-  static async respondToJoinRequest(tripId, currentUser, passenger, response) {
-    const validPassengerResult = await db.query(
-      `
-          SELECT *
-          FROM passengers
-          WHERE trip_id = $1
-          AND username = $2
-          `,
-      [tripId, passenger]
-    );
+  // /** RESPOND TO A JOIN REQUEST
+  //  *
+  //  * Updates the status of a trip request.
+  //  * @param {string} id - ID of the trip request.
+  //  * @param {string} request_status - New request status.
+  //  * @returns {object} - Updated trip request object.
+  //  **/
+  // static async respondToJoinRequest(tripId, currentUser, passenger, response) {
+  //   const validPassengerResult = await db.query(
+  //     `
+  //         SELECT *
+  //         FROM passengers
+  //         WHERE trip_id = $1
+  //         AND username = $2
+  //         `,
+  //     [tripId, passenger]
+  //   );
 
-    const joinRequest = validPassengerResult.rows[0];
-    if (!joinRequest)
-      throw new NotFoundError(
-        `No passenger/ join request found with id: ${tripId} and username${passenger}`
-      );
+  //   const joinRequest = validPassengerResult.rows[0];
+  //   if (!joinRequest)
+  //     throw new NotFoundError(
+  //       `No passenger/ join request found with id: ${tripId} and username${passenger}`
+  //     );
 
-    // Update reservation_status and get the updated row
-    const updateResult = await db.query(
-      `
-          UPDATE passengers
-          SET reservation_status = $1, reservation_timestamp = CURRENT_TIMESTAMP
-          WHERE trip_id = $2 AND username = $3
-          RETURNING reservation_status AS 'reservationStatus'
-          `,
-      [response, tripId, passenger]
-    );
+  //   // Update reservation_status and get the updated row
+  //   const updateResult = await db.query(
+  //     `
+  //         UPDATE passengers
+  //         SET reservation_status = $1, reservation_timestamp = CURRENT_TIMESTAMP
+  //         WHERE trip_id = $2 AND username = $3
+  //         RETURNING reservation_status AS 'reservationStatus'
+  //         `,
+  //     [response, tripId, passenger]
+  //   );
 
-    const tripJoinResponse = jsReady.convertKeysToCamelCase(
-      updateResult.rows[0]
-    );
+  //   const tripJoinResponse = jsReady.convertKeysToCamelCase(
+  //     updateResult.rows[0]
+  //   );
 
-    if (!tripJoinResponse)
-      throw new ExpressError(
-        `Failed to update reservation status for trip with ID ${tripId}`
-      );
+  //   if (!tripJoinResponse)
+  //     throw new ExpressError(
+  //       `Failed to update reservation status for trip with ID ${tripId}`
+  //     );
 
-    return tripJoinResponse;
-  }
+  //   return tripJoinResponse;
+  // }
 
   static async getTripPassengers(tripId) {
     const tripPassengersResult = await db.query(

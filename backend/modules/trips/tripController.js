@@ -28,16 +28,6 @@ exports.createNewTrip = asyncHandler(async (req, res, next) => {
   res.status(201).json({ success: true, data: newTrip });
 });
 
-// Handle trip delete on DELETE.
-exports.deleteOneTrip = asyncHandler(async (req, res, next) => {
-  const tripId = parseInt(req.params.tripId);
-  await TripApi.deleteOneTrip(tripId);
-
-  res
-    .status(204)
-    .json({ success: true, data: { message: "Trip deleted successfully" } });
-});
-
 // Handle trip update on PATCH.
 exports.updateOneTrip = asyncHandler(async (req, res) => {
   const tripId = parseInt(req.params.tripId);
@@ -49,4 +39,14 @@ exports.updateOneTrip = asyncHandler(async (req, res) => {
   );
 
   res.status(200).json({ success: true, data: updatedTrip });
+});
+
+// Handle trip delete on DELETE.
+exports.deleteOneTrip = asyncHandler(async (req, res, next) => {
+  const tripId = parseInt(req.params.tripId);
+  await TripApi.deleteOneTrip(tripId);
+
+  res
+    .status(204)
+    .json({ success: true, data: { message: "Trip deleted successfully" } });
 });

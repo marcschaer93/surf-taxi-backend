@@ -17,17 +17,15 @@ const {
   createNewTripMemberRequestSchema,
 } = require("./userSchemas/createNewTripMemberRequestSchema.js");
 
-module.exports = router;
+/// USER ROUTES ///
 
-// USER ROUTES
-
-// GET request for all Users.
+// List all users (Admin only)
 router.get("/", authenticate, authorize("admin"), userController.getAllUsers);
 
-// GET request for one user (profile)
+// Get user profile
 router.get("/:username", authenticate, userController.getOneUser);
 
-// PATCH request to update user (profile)
+// Update user profile
 router.patch(
   "/:username",
   authenticate,
@@ -36,7 +34,7 @@ router.patch(
   userController.updateUserProfile
 );
 
-// GET request for all trips and reservations of user
+// Get all user's related trips (organized trips and reservations)
 router.get(
   "/:username/trips",
   authenticate,
@@ -44,14 +42,14 @@ router.get(
   userController.getAllUserTrips
 );
 
-// GET request for one trip and reservation of user
+// Get details of a specific trip and reservation for a user
 router.get(
   "/:username/trips/:tripId",
   authenticate,
   userController.getOneUserReservation
 );
 
-// GET request for all related user reservations
+// List all user's reservations
 router.get(
   "/:username/reservations",
   authenticate,
@@ -59,7 +57,7 @@ router.get(
   userController.getAllUserReservations
 );
 
-// Delete request to delete Trip as trip owner (NOT IMPLEMENTED: Can't delete if already requests).
+// Delete a trip as the trip owner (Not implemented: restriction on deletion if there are pending requests)
 router.delete(
   "/:username/trips/:tripId",
   authenticate,
@@ -67,7 +65,7 @@ router.delete(
   userController.deleteMyTrip
 );
 
-// POST request to update favorite IDs of a user
+// Update user's favorite trip IDs
 router.patch(
   "/:username/favorites",
   authenticate,
@@ -75,6 +73,9 @@ router.patch(
   userController.updateUserFavoriteIds
 );
 
+/// Notifications ///
+
+// Check for new notifications for a user
 router.get(
   "/:username/check-notifications",
   authenticate,
@@ -82,9 +83,12 @@ router.get(
   userController.checkNotifications
 );
 
+// Mark a specific notification as read
 router.patch(
   "/:username/notifications/:notificationId",
   authenticate,
   ensureCorrectUser,
   userController.markNotificationAsRead
 );
+
+module.exports = router;
