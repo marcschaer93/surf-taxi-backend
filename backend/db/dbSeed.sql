@@ -34,6 +34,10 @@ VALUES
 
 
 
--- confirmed: The user's seat reservation has been confirmed.
--- pending: The reservation is pending confirmation.
--- rejected: The reservation has been rejected by the trip organizer.
+
+-- [i] reservation status: 
+
+-- Requested: "You've requested to join this trip."
+-- Pending: "You're in touch! Waiting for organizer approval."
+-- Confirmed: "Seat secured! Your spot on this trip is confirmed."
+-- Rejected: "Request declined. Your spot on this trip is not confirmed."

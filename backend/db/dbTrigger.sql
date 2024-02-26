@@ -88,11 +88,10 @@ WHEN (NEW.reservation_status = 'rejected')
 EXECUTE FUNCTION notify_rejection();
 
 
--- reservation status: 
+-- [i] reservation status: 
 
 -- Requested: "You've requested to join this trip."
 -- Pending: "You're in touch! Waiting for organizer approval."
 -- Confirmed: "Seat secured! Your spot on this trip is confirmed."
 -- Rejected: "Request declined. Your spot on this trip is not confirmed."
 
--- Declined insetad rejcted ?

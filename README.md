@@ -30,8 +30,10 @@ This basically means that the modern surfer drives a lot from A to B and back an
 
 #### Database Setup:
 
-1. Create the Surf Taxi database: `createdb surf-taxi`
-2. Initialize the database: `psql -U [psql username] -d surf-taxi -f dbSetup.sql`
+1. Create the Surf Taxi database: `createdb surf_taxi`
+2. Initialize the database: `psql -U [psql username] -d surf_taxi -f dbSetup.sql`
+
+For more detailed information on the database schema, including tables, relationships, and indices, please refer to the documentation provided in the `docs/` directory under [databaseSchema](docs/databaseSchema).
 
 #### Starting the Backend:
 
@@ -53,8 +55,10 @@ This basically means that the modern surfer drives a lot from A to B and back an
 
 ### Testing the Backend
 
-- Ensure Jest and Supertest are installed: `npm install --save-dev jest supertest`
-- Run tests: `npm test`
+1. Create the Surf Taxi Test database: `createdb surf_taxi_test`
+2. Initialize the database: `psql -U [psql username] -d surf_taxi_test -f dbSetupTests.sql`
+3. Ensure Jest and Supertest are installed: `npm install --save-dev jest supertest`
+4. Run tests: `npm test`
 
 ### Testing the Frontend
 
@@ -67,12 +71,11 @@ The backend API supports various endpoints for trips, passengers, notifications,
 ### Routes
 
 - `/`: Homepage
-- `/companies`: Lists all companies
-- `/companies/apple`: View details of a specific company
-- `/jobs`: Lists all available jobs
-- `/login`: Login/signup page
+- `/trips`: Lists all trips
+- `/trips/:tripId`: View details of a specific trip
+- `/login`: Login form
 - `/signup`: Signup form
-- `/profile`: Edit profile page
+- `/profile`: Profile page
 
 ## Deployment
 
