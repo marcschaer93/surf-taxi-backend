@@ -9,16 +9,15 @@ const {
   BadRequestError,
 } = require("../../helpers/expressError");
 
-/** TRIP API
- *
- * Related functions for trips.
- **/
 class TripApi {
-  /** ALL TRIPS
+  /**
+   * Retrieves all trips from the database.
    *
-   * Retrieves all users from the database.
-   * Returns an array of users.
-   **/
+   * This method fetches and returns an array of all trip records. Each trip record
+   * is transformed to use camelCase keys for consistency with JavaScript naming conventions.
+   *
+   * @returns {Array} An array of trip objects. Returns an empty array if no trips exist.
+   */
   static async getAllTrips() {
     const result = await db.query(`SELECT * FROM trips`);
     const allTrips = result.rows.map((row) =>
@@ -28,29 +27,17 @@ class TripApi {
     // No error if allTrips is empty!
     return allTrips;
   }
-  // static async getAllTrips() {
-  //   const result = await db.query(
-  //     `
-  //       SELECT trips.*, passengers.reservation_status
-  //       FROM trips
-  //       INNER JOIN passengers ON trips.id = passengers.trip_id
-  //     `
-  //   );
-  //   const allTrips = result.rows.map((row) =>
-  //     jsReady.convertKeysToCamelCase(row)
-  //   );
 
-  //   // No error if allTrips is empty!
-  //   return allTrips;
-  // }
-
-  /** SINGLE TRIP
+  /**
+   * Retrieves a single trip by its ID.
    *
-   * Retrieves a trip by trip_id from the database.
-   * Throws NotFoundError if the trip doesn't exist.
-   * @param {integer} id - id of the trip to retrieve.
-   * @returns {object} - Trip object.
-   **/
+   * This method searches for a trip by its unique identifier. If found, it returns the trip details;
+   * otherwise, it throws a NotFoundError.
+   *
+   * @param {number} tripId - The unique ID of the trip to retrieve.
+   * @returns {Object} An object containing the trip details.
+   * @throws {NotFoundError} If no trip is found with the provided ID.
+   */
   static async getOneTrip(tripId) {
     const result = await db.query(
       `
@@ -85,15 +72,17 @@ class TripApi {
     return tripDetails;
   }
 
-  /** NEW TRIP
-   *
+  /**
    * Creates a new trip in the database.
    *
-   * @param {object} data - Trip data to create a new trip.
-   * @param {string} username - The username of the trip creator.
-   * @returns {object} - The newly created trip object.
-   **/
-
+   * Accepts trip data and the username of the trip creator as parameters. After inserting the trip
+   * into the database, it returns the newly created trip object.
+   *
+   * @param {Object} tripData - The data for the new trip.
+   * @param {string} username - The username of the user creating the trip.
+   * @returns {Object} The newly created trip object.
+   * @throws {ExpressError} If the trip cannot be created.
+   */
   static async createNewTrip(tripData, loggedInUser) {
     const insertData = sqlReady.convertKeysToSnakeCase(tripData);
     // Part 1: Insert a new trip to 'trips' table
@@ -136,13 +125,19 @@ class TripApi {
     return newTrip;
   }
 
-  /** UPDATE TRIP
+  /**
+   * Updates an existing trip in the database.
    *
-   * Updates a trip in the database.
+   * This method allows for the update of trip details. It checks if the current user is the trip owner
+   * before proceeding with the update. If the update is successful, it returns the updated trip object.
    *
-   * @param {object} data - Trip data to update.
-   * @returns {object} - Success message and the newly updated trip object.
-   **/
+   * @param {number} tripId - The ID of the trip to update.
+   * @param {Object} updateData - The data to update the trip with.
+   * @param {string} currentUser - The username of the current user attempting the update.
+   * @returns {Object} The updated trip object.
+   * @throws {BadRequestError} If the current user is not the trip owner.
+   * @throws {ExpressError} If the update fails.
+   */
   static async updateOneTrip(tripId, updateData, currentUser) {
     const insertData = sqlReady.convertKeysToSnakeCase(updateData);
 
@@ -166,12 +161,15 @@ class TripApi {
     return updatedTrip;
   }
 
-  /** DELETE TRIP
+  /**
+   * Deletes a trip from the database.
    *
-   *  Delete given trip from database; returns undefined.
+   * This method attempts to delete a trip based on its ID. If the trip is successfully deleted,
+   * it returns nothing. If no trip with the given ID exists, it throws a NotFoundError.
    *
-   * Throws NotFoundError if trip not found.
-   **/
+   * @param {number} tripId - The ID of the trip to delete.
+   * @throws {NotFoundError} If no trip is found with the provided ID.
+   */
   static async deleteOneTrip(tripId) {
     const result = await db.query(
       `DELETE

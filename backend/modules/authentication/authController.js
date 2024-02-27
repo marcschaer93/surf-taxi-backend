@@ -1,6 +1,6 @@
-// ASYNCHANDLER - This middleware helps to catch any errors that occur within the handler and forwards them to the Express error-handling middleware via next(). Without try...catch block. This then sends the error to client.
-const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
+// Middleware for error handling in async functions without explicit try-catch blocks.
+const asyncHandler = require("express-async-handler");
 
 const AuthApi = require("../authentication/authModel");
 const { BadRequestError, ExpressError } = require("../../helpers/expressError");
@@ -9,6 +9,9 @@ const {
   generateRefreshToken,
 } = require("../../helpers/jwtTokens");
 
+/**
+ * Processes user registration, generating access and refresh tokens upon successful registration.
+ */
 exports.registerUser = asyncHandler(async (req, res, next) => {
   const newRegisteredUser = await AuthApi.registerUser(req.body);
 
@@ -25,6 +28,9 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   });
 });
 
+/**
+ * Authenticates a user and provides new access and refresh tokens upon successful login.
+ */
 exports.loginUser = asyncHandler(async (req, res, next) => {
   const loggedInUser = await AuthApi.loginUser(req.body);
 
@@ -43,6 +49,9 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
   });
 });
 
+/**
+ * Generates a new access token using a valid refresh token.
+ */
 exports.createNewRefreshToken = asyncHandler(async (req, res, next) => {
   const { refreshToken } = req.body;
 

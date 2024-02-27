@@ -1,10 +1,12 @@
-// This middleware helps to catch any errors that occur within the handler and forwards them to the Express error-handling middleware via next(). Without try...catch block. No next keyword needed
-const asyncHandler = require("express-async-handler");
-
 const ReservationApi = require("./reservationModel");
 const { BadRequestError, ExpressError } = require("../../helpers/expressError");
 
-//
+// Middleware for error handling in async functions without explicit try-catch blocks.
+const asyncHandler = require("express-async-handler");
+
+/**
+ * Retrieve all reservations for a specific trip.
+ */
 exports.getAllTripReservations = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.tripId);
   const tripReservations = await ReservationApi.getAllTripReservations(tripId);
@@ -12,11 +14,9 @@ exports.getAllTripReservations = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: tripReservations });
 });
 
-/** REQUEST TO JOIN A TRIP (creates new reservation)
- *
- * Handle User trip request on POST
- *
- **/
+/**
+ * Create a new reservation for a trip.
+ */
 exports.createNewReservation = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.tripId);
   const currentUser = req.username;
@@ -32,10 +32,11 @@ exports.createNewReservation = asyncHandler(async (req, res, next) => {
   });
 });
 
+/**
+ * Update the status of an existing reservation.
+ */
 exports.updateOneReservation = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.tripId);
-  // needs reservation username
-  // const username = req.params.username;
   const { newStatus, reservationUsername } = req.body;
 
   const updatedReservation = await ReservationApi.updateOneReservation(
@@ -47,12 +48,9 @@ exports.updateOneReservation = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: updatedReservation });
 });
 
-/** CANCEL OWN JOIN REQUEST
- *
- * Handle cancel trip membership on DELETE
- * as PASSENGER if not already ('approved')
- * and not TRIP OWNER
- **/
+/**
+ * Cancel a specific reservation.
+ */
 exports.deleteOneReservation = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.tripId);
   const currentUser = req.username;

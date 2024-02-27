@@ -1,3 +1,6 @@
+-- TRIGGERS to trigger notifications
+
+
 -- Define a trigger function for handling join request notifications
 CREATE OR REPLACE FUNCTION notify_join_request()
 RETURNS TRIGGER AS $$
@@ -57,10 +60,6 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
-
-
-
 
 -- Create triggers for handling join requests, approvals, and rejections
 CREATE TRIGGER notify_join_request_trigger

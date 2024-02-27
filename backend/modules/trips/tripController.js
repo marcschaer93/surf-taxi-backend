@@ -1,10 +1,12 @@
-// This middleware helps to catch any errors that occur within the handler and forwards them to the Express error-handling middleware via next(). Without try...catch block. No next keyword needed
-const asyncHandler = require("express-async-handler");
-
 const TripApi = require("./tripModel");
 const { BadRequestError, ExpressError } = require("../../helpers/expressError");
 
-// Display list of all Trips. (exclude OwnTrips)
+// Middleware for error handling in async functions without explicit try-catch blocks.
+const asyncHandler = require("express-async-handler");
+
+/**
+ * Get all trips excluding those owned by the logged-in user.
+ */
 exports.getAllTrips = asyncHandler(async (req, res, next) => {
   const loggedInUser = req.username;
   const allTrips = await TripApi.getAllTrips();
@@ -12,7 +14,9 @@ exports.getAllTrips = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: allTrips });
 });
 
-// Display detail page for a specific Trip.
+/**
+ * Get details of a specific trip.
+ */
 exports.getOneTrip = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.tripId);
   const tripDetails = await TripApi.getOneTrip(tripId);
@@ -20,7 +24,9 @@ exports.getOneTrip = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: tripDetails });
 });
 
-// Handle Trip create on POST.
+/**
+ * Create a new trip.
+ */
 exports.createNewTrip = asyncHandler(async (req, res, next) => {
   const loggedInUser = req.username;
   const newTrip = await TripApi.createNewTrip(req.body, loggedInUser);
@@ -28,7 +34,9 @@ exports.createNewTrip = asyncHandler(async (req, res, next) => {
   res.status(201).json({ success: true, data: newTrip });
 });
 
-// Handle trip update on PATCH.
+/**
+ * Update details of a specific trip.
+ */
 exports.updateOneTrip = asyncHandler(async (req, res) => {
   const tripId = parseInt(req.params.tripId);
   const loggedInUser = req.username;
@@ -41,7 +49,9 @@ exports.updateOneTrip = asyncHandler(async (req, res) => {
   res.status(200).json({ success: true, data: updatedTrip });
 });
 
-// Handle trip delete on DELETE.
+/**
+ * Delete a specific trip.
+ */
 exports.deleteOneTrip = asyncHandler(async (req, res, next) => {
   const tripId = parseInt(req.params.tripId);
   await TripApi.deleteOneTrip(tripId);

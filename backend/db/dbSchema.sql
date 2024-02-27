@@ -30,16 +30,6 @@ CREATE TABLE trips (
 );
 
 
--- CREATE TABLE passengers (
---   username VARCHAR(25) 
---     REFERENCES users(username) ON DELETE CASCADE,
---   trip_id INTEGER 
---     REFERENCES trips(id) ON DELETE CASCADE,
---   reservation_status VARCHAR(20), 
---   reservation_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   PRIMARY KEY (username, trip_id)
--- );
-
 CREATE TABLE reservations (
   username VARCHAR(25) 
     REFERENCES users(username) ON DELETE CASCADE,
@@ -52,7 +42,6 @@ CREATE TABLE reservations (
   -- notes TEXT  -- Any special requests or notes related to this reservation
   PRIMARY KEY (username, trip_id)
 );
-
 
 
 CREATE TABLE notifications (

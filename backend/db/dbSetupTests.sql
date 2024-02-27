@@ -1,4 +1,5 @@
--- Run in Terminal --> psql -U marcschaer -d surf_taxi_test -a -f db/dbSetupTests.sql
+-- Setup the test_db: Run in Terminal --> 
+-- `psql -U marcschaer -d surf_taxi_test -a -f db/dbSetupTests.sql`
 
 -- TESTS
 

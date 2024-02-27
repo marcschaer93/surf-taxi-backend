@@ -6,15 +6,15 @@ const { getDatabaseUri } = require("../config");
 const isProduction = process.env.NODE_ENV === "production";
 
 const pool = new Pool({
-  // only one needed:
   connectionString: getDatabaseUri(),
+
   ssl: isProduction
     ? {
         rejectUnauthorized: true,
       }
     : false,
 
-  //more config options below (not important):
+  //more config options below (optional):
   user: "marcschaer",
   password: process.env.PSQL_PASSWORD,
   host: "localhost",

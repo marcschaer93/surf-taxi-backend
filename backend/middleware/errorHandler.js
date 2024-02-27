@@ -19,24 +19,4 @@ const handleGenericError = (err, req, res, next) => {
     .json({ success: false, error: { message, code: status } });
 };
 
-// const errorHandler = (err, req, res, next) => {
-//   let statusCode = 500; // Internal Server Error by default
-//   let errorMessage = "Internal Server Error";
-
-//   // Check if the error is an instance of ExpressError
-//   if (err instanceof ExpressError) {
-//     statusCode = err.status;
-//     errorMessage = err.message;
-//   }
-
-//   // Log the error for debugging purposes
-//   console.error(err);
-
-//   // Send the error response to the client
-//   res.status(statusCode).json({
-//     success: false,
-//     error: { message: errorMessage, code: statusCode },
-//   });
-// };
-
 module.exports = { handle404Error, handleGenericError };

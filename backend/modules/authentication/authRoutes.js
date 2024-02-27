@@ -7,10 +7,7 @@ const { authRegisterSchema } = require("./authSchemas/authRegisterSchema.js");
 const { authLoginSchema } = require("./authSchemas/authLoginSchema.js");
 const { refreshTokenSchema } = require("./authSchemas/refreshTokenSchema.js");
 
-// export our router to be mounted by the parent application
-module.exports = router;
-
-// AUTH ROUTES
+/// AUTH ROUTES => /api/auth/... ///
 
 // POST request for creating User with valid registration inputs.
 router.post(
@@ -32,3 +29,6 @@ router.post(
   validateInputs(refreshTokenSchema),
   authController.createNewRefreshToken
 );
+
+// export our router to be mounted by the parent application
+module.exports = router;

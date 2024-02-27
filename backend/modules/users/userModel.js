@@ -12,16 +12,16 @@ const {
 } = require("../../helpers/expressError");
 const { BCRYPT_WORK_FACTOR } = require("../../config");
 
-/** USER API
- *
- * Related functions for users.
- **/
 class UserApi {
-  /** ALL USERS
-   *
+  /**
    * Retrieves all users from the database.
-   * Returns an array of users.
-   **/
+   *
+   * This method queries the database for all users and returns an array of user objects.
+   * Each user object includes the user's username, first name, last name, email, gender, birth year,
+   * phone number, languages spoken, profile image URL, and biography.
+   *
+   * @returns {Array} An array of objects, each representing a user.
+   */
   static async getAllUsers() {
     const result = await db.query(
       `
@@ -46,13 +46,18 @@ class UserApi {
     return allUsers;
   }
 
-  /**  SINGLE USER
+  /**
+   * Fetches a single user by their username.
    *
-   * Retrieves a user by username from the database.
-   * Throws NotFoundError if the user doesn't exist.
-   * @param {string} username - Username of the user to retrieve.
-   * @returns {object} - User object.
-   **/
+   * This method looks up a user by their username and returns a user object if found.
+   * The user object includes the user's username, first name, last name, email, gender, birth year,
+   * phone number, languages spoken, profile image URL, and biography.
+   * If no user is found with the provided username, it throws a NotFoundError.
+   *
+   * @param {string} username - The username of the user to retrieve.
+   * @throws {NotFoundError} If no user is found with the provided username.
+   * @returns {Object} An object representing the user.
+   */
   static async getOneUser(username) {
     const result = await db.query(
       `
@@ -80,13 +85,19 @@ class UserApi {
     return user;
   }
 
-  /** UPDATE USER PROFILE
+  /**
+   * Updates a user's profile information.
    *
-   * Updates user profile information.
-   * @param {string} username - Username of the user to update.
-   * @param {object} userData - Updated user data.
-   * @returns {object} - Updated user object.
-   **/
+   * This method allows for the updating of a user's profile. It can handle partial updates;
+   * only the fields provided in the `updateData` parameter will be updated. Upon successful update,
+   * it returns the updated user profile information.
+   * If the update process fails, it throws an ExpressError.
+   *
+   * @param {string} loggedInUser - The username of the user whose profile is being updated.
+   * @param {Object} updateData - An object containing the fields to be updated.
+   * @throws {ExpressError} If the update fails.
+   * @returns {Object} An object representing the updated user profile.
+   */
   static async updateUserProfile(loggedInUser, updateData) {
     const insertData = sqlReady.convertKeysToSnakeCase(updateData);
     console.log("insertData", insertData);
@@ -128,6 +139,16 @@ class UserApi {
     return updatedUserProfile;
   }
 
+  /**
+   * Retrieves all trips associated with a user.
+   *
+   * This method fetches all trips that a user either organizes or participates in. It distinguishes
+   * between trips based on the user's role (organizer or participant) and reservation status.
+   * The method returns an array of trip objects.
+   *
+   * @param {string} loggedInUser - The username of the user whose trips are being retrieved.
+   * @returns {Array} An array of trip objects associated with the user.
+   */
   static async getAllUserTrips(loggedInUser) {
     const allUserTripsResult = await db.query(
       `
@@ -162,70 +183,19 @@ class UserApi {
 
     return allUserTrips;
   }
-  // static async getAllUserTrips(loggedInUser) {
-  //   const allUserTripsResult = await db.query(
-  //     `
-  //     SELECT
-  //       T.id,
-  //       T.date,
-  //       T.owner,
-  //       T.start_location,
-  //       T.destination,
-  //       T.stops,
-  //       T.travel_info,
-  //       T.seats,
-  //       T.costs,
-  //       json_agg(jsonb_build_object('username', P.username, 'reservationStatus', P.reservation_status, 'reservationTimestamp', P.reservation_timestamp ) ORDER BY P.username) AS reservations
-  //     FROM
-  //       trips AS T
-  //     LEFT JOIN
-  //       reservations AS P ON T.id = P.trip_id
-  //     WHERE
-  //       T.owner = $1 OR P.username = $1
-  //     GROUP BY
-  //       T.id, T.date, T.owner, T.start_location, T.destination, T.stops, T.travel_info, T.seats, T.costs;
 
-  //   `,
-
-  //     [loggedInUser]
-  //   );
-
-  //   const allUserTrips = allUserTripsResult.rows.map((row) =>
-  //     jsReady.convertKeysToCamelCase(row)
-  //   );
-
-  //   return allUserTrips;
-  // }
-  // static async getAllUserTrips(loggedInUser) {
-  //   const allUserTripsResult = await db.query(
-  //     `
-  //     SELECT
-  //       trips.id,
-  //       trips.owner AS owner,
-  //       trips.date,
-  //       trips.start_location,
-  //       trips.destination,
-  //       trips.stops,
-  //       trips.travel_info,
-  //       trips.seats,
-  //       trips.costs,
-  //       reservations.username AS passenger_username,
-  //       reservations.reservation_status
-  //     FROM trips
-  //     LEFT JOIN reservations ON trips.id = reservations.trip_id
-  //     WHERE trips.owner = $1 OR reservations.username = $1
-  //     `,
-
-  //     [loggedInUser]
-  //   );
-
-  //   const allUserTrips = allUserTripsResult.rows.map((row) =>
-  //     jsReady.convertKeysToCamelCase(row)
-  //   );
-
-  //   return allUserTrips;
-  // }
-
+  /**
+   * Retrieves a specific reservation for a user.
+   *
+   * This method fetches a reservation for a given user based on the username and trip ID. It returns
+   * an object containing the reservation details if found. If no reservation matches the criteria,
+   * it throws a NotFoundError.
+   *
+   * @param {string} username - The username of the user whose reservation is being retrieved.
+   * @param {number} tripId - The ID of the trip associated with the reservation.
+   * @throws {NotFoundError} If no reservation is found with the provided username and trip ID.
+   * @returns {Object} An object representing the user's reservation.
+   */
   static async getOneUserReservation(username, tripId) {
     const oneUserReservationResult = await db.query(
       `
@@ -250,6 +220,16 @@ class UserApi {
     return userReservation;
   }
 
+  /**
+   * Retrieves all reservations for a user.
+   *
+   * This method queries the database for all reservations associated with a given username. It returns
+   * an array of reservation objects, each containing details of a reservation. If no reservations are
+   * found for the user, it returns an empty array.
+   *
+   * @param {string} username - The username of the user whose reservations are being retrieved.
+   * @returns {Array} An array of objects, each representing a reservation.
+   */
   static async getAllUserReservations(username) {
     const allUserReservationsResult = await db.query(
       `
@@ -268,6 +248,17 @@ class UserApi {
     return userReservations;
   }
 
+  /**
+   * Deletes a specific trip for a user.
+   *
+   * This method attempts to delete a trip based on its ID and the owner's username. If the trip is
+   * successfully deleted, it returns nothing. If no trip matches the given ID and username, it throws
+   * a NotFoundError.
+   *
+   * @param {number} tripId - The ID of the trip to delete.
+   * @param {string} username - The username of the trip's owner.
+   * @throws {NotFoundError} If no trip is found with the provided ID and owner username.
+   */
   static async deleteMyTrip(tripId, username) {
     const result = await db.query(
       `DELETE
@@ -287,6 +278,18 @@ class UserApi {
     return;
   }
 
+  /**
+   * Updates a user's favorite IDs.
+   *
+   * This method updates the list of favorite IDs for a user. It overwrites the existing list with
+   * the new list provided in the `favoriteIds` parameter. If the update is successful, it returns
+   * the updated user object. If the user cannot be found or the update fails, it throws an error.
+   *
+   * @param {string} username - The username of the user whose favorite IDs are being updated.
+   * @param {Array} favoriteIds - An array of new favorite IDs to update for the user.
+   * @throws {Error} If the user is not found or the favorites are not updated.
+   * @returns {Object} An object representing the updated user.
+   */
   static async updateUserFavoriteIds(username, favoriteIds) {
     const updateUserFavoritesResult = await db.query(
       `
@@ -310,6 +313,16 @@ class UserApi {
     return updatedUser;
   }
 
+  /**
+   * Checks for unread notifications for a user.
+   *
+   * This method queries the database for any unread notifications for a given user. It returns an
+   * array of notification objects that are marked as unread. If there are no unread notifications,
+   * it returns an empty array.
+   *
+   * @param {string} username - The username of the user to check notifications for.
+   * @returns {Array} An array of unread notification objects.
+   */
   static async checkNotifications(username) {
     const notificationCheckResult = await db.query(
       `
@@ -327,6 +340,17 @@ class UserApi {
     return notifications;
   }
 
+  /**
+   * Marks a specific notification as read for a user.
+   *
+   * This method updates the status of a specific notification to 'read' for a given user and
+   * notification ID. If the update is successful, it returns the updated notification object. It
+   * might throw an error if the update process fails.
+   *
+   * @param {string} username - The username of the recipient of the notification.
+   * @param {number} notificationId - The ID of the notification to be marked as read.
+   * @returns {Object} The updated notification object marked as read.
+   */
   static async markNotificationAsRead(username, notificationId) {
     const notificationMarkResult = await db.query(
       `

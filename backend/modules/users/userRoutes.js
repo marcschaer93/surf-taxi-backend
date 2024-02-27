@@ -17,7 +17,7 @@ const {
   createNewTripMemberRequestSchema,
 } = require("./userSchemas/createNewTripMemberRequestSchema.js");
 
-/// USER ROUTES ///
+/// USER ROUTES => /api/users/... ///
 
 // List all users (Admin only)
 router.get("/", authenticate, authorize("admin"), userController.getAllUsers);

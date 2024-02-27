@@ -1,28 +1,33 @@
-// This middleware helps to catch any errors that occur within the handler and forwards them to the Express error-handling middleware via next(). Without try...catch block. No next keyword needed
-const asyncHandler = require("express-async-handler");
-
 const UserApi = require("./userModel");
 const { BadRequestError, ExpressError } = require("../../helpers/expressError");
 
-// Displays list of all Users.
+// Middleware for error handling in async functions without explicit try-catch blocks.
+const asyncHandler = require("express-async-handler");
+
+/**
+ * Get all users.
+ * Responds with a list of all users. The list can be empty.
+ */
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const allUsers = await UserApi.getAllUsers();
 
   res.status(200).json({ success: true, data: allUsers }); // list can be empty!
 });
 
-// Displays detail page for a specific User
+/**
+ * Get a single user by username.
+ */
 exports.getOneUser = asyncHandler(async (req, res, next) => {
   const { username } = req.params;
   const user = await UserApi.getOneUser(username);
-  // const userData = await UserApi.getOneUser(username);
-  // const userTrips = await TripApi;
-  // const userPassenger = await PassengerApi;
 
   res.status(200).json({ success: true, data: user });
 });
 
-// Handle Profile update on PATCH
+/**
+ * Update user profile.
+ * Throws BadRequestError if request body is empty.
+ */
 exports.updateUserProfile = asyncHandler(async (req, res, next) => {
   const isRequestBodyEmpty = Object.keys(req.body).length === 0;
   if (isRequestBodyEmpty) {
@@ -39,28 +44,20 @@ exports.updateUserProfile = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: updatedUserProfile });
 });
 
-// Displays list of all Trips from Users. (trip owner & join request trips and saved trips)
+/**
+ * Get all trips associated with the logged-in user.
+ */
 exports.getAllUserTrips = asyncHandler(async (req, res, next) => {
   const loggedInUser = req.username;
   const allUserTrips = await UserApi.getAllUserTrips(loggedInUser);
 
-  // const myTripsAsOwner = allUserTrips.filter(
-  //   (trip) => trip.tripOwner === loggedInUser
-  // );
-
-  // const myTripsAsPassenger = allUserTrips.filter(
-  //   (trip) => trip.passengerUsername === loggedInUser
-  // );
-
-  res
-    .status(200)
-    // .json({ success: true, data: { myTripsAsOwner, myTripsAsPassenger } });
-    .json({ success: true, data: allUserTrips });
+  res.status(200).json({ success: true, data: allUserTrips });
 });
 
-// Display one User reservation for a trip
+/**
+ * Get a user's reservation for a specific trip.
+ */
 exports.getOneUserReservation = asyncHandler(async (req, res, next) => {
-  // const loggedInUser = req.username;
   const username = req.params.username;
   const tripId = parseInt(req.params.tripId);
 
@@ -69,7 +66,9 @@ exports.getOneUserReservation = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: userReservation });
 });
 
-// Displays list of all reservations for user (userAsPassenger and myTripPassengers)
+/**
+ * Get all reservations for the logged-in user.
+ */
 exports.getAllUserReservations = asyncHandler(async (req, res, next) => {
   const loggedInUser = req.username;
   const userReservations = await UserApi.getAllUserReservations(loggedInUser);
@@ -77,7 +76,9 @@ exports.getAllUserReservations = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: userReservations });
 });
 
-// Handle delete trip as trip owner
+/**
+ * Delete a trip as the trip owner.
+ */
 exports.deleteMyTrip = asyncHandler(async (req, res, next) => {
   const username = req.params.username;
   const tripId = parseInt(req.params.tripId);
@@ -89,7 +90,9 @@ exports.deleteMyTrip = asyncHandler(async (req, res, next) => {
     .json({ success: true, data: { message: "Trip deleted successfully" } });
 });
 
-// Handle update user favorites
+/**
+ * Update user favorites.
+ */
 exports.updateUserFavoriteIds = asyncHandler(async (req, res, next) => {
   const { favoriteIds } = req.body;
   console.log("FAVORITE IDS", favoriteIds);
@@ -102,14 +105,18 @@ exports.updateUserFavoriteIds = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: updatedUser });
 });
 
-// Handle check notifications
+/**
+ * Check notifications for a user.
+ */
 exports.checkNotifications = asyncHandler(async (req, res, next) => {
   const username = req.params.username;
   const notifications = await UserApi.checkNotifications(username);
   res.status(200).json({ success: true, data: notifications });
 });
 
-// Handle mark notifications as read
+/**
+ * Mark a notification as read for a user.
+ */
 exports.markNotificationAsRead = asyncHandler(async (req, res, next) => {
   const username = req.params.username;
   const notificationId = parseInt(req.params.notificationId);

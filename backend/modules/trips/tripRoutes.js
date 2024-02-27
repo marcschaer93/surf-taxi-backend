@@ -8,7 +8,7 @@ const { validateInputs } = require("../../middleware/validateInputs");
 const { createTripSchema } = require("./tripSchemas/createTripSchema");
 const { updateTripSchema } = require("./tripSchemas/updateTripSchema");
 
-/// TRIP ROUTES ///
+/// TRIP ROUTES => /api/trips/... ///
 
 // List all trips
 router.get("/", tripController.getAllTrips);

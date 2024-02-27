@@ -12,11 +12,12 @@ const {
 } = require("../../helpers/expressError");
 const { BCRYPT_WORK_FACTOR } = require("../../config");
 
-/** RESERVATION API
- *
- * Related functions for reservations.
- **/
 class ReservationApi {
+  /**
+   * Retrieves all reservations for a specific trip.
+   * @param {number} tripId - The ID of the trip.
+   * @returns {Array} List of reservations.
+   */
   static async getAllTripReservations(tripId) {
     const allTripReservationsResult = await db.query(
       `
@@ -35,6 +36,13 @@ class ReservationApi {
     return tripReservations;
   }
 
+  /**
+   * Creates a new reservation for a trip by a user.
+   * Validates trip existence and user's ability to make a reservation.
+   * @param {number} tripId - ID of the trip to reserve.
+   * @param {string} currentUser - Username of the user making the reservation.
+   * @returns {Object} The newly created reservation.
+   */
   static async createNewReservation(tripId, currentUser) {
     const tripCheckResult = await db.query(
       `SELECT * FROM trips WHERE id = $1`,
@@ -94,6 +102,13 @@ class ReservationApi {
     return newReservation;
   }
 
+  /**
+   * Deletes a reservation for a trip by a user.
+   * Validates reservation existence and status before deletion.
+   * @param {number} tripId - ID of the trip for which reservation is to be deleted.
+   * @param {string} currentUser - Username of the user deleting the reservation.
+   * @returns {Object} The deleted reservation.
+   */
   static async deleteOneReservation(tripId, currentUser) {
     const validReservationResult = await db.query(
       `
@@ -136,22 +151,13 @@ class ReservationApi {
     return removedReservation;
   }
 
-  static async getTripPassengers(tripId) {
-    const tripPassengersResult = await db.query(
-      `
-        SELECT * 
-        FROM passengers
-        WHERE trip_id = $1
-      `,
-      [tripId]
-    );
-
-    const tripPassengers = tripPassengersResult.rows.map((row) =>
-      jsReady.convertKeysToCamelCase(row)
-    );
-
-    return tripPassengers; // even if empty
-  }
+  /**
+   * Updates the status of an existing reservation.
+   * @param {number} tripId - ID of the trip.
+   * @param {string} reservationUsername - Username of the user whose reservation is to be updated.
+   * @param {string} newStatus - New status to set for the reservation.
+   * @returns {Object} The updated reservation.
+   */
 
   static async updateOneReservation(tripId, reservationUsername, newStatus) {
     const updateReservationResult = await db.query(

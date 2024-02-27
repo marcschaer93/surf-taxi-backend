@@ -12,7 +12,7 @@ const {
 
 const { validateInputs } = require("../../middleware/validateInputs.js");
 
-/// RESERVATION ROUTES --> /api/reservations/... ///
+/// RESERVATION ROUTES => /api/reservations/... ///
 
 // Get all reservations for a specific trip
 router.get(
