@@ -15,7 +15,7 @@ import { useAuthContext } from "../../context/authProvider";
 import { FavoriteButton } from "../../components/ui/FavoriteButton";
 import { StyledPreviewCard } from "../../styles/cardStyles";
 import { TripCardContent } from "./TripCardContent";
-import { useFavorite } from "../../hooks/useFavorite";
+import { useToggleFavoriteTrip } from "../../hooks/useToggleFavoriteTrip";
 import { theme } from "../../utils/theme";
 import { useMyTrips } from "../../context/MyTripsProvider";
 import { StatusChip } from "../../components/ui/StatusChip";
@@ -34,7 +34,7 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
   console.log("TRIP DETAIULS", tripDetails);
 
   // Favorite trips hook (only for logged in users)
-  const { isFavorited, toggleFavorite } = useFavorite(tripId);
+  const { isFavorited, toggleFavorite } = useToggleFavoriteTrip(tripId);
 
   const handleFavorite = (e, tripId) => {
     e.stopPropagation();

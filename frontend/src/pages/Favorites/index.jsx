@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 
 import { useAuthContext } from "../../context/authProvider";
 import TripPreviewCard from "../Trips/TripPreviewCard";
-import { useFavoriteTrips } from "../../hooks/useFavoriteTrips";
+import { useFetchFavoriteTrips } from "../../hooks/useFetchFavoriteTrips";
 import { Title, TitleDivider } from "../../styles/fontStyles";
 import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
 import { theme } from "../../utils/theme";
@@ -11,10 +11,10 @@ import { useMyTrips } from "../../context/MyTripsProvider";
 
 export const Favorites = () => {
   const { user } = useAuthContext();
-
   // memoize favoriteIds to ensure that it only updates when user.favoriteIds actually changes, not when the user object itself might be recreated without meaningful changes to favoriteIds.
   const favoriteIds = useMemo(() => user.favoriteIds || [], [user.favoriteIds]);
-  const { favoriteTrips, loading } = useFavoriteTrips(favoriteIds);
+  const { favoriteTrips, loading } = useFetchFavoriteTrips(favoriteIds);
+
   const { myTrips } = useMyTrips();
 
   return (

@@ -6,7 +6,7 @@ import * as UserApi from "../api/services/UserApi";
 import { useAuthContext } from "../context/authProvider";
 import { useMyTrips } from "../context/MyTripsProvider";
 
-export const useAllTrips = () => {
+export const useFetchAllTrips = () => {
   const { user } = useAuthContext();
   const { showBoundary } = useErrorBoundary();
   const [allTrips, setAllTrips] = useState([]);

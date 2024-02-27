@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import * as ReservationApi from "../api/services/ReservationApi";
 
-export const useTripReservations = (tripId, username) => {
+export const useFetchTripReservations = (tripId, username) => {
   const [reservations, setReservations] = useState([]);
   const [loadingReservations, setLoadingReservations] = useState(true);
 

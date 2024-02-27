@@ -25,34 +25,34 @@ export const MyTripsProvider = ({ children }) => {
   const [loadingReservations, setLoadingReservations] = useState(false); // false!
   const [reservationError, setReservationError] = useState(null);
 
-  // const { myTrips, setMyTrips, loadingMyTrips, setLoadingMyTrips } =
-  //   useFetchMyTrips();
+  const { myTrips, setMyTrips, loadingMyTrips } = useFetchMyTrips();
 
-  const [myTrips, setMyTrips] = useState([]);
-  const [loadingMyTrips, setLoadingMyTrips] = useState(true);
-  // Get user trips
-  useEffect(() => {
-    const getAllMyTrips = async () => {
-      try {
-        const myTripsData = await UserApi.getAllUserTrips(user.username);
-        setMyTrips(myTripsData);
-      } catch (error) {
-        // Show error boundary
-        showBoundary(error);
-        console.error("Error fetching trips:", error);
-        setMyTrips([]);
-      } finally {
-        setLoadingMyTrips(false);
-      }
-    };
-    if (user) {
-      getAllMyTrips();
-    } else {
-      setLoadingMyTrips(false); // Ensure loading is stopped if there's no user
-    }
-  }, [user]);
+  // const [myTrips, setMyTrips] = useState([]);
+  // const [loadingMyTrips, setLoadingMyTrips] = useState(true);
 
-  // get all trip reservations
+  // // Get all logged-in user related trips
+  // useEffect(() => {
+  //   const getAllMyTrips = async () => {
+  //     try {
+  //       const myTripsData = await UserApi.getAllUserTrips(user.username);
+  //       setMyTrips(myTripsData);
+  //     } catch (error) {
+  //       // Show error boundary
+  //       showBoundary(error);
+  //       console.error("Error fetching trips:", error);
+  //       setMyTrips([]);
+  //     } finally {
+  //       setLoadingMyTrips(false);
+  //     }
+  //   };
+  //   if (user) {
+  //     getAllMyTrips();
+  //   } else {
+  //     setLoadingMyTrips(false); // Ensure loading is stopped if there's no user
+  //   }
+  // }, [user]);
+
+  // get all reservations for trip by ID
   const fetchReservationsForTrip = useCallback(async (tripId) => {
     setLoadingReservations(true);
     try {

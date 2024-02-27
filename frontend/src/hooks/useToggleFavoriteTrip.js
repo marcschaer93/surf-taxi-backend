@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuthContext } from "../context/authProvider";
 import * as UserApi from "../api/services/UserApi";
 
-export const useFavorite = (tripId) => {
+export const useToggleFavoriteTrip = (tripId) => {
   tripId = parseInt(tripId);
   const { user, updateUser } = useAuthContext();
   const [isFavorited, setIsFavorited] = useState(

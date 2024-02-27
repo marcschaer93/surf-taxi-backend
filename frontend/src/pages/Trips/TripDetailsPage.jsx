@@ -9,8 +9,8 @@ import * as TripApi from "../../api/services/TripApi";
 import * as UserApi from "../../api/services/UserApi";
 import { TripDetailsCard } from "./TripDetailsCard";
 import { OwnerTripDetailsCard } from "./OwnerTripDetailsCard";
-import { useTripReservations } from "../../hooks/useTripReservations";
-import { useTripDetails } from "../../hooks/useTripDetails";
+import { useFetchTripReservations } from "../../hooks/useFetchTripReservations";
+import { useFetchTripDetails } from "../../hooks/useFetchTripDetails";
 import { useMyTrips } from "../../context/MyTripsProvider";
 import { Loading } from "../../components/ui/Loading";
 

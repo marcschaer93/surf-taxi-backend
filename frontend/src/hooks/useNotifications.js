@@ -46,26 +46,3 @@ export const useNotifications = (user) => {
 
   return { notifications, checkNotifications, markNotificationAsRead };
 };
-
-//   if (!notifications)
-//     return (
-//       <Box>
-//         <Typography>No notifications...</Typography>
-//       </Box>
-//     );
-
-//   return (
-//     <>
-//       {notifications.length > 0 && (
-//         <Box>
-//           {notifications.map((notification) => (
-//             <Box key={notification.id}>
-//               {/* Render notification content here */}
-//               <Typography>{notification.message}</Typography>
-//             </Box>
-//           ))}
-//           <p>Unread Notifications: {notifications.length}</p>
-//         </Box>
-//       )}
-//     </>
-//   );

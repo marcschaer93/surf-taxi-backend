@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import * as TripApi from "../api/services/TripApi";
 import { useAuthContext } from "../context/authProvider";
 
-export const useTripDetails = (tripId) => {
+export const useFetchTripDetails = (tripId) => {
   const { user } = useAuthContext();
   const [tripDetails, setTripDetails] = useState(null);
   const [loadingTripDetails, setLoadingTripDetails] = useState(true);

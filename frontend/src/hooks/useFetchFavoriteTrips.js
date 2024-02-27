@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import * as TripApi from "../api/services/TripApi";
 
-export const useFavoriteTrips = (favoriteIds) => {
+export const useFetchFavoriteTrips = (favoriteIds) => {
   const [favoriteTrips, setFavoriteTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

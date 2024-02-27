@@ -18,7 +18,7 @@ import { AppRoutes } from "./components/AppRoutes";
 import { BottomActionBar } from "./components/BottomActionBar";
 
 import { BottomNavBar } from "./components/BottomNavBar";
-import { useAllTrips } from "./hooks/useAllTrips";
+import { useFetchAllTrips } from "./hooks/useFetchAllTrips";
 import { useNotifications } from "./hooks/useNotifications";
 import { useAuthContext } from "./context/authProvider";
 
@@ -35,7 +35,7 @@ const MainContent = styled(Box)(({ theme }) => ({
 export default function App() {
   const { user } = useAuthContext();
   const location = useLocation();
-  const { allTrips, loadingAllTrips } = useAllTrips();
+  const { allTrips, loadingAllTrips } = useFetchAllTrips();
   const { notifications, markNotificationAsRead } = useNotifications(user);
 
   // Paths where the bottom navbar should be displayed

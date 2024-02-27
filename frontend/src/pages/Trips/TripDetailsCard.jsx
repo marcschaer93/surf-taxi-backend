@@ -23,7 +23,7 @@ import { theme } from "../../utils/theme";
 import { CancelRequestConfirmationCard } from "../../components/confirmationCards/CancelRequestConfirmationCard";
 import { JoinRequestConfirmationCard } from "../../components/confirmationCards/JoinRequestConfirmationCard";
 import { StyledDetailsCard } from "../../styles/cardStyles";
-import { useFavorite } from "../../hooks/useFavorite";
+import { useToggleFavoriteTrip } from "../../hooks/useToggleFavoriteTrip";
 import { useParams } from "react-router-dom";
 import { Title, TitleDivider } from "../../styles/fontStyles";
 
