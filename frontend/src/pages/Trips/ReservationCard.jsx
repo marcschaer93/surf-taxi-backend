@@ -24,16 +24,12 @@ import { ConnectConfirmationCard } from "../../components/confirmationCards/Conn
 import { ColorAvatar } from "../../components/ui/ColorAvatar";
 import { StatusChip } from "../../components/ui/StatusChip";
 
-export const PassengerCard = ({
+export const ReservationCard = ({
   tripDetails,
   passengerNotification,
   reservation,
-
-  handleGoBack,
-  handleConfirmConnect,
   handleAction,
 }) => {
-  console.log("passenegercard name", reservation.username);
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const [showConfirmation, setShowConfirmation] = useState(false);

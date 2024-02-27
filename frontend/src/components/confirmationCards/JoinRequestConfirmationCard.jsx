@@ -1,6 +1,6 @@
 import { Confirmation } from "../../pages/Trips/Confirmation";
 import { Box, CardActions, Button } from "@mui/material";
-import { useMyTrips } from "../../context/MyTripsProvider";
+import { useMyTripsContext } from "../../context/MyTripsProvider";
 
 export const JoinRequestConfirmationCard = ({
   tripDetails,
@@ -8,7 +8,7 @@ export const JoinRequestConfirmationCard = ({
   onClose,
   // handleAction,
 }) => {
-  const { handleAction } = useMyTrips();
+  const { handleAction } = useMyTripsContext();
 
   const message = `Are you sure you want to send a join request for the trip from ${tripDetails.startLocation} to ${tripDetails.destination}?`;
 

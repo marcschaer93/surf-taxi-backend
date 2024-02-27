@@ -1,6 +1,6 @@
 import { Confirmation } from "../../pages/Trips/Confirmation";
 import { Box, CardActions, Button } from "@mui/material";
-import { useMyTrips } from "../../context/MyTripsProvider";
+import { useMyTripsContext } from "../../context/MyTripsProvider";
 
 export const CancelRequestConfirmationCard = ({
   tripDetails,
@@ -9,7 +9,7 @@ export const CancelRequestConfirmationCard = ({
   onClose,
   // handleAction,
 }) => {
-  const { handleAction } = useMyTrips();
+  const { handleAction } = useMyTripsContext();
   const message = `Are you sure you want to cancel your request for the trip from ${tripDetails.startLocation} to ${tripDetails.destination}?`;
 
   const title = "Confirm Cancel Request";

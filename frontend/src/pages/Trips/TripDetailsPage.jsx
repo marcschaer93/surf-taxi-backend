@@ -4,14 +4,13 @@ import { Box } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 import { useAuthContext } from "../../context/authProvider";
-import * as PassengerApi from "../../api/services/ReservationApi";
 import * as TripApi from "../../api/services/TripApi";
 import * as UserApi from "../../api/services/UserApi";
 import { TripDetailsCard } from "./TripDetailsCard";
-import { OwnerTripDetailsCard } from "./OwnerTripDetailsCard";
+import { OrganizerTripDetailsCard } from "./OrganizerTripDetailsCard";
 import { useFetchTripReservations } from "../../hooks/useFetchTripReservations";
 import { useFetchTripDetails } from "../../hooks/useFetchTripDetails";
-import { useMyTrips } from "../../context/MyTripsProvider";
+import { useMyTripsContext } from "../../context/MyTripsProvider";
 import { Loading } from "../../components/ui/Loading";
 
 // DATA FLOW
@@ -38,7 +37,7 @@ const TripDetailsPage = ({ allTrips }) => {
     reservations,
     handleAction,
     loadingReservations,
-  } = useMyTrips();
+  } = useMyTripsContext();
 
   useEffect(() => {
     if (!tripDetailsFromState) {
@@ -60,7 +59,7 @@ const TripDetailsPage = ({ allTrips }) => {
   const isTripOrganizer = user.username === tripDetails?.owner;
 
   useEffect(() => {
-    // Fetch passengers when the component mounts or tripId changes
+    // Fetch reservations when the component mounts or tripId changes
     fetchReservationsForTrip(tripId);
   }, [fetchReservationsForTrip, tripId]);
 
@@ -84,7 +83,7 @@ const TripDetailsPage = ({ allTrips }) => {
   return (
     <>
       {isTripOrganizer ? (
-        <OwnerTripDetailsCard
+        <OrganizerTripDetailsCard
           tripDetails={tripDetails}
           reservations={reservations}
           handleAction={handleAction}

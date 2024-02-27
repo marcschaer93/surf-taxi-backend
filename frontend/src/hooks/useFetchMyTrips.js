@@ -33,5 +33,5 @@ export const useFetchMyTrips = () => {
     }
   }, [user]);
 
-  return { myTrips, setMyTrips, loadingMyTrips };
+  return { myTrips, setMyTrips, loadingMyTrips, setLoadingMyTrips };
 };

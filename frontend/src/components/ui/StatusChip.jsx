@@ -6,8 +6,9 @@ export const StatusChip = ({ isTripOwner, status }) => {
     // position: "absolute",
     // top: 18,
     // right: 18,
-    fontSize: "12px",
+    fontSize: "11px",
     fontWeight: "bold",
+    padding: "14px 10px",
   });
 
   const getChipColor = () => {
@@ -52,9 +53,11 @@ export const StatusChip = ({ isTripOwner, status }) => {
         // backgroundColor: isTripOwner ? "#d41b64" : theme.palette.primary.main,
         // color: isTripOwner ? "white" : "white",
       }}
-      label={isTripOwner ? "OWNER" : status ? status.toUpperCase() : "NOT GOOD"}
+      label={
+        isTripOwner ? "ORGANIZER" : status ? status.toUpperCase() : "NOT GOOD"
+      }
       variant="filled"
-      size="medium"
+      size="small"
     />
   );
 };

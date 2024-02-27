@@ -4,7 +4,6 @@ import { useErrorBoundary } from "react-error-boundary";
 import * as TripApi from "../api/services/TripApi";
 import * as UserApi from "../api/services/UserApi";
 import { useAuthContext } from "../context/authProvider";
-import { useMyTrips } from "../context/MyTripsProvider";
 
 export const useFetchAllTrips = () => {
   const { user } = useAuthContext();

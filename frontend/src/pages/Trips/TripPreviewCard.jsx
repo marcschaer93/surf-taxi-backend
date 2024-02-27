@@ -8,6 +8,7 @@ import {
   Typography,
   styled,
   Chip,
+  Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/authProvider";
@@ -17,8 +18,19 @@ import { StyledPreviewCard } from "../../styles/cardStyles";
 import { TripCardContent } from "./TripCardContent";
 import { useToggleFavoriteTrip } from "../../hooks/useToggleFavoriteTrip";
 import { theme } from "../../utils/theme";
-import { useMyTrips } from "../../context/MyTripsProvider";
+import { useMyTripsContext } from "../../context/MyTripsProvider";
 import { StatusChip } from "../../components/ui/StatusChip";
+import { TitleDivider } from "../../styles/fontStyles";
+import { format } from "date-fns";
+
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import EventIcon from "@mui/icons-material/Event";
+import StopIcon from "@mui/icons-material/Stop";
+import EventSeatIcon from "@mui/icons-material/EventSeat";
+import InfoIcon from "@mui/icons-material/Info";
+import ArrowRightAltSharpIcon from "@mui/icons-material/ArrowRightAltSharp";
+import CalendarMonthSharpIcon from "@mui/icons-material/CalendarMonthSharp";
+import PaidSharpIcon from "@mui/icons-material/PaidSharp";
 
 // DATA FLOW
 // tripDetails       ===>     from parent
@@ -30,8 +42,6 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const tripId = tripDetails?.id;
-
-  console.log("TRIP DETAIULS", tripDetails);
 
   // Favorite trips hook (only for logged in users)
   const { isFavorited, toggleFavorite } = useToggleFavoriteTrip(tripId);
@@ -45,6 +55,9 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
     navigate(`/trips/${tripId}`, { state: { tripDetails } });
   };
 
+  const { startLocation, destination, stops, seats, date, travelInfo, costs } =
+    tripDetails;
+
   return (
     <StyledPreviewCard
       variant="outlined"
@@ -55,27 +68,39 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
           : theme.palette.grey[800],
       }}
     >
-      {!isInMyTrips && !isTripOrganizer && user && (
+      {/* {!isInMyTrips && !isTripOrganizer && user && (
         <FavoriteButton
           handleFavorite={handleFavorite}
           isFavorited={isFavorited}
         ></FavoriteButton>
-      )}
+      )} */}
 
-      {/* {isInMyTrips || isTripOrganizer ? (
-        <CardStatusChip
-          // isTripOwner={isTripOrganizer}
-          // status={tripReservation?.reservationStatus}
-          status={tripDetails.userReservationStatus}
-        />
-      ) : null} */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          color: "#fff",
+          padding: "0px 0px",
+          mb: -2, // Reduce margin below the flags
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Typography variant="body2" sx={{ mx: 3, fontSize: "2.5rem" }}>
+            🇪🇸
+          </Typography>
+          <Typography variant="body2" sx={{ mx: 3, fontSize: "2.5rem" }}>
+            🇲🇦
+          </Typography>
+        </Box>
 
-      {/* {isInMyTrips ? (
-        <StatusChip
-          status={tripDetails.userReservationStatus}
-          isTripOrganizer={isTripOrganizer}
-        />
-      ) : null} */}
+        {!isInMyTrips && !isTripOrganizer && user && (
+          <FavoriteButton
+            handleFavorite={handleFavorite}
+            isFavorited={isFavorited}
+          />
+        )}
+      </Box>
 
       {isInMyTrips ? (
         <Box sx={{ position: "absolute", top: 18, right: 18 }}>
@@ -86,9 +111,80 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
         </Box>
       ) : null}
 
-      <TripCardContent preview={true} tripDetails={tripDetails} />
+      <CardContent>
+        {/* Trip Route */}
+        <Box
+          display="flex"
+          justifyContent="left" // Center the content horizontally
+          alignItems="center" // Align items vertically
+          sx={{
+            textAlign: "center", // Center the text if it wraps
+          }}
+        >
+          <Typography
+            component="span" // Use span to keep inline with flex items
+            variant="h5" // Adjust size for better mobile visibility
+            sx={{ marginRight: 2 }} // Add some spacing before the arrow
+          >
+            {startLocation}
+          </Typography>
 
-      <CardActions></CardActions>
+          <ArrowRightAltSharpIcon
+            sx={{
+              color: theme.palette.text.secondary,
+              mx: 1, // Margin on both sides for spacing
+            }}
+          />
+
+          <Typography
+            component="span" // Use span to keep inline with flex items
+            variant="h5" // Adjust size for better mobile visibility
+            sx={{ marginLeft: 2 }} // Add some spacing after the arrow
+          >
+            {destination}
+          </Typography>
+        </Box>
+
+        <Divider sx={{ my: 2, bgcolor: "divider" }} />
+
+        {/* Date */}
+        <Typography color="text">
+          <CalendarMonthSharpIcon sx={{ marginRight: 1 }} />
+          {format(new Date(date), "MMMM dd, yyyy")}
+        </Typography>
+
+        {/* Stops */}
+        <Typography color="text.secondary">
+          <StopIcon sx={{ marginRight: 1 }} />
+          Stops: {stops}
+        </Typography>
+
+        {/* Available Seats */}
+        <Typography color="text.secondary">
+          <EventSeatIcon sx={{ marginRight: 1 }} />
+          Available Seats: {seats}
+        </Typography>
+
+        {/* Trip costs */}
+        <Typography color="text.secondary">
+          <PaidSharpIcon sx={{ marginRight: 1 }} />
+          Costs: {costs}
+        </Typography>
+
+        {/* Car */}
+        {/* <Typography color="text.secondary">
+          <PaidSharpIcon sx={{ marginRight: 1 }} />
+          Mercedes Sprinter
+        </Typography> */}
+
+        {/* Travel Info */}
+        {/* {travelInfo && (
+          <Typography color="text.secondary">
+            <InfoIcon sx={{ marginRight: 1 }} />
+            {travelInfo}
+          </Typography>
+        )} */}
+      </CardContent>
     </StyledPreviewCard>
   );
 };

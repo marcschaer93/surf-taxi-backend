@@ -7,7 +7,7 @@ import { useAuthContext } from "../../context/authProvider";
 import { Title, TitleDivider } from "../../styles/fontStyles";
 import SurfingSharpIcon from "@mui/icons-material/SurfingSharp";
 import { theme } from "../../utils/theme";
-import { useMyTrips } from "../../context/MyTripsProvider";
+import { useMyTripsContext } from "../../context/MyTripsProvider";
 
 // DATA FLOW
 // allTrips         ===>     API Call, init data
@@ -16,8 +16,8 @@ import { useMyTrips } from "../../context/MyTripsProvider";
 const AllTrips = ({ allTrips }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
+  const { myTrips } = useMyTripsContext();
   const [visibleTrips, setVisibleTrips] = useState(allTrips);
-  const { myTrips } = useMyTrips();
 
   // Filter out trips already in user's list
   // useEffect(() => {

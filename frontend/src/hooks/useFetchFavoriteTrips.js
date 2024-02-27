@@ -7,6 +7,8 @@ export const useFetchFavoriteTrips = (favoriteIds) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  console.log("FAVIDS", favoriteIds);
+
   useEffect(() => {
     const fetchFavoriteTrips = async () => {
       try {

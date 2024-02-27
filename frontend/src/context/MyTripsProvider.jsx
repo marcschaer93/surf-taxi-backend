@@ -25,32 +25,9 @@ export const MyTripsProvider = ({ children }) => {
   const [loadingReservations, setLoadingReservations] = useState(false); // false!
   const [reservationError, setReservationError] = useState(null);
 
-  const { myTrips, setMyTrips, loadingMyTrips } = useFetchMyTrips();
-
-  // const [myTrips, setMyTrips] = useState([]);
-  // const [loadingMyTrips, setLoadingMyTrips] = useState(true);
-
-  // // Get all logged-in user related trips
-  // useEffect(() => {
-  //   const getAllMyTrips = async () => {
-  //     try {
-  //       const myTripsData = await UserApi.getAllUserTrips(user.username);
-  //       setMyTrips(myTripsData);
-  //     } catch (error) {
-  //       // Show error boundary
-  //       showBoundary(error);
-  //       console.error("Error fetching trips:", error);
-  //       setMyTrips([]);
-  //     } finally {
-  //       setLoadingMyTrips(false);
-  //     }
-  //   };
-  //   if (user) {
-  //     getAllMyTrips();
-  //   } else {
-  //     setLoadingMyTrips(false); // Ensure loading is stopped if there's no user
-  //   }
-  // }, [user]);
+  // Get all logged-in user related trips
+  const { myTrips, setMyTrips, loadingMyTrips, setLoadingMyTrips } =
+    useFetchMyTrips();
 
   // get all reservations for trip by ID
   const fetchReservationsForTrip = useCallback(async (tripId) => {
@@ -223,7 +200,7 @@ export const MyTripsProvider = ({ children }) => {
 };
 
 // Custom hook for easy consumption
-export const useMyTrips = () => {
+export const useMyTripsContext = () => {
   const context = useContext(MyTripsContext);
   if (!context) {
     throw new Error("useMyTrips must be used within a MyTripsProvider");

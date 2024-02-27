@@ -1,24 +1,56 @@
 import React from "react"; // Ensure React import for JSX if using React 17 or earlier
-import { Box, Typography } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Switch,
+  FormControlLabel,
+  FormGroup,
+} from "@mui/material";
 import SurfingSharpIcon from "@mui/icons-material/SurfingSharp";
 import { useAuthContext } from "../../context/authProvider";
 import TripPreviewCard from "./TripPreviewCard";
 import { Title, TitleDivider } from "../../styles/fontStyles";
 import { theme } from "../../utils/theme";
-import { useMyTrips } from "../../context/MyTripsProvider";
+import { useMyTripsContext } from "../../context/MyTripsProvider";
+import { useState } from "react";
 
 const MyTrips = () => {
   const { user } = useAuthContext();
-  const { myTrips } = useMyTrips(); // Use the custom hook to access myTrips from the context
+  const { myTrips } = useMyTripsContext();
   const isEmpty = myTrips.length === 0;
 
-  console.log("MYTRIPS", myTrips);
+  const [showOrganizerTrips, setShowOrganizerTrips] = useState(false);
+
+  const handleToggleChange = (e) => {
+    setShowOrganizerTrips(e.target.checked);
+  };
+
+  const filteredTrips = myTrips.filter((trip) =>
+    showOrganizerTrips
+      ? trip.owner === user.username
+      : trip.owner !== user.username
+  );
 
   return (
     <>
       <Box>
         <Title variant="h3">My Trips</Title>
         <TitleDivider />
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: 2,
+        }}
+      >
+        <FormGroup row>
+          <Typography sx={{ marginRight: 1 }}>Passenger</Typography>
+          <Switch checked={showOrganizerTrips} onChange={handleToggleChange} />
+          <Typography sx={{ marginLeft: 1 }}>Organizer</Typography>
+        </FormGroup>
       </Box>
 
       {isEmpty ? (
@@ -35,7 +67,7 @@ const MyTrips = () => {
         </Box>
       ) : (
         <Box sx={{ marginBottom: "80px" }}>
-          {myTrips.map((trip) => (
+          {filteredTrips.map((trip) => (
             <TripPreviewCard
               key={trip.id}
               tripDetails={trip}

@@ -8,16 +8,16 @@ import { theme } from "../../utils/theme";
 
 export const FavoriteButton = ({ isFavorited, handleFavorite }) => {
   const FavoriteButton = styled(IconButton)({
-    borderRadius: "50%",
-    border: `0.1px solid ${theme.palette.text.secondary}`,
+    // borderRadius: "50%",
+    // border: `0.1px solid ${theme.palette.text.secondary}`,
     padding: "5px", // Adjust padding as needed
-    backgroundColor: "white",
+    // backgroundColor: "white",
     "&:hover": {
       backgroundColor: "white",
       color: theme.palette.primary.contrastText,
     },
     "& .MuiSvgIcon-root": {
-      fontSize: "1rem", // Adjust the size as needed
+      fontSize: "1.5rem", // Adjust the size as needed
     },
 
     position: "absolute",

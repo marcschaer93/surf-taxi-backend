@@ -33,8 +33,8 @@ function stringAvatar(username) {
   };
 }
 
-export const PassengerAvatars = ({ reservations }) => {
-  // Filter passengers based on reservationStatus
+export const ReservationAvatars = ({ reservations }) => {
+  // Filter reservations based on reservationStatus
   const filteredReservations = reservations.filter(
     (r) => r.status === "confirmed"
   );

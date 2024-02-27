@@ -1,4 +1,6 @@
 import { Confirmation } from "./Confirmation";
+import { format } from "date-fns";
+
 import {
   Box,
   Card,
@@ -17,16 +19,17 @@ import { CancelRequestConfirmationCard } from "../../components/confirmationCard
 import { JoinRequestConfirmationCard } from "../../components/confirmationCards/JoinRequestConfirmationCard";
 import { DeleteOwnTripConfirmationCard } from "../../components/confirmationCards/DeleteOwnTripConfirmationCard";
 import { StyledDetailsCard } from "../../styles/cardStyles";
-import { PassengerCard } from "./PassengerCard";
+import { ReservationCard } from "./ReservationCard";
 import { Title, TitleDivider } from "../../styles/fontStyles";
 import { GoBackButton } from "../../components/ui/GoBackButton";
 import { useState } from "react";
 import { TripCardContent } from "./TripCardContent";
 import { BottomActionBar } from "../../components/BottomActionBar";
-import { PassengerAvatars } from "../../components/ui/PassengerAvatars";
+import { ReservationAvatars } from "../../components/ui/PassengerAvatars";
 import { StatusChip } from "../../components/ui/StatusChip";
+import InfoSharpIcon from "@mui/icons-material/InfoSharp";
 
-export const OwnerTripDetailsCard = ({
+export const OrganizerTripDetailsCard = ({
   tripDetails,
   reservations,
   handleAction,
@@ -53,31 +56,54 @@ export const OwnerTripDetailsCard = ({
           <TitleDivider />
         </Box>
 
-        <StyledDetailsCard variant="outlined">
-          <Box sx={{ position: "absolute", top: 18, right: 18 }}>
+        {/* <StyledDetailsCard variant="outlined"> */}
+        {/* <Box sx={{ position: "absolute", top: 18, right: 18 }}>
             <StatusChip isTripOwner={true} status={"organizer"} />
-          </Box>
+          </Box> */}
 
-          <TripCardContent tripDetails={tripDetails} />
+        <TripCardContent tripDetails={tripDetails} />
 
-          <Box>
-            {showConfirmation && (
-              <DeleteOwnTripConfirmationCard
-                tripDetails={tripDetails}
-                open={showConfirmation}
-                onClose={closeConfirmation}
-                handleAction={handleAction}
-              />
-            )}
+        <Box>
+          {showConfirmation && (
+            <DeleteOwnTripConfirmationCard
+              tripDetails={tripDetails}
+              open={showConfirmation}
+              onClose={closeConfirmation}
+              handleAction={handleAction}
+            />
+          )}
+        </Box>
+
+        {/* User Trip Status */}
+        <Box>
+          <TitleDivider />
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box>
+              <Box sx={{ display: "flex", gap: "10px" }}>
+                <Typography variant="h5">My Status</Typography>
+                <InfoSharpIcon />
+              </Box>
+              {/* <Typography variant="body2">
+                {`Last modified: ${format(
+                  userReservation.reservationTimestamp,
+                  "yyyy-MM-dd "
+                )}`}
+              </Typography> */}
+            </Box>
+            <StatusChip isTripOwner={false} status={"organizer"} />
           </Box>
-        </StyledDetailsCard>
+        </Box>
+
+        <TitleDivider />
+
+        {/* </StyledDetailsCard> */}
 
         {/* Requests */}
         <Box>
           <Typography variant="h5">My Requests</Typography>
           {notConfirmedReservations && notConfirmedReservations.length > 0 ? (
             notConfirmedReservations.map((r) => (
-              <PassengerCard
+              <ReservationCard
                 key={`${r.username} + ${r.trip_id}`}
                 tripDetails={tripDetails}
                 reservation={r}
@@ -93,7 +119,7 @@ export const OwnerTripDetailsCard = ({
         <Box>
           <TitleDivider />
           <Typography variant="h5">Reserved Seats</Typography>
-          <PassengerAvatars reservations={reservations} />
+          <ReservationAvatars reservations={reservations} />
         </Box>
 
         <TitleDivider />

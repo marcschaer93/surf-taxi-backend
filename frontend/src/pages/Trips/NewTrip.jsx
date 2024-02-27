@@ -6,12 +6,12 @@ import { TripForm } from "./TripForm";
 import { Title, TitleDivider } from "../../styles/fontStyles";
 import { GoBackButton } from "../../components/ui/GoBackButton";
 import { BottomActionBar } from "../../components/BottomActionBar";
-import { useMyTrips } from "../../context/MyTripsProvider";
+import { useMyTripsContext } from "../../context/MyTripsProvider";
 
 export const NewTrip = () => {
-  const auth = useAuthContext();
   const navigate = useNavigate();
-  const { myTrips, setMyTrips, addTrip } = useMyTrips();
+  const auth = useAuthContext();
+  const { myTrips, setMyTrips, addTrip } = useMyTripsContext();
 
   const handleGoBackButton = (e, tripId) => {
     e.stopPropagation();
