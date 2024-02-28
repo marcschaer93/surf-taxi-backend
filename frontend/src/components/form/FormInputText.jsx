@@ -21,6 +21,8 @@ export const FormInputText = ({
   label,
   errors,
   disabled = false,
+  type = null,
+  InputLabelProps = null,
 }) => {
   return (
     <Controller
@@ -37,6 +39,8 @@ export const FormInputText = ({
           variant="outlined"
           fullWidth
           disabled={disabled}
+          type={type}
+          InputLabelProps={InputLabelProps}
         />
       )}
     />

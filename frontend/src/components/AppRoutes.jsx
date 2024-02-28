@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import { Home } from "../pages/Home";
 import { Login } from "../pages/Login";
@@ -22,7 +22,9 @@ export const AppRoutes = ({
   return (
     <Routes>
       // HOME
-      <Route path="/" element={<Home allTrips={allTrips} />} />
+      {/* <Route path="/" element={<Home allTrips={allTrips} /> } /> */}
+      // Entry Point is /trips not home !!
+      <Route path="/" element={<Navigate replace to="/trips" />} />
       // USER ROUTES
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />

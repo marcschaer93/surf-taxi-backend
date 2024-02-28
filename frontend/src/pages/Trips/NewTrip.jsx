@@ -29,13 +29,13 @@ export const NewTrip = () => {
       <TripForm addTrip={addTrip} />
 
       {/* Bottom action bar */}
-      <BottomActionBar
+      {/* <BottomActionBar
         variant={"contained"}
         color={"primary"}
         // onClick={handleSubmit(onFormSubmit)}
         onClick={console.log("NOT IMPL!")}
         buttonText={"Add Trip"}
-      />
+      /> */}
     </Box>
   );
 };

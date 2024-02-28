@@ -29,16 +29,18 @@ const AllTrips = ({ allTrips }) => {
   // }, [myTrips, allTrips]);
 
   useEffect(() => {
-    // Extract trip IDs from myTrips for comparison
-    const myTripsIds = myTrips.map((trip) => trip.id);
+    if (!user) {
+      setVisibleTrips(allTrips);
+      return;
+    }
 
-    // Filter allTrips based on whether their ID appears in myTripsIds
+    // Proceed with filtering if there is a logged-in user
+    const myTripsIds = myTrips.map((trip) => trip.id);
     const filteredTrips = allTrips.filter(
       (trip) => !myTripsIds.includes(trip.id)
     );
-
     setVisibleTrips(filteredTrips);
-  }, [myTrips, allTrips]);
+  }, [user, myTrips, allTrips]);
 
   const isEmpty = visibleTrips.length === 0;
 
@@ -69,7 +71,7 @@ const AllTrips = ({ allTrips }) => {
                 key={trip.id}
                 tripDetails={trip}
                 isInMyTrips={false}
-                isTripOrganizer={trip.owner === user.username}
+                isTripOrganizer={user ? trip.owner === user.username : null}
               />
             ))}
           </Box>

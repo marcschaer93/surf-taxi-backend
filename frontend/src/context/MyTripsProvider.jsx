@@ -58,9 +58,10 @@ export const MyTripsProvider = ({ children }) => {
 
         const newTrip = { ...newTripData, userReservationStatus: "organizer" };
         setMyTrips((prevTrips) => [...prevTrips, newTrip]);
-        console.log("Trip created successfully:", newTrip);
+        return newTrip;
       } catch (error) {
         console.error(error);
+        return null;
       } finally {
         setLoadingMyTrips(false);
       }

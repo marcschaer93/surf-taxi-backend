@@ -31,6 +31,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import ArrowRightAltSharpIcon from "@mui/icons-material/ArrowRightAltSharp";
 import CalendarMonthSharpIcon from "@mui/icons-material/CalendarMonthSharp";
 import PaidSharpIcon from "@mui/icons-material/PaidSharp";
+import { ConditionalFavorite } from "../Favorites/ConditionalFavorite";
 
 // DATA FLOW
 // tripDetails       ===>     from parent
@@ -44,12 +45,12 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
   const tripId = tripDetails?.id;
 
   // Favorite trips hook (only for logged in users)
-  const { isFavorited, toggleFavorite } = useToggleFavoriteTrip(tripId);
+  // const { isFavorited, toggleFavorite } = useToggleFavoriteTrip(tripId);
 
-  const handleFavorite = (e, tripId) => {
-    e.stopPropagation();
-    toggleFavorite();
-  };
+  // const handleFavorite = (e, tripId) => {
+  //   e.stopPropagation();
+  //   toggleFavorite();
+  // };
 
   const handleCardClick = () => {
     navigate(`/trips/${tripId}`, { state: { tripDetails } });
@@ -68,13 +69,6 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
           : theme.palette.grey[800],
       }}
     >
-      {/* {!isInMyTrips && !isTripOrganizer && user && (
-        <FavoriteButton
-          handleFavorite={handleFavorite}
-          isFavorited={isFavorited}
-        ></FavoriteButton>
-      )} */}
-
       <Box
         sx={{
           display: "flex",
@@ -94,11 +88,9 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
           </Typography>
         </Box>
 
+        {/* Conditional rendering based on user being logged in */}
         {!isInMyTrips && !isTripOrganizer && user && (
-          <FavoriteButton
-            handleFavorite={handleFavorite}
-            isFavorited={isFavorited}
-          />
+          <ConditionalFavorite tripId={tripId} />
         )}
       </Box>
 
@@ -115,32 +107,24 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
         {/* Trip Route */}
         <Box
           display="flex"
-          justifyContent="left" // Center the content horizontally
-          alignItems="center" // Align items vertically
+          justifyContent="left"
+          alignItems="center"
           sx={{
-            textAlign: "center", // Center the text if it wraps
+            textAlign: "center",
           }}
         >
-          <Typography
-            component="span" // Use span to keep inline with flex items
-            variant="h5" // Adjust size for better mobile visibility
-            sx={{ marginRight: 2 }} // Add some spacing before the arrow
-          >
+          <Typography component="span" variant="h5" sx={{ marginRight: 2 }}>
             {startLocation}
           </Typography>
 
           <ArrowRightAltSharpIcon
             sx={{
               color: theme.palette.text.secondary,
-              mx: 1, // Margin on both sides for spacing
+              mx: 1,
             }}
           />
 
-          <Typography
-            component="span" // Use span to keep inline with flex items
-            variant="h5" // Adjust size for better mobile visibility
-            sx={{ marginLeft: 2 }} // Add some spacing after the arrow
-          >
+          <Typography component="span" variant="h5" sx={{ marginLeft: 2 }}>
             {destination}
           </Typography>
         </Box>
