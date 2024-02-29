@@ -10,6 +10,12 @@ Furthermore, many surfers are landlocked and are looking for a ride to the coast
 
 This basically means that the modern surfer drives a lot from A to B and back and forth. So there are many potential ride opportunities.
 
+## Important Note:
+
+Due to the project scope, Surf Taxi is specifically optimized for mobile use, offering the best UI and UX on smartphones. While the app is fully functional on web browsers, its layout and functionalities shine on mobile platforms. For an optimal experience, we recommend accessing Surf Taxi on your smartphone or using mobile emulation tools like Chrome's DevTools set to iPhone 7.
+
+![Surf Taxi Mobile View](frontend/public/assets/images/chrome-dev-tools.jpg)
+
 ## Technology Stack
 
 #### Frontend:
