@@ -12,9 +12,10 @@ This basically means that the modern surfer drives a lot from A to B and back an
 
 ## Important Note:
 
-Due to the project scope, Surf Taxi is specifically optimized for mobile use, offering the best UI and UX on smartphones. While the app is fully functional on web browsers, its layout and functionalities shine on mobile platforms. For an optimal experience, we recommend accessing Surf Taxi on your smartphone or using mobile emulation tools like Chrome's DevTools set to iPhone 7.
+**Surf Taxi is optimized for mobile use**, offering an excellent experience on smartphones. Although it also works on desktop browsers, you'll get the full visual and functional benefits on a mobile device. If you're on a desktop, you can switch your browser view to a mobile setting (for example, use Chrome's DevTools to simulate an iPhone 7) to see how it looks on a phone.
 
-![Surf Taxi Mobile View](frontend/public/assets/images/chrome-dev-tools.jpg)
+<!-- ![Surf Taxi Mobile View](frontend/public/assets/images/chrome-dev-tools.jpg) -->
+<img src="frontend/public/assets/images/chrome-dev-tools.jpg" width="300"/>
 
 ## Technology Stack
 
