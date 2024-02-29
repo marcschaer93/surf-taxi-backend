@@ -12,22 +12,15 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/authProvider";
-// import { CardStatusChip } from "../../components/ui/CardStatusChip";
-import { FavoriteButton } from "../../components/ui/FavoriteButton";
 import { StyledPreviewCard } from "../../styles/cardStyles";
 import { TripCardContent } from "./TripCardContent";
 import { useToggleFavoriteTrip } from "../../hooks/useToggleFavoriteTrip";
 import { theme } from "../../utils/theme";
-import { useMyTripsContext } from "../../context/MyTripsProvider";
 import { StatusChip } from "../../components/ui/StatusChip";
-import { TitleDivider } from "../../styles/fontStyles";
 import { format } from "date-fns";
 
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import EventIcon from "@mui/icons-material/Event";
 import StopIcon from "@mui/icons-material/Stop";
 import EventSeatIcon from "@mui/icons-material/EventSeat";
-import InfoIcon from "@mui/icons-material/Info";
 import ArrowRightAltSharpIcon from "@mui/icons-material/ArrowRightAltSharp";
 import CalendarMonthSharpIcon from "@mui/icons-material/CalendarMonthSharp";
 import PaidSharpIcon from "@mui/icons-material/PaidSharp";

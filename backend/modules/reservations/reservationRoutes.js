@@ -29,7 +29,7 @@ router.post(
 );
 
 // Updates reservation  (Response by trip owner or admin)
-router.put(
+router.patch(
   "/:tripId",
   authenticate,
   reservationController.updateOneReservation

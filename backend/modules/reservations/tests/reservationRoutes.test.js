@@ -43,98 +43,119 @@ describe("GET /api/reservations/:tripId", function () {
   });
 });
 
-// /* POST /api/reservations/trips/:tripId/join */
+/* POST /api/reservations/trips/:tripId/join */
 
-// describe("POST /api/reservations/trips/:tripId/join", function () {
-//   test("OK to make a join request as loggedIn user and user_role", async function () {
-//     const resp = await request(app)
-//       .post(`/api/reservations/trips/${testTripIds[0]}/join`)
-//       .set("authorization", `Bearer ${u2AccessToken}`);
+describe("POST /api/reservations/:tripId", function () {
+  test("OK to create new reservation and make a join request as loggedIn user and user_role", async function () {
+    const resp = await request(app)
+      .post(`/api/reservations/${testTripIds[0]}`)
+      .set("authorization", `Bearer ${u2AccessToken}`);
 
-//     expect(resp.statusCode).toEqual(201);
-//     expect(resp.body.success).toEqual(true);
-//     expect(resp.body.data.reservation).toEqual("marcschaer");
-//     expect(resp.body.data.newJoinRequest.status).toEqual("requested");
-//     expect(resp.body.data.newJoinRequest.username).toEqual("marcschaer");
-//     expect(resp.body.data.newJoinRequest.tripId).toEqual(testTripIds[0]);
-//   });
+    expect(resp.statusCode).toEqual(201);
+    expect(resp.body.success).toEqual(true);
+    expect(resp.body.data).toHaveProperty("status", "requested");
+    expect(resp.body.data).toHaveProperty("username", "marcschaer");
+    expect(resp.body.data).toHaveProperty("tripId", expect.any(Number));
+  });
 
-//   test("FAIL to make a join request as tripOwner to own trip", async function () {
-//     const resp = await request(app)
-//       .post(`/api/reservations/trips/${testTripIds[0]}/join`)
-//       .set("authorization", `Bearer ${u1AccessToken}`);
+  test("FAIL to make a join request as tripOwner to own trip", async function () {
+    const resp = await request(app)
+      .post(`/api/reservations/${testTripIds[0]}`)
+      .set("authorization", `Bearer ${u1AccessToken}`);
 
-//     expect(resp.statusCode).toEqual(400);
-//     expect(resp.body.error.message).toMatch(
-//       `Can't Request. You are the owner of the trip with ID: ${testTripIds[0]}.`
-//     );
-//   });
-// });
+    expect(resp.statusCode).toEqual(400);
+    expect(resp.body.error.message).toMatch(
+      `Can't Request. You are the owner of the trip with ID: ${testTripIds[0]}.`
+    );
+  });
+});
 
-// /* DELETE /api/passenger/trips/:tripId/join */
+/* DELETE /api/passenger/trips/:tripId/join */
 
-// describe("DELETE /api/passenger/trips/:tripId/join", function () {
-//   test("OK remove own join request if not already 'confirmed'", async function () {
-//     const resp = await request(app)
-//       .delete(`/api/reservationss/trips/${testTripIds[1]}/join`)
-//       .set("authorization", `Bearer ${u1AccessToken}`);
+describe("DELETE /api/reservations/:tripId", function () {
+  test("OK remove own reservation (join request) if not already 'confirmed'", async function () {
+    const resp = await request(app)
+      .delete(`/api/reservations/${testTripIds[1]}`)
+      .set("authorization", `Bearer ${u1AccessToken}`);
 
-//     expect(resp.statusCode).toEqual(204);
-//   });
+    expect(resp.statusCode).toEqual(204);
+  });
 
-//   test("FAIL remove own join request if already 'confirmed'", async function () {
-//     // change join request to confirmed first..
-//     await db.query(
-//       `
-//       UPDATE reservationss
-//       SET status = $3
-//       WHERE trip_id = $1
-//       AND username = $2
-//       `,
-//       [testTripIds[1], "testuser", "confirmed"]
-//     );
+  test("FAIL remove own join request if already 'confirmed'", async function () {
+    // change join request to confirmed first..
+    await db.query(
+      `
+      UPDATE reservations
+      SET status = $3
+      WHERE trip_id = $1
+      AND username = $2
+      `,
+      [testTripIds[1], "testuser", "confirmed"]
+    );
 
-//     const resp = await request(app)
-//       .delete(`/api/reservationss/trips/${testTripIds[1]}/join`)
-//       .set("authorization", `Bearer ${u1AccessToken}`);
+    const resp = await request(app)
+      .delete(`/api/reservations/${testTripIds[1]}`)
+      .set("authorization", `Bearer ${u1AccessToken}`);
 
-//     expect(resp.statusCode).toEqual(400);
-//   });
-// });
+    expect(resp.statusCode).toEqual(400);
+  });
+});
 
-// /* PATCH /api/reservationss/trips/:tripId/join/:passengerUsername/respond */
+/* PATCH /api/reservationss/trips/:tripId/join/:passengerUsername/respond */
 
-// describe("PATCH /api/reservationss/trips/:tripId/join/:passengerUsername/respond", function () {
-//   test("OK to respond to a join request as tripOwner", async function () {
-//     const resp = await request(app)
-//       .patch(`/api/reservationss/trips/${testTripIds[1]}/join/testuser/respond`)
-//       .set("authorization", `Bearer ${u2AccessToken}`)
-//       .send({ response: "confirmed" });
+describe("PATCH /api/reservations/:tripId", () => {
+  it("should update the reservation status and return the updated reservation", async () => {
+    const tripId = testTripIds[1];
+    const reservationUsername = "testuser";
+    const newStatus = "confirmed";
+    const token = u2AccessToken;
 
-//     expect(resp.statusCode).toEqual(200);
-//   });
+    const response = await request(app)
+      .patch(`/api/reservations/${tripId}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        reservationUsername,
+        newStatus,
+      })
+      .expect(200);
 
-//   test("FAIL to respond to own trip as tripOwner", async function () {
-//     const resp = await request(app)
-//       .patch(`/api/reservationss/trips/${testTripIds[0]}/join/testuser/respond`)
-//       .set("authorization", `Bearer ${u1AccessToken}`)
-//       .send({ response: "confirmed" });
+    expect(response.body.success).toBe(true);
+    expect(response.body.data).toHaveProperty("status", newStatus);
+    expect(response.body.data).toHaveProperty("username", reservationUsername);
+    expect(response.body.data).toHaveProperty("tripId", tripId);
+  });
 
-//     expect(resp.statusCode).toEqual(401);
-//     expect(resp.body.error.message).toMatch(
-//       "You are the trip owner and cannot perform this action."
-//     );
-//   });
+  test("FAIL to respond to own trip as tripOwner", async function () {
+    const tripId = testTripIds[1];
+    const reservationUsername = "marcschaer";
+    const newStatus = "confirmed";
+    const token = u2AccessToken;
 
-//   test("FAIL to respond to a join request as tripOwner if already 'confirmed'", async function () {
-//     const resp = await request(app)
-//       .patch(`/api/reservationss/trips/${testTripIds[0]}/join/testuser/respond`)
-//       .set("authorization", `Bearer ${u1AccessToken}`)
-//       .send({ response: "confirmed" });
+    const resp = await request(app)
+      .patch(`/api/reservations/${tripId}`)
+      .set("authorization", `Bearer ${token}`)
+      .send({ reservationUsername, newStatus });
 
-//     expect(resp.statusCode).toEqual(401);
-//     expect(resp.body.error.message).toMatch(
-//       "You are the trip owner and cannot perform this action."
-//     );
-//   });
-// });
+    expect(resp.statusCode).toEqual(401);
+    expect(resp.body.error.message).toMatch(
+      "You are the trip owner and cannot perform this action."
+    );
+  });
+
+  test("FAIL to respond to a join request as tripOwner if already 'confirmed'", async function () {
+    const tripId = testTripIds[1];
+    const reservationUsername = "testuser";
+    const newStatus = "confirmed";
+    const token = u2AccessToken;
+
+    const resp = await request(app)
+      .patch(`/api/reservations/${tripId}`)
+      .set("authorization", `Bearer ${token}`)
+      .send({ reservationUsername, newStatus });
+
+    expect(resp.statusCode).toEqual(401);
+    expect(resp.body.error.message).toMatch(
+      "You are the trip owner and cannot perform this action."
+    );
+  });
+});

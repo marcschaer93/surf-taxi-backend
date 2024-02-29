@@ -98,7 +98,7 @@ async function commonBeforeAll() {
   testTripIds[1] = resultTrip2.id;
 
   //   await User.applyToJob("u1", testJobIds[0]);
-  await ReservationApi.requestToJoin(testTripIds[1], "testuser");
+  await ReservationApi.createNewReservation(testTripIds[1], "testuser");
 }
 async function commonBeforeEach() {
   await db.query("BEGIN");

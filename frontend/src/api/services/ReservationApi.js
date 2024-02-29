@@ -27,7 +27,7 @@ export const updateOneReservation = async (
   newStatus
 ) => {
   try {
-    const response = await ApiService.put(`/reservations/${tripId}`, {
+    const response = await ApiService.patch(`/reservations/${tripId}`, {
       newStatus,
       reservationUsername,
     });
