@@ -15,7 +15,7 @@ This basically means that the modern surfer drives a lot from A to B and back an
 **Surf Taxi is optimized for mobile use**, offering an excellent experience on smartphones. Although it also works on desktop browsers, you'll get the full visual and functional benefits on a mobile device. If you're on a desktop, you can switch your browser view to a mobile setting (for example, use Chrome's DevTools to simulate an iPhone 7) to see how it looks on a phone.
 
 <!-- ![Surf Taxi Mobile View](frontend/public/assets/images/chrome-dev-tools.jpg) -->
-<img src="frontend/public/assets/images/surf-taxi(iPhone 6_7_8 Plus).png" width="100"/>
+<img src="frontend/public/assets/images/surf-taxi(iPhone 6_7_8 Plus).png" width="150"/>
 
 ## Technology Stack
 
