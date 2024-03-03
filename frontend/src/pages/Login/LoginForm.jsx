@@ -40,10 +40,16 @@ export const LoginForm = () => {
     setError,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      username: "testuser",
-      password: "password",
-    },
+    defaultValues:
+      process.env.NODE_ENV === "development"
+        ? {
+            username: "testuser",
+            password: "password",
+          }
+        : {
+            username: "",
+            password: "",
+          },
   });
 
   const onFormSubmit = async (credentials) => {
