@@ -4,13 +4,14 @@ import { useMyTripsContext } from "../../context/MyTripsProvider";
 
 export const CancelRequestConfirmationCard = ({
   tripDetails,
-  // handleConfirmCancel,
   open,
   onClose,
-  // handleAction,
 }) => {
   const { handleAction } = useMyTripsContext();
-  const message = `Are you sure you want to cancel your request for the trip from ${tripDetails.startLocation} to ${tripDetails.destination}?`;
+
+  const { originCity, destinationCity } = tripDetails;
+
+  const message = `Are you sure you want to cancel your request for the trip from ${originCity} to ${destinationCity}?`;
 
   const title = "Confirm Cancel Request";
 

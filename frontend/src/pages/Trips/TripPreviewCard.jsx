@@ -177,7 +177,7 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
         <Divider sx={{ my: 2, bgcolor: "divider" }} />
 
         {/* Date */}
-        <Typography color="text">
+        <Typography color="text.secondary">
           <CalendarMonthSharpIcon sx={{ marginRight: 1 }} />
           {format(new Date(date), "MMMM dd, yyyy")}
         </Typography>

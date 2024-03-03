@@ -19,6 +19,7 @@ import {
   SignupLink,
   FormTitle,
 } from "../../styles/formStyles";
+import { BottomSpacer } from "../../components/ui/BottomSpacer";
 
 /**
  * LoginForm Component
@@ -63,60 +64,63 @@ export const LoginForm = () => {
   };
 
   return (
-    <FormContainer>
-      <TitleContainer>
-        <FormTitle variant="h4">Login Form</FormTitle>
-        <Underline></Underline>
-      </TitleContainer>
+    <>
+      <FormContainer>
+        <TitleContainer>
+          <FormTitle variant="h4">Login Form</FormTitle>
+          <Underline></Underline>
+        </TitleContainer>
 
-      <Box
-        component="form"
-        autoComplete="off"
-        onSubmit={handleSubmit(onFormSubmit)}
-      >
-        <InputsContainer>
-          <Input>
-            <FormInputUsername
-              name="username"
-              control={control}
-              label="Username"
-              errors={errors}
-            />
-          </Input>
-
-          <Input>
-            <FormInputPassword
-              name="password"
-              control={control}
-              label="Password"
-              errors={errors}
-            />
-          </Input>
-        </InputsContainer>
-
-        <LostPasswordContainer
-          onClick={() => alert("Lost Password ? Sorry I can't Help you!")}
+        <Box
+          component="form"
+          autoComplete="off"
+          onSubmit={handleSubmit(onFormSubmit)}
         >
-          Lost Password
-        </LostPasswordContainer>
+          <InputsContainer>
+            <Input>
+              <FormInputUsername
+                name="username"
+                control={control}
+                label="Username"
+                errors={errors}
+              />
+            </Input>
 
-        <SubmitContainer>
-          <SubmitButton
-            variant="contained"
-            color="primary"
-            type="submit"
-            size="medium"
+            <Input>
+              <FormInputPassword
+                name="password"
+                control={control}
+                label="Password"
+                errors={errors}
+              />
+            </Input>
+          </InputsContainer>
+
+          <LostPasswordContainer
+            onClick={() => alert("Lost Password ? Sorry I can't Help you!")}
           >
-            Login
-          </SubmitButton>
-        </SubmitContainer>
-        <SwitchContainer>
-          Not a Member yet?
-          <SignupLink component={Link} to="/register" exact="true">
-            Sign Up.
-          </SignupLink>
-        </SwitchContainer>
-      </Box>
-    </FormContainer>
+            Lost Password
+          </LostPasswordContainer>
+
+          <SubmitContainer>
+            <SubmitButton
+              variant="contained"
+              color="primary"
+              type="submit"
+              size="medium"
+            >
+              Login
+            </SubmitButton>
+          </SubmitContainer>
+          <SwitchContainer>
+            Not a Member yet?
+            <SignupLink component={Link} to="/register" exact="true">
+              Sign Up.
+            </SignupLink>
+          </SwitchContainer>
+        </Box>
+      </FormContainer>
+      <BottomSpacer />
+    </>
   );
 };

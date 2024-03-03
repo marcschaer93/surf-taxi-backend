@@ -1,17 +1,21 @@
 import React from "react";
 import { Confirmation } from "../../pages/Trips/Confirmation";
 import { Box, Typography } from "@mui/material";
+import { useMyTripsContext } from "../../context/MyTripsProvider";
 
 export const ConnectConfirmationCard = ({
   reservation,
   open,
   onClose,
   tripDetails,
-  handleAction,
 }) => {
+  const { handleAction } = useMyTripsContext();
+
+  const { originCity, destinationCity } = tripDetails;
+
   // Directly assign message and title based on the passenger reservation status
   const isRequested = reservation.status === "requested";
-  const journeyDetails = `${tripDetails.startLocation} to ${tripDetails.destination}`;
+  const journeyDetails = `${originCity} to ${destinationCity}`;
 
   let message, title;
 

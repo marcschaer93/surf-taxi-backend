@@ -39,6 +39,7 @@ import InfoSharpIcon from "@mui/icons-material/InfoSharp";
 import { useMyTripsContext } from "../../context/MyTripsProvider";
 import { useAuthContext } from "../../context/authProvider";
 import TripPreviewCard from "./TripPreviewCard";
+import { StatusInfoDialog } from "./StatusInfoDialog";
 
 export const TripDetailsCard = ({
   tripDetails,
@@ -54,6 +55,7 @@ export const TripDetailsCard = ({
     useToggleFavoriteTrip(tripId);
   const [showJoinConfirmation, setShowJoinConfirmation] = useState(false);
   const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
+  const [showStatusInfoDialog, setShowStatusInfoDialog] = useState(false);
   const [userReservation, setUserReservation] = useState(null);
 
   useEffect(() => {
@@ -67,21 +69,13 @@ export const TripDetailsCard = ({
 
   const isInMyTrips = myTrips.some((t) => t.id === parseInt(tripId));
 
-  const openJoinConfirmation = () => {
-    setShowJoinConfirmation(true);
-  };
+  const openStatusInfoDialog = () => setShowStatusInfoDialog(true);
+  const closeStatusInfoDialog = () => setShowStatusInfoDialog(false);
 
-  const openCancelConfirmation = () => {
-    setShowCancelConfirmation(true);
-  };
-
-  const closeJoinConfirmation = () => {
-    setShowJoinConfirmation(false);
-  };
-
-  const closeCancelConfirmation = () => {
-    setShowCancelConfirmation(false);
-  };
+  const openJoinConfirmation = () => setShowJoinConfirmation(true);
+  const openCancelConfirmation = () => setShowCancelConfirmation(true);
+  const closeJoinConfirmation = () => setShowJoinConfirmation(false);
+  const closeCancelConfirmation = () => setShowCancelConfirmation(false);
 
   const handleFavorite = (e, tripId) => {
     e.stopPropagation();
@@ -90,7 +84,7 @@ export const TripDetailsCard = ({
 
   const handleGoBackButton = (e, tripId) => {
     e.stopPropagation();
-    navigate(-1);
+    isInMyTrips ? navigate("/my-trips") : navigate("/trips");
   };
 
   const handleAvatarClick = (username) => {
@@ -157,22 +151,37 @@ export const TripDetailsCard = ({
           <TitleDivider />
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
-              <Box sx={{ display: "flex", gap: "10px" }}>
-                <Typography variant="h5">My Status</Typography>
-                <InfoSharpIcon />
+              <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <Typography variant="h5" component="span">
+                  My Status
+                </Typography>
+
+                {/* Status Info Button */}
+                <IconButton
+                  onClick={openStatusInfoDialog}
+                  color="primary"
+                  sx={{ padding: 0, marginTop: "-4px" }}
+                >
+                  <InfoSharpIcon />
+                </IconButton>
+                {/* StatusInfoDialog */}
+                <StatusInfoDialog
+                  open={showStatusInfoDialog}
+                  onClose={closeStatusInfoDialog}
+                  currentStatus={userReservation.status}
+                  // onConfirm
+                  // message
+                  // title
+                />
               </Box>
               <Typography variant="body2">
                 {`Last modified: ${format(
                   userReservation.reservationTimestamp,
-                  "yyyy-MM-dd "
+                  "dd MMMM, yyyy"
                 )}`}
               </Typography>
             </Box>
-            <StatusChip
-              sx={{}}
-              isTripOwner={false}
-              status={userReservation.status}
-            />
+            <StatusChip isTripOwner={false} status={userReservation.status} />
           </Box>
         </Box>
       )}

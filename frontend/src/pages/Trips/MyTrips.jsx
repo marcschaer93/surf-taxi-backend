@@ -13,11 +13,11 @@ import { Title, TitleDivider } from "../../styles/fontStyles";
 import { theme } from "../../utils/theme";
 import { useMyTripsContext } from "../../context/MyTripsProvider";
 import { useState } from "react";
+import { BottomSpacer } from "../../components/ui/BottomSpacer";
 
 const MyTrips = () => {
   const { user } = useAuthContext();
   const { myTrips } = useMyTripsContext();
-  const isEmpty = myTrips.length === 0;
 
   const [showOrganizerTrips, setShowOrganizerTrips] = useState(false);
 
@@ -30,6 +30,8 @@ const MyTrips = () => {
       ? trip.owner === user.username
       : trip.owner !== user.username
   );
+
+  const isEmpty = filteredTrips.length === 0;
 
   return (
     <>
@@ -58,24 +60,25 @@ const MyTrips = () => {
           <SurfingSharpIcon
             sx={{ fontSize: "3rem", color: theme.palette.text.secondary }}
           />
-          <Typography variant="h6">
-            No trips in myTrips available now
-          </Typography>
+          <Typography variant="h6">No trips available now</Typography>
           <Typography color="text.secondary">
             Add a new Trip or join another!
           </Typography>
         </Box>
       ) : (
-        <Box sx={{ marginBottom: "80px" }}>
-          {filteredTrips.map((trip) => (
-            <TripPreviewCard
-              key={trip.id}
-              tripDetails={trip}
-              isInMyTrips={true}
-              isTripOrganizer={trip.owner === user.username}
-            />
-          ))}
-        </Box>
+        <>
+          <Box>
+            {filteredTrips.map((trip) => (
+              <TripPreviewCard
+                key={trip.id}
+                tripDetails={trip}
+                isInMyTrips={true}
+                isTripOrganizer={trip.owner === user.username}
+              />
+            ))}
+          </Box>
+          <BottomSpacer />
+        </>
       )}
     </>
   );

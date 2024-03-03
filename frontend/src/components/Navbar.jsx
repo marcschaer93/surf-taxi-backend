@@ -132,10 +132,13 @@ export const Navbar = () => {
             </NotificationContainer>
           )}
 
+          {/* Trip filter */}
           {user && (
             <Box sx={{ display: { xs: "flex", sm: "none" } }}>
               <IconButton
-                onClick={() => console.log("SETTINGS, NOT IMPLEMENTED")}
+                onClick={() =>
+                  alert("TRIP FILTER NOT IMPLEMENTED in progress...")
+                }
                 color="inherit"
               >
                 <TuneSharpIcon />

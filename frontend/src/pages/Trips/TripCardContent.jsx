@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import AirportShuttleSharpIcon from "@mui/icons-material/AirportShuttleSharp";
 
 import React from "react";
 import {
@@ -87,7 +88,7 @@ export const TripCardContent = ({ tripDetails, preview }) => {
             {/* Date */}
             <Typography color="text.secondary">
               <CalendarMonthSharpIcon sx={{ marginRight: 1 }} />
-              {format(new Date(date), "MMMM dd, yyyy")}
+              {format(new Date(date), "dd MMMM, yyyy")}
             </Typography>
 
             {/* Stops */}
@@ -110,7 +111,7 @@ export const TripCardContent = ({ tripDetails, preview }) => {
 
             {/* Car */}
             <Typography color="text.secondary">
-              <PaidSharpIcon sx={{ marginRight: 1 }} />
+              <AirportShuttleSharpIcon sx={{ marginRight: 1 }} />
               Mercedes Sprinter
             </Typography>
 

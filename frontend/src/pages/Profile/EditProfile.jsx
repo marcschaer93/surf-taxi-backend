@@ -28,6 +28,7 @@ import {
 } from "../../styles/formStyles";
 
 import { GoBackButton } from "../../components/ui/GoBackButton";
+import { BottomSpacer } from "../../components/ui/BottomSpacer";
 
 /**
  * EditForm Component
@@ -123,7 +124,7 @@ export const EditProfile = () => {
               <FormInputText
                 name="avatar"
                 control={control}
-                label="Avatar URL"
+                label="Avatar"
                 errors={errors}
               />
             </Input>
@@ -131,14 +132,14 @@ export const EditProfile = () => {
               <FormInputText
                 name="facebook"
                 control={control}
-                label="Facebook URL"
+                label="Facebook"
                 errors={errors}
               />
             </Input>
             <FormInputText
               name="instagram"
               control={control}
-              label="Instagram,"
+              label="Instagram"
               errors={errors}
             />
             <FormInputMultiline
@@ -164,6 +165,7 @@ export const EditProfile = () => {
           </SubmitContainer> */}
         </Box>
       </FormContainer>
+      <BottomSpacer />
 
       {/* Bottom action bar */}
       <BottomActionBar

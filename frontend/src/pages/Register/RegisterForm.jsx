@@ -5,6 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button, Typography, Box } from "@mui/material";
 
 import { FormInputText } from "../../components/form/FormInputText";
+import { FormInputPassword } from "../../components/form/FormInputPassword";
 import { useAuthContext } from "../../context/authProvider";
 import {
   FormContainer,
@@ -21,6 +22,7 @@ import {
   HalfInput,
   HalfInputContainer,
 } from "../../styles/formStyles";
+import { BottomSpacer } from "../../components/ui/BottomSpacer";
 
 /**
  * RegisterForm Component
@@ -70,74 +72,77 @@ export const RegisterForm = () => {
   };
 
   return (
-    <FormContainer>
-      <TitleContainer>
-        <FormTitle variant="h1">Register Form</FormTitle>
-        <Underline></Underline>
-      </TitleContainer>
-      <form autoComplete="off" onSubmit={handleSubmit(onFormSubmit)}>
-        <InputsContainer>
-          <Input>
-            <FormInputText
-              name="username"
-              control={control}
-              label="Username"
-              errors={errors}
-            />
-          </Input>
-          <HalfInputContainer>
-            <HalfInput>
+    <>
+      <FormContainer>
+        <TitleContainer>
+          <FormTitle variant="h1">Register Form</FormTitle>
+          <Underline></Underline>
+        </TitleContainer>
+        <form autoComplete="off" onSubmit={handleSubmit(onFormSubmit)}>
+          <InputsContainer>
+            <Input>
               <FormInputText
-                name="firstName"
+                name="username"
                 control={control}
-                label="First name"
+                label="Username"
                 errors={errors}
               />
-            </HalfInput>
-            <HalfInput>
+            </Input>
+            <HalfInputContainer>
+              <HalfInput>
+                <FormInputText
+                  name="firstName"
+                  control={control}
+                  label="First name"
+                  errors={errors}
+                />
+              </HalfInput>
+              <HalfInput>
+                <FormInputText
+                  name="lastName"
+                  control={control}
+                  label="Last Name"
+                  errors={errors}
+                />
+              </HalfInput>
+            </HalfInputContainer>
+            <Input>
               <FormInputText
-                name="lastName"
+                name="email"
                 control={control}
-                label="Last Name"
+                label="Email"
                 errors={errors}
               />
-            </HalfInput>
-          </HalfInputContainer>
-          <Input>
-            <FormInputText
-              name="email"
-              control={control}
-              label="Email"
-              errors={errors}
-            />
-          </Input>
-          <Input>
-            <FormInputText
-              name="password"
-              control={control}
-              label="Password"
-              errors={errors}
-            />
-          </Input>
-        </InputsContainer>
+            </Input>
+            <Input>
+              <FormInputPassword
+                name="password"
+                control={control}
+                label="Password"
+                errors={errors}
+              />
+            </Input>
+          </InputsContainer>
 
-        <SubmitContainer>
-          <SubmitButton
-            variant="contained"
-            color="primary"
-            type="submit"
-            size="medium"
-          >
-            Register
-          </SubmitButton>
-        </SubmitContainer>
-      </form>
-      <SwitchContainer>
-        Already a Member ?
-        <SignupLink component={Link} to="/login" exact="true">
-          Login
-        </SignupLink>
-      </SwitchContainer>
-    </FormContainer>
+          <SubmitContainer>
+            <SubmitButton
+              variant="contained"
+              color="primary"
+              type="submit"
+              size="medium"
+            >
+              Register
+            </SubmitButton>
+          </SubmitContainer>
+        </form>
+        <SwitchContainer>
+          Already a Member ?
+          <SignupLink component={Link} to="/login" exact="true">
+            Login
+          </SignupLink>
+        </SwitchContainer>
+      </FormContainer>
+      <BottomSpacer />
+    </>
   );
 };

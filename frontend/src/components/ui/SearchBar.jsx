@@ -47,6 +47,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export const SearchBar = ({ searchTerm, handleChange }) => {
+  const handleSearchClick = () => {
+    alert("SEARCHBAR NOT IMPLEMENTED in progress...");
+  };
+
   return (
     <Search>
       <SearchIconWrapper>
@@ -59,6 +63,7 @@ export const SearchBar = ({ searchTerm, handleChange }) => {
         onChange={handleChange}
         name="searchTerm"
         autoComplete="off"
+        onClick={handleSearchClick}
       />
     </Search>
   );

@@ -1,13 +1,17 @@
 import { Confirmation } from "../../pages/Trips/Confirmation";
 import { Box, CardActions, Button } from "@mui/material";
+import { useMyTripsContext } from "../../context/MyTripsProvider";
 
 export const DeleteOwnTripConfirmationCard = ({
   tripDetails,
   open,
   onClose,
-  handleAction,
 }) => {
-  const message = `Are you sure you want to delete your trip from ${tripDetails.startLocation} to ${tripDetails.destination}?`;
+  const { handleAction } = useMyTripsContext();
+
+  const { originCity, destinationCity } = tripDetails;
+
+  const message = `Are you sure you want to delete your trip from ${originCity} to ${destinationCity}?`;
 
   const title = "Confirm Delete Trip";
 

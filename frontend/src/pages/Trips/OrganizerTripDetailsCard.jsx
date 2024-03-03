@@ -40,7 +40,7 @@ export const OrganizerTripDetailsCard = ({
   const closeConfirmation = () => setShowConfirmation(false);
   const handleGoBackButton = (e, tripId) => {
     e.stopPropagation();
-    navigate(-1);
+    navigate("/my-trips");
   };
 
   const notConfirmedReservations = reservations.filter(

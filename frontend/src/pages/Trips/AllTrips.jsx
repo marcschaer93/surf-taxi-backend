@@ -8,6 +8,7 @@ import { Title, TitleDivider } from "../../styles/fontStyles";
 import SurfingSharpIcon from "@mui/icons-material/SurfingSharp";
 import { theme } from "../../utils/theme";
 import { useMyTripsContext } from "../../context/MyTripsProvider";
+import { BottomSpacer } from "../../components/ui/BottomSpacer";
 
 // DATA FLOW
 // allTrips         ===>     API Call, init data
@@ -65,16 +66,19 @@ const AllTrips = ({ allTrips }) => {
             </Typography>
           </Box>
         ) : (
-          <Box sx={{ marginBottom: "80px" }}>
-            {visibleTrips.map((trip) => (
-              <TripPreviewCard
-                key={trip.id}
-                tripDetails={trip}
-                isInMyTrips={false}
-                isTripOrganizer={user ? trip.owner === user.username : null}
-              />
-            ))}
-          </Box>
+          <>
+            <Box>
+              {visibleTrips.map((trip) => (
+                <TripPreviewCard
+                  key={trip.id}
+                  tripDetails={trip}
+                  isInMyTrips={false}
+                  isTripOrganizer={user ? trip.owner === user.username : null}
+                />
+              ))}
+            </Box>
+            <BottomSpacer />
+          </>
         )}
       </Box>
     </>
