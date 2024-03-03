@@ -74,8 +74,18 @@ export const HalfInput = styled(Box)(({ theme }) => ({
   },
 }));
 
+export const SeventyPercentInput = styled(Box)(({ theme }) => ({
+  flexBasis: "70%", // Use flex basis for proportional sizing
+}));
+
+export const ThirtyPercentInput = styled(Box)(({ theme }) => ({
+  flexBasis: "30%", // Use flex basis for proportional sizing
+}));
+
 export const HalfInputContainer = styled(Box)(({ theme }) => ({
   display: "flex",
+  justifyContent: "space-between",
+  width: "100%",
   gap: "10px",
 }));
 

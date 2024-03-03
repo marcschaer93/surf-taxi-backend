@@ -17,11 +17,12 @@ VALUES ('testuser',
 
 -- Seed data for Trips table
 
-INSERT INTO trips (date, owner, start_location, destination, stops, travel_info, seats, costs)
+INSERT INTO trips (date, owner, origin_city, origin_country_code, destination_city, destination_country_code, stops, travel_info, seats, costs)
 VALUES
-  ('2024-01-15', 'testuser', 'City A', 'City B', 'City C', 'Going from A to B via C', 4, '20 USD'),
-  ('2024-01-20', 'testuser', 'City B', 'City C', 'City D', 'Traveling from B to C and D', 2, '15 USD'),
-  ('2024-01-25', 'testadmin', 'City C', 'City D', 'City E', 'Trip from C to D with a stop at E', 3, '25 USD');
+  ('2024-03-15', 'testuser', 'Interlaken', 'CH', 'Somo', 'ES', 'Hossegor', 'Going from Interlaken to Somo via Hossegor', 4, '20 USD');
+
+  -- ('2024-05-20', 'testuser', 'City B', 'City C', 'City D', 'Traveling from B to C and D', 2, '15 USD'),
+  -- ('2024-07-25', 'testadmin', 'City C', 'City D', 'City E', 'Trip from C to D with a stop at E', 3, '25 USD');
 
 
 -- Seed data for Reservations table

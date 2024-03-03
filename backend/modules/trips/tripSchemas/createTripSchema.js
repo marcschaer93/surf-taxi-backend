@@ -19,16 +19,28 @@ const createTripSchema = {
         "Please provide a valid timestamp in ISO 8601 format: 2023-03-20T23:15:30",
     },
   },
-  startLocation: {
+  originCity: {
     in: ["body"],
     isString: {
-      errorMessage: "Please provide a valid start location.",
+      errorMessage: "Please provide a valid origin city.",
     },
   },
-  destination: {
+  originCountryCode: {
     in: ["body"],
     isString: {
-      errorMessage: "Please provide a valid destination.",
+      errorMessage: "Please provide a valid origin country code.",
+    },
+  },
+  destinationCity: {
+    in: ["body"],
+    isString: {
+      errorMessage: "Please provide a valid destination city.",
+    },
+  },
+  destinationCountryCode: {
+    in: ["body"],
+    isString: {
+      errorMessage: "Please provide a valid destination country code.",
     },
   },
   stops: {

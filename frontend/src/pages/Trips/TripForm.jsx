@@ -13,6 +13,9 @@ import { FormInputText } from "../../components/form/FormInputText";
 import { BottomActionBar } from "../../components/BottomActionBar";
 import { FormInputDate } from "../../components/form/FormInputDate";
 import { FormInputMobileDate } from "../../components/form/FormInputMobileDate";
+import { CountrySelect } from "../../components/form/CountrySelect";
+import { SeventyPercentInput } from "../../styles/formStyles";
+import { ThirtyPercentInput } from "../../styles/formStyles";
 
 import {
   FormContainer,
@@ -32,7 +35,6 @@ import {
 
 export const TripForm = ({ addTrip }) => {
   const navigate = useNavigate();
-
   const { user } = useAuthContext();
 
   const {
@@ -44,12 +46,14 @@ export const TripForm = ({ addTrip }) => {
   } = useForm({
     defaultValues: {
       // date: "2023-12-31",
-      startLocation: "Bern",
-      destination: "Santander",
+      originCity: "Bern",
+      destinationCity: "Santander",
       stops: "Hossegor",
       travelInfo: "surftrip",
       costs: "split gas \u0026 tolls",
       seats: 2,
+      originCountryCode: "",
+      destinationCountryCode: "",
     },
   });
 
@@ -58,6 +62,8 @@ export const TripForm = ({ addTrip }) => {
     // const formattedDate = format(date, "yyyy-MM-dd"); // Formats date to "2024-02-08"
     const formattedDate = formatISO(date);
     const updatedFormData = { ...formData, date: formattedDate };
+
+    console.log("FORM DATA", updatedFormData);
 
     addTrip(updatedFormData)
       .then((newTrip) => {
@@ -76,27 +82,54 @@ export const TripForm = ({ addTrip }) => {
   return (
     <>
       <FormContainer>
-        <Box component="form" autoComplete="off" sx={{ marginBottom: "80px" }}>
+        <Box
+          component="form"
+          autoComplete="off"
+          // onSubmit={handleSubmit(onSubmit)}
+          sx={{ marginBottom: "80px" }}
+        >
           <InputsContainer>
-            {/* startLocation */}
-            <Input>
-              <FormInputText
-                name="startLocation"
-                control={control}
-                label="From"
-                errors={errors}
-              />
-            </Input>
+            <HalfInputContainer>
+              {/* startLocation */}
+              <SeventyPercentInput>
+                <FormInputText
+                  name="originCity"
+                  control={control}
+                  label="From"
+                  errors={errors}
+                />
+              </SeventyPercentInput>
 
-            {/* destination */}
-            <Input>
-              <FormInputText
-                name="destination"
-                control={control}
-                label="To"
-                errors={errors}
-              />
-            </Input>
+              <ThirtyPercentInput>
+                <CountrySelect
+                  name="originCountryCode"
+                  control={control}
+                  label="Country"
+                  errors={errors}
+                />
+              </ThirtyPercentInput>
+            </HalfInputContainer>
+
+            <HalfInputContainer>
+              {/* destination */}
+              <SeventyPercentInput>
+                <FormInputText
+                  name="destinationCity"
+                  control={control}
+                  label="To"
+                  errors={errors}
+                />
+              </SeventyPercentInput>
+
+              <ThirtyPercentInput>
+                <CountrySelect
+                  name="destinationCountryCode"
+                  control={control}
+                  label="Country"
+                  errors={errors}
+                />
+              </ThirtyPercentInput>
+            </HalfInputContainer>
 
             {/* travelInfo */}
             <Input>

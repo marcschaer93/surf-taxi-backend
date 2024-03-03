@@ -45,8 +45,10 @@ class TripApi {
           T.id,
           T.date,
           T.owner,
-          T.start_location,
-          T.destination,
+          T.origin_city,
+          T.origin_country_code,
+          T.destination_city,
+          T.destination_country_code,
           T.stops,
           T.travel_info,
           T.seats,
@@ -59,7 +61,7 @@ class TripApi {
         WHERE
           T.id = $1
         GROUP BY
-          T.id, T.date, T.owner, T.start_location, T.destination, T.stops, T.travel_info, T.seats, T.costs
+          T.id, T.date, T.owner, T.origin_city, T.origin_country_code, T.destination_city, T.destination_country_code, T.stops, T.travel_info, T.seats, T.costs
     `,
       [tripId]
     );
@@ -84,7 +86,19 @@ class TripApi {
    * @throws {ExpressError} If the trip cannot be created.
    */
   static async createNewTrip(tripData, loggedInUser) {
-    const insertData = sqlReady.convertKeysToSnakeCase(tripData);
+    // const insertData = sqlReady.convertKeysToSnakeCase(tripData);
+    const {
+      owner,
+      date,
+      originCity,
+      originCountryCode,
+      destinationCity,
+      destinationCountryCode,
+      stops,
+      travelInfo,
+      seats,
+      costs,
+    } = tripData;
     // Part 1: Insert a new trip to 'trips' table
     const createNewTripResult = await db.query(
       `
@@ -92,25 +106,29 @@ class TripApi {
           (
             owner,
             date,
-            start_location,
-            destination,
+            origin_city,
+            origin_country_code,
+            destination_city,
+            destination_country_code,
             stops,
             travel_info,
             seats,
             costs
           )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         RETURNING *
         `,
       [
         loggedInUser,
-        insertData.date,
-        insertData.start_location,
-        insertData.destination,
-        insertData.stops,
-        insertData.travel_info,
-        insertData.seats,
-        insertData.costs,
+        date,
+        originCity,
+        originCountryCode,
+        destinationCity,
+        destinationCountryCode,
+        stops,
+        travelInfo,
+        seats,
+        costs,
       ]
     );
 

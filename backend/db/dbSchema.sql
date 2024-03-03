@@ -21,8 +21,10 @@ CREATE TABLE trips (
   id SERIAL PRIMARY KEY, 
   owner TEXT REFERENCES users(username),  -- Reference to the user organizing the trip
   date TIMESTAMP,
-  start_location TEXT,
-  destination TEXT,
+  origin_city TEXT,
+  origin_country_code TEXT,
+  destination_city TEXT,
+  destination_country_code TEXT,
   stops TEXT,
   travel_info TEXT,
   seats INTEGER,

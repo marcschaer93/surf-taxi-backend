@@ -35,22 +35,40 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 // If you are using date-fns v3.x, please import the v3 adapter
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 
-export const FormInputMobileDate = ({ control }) => {
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormHelperText,
+} from "@mui/material";
+
+export const FormInputMobileDate = ({ control, errors }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Controller
         name="date"
         control={control}
         rules={{ required: "This field is required" }}
-        render={({ field: { onChange, value, error } }) => (
-          <MobileDatePicker
-            size="small"
-            label="Date"
+        render={({
+          field: { onChange, value, error },
+          //   fieldState: { error },
+        }) => (
+          <FormControl
+            fullWidth
             error={!!error}
-            helperText={error ? error.message : null}
-            value={value || null}
-            onChange={onChange}
-          />
+            size="small"
+            sx={{ minWidth: 120, marginTop: 1 }}
+          >
+            <MobileDatePicker
+              label="Date"
+              error={!!error}
+              helperText={error ? error.message : null}
+              value={value || null}
+              onChange={onChange}
+            />
+            {error && <FormHelperText>{error.message}</FormHelperText>}
+          </FormControl>
         )}
       />
     </LocalizationProvider>

@@ -49,8 +49,36 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
     navigate(`/trips/${tripId}`, { state: { tripDetails } });
   };
 
-  const { startLocation, destination, stops, seats, date, travelInfo, costs } =
-    tripDetails;
+  const countryOptions = [
+    { code: "PT", name: "Portugal", flag: "🇵🇹" },
+    { code: "ES", name: "Spain", flag: "🇪🇸" },
+    { code: "FR", name: "France", flag: "🇫🇷" },
+    { code: "IE", name: "Ireland", flag: "🇮🇪" },
+    { code: "UK", name: "United Kingdom", flag: "🇬🇧" },
+    { code: "NO", name: "Norway", flag: "🇳🇴" },
+    { code: "DE", name: "Germany", flag: "🇩🇪" },
+    { code: "NL", name: "Netherlands", flag: "🇳🇱" },
+    { code: "DK", name: "Denmark", flag: "🇩🇰" },
+    { code: "IT", name: "Italy", flag: "🇮🇹" },
+    { code: "MA", name: "Morocco", flag: "🇲🇦" },
+    { code: "SE", name: "Sweden", flag: "🇸🇪" },
+    { code: "BE", name: "Belgium", flag: "🇧🇪" },
+    { code: "CH", name: "Switzerland", flag: "🇨🇭" },
+    { code: "HR", name: "Croatia", flag: "🇭🇷" },
+  ];
+
+  const {
+    owner,
+    originCity,
+    originCountryCode,
+    destinationCity,
+    destinationCountryCode,
+    stops,
+    seats,
+    date,
+    travelInfo,
+    costs,
+  } = tripDetails;
 
   return (
     <StyledPreviewCard
@@ -69,15 +97,23 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
           alignItems: "center",
           color: "#fff",
           padding: "0px 0px",
-          mb: -2, // Reduce margin below the flags
+          mb: -1, // Reduce margin below the flags
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant="body2" sx={{ mx: 3, fontSize: "2.5rem" }}>
-            🇪🇸
+            {
+              countryOptions.find(
+                (country) => country.code === originCountryCode
+              )?.flag
+            }
           </Typography>
           <Typography variant="body2" sx={{ mx: 3, fontSize: "2.5rem" }}>
-            🇲🇦
+            {
+              countryOptions.find(
+                (country) => country.code === destinationCountryCode
+              )?.flag
+            }
           </Typography>
         </Box>
 
@@ -107,18 +143,34 @@ const TripPreviewCard = ({ tripDetails, isInMyTrips, isTripOrganizer }) => {
           }}
         >
           <Typography component="span" variant="h5" sx={{ marginRight: 2 }}>
-            {startLocation}
+            {originCity}
+            <Typography
+              component="span"
+              variant="caption"
+              color="text.secondary"
+              sx={{ marginLeft: 0.5 }}
+            >
+              ({originCountryCode})
+            </Typography>
           </Typography>
 
           <ArrowRightAltSharpIcon
             sx={{
-              color: theme.palette.text.secondary,
-              mx: 1,
+              color: "action.active",
+              mx: 2,
             }}
           />
 
           <Typography component="span" variant="h5" sx={{ marginLeft: 2 }}>
-            {destination}
+            {destinationCity}
+            <Typography
+              component="span"
+              variant="caption"
+              color="text.secondary"
+              sx={{ marginLeft: 0.5 }}
+            >
+              ({destinationCountryCode})
+            </Typography>
           </Typography>
         </Box>
 

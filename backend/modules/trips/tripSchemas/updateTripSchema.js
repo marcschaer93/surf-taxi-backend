@@ -21,20 +21,36 @@ const updateTripSchema = {
     },
     optional: true, // This property is optional
   },
-  startLocation: {
+
+  originCity: {
     in: ["body"],
     isString: {
-      errorMessage: "Please provide a valid start location.",
+      errorMessage: "Please provide a valid origin city.",
     },
     optional: true, // This property is optional
   },
-  destination: {
+  originCountryCode: {
     in: ["body"],
     isString: {
-      errorMessage: "Please provide a valid destination.",
+      errorMessage: "Please provide a valid origin country code.",
     },
     optional: true, // This property is optional
   },
+  destinationCity: {
+    in: ["body"],
+    isString: {
+      errorMessage: "Please provide a valid destination city.",
+    },
+    optional: true, // This property is optional
+  },
+  destinationCountryCode: {
+    in: ["body"],
+    isString: {
+      errorMessage: "Please provide a valid destination country code.",
+    },
+    optional: true, // This property is optional
+  },
+
   stops: {
     in: ["body"],
     isString: {

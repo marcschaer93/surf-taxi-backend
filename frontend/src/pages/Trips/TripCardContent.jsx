@@ -10,6 +10,7 @@ import {
   Typography,
   styled,
   Chip,
+  Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -23,8 +24,17 @@ import PaidSharpIcon from "@mui/icons-material/PaidSharp";
 import { theme } from "../../utils/theme";
 
 export const TripCardContent = ({ tripDetails, preview }) => {
-  const { startLocation, destination, stops, seats, date, travelInfo, costs } =
-    tripDetails;
+  const {
+    originCity,
+    originCountryCode,
+    destinationCity,
+    destinationCountryCode,
+    stops,
+    seats,
+    date,
+    travelInfo,
+    costs,
+  } = tripDetails;
 
   return (
     <>
@@ -33,35 +43,45 @@ export const TripCardContent = ({ tripDetails, preview }) => {
           {/* Trip Route */}
           <Box
             display="flex"
-            justifyContent="left" // Center the content horizontally
-            alignItems="center" // Align items vertically
+            justifyContent="left"
+            alignItems="center"
             sx={{
-              textAlign: "center", // Center the text if it wraps
+              textAlign: "center",
             }}
           >
-            <Typography
-              component="span" // Use span to keep inline with flex items
-              variant="h5" // Adjust size for better mobile visibility
-              sx={{ marginRight: 2 }} // Add some spacing before the arrow
-            >
-              {startLocation}
+            <Typography component="span" variant="h5" sx={{ marginRight: 2 }}>
+              {originCity}
+              <Typography
+                component="span"
+                variant="caption"
+                color="text.secondary"
+                sx={{ marginLeft: 0.5 }}
+              >
+                ({originCountryCode})
+              </Typography>
             </Typography>
 
             <ArrowRightAltSharpIcon
               sx={{
-                color: theme.palette.text.secondary,
-                mx: 1, // Margin on both sides for spacing
+                color: "action.active",
+                mx: 2,
               }}
             />
 
-            <Typography
-              component="span" // Use span to keep inline with flex items
-              variant="h5" // Adjust size for better mobile visibility
-              sx={{ marginLeft: 2 }} // Add some spacing after the arrow
-            >
-              {destination}
+            <Typography component="span" variant="h5" sx={{ marginLeft: 2 }}>
+              {destinationCity}
+              <Typography
+                component="span"
+                variant="caption"
+                color="text.secondary"
+                sx={{ marginLeft: 0.5 }}
+              >
+                ({destinationCountryCode})
+              </Typography>
             </Typography>
           </Box>
+
+          <Divider sx={{ my: 2, bgcolor: "divider" }} />
 
           <Box sx={{ mt: 2 }}>
             {/* Date */}

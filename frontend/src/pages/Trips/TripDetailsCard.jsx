@@ -98,9 +98,6 @@ export const TripDetailsCard = ({
     // navigate(`users/${owner}`);
   };
 
-  const { startLocation, destination, stops, seats, date, travelInfo, owner } =
-    tripDetails;
-
   if (loading) return <CircularProgress />;
 
   return (
@@ -191,7 +188,10 @@ export const TripDetailsCard = ({
           }}
         >
           <Typography variant="h5">Trip Organizer</Typography>
-          <ColorAvatar username={owner} handleAvatarClick={handleAvatarClick} />
+          <ColorAvatar
+            username={tripDetails.owner}
+            handleAvatarClick={handleAvatarClick}
+          />
         </Box>
       </Box>
 
