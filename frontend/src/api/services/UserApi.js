@@ -10,9 +10,13 @@ export const getOneUser = async () => {
   }
 };
 
-export const updateUserProfile = async (username, updateData) => {
+export const updateUserProfile = async (updateData) => {
   try {
-    const response = await ApiService.patch(`/users/${username}`, updateData);
+    const response = await ApiService.patch(
+      `/users/${updateData.username}`,
+      updateData
+    );
+    console.log("RESPONSE UP{DATE:", response.data.data);
     return response.data.data;
   } catch (error) {
     handleApiError(error);

@@ -3,34 +3,40 @@ import { registerOptions } from "../../utils/registerOptions";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { FormControl } from "@mui/material";
 
+// Material UI DateField
+import { LocalizationProvider } from "@mui/x-date-pickers";
+// If you are using date-fns v3.x, please import the v3 adapter
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
+
 export const FormInputDate = ({
   name,
   control,
+  format,
   label,
   errors,
   InputLabelProps = null,
   defaultValue = null,
 }) => {
   return (
-    <Controller
-      name={name}
-      control={control}
-      rules={registerOptions[name]}
-      render={({ field }) => (
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <DateField
-            size="large"
-            format="LL"
-            {...field}
-            error={!!errors[name]}
-            helperText={errors[name] && errors[name].message}
-            variant="outlined"
-            InputLabelProps={InputLabelProps}
-            defaultValue={defaultValue}
-          />
-        </FormControl>
-      )}
-    />
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Controller
+        name={name}
+        control={control}
+        rules={registerOptions[name]}
+        render={({ field }) => (
+          <FormControl sx={{ m: 0, minWidth: 120 }} size="small">
+            <DateField
+              {...field}
+              size="small"
+              name={name}
+              label={label}
+              // defaultValue={dayjs("2022-04-17")}
+              format={format}
+            />
+          </FormControl>
+        )}
+      />
+    </LocalizationProvider>
   );
 };
 

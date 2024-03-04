@@ -1,30 +1,3 @@
-// import * as React from "react";
-// import { Controller } from "react-hook-form";
-// import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
-// import { format } from "date-fns";
-
-// import TextField from "@mui/material/TextField";
-
-// export const FormInputMobileDate = ({ control }) => {
-//   return (
-//     <Controller
-//       name="date"
-//       control={control}
-//       rules={{ required: "This field is required" }}
-//       render={({ field: { onChange, value, error } }) => (
-//         <MobileDatePicker
-//           size="small"
-//           label="Date"
-//           error={!!error}
-//           helperText={error ? error.message : null}
-//           value={value || null}
-//           onChange={onChange}
-//         />
-//       )}
-//     />
-//   );
-// };
-
 import * as React from "react";
 import { Controller } from "react-hook-form";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
@@ -55,9 +28,8 @@ export const FormInputMobileDate = ({ control, errors }) => {
           //   fieldState: { error },
         }) => (
           <FormControl
-            fullWidth
+            // fullWidth
             error={!!error}
-            size="small"
             sx={{ minWidth: 120, marginTop: 1 }}
           >
             <MobileDatePicker

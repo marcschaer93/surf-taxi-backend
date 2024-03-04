@@ -8,9 +8,10 @@ import { useAuthContext } from "../../context/authProvider";
 import { Title, TitleDivider } from "../../styles/fontStyles";
 import { theme } from "../../utils/theme";
 import { NotificationButton } from "../../components/ui/NotificationButton";
+import { ProfileData } from "./ProfileData";
 
 export const Profile = ({ notifications }) => {
-  // const { user } = useAuthContext();
+  const { user } = useAuthContext();
   // const { notifications } = useNotifications(user);
   // console.log("NOTIFICATION", notifications);
   const { handleLogout } = useAuthContext();
@@ -21,6 +22,9 @@ export const Profile = ({ notifications }) => {
         <Title variant="h3">Profile</Title>
         <TitleDivider />
       </Box>
+
+      {/* Profile Data */}
+      <ProfileData userData={user} />
 
       <Box>
         <Link to="/profile-edit">
