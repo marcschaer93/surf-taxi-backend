@@ -169,9 +169,6 @@ export const TripDetailsCard = ({
                   open={showStatusInfoDialog}
                   onClose={closeStatusInfoDialog}
                   currentStatus={userReservation.status}
-                  // onConfirm
-                  // message
-                  // title
                 />
               </Box>
               <Typography variant="body2">

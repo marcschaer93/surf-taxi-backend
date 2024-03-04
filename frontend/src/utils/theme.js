@@ -21,15 +21,17 @@ export const theme = createTheme({
       main: "#d41b64", // Your custom contrast color
     },
   },
+
   breakpoints: {
     values: {
-      xs: 0,
-      sm: 600,
-      md: 960,
-      lg: 1280,
-      xl: 1920,
+      xs: 0, // phones
+      sm: 600, // tablets
+      md: 960, // small laptop screens
+      lg: 1280, // desktops
+      xl: 1920, // larger screens
     },
   },
+
   typography: {
     fontFamily: "Inter, sans-serif",
     fontSize: 14,

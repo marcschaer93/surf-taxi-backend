@@ -37,6 +37,12 @@ export const StatusInfoDialog = ({ open, onClose, currentStatus }) => {
       nextSteps:
         "Don't get discouraged! There are plenty more trips waiting for you. Keep exploring and send more join requests.",
     },
+    organizer: {
+      description:
+        "You are the organizer of this trip. Manage your trip and participant requests.",
+      nextSteps:
+        "Review join requests from surfers, manage trip details, and communicate with confirmed participants to ensure a smooth trip experience.",
+    },
   };
 
   const statusInfo = statusDescriptions[currentStatus];

@@ -1,35 +1,25 @@
-import { useEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-
-import AllTrips from "./pages/Trips/AllTrips";
-import { Home } from "./pages/Home";
-import { RequireAuth } from "./components/RequireAuth";
-import { Navbar } from "./components/Navbar";
-import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
-import { EditProfile } from "./pages/Profile/EditProfile";
-import { Profile } from "./pages/Profile";
-import MyTrips from "./pages/Trips/MyTrips";
 import { styled, useTheme } from "@mui/material/styles";
 import { Stack, Box, Toolbar } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
+
+import { Navbar } from "./components/Navbar";
 import { Sidebar } from "./components/Sidebar";
 import { Rightbar } from "./components/Rightbar";
 import { AppRoutes } from "./components/AppRoutes";
-import { BottomActionBar } from "./components/BottomActionBar";
-
 import { BottomNavBar } from "./components/BottomNavBar";
 import { useFetchAllTrips } from "./hooks/useFetchAllTrips";
 import { useNotifications } from "./hooks/useNotifications";
 import { useAuthContext } from "./context/authProvider";
-
 import { MyTripsProvider } from "./context/MyTripsProvider";
 import { Loading } from "./components/ui/Loading";
+import { theme } from "./utils/theme";
 
 const MainContent = styled(Box)(({ theme }) => ({
   flex: 4,
   padding: theme.spacing(3),
   width: "100%",
-  marginBottom: "100px",
+  // marginBottom: "100px",
 }));
 
 export default function App() {
@@ -56,6 +46,7 @@ export default function App() {
   // Global loading state
   // const isLoading = loadingAllTrips || loadingMyTrips;
   const isLoading = loadingAllTrips;
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <>
@@ -82,13 +73,8 @@ export default function App() {
             </Stack>
 
             {/* BottomNavBar */}
-            {shouldDisplayBottomNavbar && (
-              <BottomNavBar
-                sx={{
-                  display: { sm: "none" },
-                }}
-                notifications={notifications}
-              />
+            {shouldDisplayBottomNavbar && isSmallScreen && (
+              <BottomNavBar notifications={notifications} />
             )}
           </MyTripsProvider>
         </>

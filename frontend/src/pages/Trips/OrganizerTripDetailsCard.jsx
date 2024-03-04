@@ -11,6 +11,7 @@ import {
   styled,
   Paper,
   Chip,
+  IconButton,
 } from "@mui/material";
 import { theme } from "../../utils/theme";
 // import { CardStatusChip } from "../../components/ui/CardStatusChip";
@@ -28,6 +29,7 @@ import { BottomActionBar } from "../../components/BottomActionBar";
 import { ReservationAvatars } from "../../components/ui/PassengerAvatars";
 import { StatusChip } from "../../components/ui/StatusChip";
 import InfoSharpIcon from "@mui/icons-material/InfoSharp";
+import { StatusInfoDialog } from "./StatusInfoDialog";
 
 export const OrganizerTripDetailsCard = ({
   tripDetails,
@@ -46,6 +48,11 @@ export const OrganizerTripDetailsCard = ({
   const notConfirmedReservations = reservations.filter(
     (r) => r.status !== "confirmed"
   );
+
+  const [showStatusInfoDialog, setShowStatusInfoDialog] = useState(false);
+
+  const openStatusInfoDialog = () => setShowStatusInfoDialog(true);
+  const closeStatusInfoDialog = () => setShowStatusInfoDialog(false);
 
   return (
     <>
@@ -79,14 +86,30 @@ export const OrganizerTripDetailsCard = ({
           <TitleDivider />
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
-              <Box sx={{ display: "flex", gap: "10px" }}>
-                <Typography variant="h5">My Status</Typography>
-                <InfoSharpIcon />
+              <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <Typography variant="h5" component="span">
+                  My Status
+                </Typography>
+
+                {/* Status Info Button */}
+                <IconButton
+                  onClick={openStatusInfoDialog}
+                  color="primary"
+                  sx={{ padding: 0, marginTop: "-4px" }}
+                >
+                  <InfoSharpIcon />
+                </IconButton>
+                {/* StatusInfoDialog */}
+                <StatusInfoDialog
+                  open={showStatusInfoDialog}
+                  onClose={closeStatusInfoDialog}
+                  currentStatus="organizer"
+                />
               </Box>
               {/* <Typography variant="body2">
                 {`Last modified: ${format(
                   userReservation.reservationTimestamp,
-                  "yyyy-MM-dd "
+                  "dd MMMM, yyyy"
                 )}`}
               </Typography> */}
             </Box>

@@ -44,13 +44,22 @@ export const RegisterForm = () => {
     setError, // Add setError from useForm
     formState: { errors }, // Handling form validation errors
   } = useForm({
-    defaultValues: {
-      username: "marcschaer",
-      password: "199316",
-      firstName: "Marc",
-      lastName: "Schär",
-      email: "marc.schaer93@gmail.com",
-    },
+    defaultValues:
+      process.env.NODE_ENV === "development"
+        ? {
+            username: "marcschaer",
+            password: "199316",
+            firstName: "Marc",
+            lastName: "Schär",
+            email: "marc.schaer93@gmail.com",
+          }
+        : {
+            username: "",
+            password: "",
+            firstName: "",
+            lastName: "",
+            email: "",
+          },
   });
 
   //   const { setToken } = useContext(CurrentUserContext);

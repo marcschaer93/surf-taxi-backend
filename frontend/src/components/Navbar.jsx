@@ -42,13 +42,8 @@ export const Navbar = () => {
   const { handleLogin, handleLogout, user } = useAuthContext();
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
+  const handleCloseUserMenu = () => setAnchorElUser(null);
 
   const NotificationContainer = styled(Box)(({ theme }) => ({
     display: "none",
@@ -70,7 +65,7 @@ export const Navbar = () => {
         >
           <Box>
             <Button
-              sx={{ display: { xs: "none", sm: "block" } }}
+              sx={{ display: { xs: "none", md: "block" } }}
               component={NavLink}
               to="/"
               size="large"
@@ -83,26 +78,35 @@ export const Navbar = () => {
 
           <SearchBar />
 
-          <Box sx={{ display: { xs: "none", sm: "flex" }, gap: "20px" }}>
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: "20px" }}>
             {user && (
               <>
                 <Button
                   component={NavLink}
-                  to="/my-trips"
-                  size="large"
+                  to="/trips"
+                  size="small"
                   color="inherit"
                   sx={navLinkStyle}
                 >
-                  MyTrips
+                  Add Trip
                 </Button>
                 <Button
                   component={NavLink}
                   to="/favorites"
-                  size="large"
+                  size="small"
                   color="inherit"
                   sx={navLinkStyle}
                 >
                   Favorites
+                </Button>
+                <Button
+                  component={NavLink}
+                  to="/my-trips"
+                  size="small"
+                  color="inherit"
+                  sx={navLinkStyle}
+                >
+                  MyTrips
                 </Button>
               </>
             )}
@@ -122,19 +126,18 @@ export const Navbar = () => {
           </Box>
 
           {user && (
-            <NotificationContainer>
-              <Badge badgeContent={4} color="secondary">
-                <Mail color="" />
-              </Badge>
-              <Badge badgeContent={2} color="secondary">
-                <Notifications color="" />
-              </Badge>
-            </NotificationContainer>
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <NotificationContainer>
+                <Badge badgeContent={2} color="secondary">
+                  <Notifications color="" />
+                </Badge>
+              </NotificationContainer>
+            </Box>
           )}
 
           {/* Trip filter */}
           {user && (
-            <Box sx={{ display: { xs: "flex", sm: "none" } }}>
+            <Box sx={{ display: { xs: "flex", md: "none" } }}>
               <IconButton
                 onClick={() =>
                   alert("TRIP FILTER NOT IMPLEMENTED in progress...")
@@ -152,7 +155,7 @@ export const Navbar = () => {
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     sx={{
-                      display: { xs: "none", sm: "flex" },
+                      display: { xs: "none", md: "flex" },
                       width: { xs: 24, sm: 32 },
                       height: { xs: 24, sm: 32 },
                     }}

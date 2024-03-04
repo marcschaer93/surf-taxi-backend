@@ -8,7 +8,6 @@ import { formatISO } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
 import { useAuthContext } from "../../context/authProvider";
-import { GoBackButton } from "../../components/ui/GoBackButton";
 import { FormInputText } from "../../components/form/FormInputText";
 import { BottomActionBar } from "../../components/BottomActionBar";
 import { FormInputDate } from "../../components/form/FormInputDate";
@@ -16,20 +15,10 @@ import { FormInputMobileDate } from "../../components/form/FormInputMobileDate";
 import { CountrySelect } from "../../components/form/CountrySelect";
 import { SeventyPercentInput } from "../../styles/formStyles";
 import { ThirtyPercentInput } from "../../styles/formStyles";
-
 import {
   FormContainer,
-  TitleContainer,
-  Underline,
   InputsContainer,
   Input,
-  SubmitContainer,
-  SubmitButton,
-  SwitchContainer,
-  LostPasswordContainer,
-  SignupLink,
-  FormTitle,
-  HalfInput,
   HalfInputContainer,
 } from "../../styles/formStyles";
 import { BottomSpacer } from "../../components/ui/BottomSpacer";
@@ -45,17 +34,29 @@ export const TripForm = ({ addTrip }) => {
     setError,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      // date: "2023-12-31",
-      originCity: "Bern",
-      destinationCity: "Santander",
-      stops: "Hossegor",
-      travelInfo: "surftrip",
-      costs: "split gas \u0026 tolls",
-      seats: 2,
-      originCountryCode: "",
-      destinationCountryCode: "",
-    },
+    defaultValues:
+      process.env.NODE_ENV === "development"
+        ? {
+            // date: "2023-12-31",
+            originCity: "Bern",
+            destinationCity: "Santander",
+            stops: "Hossegor",
+            travelInfo: "surftrip",
+            costs: "split gas \u0026 tolls",
+            seats: 2,
+            originCountryCode: "",
+            destinationCountryCode: "",
+          }
+        : {
+            originCity: "",
+            destinationCity: "",
+            stops: "",
+            travelInfo: "",
+            costs: "",
+            seats: 0,
+            originCountryCode: "",
+            destinationCountryCode: "",
+          },
   });
 
   const onFormSubmit = (formData) => {
@@ -63,8 +64,6 @@ export const TripForm = ({ addTrip }) => {
     // const formattedDate = format(date, "yyyy-MM-dd"); // Formats date to "2024-02-08"
     const formattedDate = formatISO(date);
     const updatedFormData = { ...formData, date: formattedDate };
-
-    console.log("FORM DATA", updatedFormData);
 
     addTrip(updatedFormData)
       .then((newTrip) => {
