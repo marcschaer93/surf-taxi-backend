@@ -9,6 +9,7 @@ import { Title, TitleDivider } from "../../styles/fontStyles";
 import { theme } from "../../utils/theme";
 import { NotificationButton } from "../../components/ui/NotificationButton";
 import { ProfileData } from "./ProfileData";
+import { BottomSpacer } from "../../components/ui/BottomSpacer";
 
 export const Profile = ({ notifications }) => {
   const { user } = useAuthContext();
@@ -35,10 +36,8 @@ export const Profile = ({ notifications }) => {
             Logout
           </Button>
         </Link>
-        <Link to="/notifications">
-          {/* Replace the following onClick handler with your actual logic */}
-        </Link>
       </Box>
+      <BottomSpacer />
     </>
   );
 };
