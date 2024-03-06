@@ -1,6 +1,6 @@
 const express = require("express");
-
 const router = express.Router();
+
 const authController = require("./authController.js");
 const { validateInputs } = require("../../middleware/validateInputs.js");
 const { authRegisterSchema } = require("./authSchemas/authRegisterSchema.js");

@@ -9,7 +9,6 @@ const {
   authorize,
   ensureNotTripOwner,
 } = require("../../middleware/authorize.js");
-
 const { validateInputs } = require("../../middleware/validateInputs.js");
 
 /// RESERVATION ROUTES => /api/reservations/... ///

@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const db = require("../../db");
 const sqlReady = require("../../helpers/sqlReady");
 const jsReady = require("../../helpers/jsReady");
-
 const {
   NotFoundError,
   BadRequestError,
@@ -123,7 +122,8 @@ class UserApi {
       gender, 
       birth_year, 
       phone, 
-      languages, 
+      languages,
+      country, 
       profile_img_url, 
       bio
     `;
@@ -238,7 +238,6 @@ class UserApi {
       SELECT * 
       FROM reservations 
       WHERE username =$1
-  
       `,
       [username]
     );
@@ -263,11 +262,13 @@ class UserApi {
    */
   static async deleteMyTrip(tripId, username) {
     const result = await db.query(
-      `DELETE
-             FROM trips
-             WHERE id = $1
-             AND owner = $2
-             RETURNING id`,
+      `
+      DELETE
+      FROM trips
+      WHERE id = $1
+      AND owner = $2
+      RETURNING id
+      `,
       [tripId, username]
     );
     const removedTrip = jsReady.convertKeysToCamelCase(result.rows[0]);

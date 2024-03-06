@@ -1,5 +1,6 @@
 import { Confirmation } from "./Confirmation";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 import {
   Box,
@@ -14,8 +15,6 @@ import {
   IconButton,
 } from "@mui/material";
 import { theme } from "../../utils/theme";
-// import { CardStatusChip } from "../../components/ui/CardStatusChip";
-import { useNavigate } from "react-router-dom";
 import { CancelRequestConfirmationCard } from "../../components/confirmationCards/CancelRequestConfirmationCard";
 import { JoinRequestConfirmationCard } from "../../components/confirmationCards/JoinRequestConfirmationCard";
 import { DeleteOwnTripConfirmationCard } from "../../components/confirmationCards/DeleteOwnTripConfirmationCard";
@@ -63,7 +62,6 @@ export const OrganizerTripDetailsCard = ({
           <TitleDivider />
         </Box>
 
-        {/* <StyledDetailsCard variant="outlined"> */}
         {/* <Box sx={{ position: "absolute", top: 18, right: 18 }}>
             <StatusChip isTripOwner={true} status={"organizer"} />
           </Box> */}
@@ -118,8 +116,6 @@ export const OrganizerTripDetailsCard = ({
         </Box>
 
         <TitleDivider />
-
-        {/* </StyledDetailsCard> */}
 
         {/* Requests */}
         <Box>

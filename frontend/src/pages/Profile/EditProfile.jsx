@@ -35,6 +35,8 @@ import {
 import { GoBackButton } from "../../components/ui/GoBackButton";
 import { BottomSpacer } from "../../components/ui/BottomSpacer";
 import { BirthyearSelect } from "../../components/form/BirthyearSelect";
+import { LanguageSelect } from "../../components/form/LanguageSelect";
+import { CountrySelect } from "../../components/form/CountrySelect";
 
 /**
  * EditForm Component
@@ -49,7 +51,19 @@ export const EditProfile = () => {
   const navigate = useNavigate();
   const { user, updateUser } = useAuthContext();
 
-  const { username, firstName, lastName, email, gender, birthYear } = user;
+  const {
+    username,
+    firstName,
+    lastName,
+    email,
+    gender,
+    birthYear,
+    bio,
+    languages,
+    country,
+  } = user;
+
+  console.log("user languages", Array.isArray(user.languages));
 
   const {
     control,
@@ -58,12 +72,15 @@ export const EditProfile = () => {
     formState: { errors }, // Handling form validation errors
   } = useForm({
     defaultValues: {
-      username: `${username}`,
-      firstName: `${firstName}`,
-      lastName: `${lastName}`,
-      email: `${email}`,
-      gender: `${gender}` || "other",
-      birthYear: `${birthYear}` || null,
+      username: username || "",
+      firstName: firstName || "",
+      lastName: lastName || "",
+      email: email || "",
+      gender: gender || "other",
+      birthYear: birthYear || "",
+      bio: bio || "",
+      languages: Array.isArray(languages) ? languages : [],
+      country: country || "",
     },
   });
 
@@ -74,8 +91,9 @@ export const EditProfile = () => {
     console.log("FORM DATA", formData);
 
     const updatedUserData = await UserApi.updateUserProfile(formData);
+    console.log("UPDATE DATA", updatedUserData);
     updateUser(updatedUserData);
-    navigate("/profile");
+    navigate("/my-profile");
   };
 
   return (
@@ -182,25 +200,35 @@ export const EditProfile = () => {
                 errors={errors}
               />
             </Input>
-            <FormInputMultiline
-              name="bio"
-              control={control}
-              label="Bio"
-              errors={errors}
-              rows={3}
-            />
-          </InputsContainer>
+            <HalfInputContainer>
+              <SeventyPercentInput>
+                <LanguageSelect
+                  name="languages"
+                  control={control}
+                  label="Language"
+                  errors={errors}
+                />
+              </SeventyPercentInput>
+              <ThirtyPercentInput>
+                <CountrySelect
+                  name="country"
+                  control={control}
+                  label="Country"
+                  errors={errors}
+                />
+              </ThirtyPercentInput>
+            </HalfInputContainer>
 
-          {/* <SubmitContainer>
-            <SubmitButton
-              variant="contained"
-              color="primary"
-              type="submit"
-              size="medium"
-            >
-              Save Changes
-            </SubmitButton>
-          </SubmitContainer> */}
+            <Input>
+              <FormInputMultiline
+                name="bio"
+                control={control}
+                label="Bio"
+                errors={errors}
+                rows={3}
+              />
+            </Input>
+          </InputsContainer>
         </Box>
       </FormContainer>
       <BottomSpacer />

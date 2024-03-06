@@ -34,7 +34,7 @@ export default function App() {
     "/",
     "/trips",
     "/favorites",
-    "/profile",
+    "/my-profile",
     "/login",
     "/register",
     "/notifications",

@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { Home } from "../pages/Home";
 import { Login } from "../pages/Login";
 import { Register } from "../pages/Register";
-import { Profile } from "../pages/Profile";
+import { MyProfile } from "../pages/Profile/MyProfile";
 import { EditProfile } from "../pages/Profile/EditProfile";
 import AllTrips from "../pages/Trips/AllTrips";
 import MyTrips from "../pages/Trips/MyTrips";
@@ -29,10 +29,10 @@ export const AppRoutes = ({
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route
-        path="/profile"
+        path="/my-profile"
         element={
           <RequireAuth>
-            <Profile notifications={notifications} />
+            <MyProfile notifications={notifications} />
           </RequireAuth>
         }
       />

@@ -1,5 +1,3 @@
-const asyncHandler = require("express-async-handler");
-
 const sqlReady = require("../../helpers/sqlReady");
 const jsReady = require("../../helpers/jsReady");
 const db = require("../../db");
@@ -86,7 +84,6 @@ class TripApi {
    * @throws {ExpressError} If the trip cannot be created.
    */
   static async createNewTrip(tripData, loggedInUser) {
-    // const insertData = sqlReady.convertKeysToSnakeCase(tripData);
     const {
       owner,
       date,
@@ -99,6 +96,7 @@ class TripApi {
       seats,
       costs,
     } = tripData;
+
     // Part 1: Insert a new trip to 'trips' table
     const createNewTripResult = await db.query(
       `
@@ -190,10 +188,12 @@ class TripApi {
    */
   static async deleteOneTrip(tripId) {
     const result = await db.query(
-      `DELETE
-             FROM trips
-             WHERE id = $1
-             RETURNING id`,
+      `
+      DELETE
+      FROM trips
+      WHERE id = $1
+      RETURNING id
+      `,
       [tripId]
     );
     const removedTrip = jsReady.convertKeysToCamelCase(result.rows[0]);

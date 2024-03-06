@@ -11,7 +11,7 @@ import { NotificationButton } from "../../components/ui/NotificationButton";
 import { ProfileData } from "./ProfileData";
 import { BottomSpacer } from "../../components/ui/BottomSpacer";
 
-export const Profile = ({ notifications }) => {
+export const MyProfile = ({ notifications }) => {
   const { user } = useAuthContext();
   // const { notifications } = useNotifications(user);
   // console.log("NOTIFICATION", notifications);
@@ -27,15 +27,16 @@ export const Profile = ({ notifications }) => {
       {/* Profile Data */}
       <ProfileData userData={user} />
 
-      <Box>
-        <Link to="/profile-edit">
-          <Button size="small" variant="outlined">
+      <Box sx={{ pt: 5 }}>
+        {/* <Link to="/profile-edit">
+          <Button size="small" variant="contained" color="primary">
             Edit Profile
           </Button>
-          <Button onClick={handleLogout} size="small" variant="outlined">
-            Logout
-          </Button>
-        </Link>
+        </Link> */}
+
+        <Button onClick={handleLogout} size="small" variant="text">
+          Logout
+        </Button>
       </Box>
       <BottomSpacer />
     </>

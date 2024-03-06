@@ -10,7 +10,7 @@ CREATE TABLE users (
   instagram TEXT,
   facebook TEXT,
   country VARCHAR(20),
-  languages TEXT,
+  languages TEXT[],
   profile_img_url TEXT,
   bio TEXT,
   role TEXT NOT NULL DEFAULT 'user',
@@ -39,9 +39,6 @@ CREATE TABLE reservations (
     REFERENCES trips(id) ON DELETE CASCADE,
   status VARCHAR(20),  -- e.g., 'requested', 'confirmed', 'canceled'
   reservation_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  -- Additional fields to consider adding:
-  -- number_of_passengers INTEGER DEFAULT 1,  -- Represents the number of people included in this reservation
-  -- notes TEXT  -- Any special requests or notes related to this reservation
   PRIMARY KEY (username, trip_id)
 );
 

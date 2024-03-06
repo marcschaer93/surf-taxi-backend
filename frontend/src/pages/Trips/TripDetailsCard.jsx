@@ -1,7 +1,5 @@
 import {
   Box,
-  Card,
-  CardContent,
   CardActions,
   Button,
   Typography,
@@ -11,7 +9,6 @@ import {
   IconButton,
   CircularProgress,
 } from "@mui/material";
-import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
@@ -19,7 +16,6 @@ import { useState, useEffect } from "react";
 
 import { Confirmation } from "./Confirmation";
 import { theme } from "../../utils/theme";
-// import { CardStatusChip } from "../../components/ui/CardStatusChip";
 import { CancelRequestConfirmationCard } from "../../components/confirmationCards/CancelRequestConfirmationCard";
 import { JoinRequestConfirmationCard } from "../../components/confirmationCards/JoinRequestConfirmationCard";
 import { StyledDetailsCard } from "../../styles/cardStyles";
@@ -51,6 +47,7 @@ export const TripDetailsCard = ({
   const location = useLocation();
   const { tripId } = useParams();
   const navigate = useNavigate();
+
   const { isFavorited, toggleFavorite, loading } =
     useToggleFavoriteTrip(tripId);
   const [showJoinConfirmation, setShowJoinConfirmation] = useState(false);
@@ -71,7 +68,6 @@ export const TripDetailsCard = ({
 
   const openStatusInfoDialog = () => setShowStatusInfoDialog(true);
   const closeStatusInfoDialog = () => setShowStatusInfoDialog(false);
-
   const openJoinConfirmation = () => setShowJoinConfirmation(true);
   const openCancelConfirmation = () => setShowCancelConfirmation(true);
   const closeJoinConfirmation = () => setShowJoinConfirmation(false);
@@ -114,12 +110,6 @@ export const TripDetailsCard = ({
         )}
       </Box>
 
-      {/* <StyledDetailsCard variant="outlined"> */}
-      {/* {userReservation && <CardStatusChip isTripOwner={false} />} */}
-
-      {/* {!userReservation && ( */}
-      {/* )} */}
-
       <TripCardContent tripDetails={tripDetails} />
 
       <CardActions>
@@ -143,7 +133,6 @@ export const TripDetailsCard = ({
           )}
         </Box>
       </CardActions>
-      {/* </StyledDetailsCard> */}
 
       {/* User Trip Status */}
       {userReservation && (
@@ -164,6 +153,7 @@ export const TripDetailsCard = ({
                 >
                   <InfoSharpIcon />
                 </IconButton>
+
                 {/* StatusInfoDialog */}
                 <StatusInfoDialog
                   open={showStatusInfoDialog}

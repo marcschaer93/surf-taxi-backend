@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+import { useErrorBoundary } from "react-error-boundary";
 import React, {
   createContext,
   useState,
@@ -5,13 +7,11 @@ import React, {
   useCallback,
   useContext,
 } from "react";
-import { useNavigate } from "react-router-dom";
 
 import * as ReservationApi from "../api/services/ReservationApi";
 import * as TripApi from "../api/services/TripApi";
 import * as UserApi from "../api/services/UserApi";
 import { useAuthContext } from "../context/authProvider";
-import { useErrorBoundary } from "react-error-boundary";
 import { useFetchMyTrips } from "../hooks/useFetchMyTrips";
 
 export const MyTripsContext = createContext();

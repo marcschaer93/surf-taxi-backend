@@ -6,9 +6,10 @@ const { BadRequestError, ValidationError } = require("../helpers/expressError");
 
 const validateInputs = (schema) => async (req, res, next) => {
   try {
-    // Run schema validation with checkSchema
+    /// Run schema validation with checkSchema
     await checkSchema(schema).run(req);
-    // Run validation with check
+
+    /// Run validation with check
     // await Promise.all(validations.map((validation) => validation.run(req)));
 
     const errors = validationResult(req);

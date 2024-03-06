@@ -74,7 +74,7 @@ export const BottomNavBar = ({ notifications }) => {
           />
           <BottomNavigationAction
             component={NavLink}
-            to="/profile"
+            to="/my-profile"
             label="Profile"
             icon={profileIcon}
           />

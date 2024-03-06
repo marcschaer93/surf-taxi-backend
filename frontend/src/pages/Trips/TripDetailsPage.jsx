@@ -29,7 +29,6 @@ const TripDetailsPage = ({ allTrips }) => {
   const [loadingTripDetails, setLoadingTripDetails] = useState(
     !tripDetailsFromState
   );
-  // const [userReservation, setUserReservation] = useState(null);
   const [loadingAction, setLoadingAction] = useState(false);
 
   const {
@@ -62,20 +61,6 @@ const TripDetailsPage = ({ allTrips }) => {
     // Fetch reservations when the component mounts or tripId changes
     fetchReservationsForTrip(tripId);
   }, [fetchReservationsForTrip, tripId]);
-
-  // const [userReservation, setUserReservation] = useState(null);
-
-  // useEffect(() => {
-  //   if (!isTripOrganizer) {
-  //     const currentUserAsPassenger = passengers?.find(
-  //       (p) => p.username === user.username
-  //     );
-
-  //     if (currentUserAsPassenger) {
-  //       setUserReservation(currentUserAsPassenger);
-  //     }
-  //   }
-  // }, [passengers, user]);
 
   if (loadingTripDetails || loadingReservations || loadingAction)
     return <Loading />;
