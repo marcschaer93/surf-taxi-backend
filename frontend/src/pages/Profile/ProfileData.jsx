@@ -90,7 +90,7 @@ export const ProfileData = ({ userData }) => {
             color="text.secondary"
             sx={{ display: "flex", alignItems: "center", mb: 1 }}
           >
-            <LanguageIcon sx={{ mr: 1 }} /> Speaks: {languages.join(", ")}
+            <LanguageIcon sx={{ mr: 1 }} /> Speaks: {languages?.join(", ")}
           </Typography>
 
           {/* Country */}
