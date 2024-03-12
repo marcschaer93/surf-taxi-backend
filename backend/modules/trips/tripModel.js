@@ -16,14 +16,61 @@ class TripApi {
    *
    * @returns {Array} An array of trip objects. Returns an empty array if no trips exist.
    */
-  static async getAllTrips() {
-    const result = await db.query(`SELECT * FROM trips`);
-    const allTrips = result.rows.map((row) =>
-      jsReady.convertKeysToCamelCase(row)
-    );
 
-    // No error if allTrips is empty!
-    return allTrips;
+  static async getAllTrips(filter) {
+    const { q, originCountry, destinationCountry, month } = filter;
+
+    let query = "SELECT * FROM trips";
+    const params = [];
+    let conditions = [];
+    let counter = 1;
+
+    if (q) {
+      const searchCondition = `(
+        origin_city ILIKE $${counter} OR 
+        destination_city ILIKE $${counter} OR 
+        origin_country_code ILIKE $${counter} OR 
+        stops ILIKE $${counter} OR 
+        destination_country_code ILIKE $${counter}
+      )`;
+      conditions.push(searchCondition);
+      // Increase counter after adding all q related conditions since they use the same parameter
+      params.push(`%${q}%`);
+      counter++;
+    }
+
+    // if (originCountry) {
+    //   params.push(originCountry);
+    //   conditions.push(`origin_country_code = $${counter++}`);
+    // }
+
+    // if (destinationCountry) {
+    //   params.push(destinationCountry);
+    //   conditions.push(`destination_country_code = $${counter++}`);
+    // }
+
+    // if (month) {
+    //   // Assuming 'month' is an integer representing the month number
+    //   params.push(month);
+    //   conditions.push(`EXTRACT(MONTH FROM date) = $${counter}`);
+    // }
+
+    // If there are any conditions, append them to the query
+    if (conditions.length > 0) {
+      query += " WHERE " + conditions.join(" AND ");
+    }
+
+    try {
+      const result = await db.query(query, params);
+      const allTrips = result.rows.map((row) =>
+        jsReady.convertKeysToCamelCase(row)
+      );
+
+      return allTrips;
+    } catch (error) {
+      console.error("Error fetching filtered trips:", error);
+      throw new Error("Failed to fetch trips");
+    }
   }
 
   /**

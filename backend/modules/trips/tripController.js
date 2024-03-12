@@ -4,11 +4,11 @@ const TripApi = require("./tripModel");
 const asyncHandler = require("express-async-handler");
 
 /**
- * Get all trips excluding those owned by the logged-in user.
+ * Get all trips.
  */
 exports.getAllTrips = asyncHandler(async (req, res, next) => {
-  const loggedInUser = req.username;
-  const allTrips = await TripApi.getAllTrips();
+  const filter = req.query;
+  const allTrips = await TripApi.getAllTrips(filter);
 
   res.status(200).json({ success: true, data: allTrips });
 });
