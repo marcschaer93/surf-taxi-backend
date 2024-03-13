@@ -11,7 +11,6 @@ import { useMyTripsContext } from "../../context/MyTripsProvider";
 
 export const Favorites = () => {
   const { user } = useAuthContext();
-  const { myTrips } = useMyTripsContext();
   // memoize favoriteIds to ensure that it only updates when user.favoriteIds actually changes, not when the user object itself might be recreated without meaningful changes to favoriteIds.
   console.log("USER FAVIDS", user.favoriteIds);
   const favoriteIds = useMemo(() => user.favoriteIds || [], [user.favoriteIds]);
