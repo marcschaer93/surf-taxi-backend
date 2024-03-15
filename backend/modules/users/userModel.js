@@ -125,7 +125,8 @@ class UserApi {
       languages,
       country, 
       profile_img_url, 
-      bio
+      bio,
+      favorite_ids
     `;
 
     const updateResult = await db.query(updateQuery, updateValues);

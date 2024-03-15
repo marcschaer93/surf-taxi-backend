@@ -14,7 +14,7 @@ CREATE TABLE users (
   profile_img_url TEXT,
   bio TEXT,
   role TEXT NOT NULL DEFAULT 'user',
-  favorite_ids INTEGER[]
+  favorite_ids INTEGER[] DEFAULT '{}'
 );
 
 CREATE TABLE trips (
