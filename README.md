@@ -1,115 +1,66 @@
-# Surf Taxi: A Full Stack Single Page Application for Surfing Enthusiasts
+# Surf Taxi Backend
+
+Welcome to the backend repository of Surf Taxi, the core engine driving the application designed for surfers across Europe to find and offer shared lifts to surf spots. This component manages data, user interactions, and trip coordination, ensuring a seamless and efficient user experience.
 
 ## Overview
 
-Surf Taxi is the go-to application for surfers across Europe who are looking for a shared lift/carpool to a surfspot.
+The backend of Surf Taxi is crafted to support the dynamic needs of the surfing community. It handles user authentication, trip management, and notifications, enabling users to easily plan their surf trips.
 
-Built on the understanding that the perfect wave is always shifting and that surfers often traverse the coast in campervans or cars to chase those waves.
+### Technology Stack
 
-Furthermore, many surfers are landlocked and are looking for a ride to the coastline.
-
-This basically means that the modern surfer drives a lot from A to B and back and forth. So there are many potential ride opportunities.
-
-## Important Note:
-
-**Surf Taxi is optimized for mobile use**, offering an excellent experience on smartphones. Although it also works on desktop browsers, you'll get the full visual and functional benefits on a mobile device. If you're on a desktop, you can switch your browser view to a mobile setting (for example, use Chrome's DevTools to simulate an iPhone 7) to see how it looks on a phone.
-
-<!-- ![Surf Taxi Mobile View](frontend/public/assets/images/chrome-dev-tools.jpg) -->
-<img src="frontend/public/assets/images/surf-taxi(iPhone 6_7_8 Plus).png" width="150"/>
-
-## Technology Stack
-
-#### Frontend:
-
-- **React**: Powers the interactive and user-friendly interface.
-- **Material UI**: Provides ready-to-use design components for a stylish look.
-
-#### Backend:
-
-- **Node.js**: Runs the server, handling requests and responses.
-- **Express.js**: Makes it easier to build and manage the server API.
-
-#### Database:
-
-- **PostgreSQL**: Stores all the app's data safely and efficiently.
-
-#### Testing:
-
-- **Jest and Supertest**: Test the backend to make sure everything works as expected.
-- **Vite-test**: Helps ensure the frontend runs smoothly and correctly.
+- **Node.js**: Serves as the runtime environment for the backend, offering scalability and performance.
+- **Express.js**: Simplifies the creation of the server API, making it more manageable and robust.
+- **PostgreSQL**: Chosen for its reliability and comprehensive feature set for data storage and retrieval.
 
 ## Project Structure
 
-- `backend/`: Contains the API and data management logic.
-- `frontend/`: Houses the React application for user interfaces.
+This repository contains all necessary code for the backend operations of Surf Taxi, including API endpoints, database interactions, and authentication logic.
 
 ## Setup Instructions
 
-### Backend
+### Database Setup
 
-#### Database Setup:
+1. Create the Surf Taxi database: `createdb surf_taxi`.
+2. Initialize the database with the provided schema: `psql -U [username] -d surf_taxi -f dbSetup.sql`.
 
-1. Create the Surf Taxi database: `createdb surf_taxi`
-2. Initialize the database: `psql -U [psql username] -d surf_taxi -f dbSetup.sql`
+For detailed information on the database schema, refer to the `docs/databaseSchema.md`.
 
-For more detailed information on the database schema, including tables, relationships, and indices, please refer to the documentation provided in the `docs/` directory under [databaseSchema](backend/docs/databaseSchema).
+### Starting the Backend
 
-#### Starting the Backend:
-
-1. Navigate to the backend directory: `cd backend`
-2. Install dependencies: `npm install`
-3. Start the server: `npm start` (Runs on port 3001)
-
-### Frontend
-
-#### Environment Setup:
-
-- Ensure the backend URL is set correctly in the frontend code to connect to `http://localhost:3001`.
-
-#### Running the Frontend:
-
-1. Navigate to the frontend directory: `cd frontend`
-2. Install dependencies: `npm install`
-3. Start the app: `npm start` (Access at `http://localhost:3000`)
+1. Navigate to the surf-taxi-backend directory: `cd surf-taxi-backend`.
+2. Install dependencies: `npm install`.
+3. Start the server: `npm start` (Listens on port 3001 by default).
 
 ### Testing the Backend
 
-1. Create the Surf Taxi Test database: `createdb surf_taxi_test`
-2. Initialize the database: `psql -U [psql username] -d surf_taxi_test -f db/dbSetupTests.sql`
-3. Ensure Jest and Supertest are installed: `npm install --save-dev jest supertest`
-4. Run tests: `npm test`
+Ensure the backend functions as expected by running comprehensive tests:
 
-### Testing the Frontend
+1. Set up a dedicated test database: `createdb surf_taxi_test`.
+2. Initialize the test database: `psql -U [username] -d surf_taxi_test -f dbSetupTests.sql`.
+3. Install testing dependencies: `npm install --save-dev jest supertest`.
+4. Execute tests: `npm test`.
 
-...
+## API Overview
 
-## Using the API
+The backend API offers various endpoints to manage trips, users, and notifications. Here's a brief overview:
 
-The backend API supports various endpoints for trips, passengers, notifications, authentication and user profiles. Detailed API documentation and examples can be found in the provided Postman collection.
+- `/trips`: Lists all available trips or post a new trip.
+- `/trips/:id`: Get, update, or delete a specific trip.
+- `/users`: User registration and profile management.
+- `/auth/login`: Authentication for users.
+- `/notifications`: Manage notifications for trip updates.
 
-### Routes
-
-- `/`: Homepage
-- `/trips`: Lists all trips
-- `/trips/:tripId`: View details of a specific trip
-- `/login`: Login form
-- `/signup`: Signup form
-- `/profile`: Profile page
+Detailed API documentation is available in the `docs/api.md`.
 
 ## Deployment
 
-The application is optimized for mobile use and is best experienced on mobile devices or through device emulation tools like Chrome DevTools set to iPhone 7.
-
-The application is deployed on Render:
-
-- **Backend**: [https://surf-taxi-api.onrender.com](https://surf-taxi-api.onrender.com)
-- **Frontend**: [https://surf-taxi.onrender.com](https://surf-taxi.onrender.com)
+The backend is deployed to Render, ensuring high availability and performance. Access the API at [https://surf-taxi-api.onrender.com](https://surf-taxi-api.onrender.com).
 
 ## Author
 
 **Marc Schaer**
 
-Feel free to reach out for any questions or feedback:
+I'm here to help with any questions or feedback:
 
 - Email: marc.schaer93@gmail.com
 - LinkedIn: [https://www.linkedin.com/in/marc-sch%C3%A4r-216283262/](https://www.linkedin.com/in/marc-sch%C3%A4r-216283262/)
