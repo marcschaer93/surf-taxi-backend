@@ -54,7 +54,7 @@ Detailed API documentation is available in the `docs/api.md`.
 
 ## Deployment
 
-The backend is deployed to Render, ensuring high availability and performance. Access the API at [https://surf-taxi-api.onrender.com](https://surf-taxi-api.onrender.com).
+The backend is deployed to Render, ensuring high availability and performance. Access the API at [https://surf-taxi-backend.onrender.com/](https://surf-taxi-backend.onrender.com/).
 
 ## Author
 
